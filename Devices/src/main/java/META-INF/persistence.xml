@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="RES">
+		<class>com.rimdev.RES.entites.Device_Action</class>
+		<class>com.rimdev.RES.entites.Device_request</class>
+		<class>com.rimdev.RES.entites.Device_rule</class>
+		<class>com.rimdev.RES.entites.Device_table</class>
+		<class>com.rimdev.RES.entites.Device_type</class>
+		<class>com.rimdev.RES.entites.Dtype_opera</class>
+		<class>com.rimdev.RES.entites.Error_map</class>
+		<class>com.rimdev.RES.entites.Request_log</class>
+		<class>com.rimdev.RES.entites.OperaSystem</class>
+	</persistence-unit>
+</persistence>
