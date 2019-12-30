@@ -62,9 +62,9 @@ public class TransactionType implements Serializable {
         this.id = id;
     }
 
-    public TransactionType(Integer id, String tRXtype) {
+    public TransactionType(Integer id, String error) {
         this.id = id;
-        this.tRXtype = tRXtype;
+        this.tRXdescrption = error;
     }
 
     public Integer getId() {

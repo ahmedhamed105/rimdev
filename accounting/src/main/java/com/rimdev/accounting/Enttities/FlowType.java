@@ -64,10 +64,9 @@ public class FlowType implements Serializable {
         this.id = id;
     }
 
-    public FlowType(Integer id, String flowtype, String flowstatus) {
+    public FlowType(Integer id, String error) {
         this.id = id;
-        this.flowtype = flowtype;
-        this.flowstatus = flowstatus;
+        this.flowdescription = error;
     }
 
     public Integer getId() {
