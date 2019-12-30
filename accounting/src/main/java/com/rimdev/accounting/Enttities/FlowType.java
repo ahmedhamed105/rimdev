@@ -56,6 +56,8 @@ public class FlowType implements Serializable {
     private String flowstatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowtypeID")
     private Collection<AccountProcess> accountProcessCollection;
+    
+    private String error;
 
     public FlowType() {
     }
@@ -66,8 +68,18 @@ public class FlowType implements Serializable {
 
     public FlowType(Integer id, String error) {
         this.id = id;
-        this.flowdescription = error;
+        this.error = error;
     }
+    
+    
+
+    public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
 
     public Integer getId() {
         return id;

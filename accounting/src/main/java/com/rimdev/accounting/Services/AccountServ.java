@@ -1,12 +1,18 @@
 package com.rimdev.accounting.Services;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.accounting.Enttities.Account;
+import com.rimdev.accounting.Enttities.Currency;
+import com.rimdev.accounting.Enttities.Account;
 import com.rimdev.accounting.Repo.AccountRepo;
+import com.rimdev.accounting.Repo.CurrencyRepo;
+import com.rimdev.accounting.Utils.ObjectUtils;
 
 
 
@@ -16,12 +22,88 @@ public class AccountServ {
 @Autowired 
 private AccountRepo accountRepo;
 
+@Autowired 
+private CurrencyRepo currencyRepo;
+
 
 public List<Account> getall() {
 	
 	return (List<Account>) accountRepo.findAll();
 	
 }
+
+public Account Save(Account input) {
+	
+	if(input.getCurrencyID() != null) {
+		
+		try {
+			Optional<Currency> flowid =currencyRepo.finbyidCurrency(input.getCurrencyID().getId());
+			 
+			 if (flowid.isPresent()){
+				 Currency curouput = flowid.get();
+				 
+				}
+				else{
+				   // alternative processing....
+					return new Account(-1,"Currency not Active");
+				}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new Account(-1,e.getMessage());
+		}
+	}
+	
+	try {	
+		Account ouput =accountRepo.save(input);	
+		return ouput;
+	} catch (Exception e) {
+		// TODO: handle exception
+		
+		return new Account(-1,e.getMessage());
+	}			
+		
+	}
+
+
+public Account update(Account input,Integer id)  {
+	Account ouput = null;
+	
+	try {
+		Optional<Account> flowid =accountRepo.finbyidaccount(id);
+		 
+		 if (flowid.isPresent()){
+			  ouput = flowid.get();
+			// System.out.println(ouput.getCurrencyISO());
+			  BeanUtils.copyProperties(input, ouput, ObjectUtils.getNullPropertyNames(input));
+			//  System.out.println(ouput.getCurrencyISO());
+			   // processing with foo ...
+			}
+			else{
+			   // alternative processing....
+				return new Account(-1,"account or currency not Active");
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return new Account(-1,e.getMessage());
+	}
+	
+	if(ouput == null) {
+		return new Account(-1,"ouput is null");
+	}else {
+	
+	try {	
+		Account ouput1 =accountRepo.save(ouput);	
+		return ouput1;
+	} catch (Exception e) {
+		// TODO: handle exception
+		
+		return new Account(-1,e.getMessage());
+	}	
+	}
+	
+}
+
+
 
 
 

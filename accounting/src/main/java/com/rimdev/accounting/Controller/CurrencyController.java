@@ -47,14 +47,14 @@ public class CurrencyController {
 				 ouput= currencyServ.Save(input);
 				 if(ouput == null || ouput.getId() == -1) {
 						
-					 ouput.setCurrencydescription(ouput.getCurrencydescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null || ouput.getId() == -1) {
 						
-					 ouput.setCurrencydescription(ouput.getCurrencydescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			}
@@ -68,14 +68,14 @@ public class CurrencyController {
 				 ouput= currencyServ.update(input, input.getId());
 				 if(ouput == null || ouput.getId() == -1) {
 					
-					 ouput.setCurrencydescription(ouput.getCurrencydescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null|| ouput.getId() == -1) {
 					 
-					 ouput.setCurrencydescription(ouput.getCurrencydescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			}

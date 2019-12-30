@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.accounting.Enttities.FlowType;
-import com.rimdev.accounting.Repo.FlowTypeRepo;
-import com.rimdev.accounting.Services.CurrencyServ;
 import com.rimdev.accounting.Services.FlowTypeServ;
 
 @Controller // This means that this class is a Controller
@@ -47,14 +45,14 @@ public class FlowController {
 				 ouput= flowTypeServ.Save(input);
 				 if(ouput == null || ouput.getId() == -1) {
 						
-					 ouput.setFlowdescription(ouput.getFlowdescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null || ouput.getId() == -1) {
 						
-					 ouput.setFlowdescription(ouput.getFlowdescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			}
@@ -68,14 +66,14 @@ public class FlowController {
 				 ouput= flowTypeServ.update(input, input.getId());
 				 if(ouput == null || ouput.getId() == -1) {
 					
-					 ouput.setFlowdescription(ouput.getFlowdescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null|| ouput.getId() == -1) {
 					 
-					 ouput.setFlowdescription(ouput.getFlowdescription());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			}

@@ -37,8 +37,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @DynamicUpdate
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")
+     @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")
     , @NamedQuery(name = "Account.findById", query = "SELECT a FROM Account a WHERE a.id = :id")
+    
+    
     , @NamedQuery(name = "Account.findByAcctNumber", query = "SELECT a FROM Account a WHERE a.acctNumber = :acctNumber")
     , @NamedQuery(name = "Account.findByAcctName", query = "SELECT a FROM Account a WHERE a.acctName = :acctName")
     , @NamedQuery(name = "Account.findByCurrbalance", query = "SELECT a FROM Account a WHERE a.currbalance = :currbalance")
@@ -86,27 +88,29 @@ public class Account implements Serializable {
     @JoinColumn(name = "Currency_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Currency currencyID;
+    
+    
+    private String error;
 
     public Account() {
     }
 
-    public Account(Integer id) {
+    public Account(Integer id,String error) {
         this.id = id;
+        this.error = error;
     }
 
-    public Account(Integer id, String acctNumber, String acctName, String currbalance, String avalbalance, Date lastmodification, Date createdate, String customernumber, String acctstatus) {
-        this.id = id;
-        this.acctNumber = acctNumber;
-        this.acctName = acctName;
-        this.currbalance = currbalance;
-        this.avalbalance = avalbalance;
-        this.lastmodification = lastmodification;
-        this.createdate = createdate;
-        this.customernumber = customernumber;
-        this.acctstatus = acctstatus;
-    }
 
-    public Integer getId() {
+
+    public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public Integer getId() {
         return id;
     }
 

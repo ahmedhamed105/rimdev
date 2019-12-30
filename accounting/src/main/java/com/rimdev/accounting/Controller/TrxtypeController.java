@@ -46,14 +46,14 @@ public class TrxtypeController {
 				 ouput= TransactionTypeServ.Save(input);
 				 if(ouput == null || ouput.getId() == -1) {
 						
-					 ouput.setTRXdescrption(ouput.getTRXdescrption());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<TransactionType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null || ouput.getId() == -1) {
 						
-					 ouput.setTRXdescrption(ouput.getTRXdescrption());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<TransactionType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			}
@@ -67,14 +67,14 @@ public class TrxtypeController {
 				 ouput= TransactionTypeServ.update(input, input.getId());
 				 if(ouput == null || ouput.getId() == -1) {
 					
-					 ouput.setTRXdescrption(ouput.getTRXdescrption());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<TransactionType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null|| ouput.getId() == -1) {
 					 
-					 ouput.setTRXdescrption(ouput.getTRXdescrption());
+					 ouput.setError(ouput.getError());
 					 return new ResponseEntity<TransactionType>(ouput, HttpStatus.BAD_REQUEST);	 
 				 }
 			}

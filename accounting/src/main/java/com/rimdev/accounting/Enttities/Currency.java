@@ -62,14 +62,26 @@ public class Currency implements Serializable {
     private Collection<AccountProcess> accountProcessCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
     private Collection<Account> accountCollection;
+    
+    private String error;
 
     public Currency() {
     }
 
     public Currency(Integer id,String error) {
         this.id = id;
-        this.currencydescription = error;
+        this.error = error;
     }
+    
+  
+    public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
 
 
     public Integer getId() {

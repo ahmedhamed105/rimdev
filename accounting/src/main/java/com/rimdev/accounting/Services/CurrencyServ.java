@@ -48,7 +48,7 @@ public Currency update(Currency input,Integer id)  {
 	Currency ouput = null;
 	
 	try {
-		Optional<Currency> curid =currencyRepo.findById(id);
+		Optional<Currency> curid =currencyRepo.finbyidCurrency(id);
 		 
 		 if (curid.isPresent()){
 			  ouput = curid.get();
@@ -59,7 +59,7 @@ public Currency update(Currency input,Integer id)  {
 			}
 			else{
 			   // alternative processing....
-				return new Currency(-1,"not found");
+				return new Currency(-1,"Currency may be not Active");
 			}
 	} catch (Exception e) {
 		// TODO: handle exception

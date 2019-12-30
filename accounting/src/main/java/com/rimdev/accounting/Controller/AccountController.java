@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +28,57 @@ public class AccountController {
 		
 		return new ResponseEntity<List<Account>>(accountServ.getall(), HttpStatus.OK);
 	  }
+	
+	
+	@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
+	  public @ResponseBody ResponseEntity<Account> saveorupdate(@RequestBody Account input) {
+	    // This returns a JSON or XML with the users
+		
+		Account ouput = null;
+		
+		if(input.getId() == null || input.getId() == 0) {
+			System.out.println("insert");
+			try {
+				 ouput= accountServ.Save(input);
+				 if(ouput == null || ouput.getId() == -1) {
+						
+					 ouput.setError(ouput.getError());
+					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
+				 }
+			} catch (Exception e) {
+				// TODO: handle exception
+				 if(ouput == null || ouput.getId() == -1) {
+						
+					 ouput.setError(ouput.getError());
+					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
+				 }
+			}
+			
+			return new ResponseEntity<Account>(ouput, HttpStatus.OK);
+
+		}else {
+			System.out.println("update "+input.getId());
+			
+			try {
+				 ouput= accountServ.update(input, input.getId());
+				 if(ouput == null || ouput.getId() == -1) {
+					
+					 ouput.setError(ouput.getError());
+					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
+				 }
+			} catch (Exception e) {
+				// TODO: handle exception
+				 if(ouput == null|| ouput.getId() == -1) {
+					 
+					 ouput.setError(ouput.getError());
+					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
+				 }
+			}
+			
+			return new ResponseEntity<Account>(ouput, HttpStatus.OK);
+			
+		}
+		  }
 	
 	
 

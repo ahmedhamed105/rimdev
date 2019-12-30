@@ -54,6 +54,9 @@ public class TransactionType implements Serializable {
     private String tRXtypestatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactiontypeID")
     private Collection<AccountProcess> accountProcessCollection;
+    
+    
+    private String error;
 
     public TransactionType() {
     }
@@ -64,8 +67,18 @@ public class TransactionType implements Serializable {
 
     public TransactionType(Integer id, String error) {
         this.id = id;
-        this.tRXdescrption = error;
+        this.error = error;
     }
+    
+    
+
+    public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
 
     public Integer getId() {
         return id;
