@@ -30,6 +30,21 @@ public class AccountController {
 	  }
 	
 	
+	@RequestMapping(value = "/allstatus", method = RequestMethod.GET)
+	  public  ResponseEntity<List<Account>> getAllby(@RequestBody Account input) {
+	    // This returns a JSON or XML with the users
+		
+		if(input.getAcctstatus() != null) {
+			
+			return new ResponseEntity<List<Account>>(accountServ.getallstatus(input.getAcctstatus()), HttpStatus.OK);
+	
+		}else {
+		
+		return new ResponseEntity<List<Account>>(accountServ.getall(), HttpStatus.OK);
+		}
+	  }
+	
+	
 	@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
 	  public @ResponseBody ResponseEntity<Account> saveorupdate(@RequestBody Account input) {
 	    // This returns a JSON or XML with the users

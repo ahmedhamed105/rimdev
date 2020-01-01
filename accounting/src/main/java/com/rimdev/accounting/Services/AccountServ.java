@@ -32,12 +32,18 @@ public List<Account> getall() {
 	
 }
 
+public List<Account> getallstatus(String status) {
+	
+	return (List<Account>) accountRepo.findAllstatus(status);
+	
+}
+
 public Account Save(Account input) {
 	
 	if(input.getCurrencyID() != null) {
 		
 		try {
-			Optional<Currency> flowid =currencyRepo.finbyidCurrency(input.getCurrencyID().getId());
+			Optional<Currency> flowid =currencyRepo.findById(input.getCurrencyID().getId());
 			 
 			 if (flowid.isPresent()){
 				 Currency curouput = flowid.get();
@@ -69,7 +75,7 @@ public Account update(Account input,Integer id)  {
 	Account ouput = null;
 	
 	try {
-		Optional<Account> flowid =accountRepo.finbyidaccount(id);
+		Optional<Account> flowid =accountRepo.findbyidstatus(id);
 		 
 		 if (flowid.isPresent()){
 			  ouput = flowid.get();

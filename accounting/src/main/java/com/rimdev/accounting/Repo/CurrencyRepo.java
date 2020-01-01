@@ -14,8 +14,9 @@ import com.rimdev.accounting.Enttities.Currency;
 public interface CurrencyRepo  extends CrudRepository<Currency, Integer>{
 
 	@Query(value ="select * from rim_accounting.currency  where id = ?1 and Currency_status = 'Active'" , nativeQuery = true)
-	Optional<Currency> finbyidCurrency(Integer id);
+	Optional<Currency> findbyidstatus(Integer id);
 	
-
+	@Query(value ="select * from rim_accounting.currency  where Currency_status = ?1" , nativeQuery = true)
+	Iterable<Currency> findAllstatus(String status);
 
 }

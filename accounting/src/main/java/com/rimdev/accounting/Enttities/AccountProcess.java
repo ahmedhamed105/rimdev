@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -34,6 +38,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "AccountProcess.findByTRXAmount", query = "SELECT a FROM AccountProcess a WHERE a.tRXAmount = :tRXAmount")
     , @NamedQuery(name = "AccountProcess.findByTRXdescription", query = "SELECT a FROM AccountProcess a WHERE a.tRXdescription = :tRXdescription")
     , @NamedQuery(name = "AccountProcess.findByReferencenumber", query = "SELECT a FROM AccountProcess a WHERE a.referencenumber = :referencenumber")})
+
+
+@NamedStoredProcedureQueries({
+@NamedStoredProcedureQuery(name = "posttransaction", 
+                           procedureName = "rim_accounting.posttransaction",
+                           parameters = {
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "acct_no", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Customer_id", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.OUT, name = "error_code", type = Integer.class)
+                           }) 
+})
 public class AccountProcess implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,6 +78,9 @@ public class AccountProcess implements Serializable {
     @JoinColumn(name = "account_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Account accountID;
+    @JoinColumn(name = "Error_codes_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private ErrorCodes errorcodesID;
 
     public AccountProcess() {
     }
@@ -140,6 +158,14 @@ public class AccountProcess implements Serializable {
 
     public void setAccountID(Account accountID) {
         this.accountID = accountID;
+    }
+    
+    public ErrorCodes getErrorcodesID() {
+        return errorcodesID;
+    }
+
+    public void setErrorcodesID(ErrorCodes errorcodesID) {
+        this.errorcodesID = errorcodesID;
     }
 
     @Override

@@ -29,6 +29,13 @@ public class CurrencyServ {
 		
 	}
 	
+	public List<Currency> getallstatus(String status) {
+		
+		return (List<Currency>) currencyRepo.findAllstatus( status);
+		
+	}
+	
+	
 	
 public Currency Save(Currency input) {
 	
@@ -48,7 +55,7 @@ public Currency update(Currency input,Integer id)  {
 	Currency ouput = null;
 	
 	try {
-		Optional<Currency> curid =currencyRepo.finbyidCurrency(id);
+		Optional<Currency> curid =currencyRepo.findById(id);
 		 
 		 if (curid.isPresent()){
 			  ouput = curid.get();
@@ -59,7 +66,7 @@ public Currency update(Currency input,Integer id)  {
 			}
 			else{
 			   // alternative processing....
-				return new Currency(-1,"Currency may be not Active");
+				return new Currency(-1,"not found");
 			}
 	} catch (Exception e) {
 		// TODO: handle exception

@@ -25,6 +25,12 @@ public List<FlowType> getall() {
 		return (List<FlowType>) flowTypeRepo.findAll();
 		
 	}
+
+public List<FlowType> getallstatus(String status) {
+	
+	return (List<FlowType>) flowTypeRepo.findAllstatus( status);
+	
+}
 	
 	
 public FlowType Save(FlowType input) {
@@ -56,7 +62,7 @@ public FlowType update(FlowType input,Integer id)  {
 			}
 			else{
 			   // alternative processing....
-				return new FlowType(-1,"not found");
+				return new FlowType(-1,"Flow type may be not Active");
 			}
 	} catch (Exception e) {
 		// TODO: handle exception

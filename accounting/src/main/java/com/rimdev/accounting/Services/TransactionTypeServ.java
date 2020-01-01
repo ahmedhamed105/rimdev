@@ -18,12 +18,17 @@ public class TransactionTypeServ {
 	private TransactionTypeRepo transactionTypeRepo;
 	
 	
-	
 public List<TransactionType> getall() {
 		
 		return (List<TransactionType>) transactionTypeRepo.findAll();
 		
-	}
+}
+	
+public List<TransactionType> getallstatus(String status) {
+		
+		return (List<TransactionType>) transactionTypeRepo.findAllstatus( status);
+		
+}
 	
 	
 public TransactionType Save(TransactionType input) {
@@ -55,7 +60,7 @@ public TransactionType update(TransactionType input,Integer id)  {
 			}
 			else{
 			   // alternative processing....
-				return new TransactionType(-1,"not found");
+				return new TransactionType(-1,"Transaction Type not Active");
 			}
 	} catch (Exception e) {
 		// TODO: handle exception
