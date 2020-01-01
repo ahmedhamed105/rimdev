@@ -1,11 +1,13 @@
 package com.rimdev.accounting.inputobject;
 
+import java.math.BigDecimal;
+
 public class transaction_input {
 	
 	String Customer_no;
 	String Currency;
 	String acct_no;
-    double amount;
+	BigDecimal amount;
     String Trx_type;
     String Trx_flow;
     String  Reference_no;
@@ -62,12 +64,12 @@ public class transaction_input {
 	}
 
 
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
 
-	public void setAmount(double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 

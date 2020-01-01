@@ -1,5 +1,7 @@
 package com.rimdev.accounting.outputobject;
 
+import java.math.BigDecimal;
+
 public class Transaction_output {
 	
 	Boolean Trx_status;
@@ -8,8 +10,8 @@ public class Transaction_output {
 	String  Acct_no;
 	String  Customer_no;
 	String  Currency;
-	double  Current_balance;
-	double  Avl_balance;
+	BigDecimal  Current_balance;
+	BigDecimal  Avl_balance;
 	String  Reference_no;
 	
 	
@@ -94,22 +96,22 @@ public class Transaction_output {
 	}
 
 
-	public double getCurrent_balance() {
+	public BigDecimal getCurrent_balance() {
 		return Current_balance;
 	}
 
 
-	public void setCurrent_balance(double current_balance) {
+	public void setCurrent_balance(BigDecimal current_balance) {
 		Current_balance = current_balance;
 	}
 
 
-	public double getAvl_balance() {
+	public BigDecimal getAvl_balance() {
 		return Avl_balance;
 	}
 
 
-	public void setAvl_balance(double avl_balance) {
+	public void setAvl_balance(BigDecimal avl_balance) {
 		Avl_balance = avl_balance;
 	}
 	

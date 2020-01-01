@@ -29,6 +29,28 @@ public List<TransactionType> getallstatus(String status) {
 		return (List<TransactionType>) transactionTypeRepo.findAllstatus( status);
 		
 }
+
+
+public boolean checkpaymnet_not(String trx_type) {
+	List<TransactionType> cr_dr= (List<TransactionType>) transactionTypeRepo.findAllpaymnet(1);
+	boolean paymnet=false;
+	for (int i = 0; i < cr_dr.size(); i++) {
+		
+		if(cr_dr.get(i).getTRXtype().equals(trx_type)) {
+			paymnet = true;
+			break;			
+		}
+		
+	}
+	return paymnet;
+}
+
+
+public List<TransactionType> getallpaymnet(int pay) {
+	
+	return (List<TransactionType>) transactionTypeRepo.findAllpaymnet(pay);
+	
+}
 	
 	
 public TransactionType Save(TransactionType input) {

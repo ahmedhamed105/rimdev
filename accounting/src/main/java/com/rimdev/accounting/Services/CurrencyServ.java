@@ -29,6 +29,21 @@ public class CurrencyServ {
 		
 	}
 	
+	public boolean check_currency(String currency) {
+		List<Currency> cu=(List<Currency>) currencyRepo.findAllstatus("Active");
+		
+		boolean paymnet=false;
+		for (int i = 0; i < cu.size(); i++) {
+			
+			if(cu.get(i).getCurrencyISO().equals(currency)) {
+				paymnet = true;
+				break;			
+			}
+			
+		}
+		return paymnet;
+	}
+	
 	public List<Currency> getallstatus(String status) {
 		
 		return (List<Currency>) currencyRepo.findAllstatus( status);

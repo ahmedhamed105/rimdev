@@ -26,6 +26,8 @@ public class TrxtypeController {
 	
 	
 	
+	
+	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	  public  ResponseEntity<List<TransactionType>> getAllUsers() {
 	    // This returns a JSON or XML with the users

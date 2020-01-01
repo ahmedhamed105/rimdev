@@ -2,6 +2,7 @@ package com.rimdev.accounting.Enttities;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -65,10 +66,10 @@ public class Account implements Serializable {
     private String acctName;
     @Basic(optional = false)
     @Column(name = "Curr_balance", nullable = false, length = 45)
-    private String currbalance;
+    private BigDecimal currbalance;
     @Basic(optional = false)
     @Column(name = "Aval_balance", nullable = false, length = 45)
-    private String avalbalance;
+    private BigDecimal avalbalance;
     @Basic(optional = false)
     @Column(name = "Last_modification", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -134,19 +135,19 @@ public class Account implements Serializable {
         this.acctName = acctName;
     }
 
-    public String getCurrbalance() {
+    public BigDecimal getCurrbalance() {
         return currbalance;
     }
 
-    public void setCurrbalance(String currbalance) {
+    public void setCurrbalance(BigDecimal currbalance) {
         this.currbalance = currbalance;
     }
 
-    public String getAvalbalance() {
+    public BigDecimal getAvalbalance() {
         return avalbalance;
     }
 
-    public void setAvalbalance(String avalbalance) {
+    public void setAvalbalance(BigDecimal avalbalance) {
         this.avalbalance = avalbalance;
     }
 

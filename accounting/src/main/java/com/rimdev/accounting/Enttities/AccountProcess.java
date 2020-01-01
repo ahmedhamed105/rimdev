@@ -2,6 +2,8 @@ package com.rimdev.accounting.Enttities;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,8 +46,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @NamedStoredProcedureQuery(name = "posttransaction", 
                            procedureName = "rim_accounting.posttransaction",
                            parameters = {
-                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "acct_no", type = String.class),
                               @StoredProcedureParameter(mode = ParameterMode.IN, name = "Customer_id", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Currency", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "acct_no", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "amount", type = BigDecimal.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Trx_type", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Trx_flow", type = String.class),
                               @StoredProcedureParameter(mode = ParameterMode.OUT, name = "error_code", type = Integer.class)
                            }) 
 })
@@ -59,7 +65,7 @@ public class AccountProcess implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Column(name = "TRX_Amount", nullable = false, length = 45)
-    private String tRXAmount;
+    private BigDecimal tRXAmount;
     @Basic(optional = false)
     @Column(name = "TRX_description", nullable = false, length = 45)
     private String tRXdescription;
@@ -89,7 +95,7 @@ public class AccountProcess implements Serializable {
         this.id = id;
     }
 
-    public AccountProcess(Integer id, String tRXAmount, String tRXdescription, String referencenumber) {
+    public AccountProcess(Integer id, BigDecimal tRXAmount, String tRXdescription, String referencenumber) {
         this.id = id;
         this.tRXAmount = tRXAmount;
         this.tRXdescription = tRXdescription;
@@ -104,11 +110,11 @@ public class AccountProcess implements Serializable {
         this.id = id;
     }
 
-    public String getTRXAmount() {
+    public BigDecimal getTRXAmount() {
         return tRXAmount;
     }
 
-    public void setTRXAmount(String tRXAmount) {
+    public void setTRXAmount(BigDecimal tRXAmount) {
         this.tRXAmount = tRXAmount;
     }
 

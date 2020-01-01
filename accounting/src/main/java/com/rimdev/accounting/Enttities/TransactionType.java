@@ -52,6 +52,8 @@ public class TransactionType implements Serializable {
     private String tRXdescrption;
     @Column(name = "TRXtype_status", length = 45)
     private String tRXtypestatus;
+    @Column(name = "payment_not")
+    private int paymentNot;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactiontypeID")
     private Collection<AccountProcess> accountProcessCollection;
     
@@ -111,8 +113,17 @@ public class TransactionType implements Serializable {
     public void setTRXtypestatus(String tRXtypestatus) {
         this.tRXtypestatus = tRXtypestatus;
     }
+    
 
-    @XmlTransient
+    public int getPaymentNot() {
+		return paymentNot;
+	}
+
+	public void setPaymentNot(int paymentNot) {
+		this.paymentNot = paymentNot;
+	}
+
+	@XmlTransient
     @JsonIgnore
     public Collection<AccountProcess> getAccountProcessCollection() {
         return accountProcessCollection;

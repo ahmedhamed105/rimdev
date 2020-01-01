@@ -51,8 +51,9 @@ public class ErrorCodes implements Serializable {
     public ErrorCodes() {
     }
 
-    public ErrorCodes(Integer id) {
-        this.id = id;
+    public ErrorCodes(Integer errorCode,String errordescription) {
+        this.errorCode = errorCode;
+        this.errordescription = errordescription;
     }
 
     public ErrorCodes(Integer id, int errorCode, String errordescription) {
