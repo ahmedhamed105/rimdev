@@ -56,6 +56,8 @@ public class FlowType implements Serializable {
     private String flowstatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowtypeID")
     private Collection<AccountProcess> accountProcessCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowtypeID")
+    private Collection<HoldProcess> holdProcessCollection;
     
     private String error;
 
@@ -122,6 +124,17 @@ public class FlowType implements Serializable {
     public void setAccountProcessCollection(Collection<AccountProcess> accountProcessCollection) {
         this.accountProcessCollection = accountProcessCollection;
     }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<HoldProcess> getHoldProcessCollection() {
+        return holdProcessCollection;
+    }
+
+    public void setHoldProcessCollection(Collection<HoldProcess> holdProcessCollection) {
+        this.holdProcessCollection = holdProcessCollection;
+    }
+    
 
     @Override
     public int hashCode() {

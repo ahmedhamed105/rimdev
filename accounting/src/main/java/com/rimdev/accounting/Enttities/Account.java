@@ -89,6 +89,8 @@ public class Account implements Serializable {
     @JoinColumn(name = "Currency_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Currency currencyID;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
+    private Collection<HoldProcess> holdProcessCollection;
     
     
     private String error;
@@ -181,6 +183,16 @@ public class Account implements Serializable {
 
     public void setAcctstatus(String acctstatus) {
         this.acctstatus = acctstatus;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<HoldProcess> getHoldProcessCollection() {
+        return holdProcessCollection;
+    }
+
+    public void setHoldProcessCollection(Collection<HoldProcess> holdProcessCollection) {
+        this.holdProcessCollection = holdProcessCollection;
     }
 
     @XmlTransient

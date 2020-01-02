@@ -62,6 +62,8 @@ public class Currency implements Serializable {
     private Collection<AccountProcess> accountProcessCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
     private Collection<Account> accountCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
+    private Collection<HoldProcess> holdProcessCollection;
     
     private String error;
 
@@ -123,6 +125,17 @@ public class Currency implements Serializable {
     public void setCurrencystatus(String currencystatus) {
         this.currencystatus = currencystatus;
     }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<HoldProcess> getHoldProcessCollection() {
+        return holdProcessCollection;
+    }
+
+    public void setHoldProcessCollection(Collection<HoldProcess> holdProcessCollection) {
+        this.holdProcessCollection = holdProcessCollection;
+    }
+
 
     @XmlTransient
     @JsonIgnore

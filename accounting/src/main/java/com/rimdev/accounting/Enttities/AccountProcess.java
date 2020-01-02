@@ -3,8 +3,10 @@ package com.rimdev.accounting.Enttities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +18,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -87,6 +91,9 @@ public class AccountProcess implements Serializable {
     @JoinColumn(name = "Error_codes_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private ErrorCodes errorcodesID;
+    @Column(name = "Hold_id")
+    private Integer holdid;
+
 
     public AccountProcess() {
     }
@@ -172,6 +179,14 @@ public class AccountProcess implements Serializable {
 
     public void setErrorcodesID(ErrorCodes errorcodesID) {
         this.errorcodesID = errorcodesID;
+    }
+    
+    public Integer getHoldid() {
+        return holdid;
+    }
+
+    public void setHoldid(Integer holdid) {
+        this.holdid = holdid;
     }
 
     @Override

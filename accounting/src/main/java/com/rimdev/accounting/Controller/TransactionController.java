@@ -59,83 +59,99 @@ public class TransactionController {
 	
 	
 	
-	@RequestMapping(value = "/POST", method = RequestMethod.POST)
+	@RequestMapping(value = "/Credit", method = RequestMethod.POST)
 	  public  ResponseEntity<Transaction_output> post(@RequestBody transaction_input input) {
 	    // This returns a JSON or XML with the users
 		  System.out.println(input);
-			if(input.getAcct_no() == null && input.getCustomer_no() == null) {
-				  Transaction_output ouput=new Transaction_output();
-				  ouput.setError_desc("please enter account number or customer number");
-				  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
-				
-			}else {
-				
-				if(input.getCurrency() == null) {
-					  Transaction_output ouput=new Transaction_output();
-					  ouput.setError_desc("please enter Currency");
-					  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
-				}else {
-					
-					//check currency 
-					Currency cur=currencyServ.check_currency(input.getCurrency());
-					if(cur.getId() == -1) {
-						
-						  Transaction_output ouput=new Transaction_output();
-						  ouput.setError_desc(cur.getError());
-						  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
-					
-					
-					}else {
-						
-						
-						// check if account 
-						
-						if(input.getAcct_no() != null && input.getCustomer_no() == null) {
-						Account acct = accountServ.getbyaccount(input.getAcct_no(), cur.getId());
-							if(acct.getId() == -1) {
-								 Transaction_output ouput=new Transaction_output();
-								  ouput.setError_desc(acct.getError());
-								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
-							}
-						}
-						if(input.getAcct_no() != null && input.getCustomer_no() != null) {
-							Account acct = accountServ.getbyaccount(input.getAcct_no(), cur.getId());	
-							if(acct.getId() == -1) {
-								 Transaction_output ouput=new Transaction_output();
-								  ouput.setError_desc(acct.getError());
-								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
-							}
-						}
-						
-						// check if Rim 
-						
-						if(input.getCustomer_no() != null && input.getAcct_no() == null) {
-							Account acct = accountServ.getbyRim(input.getCustomer_no(), cur.getId());	
-							if(acct.getId() == -1) {
-								 Transaction_output ouput=new Transaction_output();
-								  ouput.setError_desc(acct.getError());
-								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
-							}
-							
-							input.setAcct_no(acct.getAcctNumber());
-						}
-				
-					
+		
+
 				
 				if(input.getReference_no() == null) {
 					
+					
+					if(input.getAcct_no() == null && input.getCustomer_no() == null) {
+						ErrorCodes Err=	errorCodesServ.geterrordesc(1);
+						  Transaction_output ouput=new Transaction_output();
+						ouput.setError_code(Err.getErrorCode());
+						ouput.setError_desc(Err.getErrordescription());
+						  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+						
+					}else {
+						
+						if(input.getCurrency() == null) {
+							ErrorCodes Err=	errorCodesServ.geterrordesc(3);
+							  Transaction_output ouput=new Transaction_output();
+							ouput.setError_code(Err.getErrorCode());
+							ouput.setError_desc(Err.getErrordescription());
+							  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+						}else {
+							
+							//check currency 
+							Currency cur=currencyServ.check_currency(input.getCurrency());
+							if(cur.getId() == -1) {
+								
+								ErrorCodes Err=	errorCodesServ.geterrordesc(3);
+								  Transaction_output ouput=new Transaction_output();
+								ouput.setError_code(Err.getErrorCode());
+								ouput.setError_desc(Err.getErrordescription());
+								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+							
+							
+							}else {
+								
+								
+								// check if account 
+								
+								if(input.getAcct_no() != null && input.getCustomer_no() == null) {
+								Account acct = accountServ.getbyaccount(input.getAcct_no(), cur.getId());
+									if(acct.getId() == -1) {
+										ErrorCodes Err=	errorCodesServ.geterrordesc(1);
+										  Transaction_output ouput=new Transaction_output();
+										ouput.setError_code(Err.getErrorCode());
+										ouput.setError_desc(Err.getErrordescription());
+										  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+									}
+								}
+								if(input.getAcct_no() != null && input.getCustomer_no() != null) {
+									Account acct = accountServ.getbyaccount(input.getAcct_no(), cur.getId());	
+									if(acct.getId() == -1) {
+										ErrorCodes Err=	errorCodesServ.geterrordesc(1);
+										  Transaction_output ouput=new Transaction_output();
+										ouput.setError_code(Err.getErrorCode());
+										ouput.setError_desc(Err.getErrordescription());
+										  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+									}
+								}
+								
+								// check if Rim 
+								
+								if(input.getCustomer_no() != null && input.getAcct_no() == null) {
+									Account acct = accountServ.getbyRim(input.getCustomer_no(), cur.getId());	
+									if(acct.getId() == -1) {
+										ErrorCodes Err=	errorCodesServ.geterrordesc(2);
+										  Transaction_output ouput=new Transaction_output();
+										ouput.setError_code(Err.getErrorCode());
+										ouput.setError_desc(Err.getErrordescription());
+										  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+									}
+									
+									input.setAcct_no(acct.getAcctNumber());
+								}
+							}
+						}
+					}
 					// amonut not zero while debit or credit by paymnet_not in transaction type table 
 					
 				boolean paymnet=TransactionTypeServ.checkpaymnet_not(input.getTrx_type());
 				if(paymnet && (input.getAmount() == null || input.getAmount().compareTo(new BigDecimal("0.00")) == 0)) {
+					ErrorCodes Err=	errorCodesServ.geterrordesc(4);
 					  Transaction_output ouput=new Transaction_output();
-					  ouput.setError_desc("payment Transaction and no amount");
+					ouput.setError_code(Err.getErrorCode());
+					ouput.setError_desc(Err.getErrordescription());
 					  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
 					
 				}
-					
-					
-					
+	
 					
 		int error =accountProcessServ.call_post(input.getCustomer_no(),input.getCurrency(),input.getAcct_no(),input.getAmount(),input.getTrx_type(),input.getTrx_flow());
 		ErrorCodes Err=	errorCodesServ.geterrordesc(error);
@@ -146,6 +162,8 @@ public class TransactionController {
 					  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.OK);	
 					
 				}else {
+					// reverse with refernece
+					
 					Transaction_output ouput=new Transaction_output();
 					ouput.setReference_no("reverse");
 					  
@@ -154,13 +172,7 @@ public class TransactionController {
 				}
 				
 				
-					}
-				
-				}
-
-			
-				
-			}
+					
 		
 	  }
 

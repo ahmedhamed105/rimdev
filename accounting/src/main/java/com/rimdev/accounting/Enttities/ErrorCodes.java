@@ -18,6 +18,8 @@ import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
  * @author ahmed.elemam
@@ -47,6 +49,8 @@ public class ErrorCodes implements Serializable {
     private String errordescription;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "errorcodesID")
     private Collection<AccountProcess> accountProcessCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
+    private Collection<HoldProcess> holdProcessCollection;
 
     public ErrorCodes() {
     }
@@ -85,8 +89,20 @@ public class ErrorCodes implements Serializable {
     public void setErrordescription(String errordescription) {
         this.errordescription = errordescription;
     }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<HoldProcess> getHoldProcessCollection() {
+        return holdProcessCollection;
+    }
+
+    public void setHoldProcessCollection(Collection<HoldProcess> holdProcessCollection) {
+        this.holdProcessCollection = holdProcessCollection;
+    }
+
 
     @XmlTransient
+    @JsonIgnore
     public Collection<AccountProcess> getAccountProcessCollection() {
         return accountProcessCollection;
     }

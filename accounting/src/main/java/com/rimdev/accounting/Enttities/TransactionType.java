@@ -56,6 +56,10 @@ public class TransactionType implements Serializable {
     private int paymentNot;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactiontypeID")
     private Collection<AccountProcess> accountProcessCollection;
+    @Column(name = "Trxcode")
+    private int trxcode;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactiontypeID")
+    private Collection<HoldProcess> holdProcessCollection;
     
     
     private String error;
@@ -131,6 +135,24 @@ public class TransactionType implements Serializable {
 
     public void setAccountProcessCollection(Collection<AccountProcess> accountProcessCollection) {
         this.accountProcessCollection = accountProcessCollection;
+    }
+    
+    public int getTrxcode() {
+        return trxcode;
+    }
+
+    public void setTrxcode(int trxcode) {
+        this.trxcode = trxcode;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<HoldProcess> getHoldProcessCollection() {
+        return holdProcessCollection;
+    }
+
+    public void setHoldProcessCollection(Collection<HoldProcess> holdProcessCollection) {
+        this.holdProcessCollection = holdProcessCollection;
     }
 
     @Override

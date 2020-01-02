@@ -1,14 +1,14 @@
-DROP PROCEDURE IF EXISTS rim_accounting.postonelegtransaction;
+DROP PROCEDURE IF EXISTS rim_accounting.posthold;
 DELIMITER //
-CREATE  PROCEDURE rim_accounting.postonelegtransaction(
+CREATE  PROCEDURE rim_accounting.posthold(
 	IN reference_no VARCHAR(255),  -- Transaction description
     IN Currency VARCHAR(255),
     IN acct_no VARCHAR(255),
     IN amount DECIMAL(20,6),
-    IN Trantypecode integer, -- 100 debit 101 force debit 200 credit
+    IN Trantypecode integer, -- 300 hold 301 reverse
     IN Trx_flow VARCHAR(255),  -- Cash ,... as table flow_type
     IN Trx_desc VARCHAR(255),  -- Transaction description
-    IN hold_id integer,  -- Hold ID if have
+    IN holdid integer,  -- Hold ID if reverse 
     OUT error_code integer   -- as table error_codes
 )
 main:BEGIN
@@ -75,47 +75,23 @@ IF error_code > 0 THEN
 select id,payment_not INTO @Trxtype_id,@payment 
 from rim_accounting.transaction_type where TRXtype_status = 'Active' and Trxcode = Trantypecode;
 
--- if debit sub from avalible and current 
-		if @payment = 1 and Trantypecode = 100
+     --  hold
+		if @payment = 0 and Trantypecode = 300
 		THEN
-
-       set  @curr_up = @curr - amount ;
+        
+BEGIN
+       set @holdid = 0;
        set  @avl_up = @avl - amount ;
+       
+select IFNULL(max(id),100)  into @holdid from rim_accounting.hold_process;
 
-	if @avl_up < 0
-THEN
- INSERT INTO `rim_accounting`.`account_process`
-(`TRX_Amount`,
-`TRX_description`,
-`Currency_ID`,
-`account_ID`,
-`Transaction_type_ID`,
-`Reference_number`,
-`Flow_type_ID`,
-`Error_codes_ID`,
-`Hold_id`)
-VALUES
-(
-amount,
-Trx_desc,
-@currency_id,
-@account,
-@Trxtype_id,
-reference_no,
-@flow_id,
-7,
-hold_id); 
-set error_code = 7;
-IF error_code > 0 THEN
-         LEAVE main;
-    END IF; 
+set @holdid = @holdid+1 ;
 
-ELSE
-
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up where acct_number = acct_no 
 and Currency_ID =  @currency_id;    
+commit;
 
-INSERT INTO `rim_accounting`.`account_process`
+INSERT INTO `rim_accounting`.`hold_process`
 (`TRX_Amount`,
 `TRX_description`,
 `Currency_ID`,
@@ -135,27 +111,26 @@ Trx_desc,
 reference_no,
 @flow_id,
 1,
-hold_id); 
+@holdid); 
 
+commit;
 
-	END IF; 
-
-       END IF; 
+set error_code = @holdid;
+END;
+ END IF; 
        
        
-       -- if  force debit sub from avalible and current 
-		if @payment = 1 and Trantypecode = 101
+        --  reverse hold
+		if @payment = 0 and Trantypecode = 301
 		THEN
+        select TRX_Amount into @amt from rim_accounting.hold_process where Hold_id = holdid and account_ID = @account;
 
-       set  @curr_up = @curr - amount ;
-       set  @avl_up = @avl - amount ;
+       set  @avl_up = @avl +@amt;
 
-	
-
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up where id = @account 
 and Currency_ID =  @currency_id;    
-
-INSERT INTO `rim_accounting`.`account_process`
+commit;
+INSERT INTO `rim_accounting`.`hold_process`
 (`TRX_Amount`,
 `TRX_description`,
 `Currency_ID`,
@@ -167,7 +142,7 @@ INSERT INTO `rim_accounting`.`account_process`
 `Hold_id`)
 VALUES
 (
-amount,
+@amt,
 Trx_desc,
 @currency_id,
 @account,
@@ -175,44 +150,12 @@ Trx_desc,
 reference_no,
 @flow_id,
 1,
-hold_id); 
+holdid); 
+commit;
 
-END IF; 
+set error_code = holdid;
 
-
--- if credit sub from avalible and current 
-if @payment = 1 and Trantypecode = 200
-THEN
-       set  @curr_up = @curr + amount ;
-       set  @avl_up = @avl + amount ;
-       
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up where acct_number = acct_no 
-and Currency_ID =  @currency_id;   
-
-INSERT INTO `rim_accounting`.`account_process`
-(`TRX_Amount`,
-`TRX_description`,
-`Currency_ID`,
-`account_ID`,
-`Transaction_type_ID`,
-`Reference_number`,
-`Flow_type_ID`,
-`Error_codes_ID`,
-`Hold_id`)
-VALUES
-(
-amount,
-Trx_desc,
-@currency_id,
-@account,
-@Trxtype_id,
-reference_no,
-@flow_id,
-1,
-hold_id); 
-END IF;  
-
-
+ END IF; 
     
     
    
