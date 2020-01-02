@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.rimdev.accounting.Enttities.Account;
+import com.rimdev.accounting.Enttities.Currency;
 import com.rimdev.accounting.Enttities.ErrorCodes;
 import com.rimdev.accounting.Enttities.TransactionType;
 import com.rimdev.accounting.Repo.AccountProcessRepo;
 import com.rimdev.accounting.Services.AccountProcessServ;
+import com.rimdev.accounting.Services.AccountServ;
 import com.rimdev.accounting.Services.CurrencyServ;
 import com.rimdev.accounting.Services.ErrorCodesServ;
 import com.rimdev.accounting.Services.TransactionTypeServ;
@@ -39,6 +42,9 @@ public class TransactionController {
 	
 	@Autowired
 	CurrencyServ currencyServ;
+	
+	@Autowired
+	AccountServ accountServ;
 	
 	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -71,26 +77,47 @@ public class TransactionController {
 				}else {
 					
 					//check currency 
+					Currency cur=currencyServ.check_currency(input.getCurrency());
+					if(cur.getId() == -1) {
+						
+						  Transaction_output ouput=new Transaction_output();
+						  ouput.setError_desc(cur.getError());
+						  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
 					
-					if(currencyServ.check_currency(input.getCurrency())) {
+					
+					}else {
 						
 						
 						// check if account 
 						
 						if(input.getAcct_no() != null && input.getCustomer_no() == null) {
-							
-							
+						Account acct = accountServ.getbyaccount(input.getAcct_no(), cur.getId());
+							if(acct.getId() == -1) {
+								 Transaction_output ouput=new Transaction_output();
+								  ouput.setError_desc(acct.getError());
+								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+							}
 						}
 						if(input.getAcct_no() != null && input.getCustomer_no() != null) {
-							
-							
+							Account acct = accountServ.getbyaccount(input.getAcct_no(), cur.getId());	
+							if(acct.getId() == -1) {
+								 Transaction_output ouput=new Transaction_output();
+								  ouput.setError_desc(acct.getError());
+								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+							}
 						}
 						
 						// check if Rim 
 						
 						if(input.getCustomer_no() != null && input.getAcct_no() == null) {
+							Account acct = accountServ.getbyRim(input.getCustomer_no(), cur.getId());	
+							if(acct.getId() == -1) {
+								 Transaction_output ouput=new Transaction_output();
+								  ouput.setError_desc(acct.getError());
+								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+							}
 							
-							
+							input.setAcct_no(acct.getAcctNumber());
 						}
 				
 					
@@ -127,13 +154,6 @@ public class TransactionController {
 				}
 				
 				
-					}else {
-						
-						  Transaction_output ouput=new Transaction_output();
-						  ouput.setError_desc("Currency not found");
-						  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
-					
-						
 					}
 				
 				}

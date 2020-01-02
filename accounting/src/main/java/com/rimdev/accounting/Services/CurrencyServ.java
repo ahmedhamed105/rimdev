@@ -29,19 +29,32 @@ public class CurrencyServ {
 		
 	}
 	
-	public boolean check_currency(String currency) {
-		List<Currency> cu=(List<Currency>) currencyRepo.findAllstatus("Active");
+	public Currency check_currency(String currency) {
 		
-		boolean paymnet=false;
-		for (int i = 0; i < cu.size(); i++) {
+		try {
 			
-			if(cu.get(i).getCurrencyISO().equals(currency)) {
-				paymnet = true;
-				break;			
+			List<Currency> cu=(List<Currency>) currencyRepo.findAllstatus("Active");
+			
+			Currency paymnet=null;
+			for (int i = 0; i < cu.size(); i++) {
+				
+				if(cu.get(i).getCurrencyISO().equals(currency)) {
+					paymnet = cu.get(i);
+					break;			
+				}
+				
+			}
+			if(paymnet == null) {
+				return new Currency(-1,"Currency not found");
+			}else {
+			return paymnet;
 			}
 			
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new Currency(-1,e.getMessage());
 		}
-		return paymnet;
+	
 	}
 	
 	public List<Currency> getallstatus(String status) {

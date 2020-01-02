@@ -38,6 +38,47 @@ public List<Account> getallstatus(String status) {
 	
 }
 
+public Account getbyaccount(String acct_no,int currency) {
+	
+	try {
+		Optional<Account> acct =accountRepo.findbyaccount(acct_no, currency);
+		 
+		 if (acct.isPresent()){
+			 Account ouput = acct.get();
+			 return ouput;
+			}
+			else{
+			   // alternative processing....
+				return new Account(-1,"Account not found");
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return new Account(-1,e.getMessage());
+	}
+	
+}
+
+
+public Account getbyRim(String rim_no,int currency) {
+	
+	try {
+		Optional<Account> acct =accountRepo.findbyrim(rim_no, currency);
+		 
+		 if (acct.isPresent()){
+			 Account ouput = acct.get();
+			 return ouput;
+			}
+			else{
+			   // alternative processing....
+				return new Account(-1,"Rim not have account for this Currency");
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return new Account(-1,e.getMessage());
+	}
+	
+}
+
 public Account Save(Account input) {
 	
 	if(input.getCurrencyID() != null) {
