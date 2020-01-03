@@ -3,6 +3,8 @@ package com.rimdev.accounting.Enttities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -51,6 +55,14 @@ public class ErrorCodes implements Serializable {
     private Collection<AccountProcess> accountProcessCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
     private Collection<HoldProcess> holdProcessCollection;
+    
+    @Column(name = "create_Date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+    @Basic(optional = false)
+    @Column(name = "effective_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date effectiveDate;
 
     public ErrorCodes() {
     }
@@ -64,6 +76,23 @@ public class ErrorCodes implements Serializable {
         this.id = id;
         this.errorCode = errorCode;
         this.errordescription = errordescription;
+    }
+    
+    
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(Date effectiveDate) {
+        this.effectiveDate = effectiveDate;
     }
 
     public Integer getId() {

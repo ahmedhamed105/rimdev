@@ -4,6 +4,7 @@ package com.rimdev.accounting.Enttities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -22,6 +23,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -93,6 +96,13 @@ public class AccountProcess implements Serializable {
     private ErrorCodes errorcodesID;
     @Column(name = "Hold_id")
     private Integer holdid;
+    @Column(name = "create_Date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+    @Basic(optional = false)
+    @Column(name = "effective_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date effectiveDate;
 
 
     public AccountProcess() {
@@ -107,6 +117,22 @@ public class AccountProcess implements Serializable {
         this.tRXAmount = tRXAmount;
         this.tRXdescription = tRXdescription;
         this.referencenumber = referencenumber;
+    }
+    
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(Date effectiveDate) {
+        this.effectiveDate = effectiveDate;
     }
 
     public Integer getId() {

@@ -91,11 +91,22 @@ public class Account implements Serializable {
     private Currency currencyID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
     private Collection<HoldProcess> holdProcessCollection;
-    
+    @Column(name = "effective_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date effectiveDate;
     
     private String error;
 
     public Account() {
+    }
+    
+
+    public Date getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(Date effectiveDate) {
+        this.effectiveDate = effectiveDate;
     }
 
     public Account(Integer id,String error) {

@@ -4,6 +4,8 @@ package com.rimdev.accounting.Enttities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -66,6 +70,14 @@ public class HoldProcess implements Serializable {
     @JoinColumn(name = "account_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Account accountID;
+    
+    @Column(name = "create_Date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+    @Basic(optional = false)
+    @Column(name = "effective_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date effectiveDate;
 
     public HoldProcess() {
     }
@@ -79,6 +91,22 @@ public class HoldProcess implements Serializable {
         this.tRXAmount = tRXAmount;
         this.tRXdescription = tRXdescription;
         this.referencenumber = referencenumber;
+    }
+    
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(Date effectiveDate) {
+        this.effectiveDate = effectiveDate;
     }
 
     public Integer getId() {

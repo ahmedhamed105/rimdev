@@ -4,6 +4,8 @@ package com.rimdev.accounting.Enttities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -64,7 +68,13 @@ public class Currency implements Serializable {
     private Collection<Account> accountCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
     private Collection<HoldProcess> holdProcessCollection;
-    
+    @Column(name = "create_Date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+    @Basic(optional = false)
+    @Column(name = "effective_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date effectiveDate;
     private String error;
 
     public Currency() {
@@ -75,6 +85,21 @@ public class Currency implements Serializable {
         this.error = error;
     }
     
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(Date effectiveDate) {
+        this.effectiveDate = effectiveDate;
+    }
   
     public String getError() {
 		return error;
