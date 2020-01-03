@@ -20,6 +20,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -92,7 +95,8 @@ public class HoldProcess implements Serializable {
         this.tRXdescription = tRXdescription;
         this.referencenumber = referencenumber;
     }
-    
+    @XmlTransient
+    @JsonIgnore
     public Date getCreateDate() {
         return createDate;
     }
@@ -100,7 +104,8 @@ public class HoldProcess implements Serializable {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getEffectiveDate() {
         return effectiveDate;
     }

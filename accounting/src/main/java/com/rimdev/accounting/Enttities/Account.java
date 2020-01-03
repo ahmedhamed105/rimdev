@@ -100,7 +100,8 @@ public class Account implements Serializable {
     public Account() {
     }
     
-
+    @XmlTransient
+    @JsonIgnore
     public Date getEffectiveDate() {
         return effectiveDate;
     }
@@ -163,7 +164,8 @@ public class Account implements Serializable {
     public void setAvalbalance(BigDecimal avalbalance) {
         this.avalbalance = avalbalance;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getLastmodification() {
         return lastmodification;
     }
@@ -171,7 +173,8 @@ public class Account implements Serializable {
     public void setLastmodification(Date lastmodification) {
         this.lastmodification = lastmodification;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getCreatedate() {
         return createdate;
     }

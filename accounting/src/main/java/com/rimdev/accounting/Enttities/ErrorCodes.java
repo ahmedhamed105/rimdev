@@ -78,7 +78,8 @@ public class ErrorCodes implements Serializable {
         this.errordescription = errordescription;
     }
     
-    
+    @XmlTransient
+    @JsonIgnore
     public Date getCreateDate() {
         return createDate;
     }
@@ -86,7 +87,8 @@ public class ErrorCodes implements Serializable {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getEffectiveDate() {
         return effectiveDate;
     }

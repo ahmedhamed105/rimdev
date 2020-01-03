@@ -84,7 +84,8 @@ public class FlowType implements Serializable {
         this.id = id;
         this.error = error;
     }
-    
+    @XmlTransient
+    @JsonIgnore
     public Date getCreateDate() {
         return createDate;
     }
@@ -92,7 +93,8 @@ public class FlowType implements Serializable {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getEffectiveDate() {
         return effectiveDate;
     }
