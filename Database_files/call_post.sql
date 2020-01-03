@@ -1,4 +1,4 @@
-SELECT @ref = '2020-1-2-000000003';
+set @ref = '2020-1-2-000000003';
 -- hold
 CALL `rim_accounting`.`posthold`(@ref,'EGP', '1000000001',100, 300, 'cash','hamed',null,@hold);
 SELECT @hold;
@@ -6,7 +6,7 @@ SELECT @hold;
 CALL `rim_accounting`.`posthold`(@ref,'EGP', '1000000001',100, 301, 'cash','hamed',@hold,@error);
 SELECT @error;
 -- credit
-CALL `rim_accounting`.`postonelegtransaction`(@ref,'EGP', '1000000001',100, 200, 'cash','hamed',null,@error);
+CALL `rim_accounting`.`postonelegtransaction`(null,'EGP', '1000000001',100, 200, 'cash','hamed',null,@error);
 SELECT @error;
 
 -- Debit

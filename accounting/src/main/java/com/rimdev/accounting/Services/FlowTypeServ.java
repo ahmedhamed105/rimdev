@@ -1,5 +1,6 @@
 package com.rimdev.accounting.Services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,9 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.accounting.Enttities.Currency;
 import com.rimdev.accounting.Enttities.FlowType;
-import com.rimdev.accounting.Repo.CurrencyRepo;
 import com.rimdev.accounting.Repo.FlowTypeRepo;
 import com.rimdev.accounting.Utils.ObjectUtils;
 
@@ -36,6 +35,10 @@ public List<FlowType> getallstatus(String status) {
 public FlowType Save(FlowType input) {
 	
 	try {	
+		
+		Date date = new Date();
+		input.setCreateDate(date);
+		input.setEffectiveDate(date);
 		FlowType ouput =flowTypeRepo.save(input);	
 		return ouput;
 	} catch (Exception e) {
@@ -74,6 +77,8 @@ public FlowType update(FlowType input,Integer id)  {
 	}else {
 	
 	try {	
+		Date date = new Date();
+		ouput.setEffectiveDate(date);
 		FlowType ouput1 =flowTypeRepo.save(ouput);	
 		return ouput1;
 	} catch (Exception e) {

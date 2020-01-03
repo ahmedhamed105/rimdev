@@ -1,5 +1,6 @@
 package com.rimdev.accounting.Services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.accounting.Enttities.Currency;
 import com.rimdev.accounting.Enttities.TransactionType;
 import com.rimdev.accounting.Repo.TransactionTypeRepo;
 import com.rimdev.accounting.Utils.ObjectUtils;
@@ -31,18 +33,35 @@ public List<TransactionType> getallstatus(String status) {
 }
 
 
-public boolean checkpaymnet_not(String trx_type) {
-	List<TransactionType> cr_dr= (List<TransactionType>) transactionTypeRepo.findAllpaymnet(1);
-	boolean paymnet=false;
-	for (int i = 0; i < cr_dr.size(); i++) {
+public TransactionType checkpaymnet_not(int trx_type) {
+	
+	
+	try {
 		
-		if(cr_dr.get(i).getTRXtype().equals(trx_type)) {
-			paymnet = true;
-			break;			
+		List<TransactionType> cu=(List<TransactionType>) transactionTypeRepo.findAllstatus("Active");
+		
+		TransactionType paymnet=null;
+		for (int i = 0; i < cu.size(); i++) {
+			
+			if(cu.get(i).getTrxcode() == trx_type ) {
+				paymnet = cu.get(i);
+				break;			
+			}
+			
+		}
+		if(paymnet == null) {
+			return new TransactionType(-1,"transaction not found");
+		}else {
+		return paymnet;
 		}
 		
+	} catch (Exception e) {
+		// TODO: handle exception
+		return new TransactionType(-1,e.getMessage());
 	}
-	return paymnet;
+	
+	
+	
 }
 
 
@@ -54,6 +73,9 @@ public List<TransactionType> getallpaymnet(int pay) {
 	
 	
 public TransactionType Save(TransactionType input) {
+	Date date = new Date();
+	input.setCreateDate(date);
+	input.setEffectiveDate(date);
 	
 	try {	
 		TransactionType ouput =transactionTypeRepo.save(input);	
@@ -94,6 +116,8 @@ public TransactionType update(TransactionType input,Integer id)  {
 	}else {
 	
 	try {	
+		Date date = new Date();
+		ouput.setEffectiveDate(date);
 		TransactionType ouput1 =transactionTypeRepo.save(ouput);	
 		return ouput1;
 	} catch (Exception e) {

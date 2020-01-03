@@ -51,16 +51,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 
 @NamedStoredProcedureQueries({
-@NamedStoredProcedureQuery(name = "posttransaction", 
-                           procedureName = "rim_accounting.posttransaction",
+@NamedStoredProcedureQuery(name = "postonelegtransaction", 
+                           procedureName = "rim_accounting.postonelegtransaction",
                            parameters = {
-                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Customer_id", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "reference_no", type = String.class),
                               @StoredProcedureParameter(mode = ParameterMode.IN, name = "Currency", type = String.class),
                               @StoredProcedureParameter(mode = ParameterMode.IN, name = "acct_no", type = String.class),
                               @StoredProcedureParameter(mode = ParameterMode.IN, name = "amount", type = BigDecimal.class),
-                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Trx_type", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Trantypecode", type = Integer.class),
                               @StoredProcedureParameter(mode = ParameterMode.IN, name = "Trx_flow", type = String.class),
-                              @StoredProcedureParameter(mode = ParameterMode.OUT, name = "error_code", type = Integer.class)
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "Trx_desc", type = String.class),
+                              @StoredProcedureParameter(mode = ParameterMode.IN, name = "hold_id", type = Integer.class),
+                              @StoredProcedureParameter(mode = ParameterMode.OUT, name = "error_code", type = String.class)
                            }) 
 })
 public class AccountProcess implements Serializable {

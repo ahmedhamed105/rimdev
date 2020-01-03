@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 
 public class Transaction_output {
 	
-	Boolean Trx_status;
 	int     Error_code;
 	String  Error_desc;
 	String  Acct_no;
 	String  Customer_no;
 	String  Currency;
+	BigDecimal  amount;
 	BigDecimal  Current_balance;
 	BigDecimal  Avl_balance;
 	String  Reference_no;
@@ -20,6 +20,20 @@ public class Transaction_output {
 	}
 	
 	
+	
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+
+
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+
 
 
 	public String getReference_no() {
@@ -33,17 +47,6 @@ public class Transaction_output {
 		Reference_no = reference_no;
 	}
 
-
-
-
-	public Boolean getTrx_status() {
-		return Trx_status;
-	}
-
-
-	public void setTrx_status(Boolean trx_status) {
-		Trx_status = trx_status;
-	}
 
 
 	public int getError_code() {

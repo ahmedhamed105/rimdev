@@ -1,5 +1,6 @@
 package com.rimdev.accounting.Services;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +69,9 @@ public class CurrencyServ {
 public Currency Save(Currency input) {
 	
 	try {	
+		Date date = new Date();
+		input.setCreateDate(date);
+		input.setEffectiveDate(date);
 		Currency ouput =currencyRepo.save(input);	
 		return ouput;
 	} catch (Exception e) {
@@ -106,6 +110,8 @@ public Currency update(Currency input,Integer id)  {
 	}else {
 	
 	try {	
+		Date date = new Date();
+		ouput.setEffectiveDate(date);
 		Currency ouput1 =currencyRepo.save(ouput);	
 		return ouput1;
 	} catch (Exception e) {

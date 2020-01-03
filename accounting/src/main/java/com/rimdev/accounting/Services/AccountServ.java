@@ -1,5 +1,6 @@
 package com.rimdev.accounting.Services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,27 @@ private AccountRepo accountRepo;
 
 @Autowired 
 private CurrencyRepo currencyRepo;
+
+
+public Account findbyid(int id) {
+	
+	try {
+		Optional<Account> flowid =accountRepo.findbyidstatus(id);
+		 
+		 if (flowid.isPresent()){
+			 Account  ouput = flowid.get();
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return new Account(-1,"account or currency not Active");
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return new Account(-1,e.getMessage());
+	}
+	
+}
 
 
 public List<Account> getall() {
@@ -101,6 +123,11 @@ public Account Save(Account input) {
 	}
 	
 	try {	
+		
+		Date date = new Date();
+		input.setCreatedate(date);
+		input.setLastmodification(date);
+		input.setEffectiveDate(date);
 		Account ouput =accountRepo.save(input);	
 		return ouput;
 	} catch (Exception e) {
@@ -139,6 +166,9 @@ public Account update(Account input,Integer id)  {
 	}else {
 	
 	try {	
+		Date date = new Date();
+		ouput.setLastmodification(date);
+		ouput.setEffectiveDate(date);
 		Account ouput1 =accountRepo.save(ouput);	
 		return ouput1;
 	} catch (Exception e) {

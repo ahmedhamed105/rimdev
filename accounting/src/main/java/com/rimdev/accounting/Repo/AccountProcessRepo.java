@@ -14,7 +14,15 @@ import com.rimdev.accounting.Enttities.AccountProcess;
 public interface AccountProcessRepo extends CrudRepository<AccountProcess, Integer>{
 
 
-    @Procedure(name = "posttransaction")
-    int main3(@Param("Customer_id")String Customer_id,@Param("Currency")String Currency,@Param("acct_no")String acct_no,@Param("amount")BigDecimal amount,@Param("Trx_type")String Trx_type,@Param("Trx_flow")String Trx_flow);
+    @Procedure(name = "postonelegtransaction")
+    String main3(
+   @Param("reference_no")String reference_no,
+   @Param("Currency")String Currency,
+   @Param("acct_no")String acct_no,
+   @Param("amount")BigDecimal amount,
+   @Param("Trantypecode")int Trantypecode,
+   @Param("Trx_flow")String Trx_flow,
+   @Param("Trx_desc")String Trx_desc,
+   @Param("hold_id")int hold_id);
 
 }

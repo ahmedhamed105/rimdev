@@ -3,99 +3,90 @@ package com.rimdev.accounting.inputobject;
 import java.math.BigDecimal;
 
 public class transaction_input {
-	
-	String Customer_no;
+	String Customer_id;
+	String reference_no;
 	String Currency;
 	String acct_no;
 	BigDecimal amount;
-    String Trx_type;
-    String Trx_flow;
-    String  Reference_no;
-    
-    
+	int Trantypecode;
+	String Trx_flow;
+	String Trx_desc;
+	int hold_id;
+
 	public transaction_input() {
 		super();
 	}
-	
-	
-	
 
+	public String getCustomer_id() {
+		return Customer_id;
+	}
+
+	public void setCustomer_id(String customer_id) {
+		Customer_id = customer_id;
+	}
 
 	public String getReference_no() {
-		return Reference_no;
+		return reference_no;
 	}
-
 
 	public void setReference_no(String reference_no) {
-		Reference_no = reference_no;
+		this.reference_no = reference_no;
 	}
-
-
-
-
-
-	public String getCustomer_no() {
-		return Customer_no;
-	}
-
-
-	public void setCustomer_no(String customer_no) {
-		Customer_no = customer_no;
-	}
-
 
 	public String getCurrency() {
 		return Currency;
 	}
 
-
 	public void setCurrency(String currency) {
 		Currency = currency;
 	}
-
 
 	public String getAcct_no() {
 		return acct_no;
 	}
 
-
 	public void setAcct_no(String acct_no) {
 		this.acct_no = acct_no;
 	}
-
 
 	public BigDecimal getAmount() {
 		return amount;
 	}
 
-
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
-
-	public String getTrx_type() {
-		return Trx_type;
+	public int getTrantypecode() {
+		return Trantypecode;
 	}
 
-
-	public void setTrx_type(String trx_type) {
-		Trx_type = trx_type;
+	public void setTrantypecode(int trantypecode) {
+		Trantypecode = trantypecode;
 	}
-
 
 	public String getTrx_flow() {
 		return Trx_flow;
 	}
 
-
 	public void setTrx_flow(String trx_flow) {
 		Trx_flow = trx_flow;
 	}
-    
-	
-	
-    
-    
+
+	public String getTrx_desc() {
+		return Trx_desc;
+	}
+
+	public void setTrx_desc(String trx_desc) {
+		Trx_desc = trx_desc;
+	}
+
+	public int getHold_id() {
+		return hold_id;
+	}
+
+	public void setHold_id(int hold_id) {
+		this.hold_id = hold_id;
+	}
 
 }

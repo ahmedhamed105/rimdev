@@ -17,9 +17,17 @@ public class AccountProcessServ {
 	
 	
 	
-	public int call_post(String Customer_id,String Currency,String acct_no,BigDecimal amount,String Trx_type,String Trx_flow){
-		int error=0;
-		error= accountProcessRepo.main3(Customer_id, Currency, acct_no, amount, Trx_type, Trx_flow);
+	public String call_post( String reference_no,
+			   String Currency,
+			   String acct_no,
+			   BigDecimal amount,
+			   int Trantypecode,
+			   String Trx_flow,
+			   String Trx_desc,
+			   int hold_id
+			){
+		String error="0";
+		error= accountProcessRepo.main3(reference_no, Currency, acct_no, amount, Trantypecode, Trx_flow, Trx_desc, hold_id);
 		return error;
 	}
 

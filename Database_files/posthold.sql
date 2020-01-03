@@ -13,6 +13,8 @@ CREATE  PROCEDURE rim_accounting.posthold(
 )
 main:BEGIN
 
+set @cdate = now();
+
 -- check  currency
 select 
 case when count(*) = 1 then 0 else 3 end INTO error_code
@@ -87,7 +89,7 @@ select IFNULL(max(id),100)  into @holdid from rim_accounting.hold_process;
 
 set @holdid = @holdid+1 ;
 
-update rim_accounting.account  set Aval_balance = @avl_up where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,effective_date=@cdate where acct_number = acct_no 
 and Currency_ID =  @currency_id;    
 commit;
 
@@ -100,7 +102,9 @@ INSERT INTO `rim_accounting`.`hold_process`
 `Reference_number`,
 `Flow_type_ID`,
 `Error_codes_ID`,
-`Hold_id`)
+`Hold_id`,
+`create_Date`,
+`effective_date`)
 VALUES
 (
 amount,
@@ -111,7 +115,9 @@ Trx_desc,
 reference_no,
 @flow_id,
 1,
-@holdid); 
+@holdid,
+@cdate,
+@cdate); 
 
 commit;
 
@@ -127,7 +133,7 @@ END;
 
        set  @avl_up = @avl +@amt;
 
-update rim_accounting.account  set Aval_balance = @avl_up where id = @account 
+update rim_accounting.account  set Aval_balance = @avl_up,effective_date=@cdate  where id = @account 
 and Currency_ID =  @currency_id;    
 commit;
 INSERT INTO `rim_accounting`.`hold_process`
@@ -139,7 +145,9 @@ INSERT INTO `rim_accounting`.`hold_process`
 `Reference_number`,
 `Flow_type_ID`,
 `Error_codes_ID`,
-`Hold_id`)
+`Hold_id`,
+`create_Date`,
+`effective_date`)
 VALUES
 (
 @amt,
@@ -150,7 +158,9 @@ Trx_desc,
 reference_no,
 @flow_id,
 1,
-holdid); 
+holdid,
+@cdate,
+@cdate); 
 commit;
 
 set error_code = holdid;

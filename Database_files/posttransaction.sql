@@ -9,9 +9,16 @@ CREATE  PROCEDURE rim_accounting.postonelegtransaction(
     IN Trx_flow VARCHAR(255),  -- Cash ,... as table flow_type
     IN Trx_desc VARCHAR(255),  -- Transaction description
     IN hold_id integer,  -- Hold ID if have
-    OUT error_code integer   -- as table error_codes
+    OUT error_code VARCHAR(255)   -- as table error_codes
+
 )
 main:BEGIN
+
+set @cdate = now();
+
+if reference_no is null then
+set reference_no =rim_accounting.generateref();
+END IF;
 
 -- check  currency
 select 
@@ -93,7 +100,9 @@ THEN
 `Reference_number`,
 `Flow_type_ID`,
 `Error_codes_ID`,
-`Hold_id`)
+`Hold_id`,
+`create_Date`,
+`effective_date`)
 VALUES
 (
 amount,
@@ -104,15 +113,17 @@ Trx_desc,
 reference_no,
 @flow_id,
 7,
-hold_id); 
-set error_code = 7;
+hold_id,
+@cdate,
+@cdate); 
+set error_code = concat(7,',',reference_no);
 IF error_code > 0 THEN
          LEAVE main;
     END IF; 
 
 ELSE
 
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where acct_number = acct_no 
 and Currency_ID =  @currency_id;    
 
 INSERT INTO `rim_accounting`.`account_process`
@@ -124,7 +135,9 @@ INSERT INTO `rim_accounting`.`account_process`
 `Reference_number`,
 `Flow_type_ID`,
 `Error_codes_ID`,
-`Hold_id`)
+`Hold_id`,
+`create_Date`,
+`effective_date`)
 VALUES
 (
 amount,
@@ -135,7 +148,9 @@ Trx_desc,
 reference_no,
 @flow_id,
 1,
-hold_id); 
+hold_id,
+@cdate,
+@cdate); 
 
 
 	END IF; 
@@ -152,7 +167,7 @@ hold_id);
 
 	
 
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where acct_number = acct_no 
 and Currency_ID =  @currency_id;    
 
 INSERT INTO `rim_accounting`.`account_process`
@@ -164,7 +179,9 @@ INSERT INTO `rim_accounting`.`account_process`
 `Reference_number`,
 `Flow_type_ID`,
 `Error_codes_ID`,
-`Hold_id`)
+`Hold_id`,
+`create_Date`,
+`effective_date`)
 VALUES
 (
 amount,
@@ -175,7 +192,9 @@ Trx_desc,
 reference_no,
 @flow_id,
 1,
-hold_id); 
+hold_id,
+@cdate,
+@cdate); 
 
 END IF; 
 
@@ -186,7 +205,7 @@ THEN
        set  @curr_up = @curr + amount ;
        set  @avl_up = @avl + amount ;
        
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where acct_number = acct_no 
 and Currency_ID =  @currency_id;   
 
 INSERT INTO `rim_accounting`.`account_process`
@@ -198,7 +217,9 @@ INSERT INTO `rim_accounting`.`account_process`
 `Reference_number`,
 `Flow_type_ID`,
 `Error_codes_ID`,
-`Hold_id`)
+`Hold_id`,
+`create_Date`,
+`effective_date`)
 VALUES
 (
 amount,
@@ -209,11 +230,13 @@ Trx_desc,
 reference_no,
 @flow_id,
 1,
-hold_id); 
+hold_id,
+@cdate,
+@cdate); 
 END IF;  
 
 
-    
+ set error_code = concat(0,',',reference_no);   
     
    
 END //
