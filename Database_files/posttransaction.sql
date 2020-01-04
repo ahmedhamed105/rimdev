@@ -116,6 +116,7 @@ reference_no,
 hold_id,
 @cdate,
 @cdate); 
+commit;
 set error_code = concat(7,',',reference_no);
 IF error_code > 0 THEN
          LEAVE main;
@@ -123,9 +124,9 @@ IF error_code > 0 THEN
 
 ELSE
 
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where id = @account 
 and Currency_ID =  @currency_id;    
-
+commit;
 INSERT INTO `rim_accounting`.`account_process`
 (`TRX_Amount`,
 `TRX_description`,
@@ -152,7 +153,7 @@ hold_id,
 @cdate,
 @cdate); 
 
-
+commit;
 	END IF; 
 
        END IF; 
@@ -167,9 +168,9 @@ hold_id,
 
 	
 
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where id = @account 
 and Currency_ID =  @currency_id;    
-
+commit;
 INSERT INTO `rim_accounting`.`account_process`
 (`TRX_Amount`,
 `TRX_description`,
@@ -195,7 +196,7 @@ reference_no,
 hold_id,
 @cdate,
 @cdate); 
-
+commit;
 END IF; 
 
 
@@ -205,9 +206,9 @@ THEN
        set  @curr_up = @curr + amount ;
        set  @avl_up = @avl + amount ;
        
-update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,Curr_balance=@curr_up,effective_date=@cdate  where id = @account 
 and Currency_ID =  @currency_id;   
-
+commit;
 INSERT INTO `rim_accounting`.`account_process`
 (`TRX_Amount`,
 `TRX_description`,
@@ -233,9 +234,10 @@ reference_no,
 hold_id,
 @cdate,
 @cdate); 
+commit;
 END IF;  
 
-
+commit;
  set error_code = concat(0,',',reference_no);   
     
    

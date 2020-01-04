@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,10 +39,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @DynamicUpdate
 @XmlRootElement
 @NamedQueries({
-     @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")
+      @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")
     , @NamedQuery(name = "Account.findById", query = "SELECT a FROM Account a WHERE a.id = :id")
-    
-    
     , @NamedQuery(name = "Account.findByAcctNumber", query = "SELECT a FROM Account a WHERE a.acctNumber = :acctNumber")
     , @NamedQuery(name = "Account.findByAcctName", query = "SELECT a FROM Account a WHERE a.acctName = :acctName")
     , @NamedQuery(name = "Account.findByCurrbalance", query = "SELECT a FROM Account a WHERE a.currbalance = :currbalance")

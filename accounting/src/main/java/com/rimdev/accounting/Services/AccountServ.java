@@ -29,11 +29,14 @@ private CurrencyRepo currencyRepo;
 
 public Account findbyid(int id) {
 	
+	
+	
 	try {
 		Optional<Account> flowid =accountRepo.findbyidstatus(id);
 		 
 		 if (flowid.isPresent()){
 			 Account  ouput = flowid.get();
+		
 			  return ouput;
 					}
 			else{

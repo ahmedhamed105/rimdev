@@ -9,11 +9,15 @@ CREATE  PROCEDURE rim_accounting.posthold(
     IN Trx_flow VARCHAR(255),  -- Cash ,... as table flow_type
     IN Trx_desc VARCHAR(255),  -- Transaction description
     IN holdid integer,  -- Hold ID if reverse 
-    OUT error_code integer   -- as table error_codes
+    OUT error_code VARCHAR(255)   -- as table error_codes
 )
 main:BEGIN
 
 set @cdate = now();
+
+if reference_no is null then
+set reference_no =rim_accounting.generateref();
+END IF;
 
 -- check  currency
 select 
@@ -77,6 +81,26 @@ IF error_code > 0 THEN
 select id,payment_not INTO @Trxtype_id,@payment 
 from rim_accounting.transaction_type where TRXtype_status = 'Active' and Trxcode = Trantypecode;
 
+-- check hold id if release
+     if Trantypecode = 301
+       THEN
+       if holdid = 0 or holdid = null
+       THEN
+        set  error_code = '9';
+       END IF; 
+       
+       select count(*) into @hold from rim_accounting.hold_process where Hold_id = holdid;
+       
+        if @hold <= 0 or @hold > 1
+       THEN
+        set  error_code = '9';
+       END IF; 
+       
+     
+        IF error_code > 0 THEN
+         LEAVE main;
+		END IF;  
+END IF;  
      --  hold
 		if @payment = 0 and Trantypecode = 300
 		THEN
@@ -89,7 +113,7 @@ select IFNULL(max(id),100)  into @holdid from rim_accounting.hold_process;
 
 set @holdid = @holdid+1 ;
 
-update rim_accounting.account  set Aval_balance = @avl_up,effective_date=@cdate where acct_number = acct_no 
+update rim_accounting.account  set Aval_balance = @avl_up,effective_date=@cdate where id = @account 
 and Currency_ID =  @currency_id;    
 commit;
 
@@ -104,7 +128,8 @@ INSERT INTO `rim_accounting`.`hold_process`
 `Error_codes_ID`,
 `Hold_id`,
 `create_Date`,
-`effective_date`)
+`effective_date`,
+`Hold_Status`)
 VALUES
 (
 amount,
@@ -117,54 +142,32 @@ reference_no,
 1,
 @holdid,
 @cdate,
-@cdate); 
+@cdate,
+'Active'); 
 
 commit;
 
-set error_code = @holdid;
+
+ set error_code = concat(@holdid,',',reference_no);
 END;
  END IF; 
        
-       
+  
+   
         --  reverse hold
-		if @payment = 0 and Trantypecode = 301
+		if @payment = 0 and Trantypecode = 301 and holdid <> 0
 		THEN
-        select TRX_Amount into @amt from rim_accounting.hold_process where Hold_id = holdid and account_ID = @account;
+        select TRX_Amount,id into @amt,@hold_curr from rim_accounting.hold_process where Hold_id = holdid and account_ID = @account;
 
        set  @avl_up = @avl +@amt;
 
 update rim_accounting.account  set Aval_balance = @avl_up,effective_date=@cdate  where id = @account 
 and Currency_ID =  @currency_id;    
 commit;
-INSERT INTO `rim_accounting`.`hold_process`
-(`TRX_Amount`,
-`TRX_description`,
-`Currency_ID`,
-`account_ID`,
-`Transaction_type_ID`,
-`Reference_number`,
-`Flow_type_ID`,
-`Error_codes_ID`,
-`Hold_id`,
-`create_Date`,
-`effective_date`)
-VALUES
-(
-@amt,
-Trx_desc,
-@currency_id,
-@account,
-@Trxtype_id,
-reference_no,
-@flow_id,
-1,
-holdid,
-@cdate,
-@cdate); 
+update rim_accounting.hold_process  set Hold_Status = 'Closed',effective_date=@cdate  where id = @hold_curr;    
 commit;
 
-set error_code = holdid;
-
+ set error_code = concat(@holdid,',',reference_no); 
  END IF; 
     
     

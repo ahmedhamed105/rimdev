@@ -1,7 +1,11 @@
 package com.rimdev.accounting.Controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.transaction.Transaction;
 
@@ -16,15 +20,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.rimdev.accounting.Enttities.Account;
 import com.rimdev.accounting.Enttities.Currency;
 import com.rimdev.accounting.Enttities.ErrorCodes;
+import com.rimdev.accounting.Enttities.HoldProcess;
 import com.rimdev.accounting.Enttities.TransactionType;
 import com.rimdev.accounting.Repo.AccountProcessRepo;
 import com.rimdev.accounting.Services.AccountProcessServ;
 import com.rimdev.accounting.Services.AccountServ;
 import com.rimdev.accounting.Services.CurrencyServ;
 import com.rimdev.accounting.Services.ErrorCodesServ;
+import com.rimdev.accounting.Services.HoldProcessServ;
 import com.rimdev.accounting.Services.TransactionTypeServ;
+import com.rimdev.accounting.inputobject.hold_search;
 import com.rimdev.accounting.inputobject.transaction_input;
 import com.rimdev.accounting.outputobject.Transaction_output;
+import com.rimdev.accounting.outputobject.hold_output;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/Trx") // 
@@ -45,6 +53,9 @@ public class TransactionController {
 	
 	@Autowired
 	AccountServ accountServ;
+	
+	@Autowired
+	HoldProcessServ holdProcessServ;
 	
 	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -184,7 +195,10 @@ public class TransactionController {
 						ErrorCodes Err=	errorCodesServ.geterrordesc(error);
 						Transaction_output ouput=new Transaction_output();
 						
+						
 						Account acctup = accountServ.findbyid(acct.getId());
+						 
+						
 						ouput.setReference_no(reference);
 						ouput.setAmount(input.getAmount());
 						ouput.setAvl_balance(acctup.getAvalbalance());
@@ -211,7 +225,7 @@ public class TransactionController {
 	  
 	  
 	  @RequestMapping(value = "/Hold", method = RequestMethod.POST)
-	  public  ResponseEntity<Transaction_output> hold(@RequestBody transaction_input input) {
+	  public  ResponseEntity<hold_output> hold(@RequestBody transaction_input input) {
 	    // This returns a JSON or XML with the users
 		  System.out.println(input);
 		
@@ -221,19 +235,19 @@ public class TransactionController {
 					
 					if(input.getAcct_no() == null && input.getCustomer_id() == null) {
 						ErrorCodes Err=	errorCodesServ.geterrordesc(1);
-						  Transaction_output ouput=new Transaction_output();
+						hold_output ouput=new hold_output();
 						ouput.setError_code(Err.getErrorCode());
 						ouput.setError_desc(Err.getErrordescription());
-						  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+						  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);
 						
 					}else {
 						
 						if(input.getCurrency() == null) {
 							ErrorCodes Err=	errorCodesServ.geterrordesc(3);
-							  Transaction_output ouput=new Transaction_output();
+							hold_output ouput=new hold_output();
 							ouput.setError_code(Err.getErrorCode());
 							ouput.setError_desc(Err.getErrordescription());
-							  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+							  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);
 						}else {
 							
 							//check currency 
@@ -241,10 +255,10 @@ public class TransactionController {
 							if(cur.getId() == -1) {
 								
 								ErrorCodes Err=	errorCodesServ.geterrordesc(3);
-								  Transaction_output ouput=new Transaction_output();
+								hold_output ouput=new hold_output();
 								ouput.setError_code(Err.getErrorCode());
 								ouput.setError_desc(Err.getErrordescription());
-								  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+								  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);
 							
 							
 							}else {
@@ -256,20 +270,20 @@ public class TransactionController {
 								 acct = accountServ.getbyaccount(input.getAcct_no(), cur.getId());
 									if(acct.getId() == -1) {
 										ErrorCodes Err=	errorCodesServ.geterrordesc(1);
-										  Transaction_output ouput=new Transaction_output();
+										hold_output ouput=new hold_output();
 										ouput.setError_code(Err.getErrorCode());
 										ouput.setError_desc(Err.getErrordescription());
-										  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+										  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);	
 									}
 								}
 								if(input.getAcct_no() != null && input.getCustomer_id() != null) {
 									acct= accountServ.getbyaccount(input.getAcct_no(), cur.getId());	
 									if(acct.getId() == -1) {
 										ErrorCodes Err=	errorCodesServ.geterrordesc(1);
-										  Transaction_output ouput=new Transaction_output();
+										hold_output ouput=new hold_output();
 										ouput.setError_code(Err.getErrorCode());
 										ouput.setError_desc(Err.getErrordescription());
-										  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+										  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);	
 									}
 								}
 								
@@ -279,10 +293,10 @@ public class TransactionController {
 									 acct = accountServ.getbyRim(input.getCustomer_id(), cur.getId());	
 									if(acct.getId() == -1) {
 										ErrorCodes Err=	errorCodesServ.geterrordesc(2);
-										  Transaction_output ouput=new Transaction_output();
+										hold_output ouput=new hold_output();
 										ouput.setError_code(Err.getErrorCode());
 										ouput.setError_desc(Err.getErrordescription());
-										  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);	
+										  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);	
 									}
 									
 									input.setAcct_no(acct.getAcctNumber());
@@ -296,48 +310,55 @@ public class TransactionController {
 				if(trantype.getId() == -1 ) {
 					
 					ErrorCodes Err=	errorCodesServ.geterrordesc(6);
-					  Transaction_output ouput=new Transaction_output();
+					hold_output ouput=new hold_output();
 					ouput.setError_code(Err.getErrorCode());
 					ouput.setError_desc(Err.getErrordescription());
-					  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+					  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);
 				
 				
 				}else {
 					
 					if(trantype.getPaymentNot() == 1) {
 						ErrorCodes Err=	errorCodesServ.geterrordesc(8);
-						  Transaction_output ouput=new Transaction_output();
+						hold_output ouput=new hold_output();
 						ouput.setError_code(Err.getErrorCode());
 						ouput.setError_desc(Err.getErrordescription());
-						  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+						  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);
 						
 						
 					}
 					
 					if(input.getAmount() == null || input.getAmount().compareTo(new BigDecimal("0.00")) == 0 ) {
 						ErrorCodes Err=	errorCodesServ.geterrordesc(4);
-						  Transaction_output ouput=new Transaction_output();
+						hold_output ouput=new hold_output();
 						ouput.setError_code(Err.getErrorCode());
 						ouput.setError_desc(Err.getErrordescription());
-						  return new ResponseEntity<Transaction_output>(ouput, HttpStatus.BAD_REQUEST);
+						  return new ResponseEntity<hold_output>(ouput, HttpStatus.BAD_REQUEST);
 						
 					}else{
 						
 						// hold call procedure
 						
-						String prouput =accountProcessServ.call_post(input.getReference_no(),input.getCurrency(),input.getAcct_no(),input.getAmount(),input.getTrantypecode(),input.getTrx_flow(),input.getTrx_desc(),input.getHold_id());
+						String prouput =accountProcessServ.call_hold(input.getReference_no(),input.getCurrency(),input.getAcct_no(),input.getAmount(),input.getTrantypecode(),input.getTrx_flow(),input.getTrx_desc(),input.getHold_id());
 						int error = 1;
+						int hold_idre = 0;
 						String reference="no";
+						ErrorCodes Err=null;
 						if(prouput.contains(",")) {
-							error=Integer.parseInt(prouput.split(",")[0]);
+							hold_idre=Integer.parseInt(prouput.split(",")[0]);
 							reference=prouput.split(",")[1];
+							 Err=	errorCodesServ.geterrordesc(0);
 						}else {
+							hold_idre=0;
 							error=Integer.parseInt(prouput);
+							 Err=	errorCodesServ.geterrordesc(error);
 						}
-						ErrorCodes Err=	errorCodesServ.geterrordesc(error);
-						Transaction_output ouput=new Transaction_output();
+				
+						hold_output ouput=new hold_output();
 						
 						Account acctup = accountServ.findbyid(acct.getId());
+					//	 acctup = accountServ.findbyid(acct.getId());
+						ouput.setHold_id(hold_idre);
 						ouput.setReference_no(reference);
 						ouput.setAmount(input.getAmount());
 						ouput.setAvl_balance(acctup.getAvalbalance());
@@ -347,7 +368,7 @@ public class TransactionController {
 						ouput.setCurrency(acctup.getCurrencyID().getCurrencyISO());
 						ouput.setError_code(Err.getErrorCode());
 						ouput.setError_desc(Err.getErrordescription());
-					return new ResponseEntity<Transaction_output>(ouput, HttpStatus.OK);	
+					return new ResponseEntity<hold_output>(ouput, HttpStatus.OK);	
 									
 						
 						
@@ -362,4 +383,55 @@ public class TransactionController {
 		
 	  }
 
+	  
+	  
+	  @RequestMapping(value = "/holdtransaction", method = RequestMethod.GET)
+	  public  ResponseEntity<List<HoldProcess>> getholds(@RequestBody hold_search search) {
+		    // This returns a JSON or XML with the users
+			List<HoldProcess> ouput;
+			if(search.getStatus() != null && search.getDescription() == null ) {
+			 ouput= holdProcessServ.getallstatus(search.getStatus());
+			}else if(search.getStatus() == null && search.getDescription() != null ) {
+			 ouput= holdProcessServ.getalllikedescription(search.getDescription());	
+			}else if(search.getStatus() != null && search.getDescription() != null ) {
+				 ouput= holdProcessServ.getalllikedescription(search.getStatus(),search.getDescription());	
+				
+			}else {
+				HoldProcess ouputq=new HoldProcess();
+					ouputq.setHoldid(-1);
+					ouputq.setError("no parmter to search");
+					
+					ouput=new ArrayList<HoldProcess>();
+					ouput.add(ouputq);
+					  return new ResponseEntity<List<HoldProcess>>(ouput, HttpStatus.BAD_REQUEST);
+		
+				
+			}
+				
+			  return new ResponseEntity<List<HoldProcess>>(ouput, HttpStatus.OK);
+		  }
+	  
+	  
+	  @RequestMapping(value = "/holdid", method = RequestMethod.GET)
+	  public  ResponseEntity<HoldProcess> getholdid(@RequestBody hold_search holdid) {
+		    // This returns a JSON or XML with the users
+			HoldProcess ouput;
+			if(holdid.getHold_id() != 0) {
+			
+			ouput= holdProcessServ.getbyholdid(holdid.getHold_id());	
+				
+			}else {
+				HoldProcess ouputq=new HoldProcess();
+					ouputq.setHoldid(-1);
+					ouputq.setError("no parmter to search");
+
+					  return new ResponseEntity<HoldProcess>(ouputq, HttpStatus.BAD_REQUEST);
+
+			}
+				
+			  return new ResponseEntity<HoldProcess>(ouput, HttpStatus.OK);
+		  }
+	  
+	  
+	  
 }

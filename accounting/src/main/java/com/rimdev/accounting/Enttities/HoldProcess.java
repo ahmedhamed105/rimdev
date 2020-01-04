@@ -81,12 +81,17 @@ public class HoldProcess implements Serializable {
     @Column(name = "effective_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date effectiveDate;
-
+    @Column(name = "Hold_Status")
+    private String holdStatus;
+    private String error;
+    
+    
     public HoldProcess() {
     }
 
-    public HoldProcess(Integer id) {
-        this.id = id;
+    public HoldProcess(Integer holdid,String error) {
+        this.holdid = holdid;
+        this.error = error;
     }
 
     public HoldProcess(Integer id, BigDecimal tRXAmount, String tRXdescription, String referencenumber) {
@@ -95,6 +100,27 @@ public class HoldProcess implements Serializable {
         this.tRXdescription = tRXdescription;
         this.referencenumber = referencenumber;
     }
+    
+    
+   
+    public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public String getHoldStatus() {
+        return holdStatus;
+    }
+
+    public void setHoldStatus(String holdStatus) {
+        this.holdStatus = holdStatus;
+    }
+    
+    
+    
     @XmlTransient
     @JsonIgnore
     public Date getCreateDate() {
