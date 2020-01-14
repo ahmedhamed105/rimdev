@@ -1,12 +1,15 @@
 package com.rimdev.accounting.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,12 +29,10 @@ public class CurrencyController {
 	
 	
 	
-	
+
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Currency>> getAllUsers() {
-	    // This returns a JSON or XML with the users
-		
-		return new ResponseEntity<List<Currency>>(currencyServ.getall(), HttpStatus.OK);
+	  public  ResponseEntity<List<Currency>> getAllUsers(){
+		return new ResponseEntity<List<Currency>>(currencyServ.getallstatus("Active"), HttpStatus.OK);
 	  }
 	
 	
