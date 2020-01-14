@@ -55,19 +55,19 @@ public class CurrencyController {
 	  public @ResponseBody ResponseEntity<List<Currency>> saveorupdate(@RequestBody Currency input) {
 	    // This returns a JSON or XML with the users
 		
-		for(Currency cd:getAllUsers().getBody()) {
-			if(cd.getCurrencyISO().equals(input.getCurrencyISO())) {
-				return getAllUserserror(1);	 					
-			}
-			
-		}
+		
 		
 		Currency ouput = null;
 		
 		if(input.getId() == null || input.getId() == 0) {
 			System.out.println("insert");
 	
-			
+			for(Currency cd:getAllUsers().getBody()) {
+				if(cd.getCurrencyISO().equals(input.getCurrencyISO())) {
+					return getAllUserserror(1);	 					
+				}
+				
+			}
 			
 			
 			try {

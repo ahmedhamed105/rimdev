@@ -51,17 +51,19 @@ public class FlowController {
 	  public @ResponseBody ResponseEntity<List<FlowType>> saveorupdate(@RequestBody FlowType input) {
 	    // This returns a JSON or XML with the users
 		
-		for(FlowType cd:getAllUsers().getBody()) {
-			if(cd.getFlowtype().equals(input.getFlowtype())) {
-				return getAllUserserror(1);	 					
-			}
-			
-		}
+
 		
 		FlowType ouput = null;
 		
 		if(input.getId() == null || input.getId() == 0) {
 			System.out.println("insert");
+			for(FlowType cd:getAllUsers().getBody()) {
+				if(cd.getFlowtype().equals(input.getFlowtype())) {
+					return getAllUserserror(1);	 					
+				}
+				
+			}
+			
 			try {
 				 ouput= flowTypeServ.Save(input);
 				 if(ouput == null || ouput.getId() == -1) {
