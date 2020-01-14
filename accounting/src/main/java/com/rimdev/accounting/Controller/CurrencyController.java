@@ -32,35 +32,61 @@ public class CurrencyController {
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	  public  ResponseEntity<List<Currency>> getAllUsers(){
-		return new ResponseEntity<List<Currency>>(currencyServ.getallstatus("Active"), HttpStatus.OK);
+		return new ResponseEntity<List<Currency>>(currencyServ.getall(), HttpStatus.OK);
 	  }
 	
 	
+	  public  ResponseEntity<List<Currency>> getAllUserserror(int errorcode){
+		  if(errorcode == 0) {
+				return new ResponseEntity<List<Currency>>(currencyServ.getall(), HttpStatus.BAD_REQUEST);
+
+		  }else if(errorcode == 1) {
+			  
+				return new ResponseEntity<List<Currency>>(currencyServ.getall(), HttpStatus.CONFLICT);
+
+		  }else {
+			  
+				return new ResponseEntity<List<Currency>>(currencyServ.getall(), HttpStatus.BAD_REQUEST);
+
+		  }
+		  }
+	
 	@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<Currency> saveorupdate(@RequestBody Currency input) {
+	  public @ResponseBody ResponseEntity<List<Currency>> saveorupdate(@RequestBody Currency input) {
 	    // This returns a JSON or XML with the users
+		
+		for(Currency cd:getAllUsers().getBody()) {
+			if(cd.getCurrencyISO().equals(input.getCurrencyISO())) {
+				return getAllUserserror(1);	 					
+			}
+			
+		}
 		
 		Currency ouput = null;
 		
 		if(input.getId() == null || input.getId() == 0) {
 			System.out.println("insert");
+	
+			
+			
+			
 			try {
 				 ouput= currencyServ.Save(input);
 				 if(ouput == null || ouput.getId() == -1) {
 						
 					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
+					 return getAllUserserror(0);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null || ouput.getId() == -1) {
 						
 					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
+					 return getAllUserserror(0);	 
 				 }
 			}
 			
-			return new ResponseEntity<Currency>(ouput, HttpStatus.OK);
+			return getAllUsers();
 
 		}else {
 			System.out.println("update "+input.getId());
@@ -69,19 +95,18 @@ public class CurrencyController {
 				 ouput= currencyServ.update(input, input.getId());
 				 if(ouput == null || ouput.getId() == -1) {
 					
-					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
+					// ouput.setError(ouput.getError());
+					 return getAllUserserror(0);	
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null|| ouput.getId() == -1) {
-					 
-					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Currency>(ouput, HttpStatus.BAD_REQUEST);	 
+					// ouput.setError(ouput.getError());
+					 return getAllUserserror(0);		 
 				 }
 			}
 			
-			return new ResponseEntity<Currency>(ouput, HttpStatus.OK);
+			return getAllUsers();
 			
 		}
 		  }

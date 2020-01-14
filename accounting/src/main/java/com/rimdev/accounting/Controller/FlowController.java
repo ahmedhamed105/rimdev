@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rimdev.accounting.Enttities.Currency;
 import com.rimdev.accounting.Enttities.FlowType;
 import com.rimdev.accounting.Services.FlowTypeServ;
 
@@ -22,8 +23,21 @@ public class FlowController {
 	@Autowired
 	FlowTypeServ flowTypeServ;
 	
-	
-	
+
+	  public  ResponseEntity<List<FlowType>> getAllUserserror(int errorcode){
+		  if(errorcode == 0) {
+				return new ResponseEntity<List<FlowType>>(flowTypeServ.getall(), HttpStatus.BAD_REQUEST);
+
+		  }else if(errorcode == 1) {
+			  
+				return new ResponseEntity<List<FlowType>>(flowTypeServ.getall(), HttpStatus.CONFLICT);
+
+		  }else {
+			  
+				return new ResponseEntity<List<FlowType>>(flowTypeServ.getall(), HttpStatus.BAD_REQUEST);
+
+		  }
+		  }
 	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	  public  ResponseEntity<List<FlowType>> getAllUsers() {
@@ -34,8 +48,15 @@ public class FlowController {
 	
 	
 	@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<FlowType> saveorupdate(@RequestBody FlowType input) {
+	  public @ResponseBody ResponseEntity<List<FlowType>> saveorupdate(@RequestBody FlowType input) {
 	    // This returns a JSON or XML with the users
+		
+		for(FlowType cd:getAllUsers().getBody()) {
+			if(cd.getFlowtype().equals(input.getFlowtype())) {
+				return getAllUserserror(1);	 					
+			}
+			
+		}
 		
 		FlowType ouput = null;
 		
@@ -46,18 +67,18 @@ public class FlowController {
 				 if(ouput == null || ouput.getId() == -1) {
 						
 					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
+					 return getAllUserserror(0);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null || ouput.getId() == -1) {
 						
 					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
+					 return getAllUserserror(0);	 
 				 }
 			}
 			
-			return new ResponseEntity<FlowType>(ouput, HttpStatus.OK);
+			return getAllUsers();
 
 		}else {
 			System.out.println("update "+input.getId());
@@ -67,18 +88,18 @@ public class FlowController {
 				 if(ouput == null || ouput.getId() == -1) {
 					
 					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
+					 return getAllUserserror(0);	 
 				 }
 			} catch (Exception e) {
 				// TODO: handle exception
 				 if(ouput == null|| ouput.getId() == -1) {
 					 
 					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<FlowType>(ouput, HttpStatus.BAD_REQUEST);	 
+					 return getAllUserserror(0);	 
 				 }
 			}
 			
-			return new ResponseEntity<FlowType>(ouput, HttpStatus.OK);
+			return getAllUsers();
 			
 		}
 		  }
