@@ -19,14 +19,10 @@ import com.rimdev.accounting.Services.TransactionTypeServ;
 public class TrxtypeController {
 	
 	
-
 	@Autowired
 	TransactionTypeServ TransactionTypeServ;
 	
-	
-	
-	
-	
+
 	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	  public  ResponseEntity<List<TransactionType>> getAllUsers() {
