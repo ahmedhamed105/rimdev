@@ -6,6 +6,7 @@
 package com.rimdev.user.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -71,7 +72,7 @@ public class Device implements Serializable {
     private String devicemac;
     @Column(name = "Device_os_version", length = 45)
     private String deviceosversion;
-    @Column(name = "Device_os_unknow", length = 45)
+    @Column(name = "Device_os_unknow", length = 1000)
     private String deviceosunknow;
     @Basic(optional = false)
     @Column(name = "Device_tokean", nullable = false, length = 45)
@@ -96,6 +97,10 @@ public class Device implements Serializable {
     @JoinColumn(name = "Device_type_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private DeviceType devicetypeID;
+    @Column(name = "Device_long", precision = 10, scale = 7)
+    private BigDecimal devicelong;
+    @Column(name = "Device_latitude", precision = 10, scale = 7)
+    private BigDecimal devicelatitude;
 
     public Device() {
     }
@@ -225,8 +230,26 @@ public class Device implements Serializable {
     public void setDevicetypeID(DeviceType devicetypeID) {
         this.devicetypeID = devicetypeID;
     }
+    
+    
 
-    @Override
+    public BigDecimal getDevicelong() {
+		return devicelong;
+	}
+
+	public void setDevicelong(BigDecimal devicelong) {
+		this.devicelong = devicelong;
+	}
+
+	public BigDecimal getDevicelatitude() {
+		return devicelatitude;
+	}
+
+	public void setDevicelatitude(BigDecimal devicelatitude) {
+		this.devicelatitude = devicelatitude;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

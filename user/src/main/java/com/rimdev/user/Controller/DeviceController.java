@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DeviceServ;
-import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.ouputobject.response_all;

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { StatusServService } from '../services/status-serv.service';
 import { FlowtypeServService } from '../services/flowtype-serv.service';
+import { DeviceServService } from '../services/device-serv.service';
+import { LocationServiceService } from '../services/location-service.service';
+import { IDevice } from '../objects/IDevice';
 
 @Component({
   selector: 'app-flowtype',
@@ -13,11 +16,18 @@ export class FlowtypeComponent implements OnInit {
   public flowtypes = [];
   public status = [];
 
-  constructor(private fb:FormBuilder,private _flowtypeserv:FlowtypeServService,private _status:StatusServService){}
+
+  constructor(private locationService: LocationServiceService,private fb:FormBuilder,private _flowtypeserv:FlowtypeServService,private _status:StatusServService){}
 
   insertform :FormGroup;
   updateformflow :FormGroup;
   ngOnInit(){
+
+
+
+  this.locationService.all_info();
+
+
     
 this._flowtypeserv.getall()
 .subscribe(data => this.flowtypes = data);
@@ -39,6 +49,8 @@ this._status.getallstatus()
          });
 
   }
+
+
 
   get flowtype(){
     return this.insertform.get('flowtype');
@@ -90,5 +102,8 @@ onUpdate(){
   this.updateformflow.reset();
   
   }
+
+
+
 
 }

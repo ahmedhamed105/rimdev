@@ -9,6 +9,8 @@ import { DasboardComponent } from './dasboard/dasboard.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { HttpErrorInterceptor } from './Error/HttpErrorInterceptor';
 import { FlowtypeComponent } from './flowtype/flowtype.component';
+import { DeviceDetectorModule } from 'ngx-device-detector';
+
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { FlowtypeComponent } from './flowtype/flowtype.component';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    DeviceDetectorModule.forRoot()
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
