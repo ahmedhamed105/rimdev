@@ -3,21 +3,17 @@ package com.rimdev.user.Services;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import com.rimdev.user.Repo.DeviceRepo;
 import com.rimdev.user.Utils.Generate;
-import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
+import com.rimdev.user.entities.DeviceOs;
+import com.rimdev.user.entities.DeviceType;
 import com.rimdev.user.ouputobject.response_all;
 
 @Service
@@ -34,9 +30,9 @@ public List<Device> getall() {
 	}
 
 
-public List<Device> checkdevice(String name) {
+public List<Device> checkdevice(String ip,DeviceOs os,DeviceType type,String browser) {
 	
-	return (List<Device>) deviceRepo.findbyname(name);
+	return (List<Device>) deviceRepo.findbyiposbrowser( ip, os, type, browser);
 	
 }
 

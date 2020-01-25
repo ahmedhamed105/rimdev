@@ -84,10 +84,14 @@ public class Device implements Serializable {
     @Basic(optional = false)
     @Column(name = "Device_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlTransient
+    @JsonIgnore
     private Date devicemodify;
     @Basic(optional = false)
     @Column(name = "Device_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlTransient
+    @JsonIgnore
     private Date devicecreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
     private Collection<UserDevice> userDeviceCollection;
@@ -101,6 +105,16 @@ public class Device implements Serializable {
     private BigDecimal devicelong;
     @Column(name = "Device_latitude", precision = 10, scale = 7)
     private BigDecimal devicelatitude;
+    @Column(name = "Device_browser", length = 45)
+    private String devicebrowser;
+    @Column(name = "Device_BVersion", length = 45)
+    private String deviceBVersion;
+    @Column(name = "Mobile", length = 45)
+    private boolean isMobile;
+    @Column(name = "Desktop_Device", length = 45)
+    private boolean isDesktopDevice;
+    @Column(name = "Tablet", length = 45)
+    private boolean isTablet;
 
     public Device() {
     }
@@ -205,7 +219,31 @@ public class Device implements Serializable {
         this.devicecreate = devicecreate;
     }
 
-    @XmlTransient
+    public boolean getIsMobile() {
+		return isMobile;
+	}
+
+	public void setIsMobile(boolean isMobile) {
+		this.isMobile = isMobile;
+	}
+
+	public boolean getIsDesktopDevice() {
+		return isDesktopDevice;
+	}
+
+	public void setIsDesktopDevice(boolean isDesktopDevice) {
+		this.isDesktopDevice = isDesktopDevice;
+	}
+
+	public boolean getIsTablet() {
+		return isTablet;
+	}
+
+	public void setIsTablet(boolean isTablet) {
+		this.isTablet = isTablet;
+	}
+
+	@XmlTransient
     @JsonIgnore
     public Collection<UserDevice> getUserDeviceCollection() {
         return userDeviceCollection;
@@ -247,6 +285,23 @@ public class Device implements Serializable {
 
 	public void setDevicelatitude(BigDecimal devicelatitude) {
 		this.devicelatitude = devicelatitude;
+	}
+	
+
+	public String getDevicebrowser() {
+		return devicebrowser;
+	}
+
+	public void setDevicebrowser(String devicebrowser) {
+		this.devicebrowser = devicebrowser;
+	}
+
+	public String getDeviceBVersion() {
+		return deviceBVersion;
+	}
+
+	public void setDeviceBVersion(String deviceBVersion) {
+		this.deviceBVersion = deviceBVersion;
 	}
 
 	@Override

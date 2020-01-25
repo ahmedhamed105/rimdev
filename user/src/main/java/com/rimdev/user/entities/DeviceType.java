@@ -57,10 +57,14 @@ public class DeviceType implements Serializable {
     @Basic(optional = false)
     @Column(name = "Dev_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlTransient
+    @JsonIgnore
     private Date devmodify;
     @Basic(optional = false)
     @Column(name = "Dev_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlTransient
+    @JsonIgnore
     private Date devcreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "devicetypeID")
     private Collection<Device> deviceCollection;

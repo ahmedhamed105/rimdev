@@ -9,7 +9,7 @@ import { IDevice } from '../objects/IDevice';
 export class DeviceServService {
 
   
-  _urlpost='http://localhost:8081/Device/saveorupdate';
+  _urlpost='http://192.168.3.76:8081/Device/saveorupdate';
   
   constructor(private _http:HttpClient) { }
 

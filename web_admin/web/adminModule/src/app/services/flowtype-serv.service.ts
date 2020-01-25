@@ -9,8 +9,8 @@ import { IFlowType } from '../objects/IFlowType';
 export class FlowtypeServService {
 
 
-  _urlgetall='http://localhost:8080/Flow/all';
-  _urlpost='http://localhost:8080/Flow/saveorupdate';
+  _urlgetall='http://192.168.3.76:8080/Flow/all';
+  _urlpost='http://192.168.3.76:8080/Flow/saveorupdate';
   
   constructor(private _http:HttpClient) { }
 

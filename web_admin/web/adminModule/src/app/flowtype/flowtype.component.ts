@@ -15,7 +15,7 @@ export class FlowtypeComponent implements OnInit {
 
   public flowtypes = [];
   public status = [];
-
+   device :string = 'ahmed';
 
   constructor(private locationService: LocationServiceService,private fb:FormBuilder,private _flowtypeserv:FlowtypeServService,private _status:StatusServService){}
 
@@ -25,7 +25,7 @@ export class FlowtypeComponent implements OnInit {
 
 
 
-  this.locationService.all_info();
+  this.device = this.locationService.all_info();
 
 
     

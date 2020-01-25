@@ -1,5 +1,3 @@
-import { IdeviceOS } from './IdeviceOS';
-import { Idevicetype } from './Idevicetype';
 
 export interface IDevice {
     devicename: String,
@@ -18,6 +16,11 @@ export interface IDevice {
     devicetypeID : {
         id: number,
         devtype: String
-    }     
+    },
+    devicebrowser: String,
+    deviceBVersion : String,
+    isMobile: boolean,
+    isDesktopDevice : boolean,
+    isTablet : boolean
 }
 

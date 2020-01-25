@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CurrencyServService {
-  _urlgetall='http://localhost:8080/Currency/all';
-  _urlpost='http://localhost:8080/Currency/saveorupdate';
+  _urlgetall='http://192.168.3.76:8080/Currency/all';
+  _urlpost='http://192.168.3.76:8080/Currency/saveorupdate';
   
   constructor(private _http:HttpClient) { }
 

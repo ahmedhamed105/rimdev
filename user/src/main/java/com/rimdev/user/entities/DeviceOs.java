@@ -60,10 +60,14 @@ public class DeviceOs implements Serializable {
     @Basic(optional = false)
     @Column(name = "Device_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlTransient
+    @JsonIgnore
     private Date devicemodify;
     @Basic(optional = false)
     @Column(name = "Device_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlTransient
+    @JsonIgnore
     private Date devicecreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceOSID")
     private Collection<Device> deviceCollection;

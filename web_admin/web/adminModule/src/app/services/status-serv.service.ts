@@ -8,7 +8,7 @@ import { Istatus } from '../objects/Istatus';
 })
 export class StatusServService {
 
-  _url='http://localhost:8080/Status/all';
+  _url='http://192.168.3.76:8080/Status/all';
 
   constructor(private _http:HttpClient) { }
 
