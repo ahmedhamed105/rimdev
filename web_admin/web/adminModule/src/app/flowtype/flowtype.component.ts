@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { StatusServService } from '../services/status-serv.service';
 import { FlowtypeServService } from '../services/flowtype-serv.service';
-import { DeviceServService } from '../services/device-serv.service';
 import { LocationServiceService } from '../services/location-service.service';
 import { IDevice } from '../objects/IDevice';
+import { devicetoken } from '../objects/devicetoken';
 
 @Component({
   selector: 'app-flowtype',
@@ -15,17 +15,26 @@ export class FlowtypeComponent implements OnInit {
 
   public flowtypes = [];
   public status = [];
-   device :string = 'ahmed';
+  public device ;
+  public page_number:number = 2 ;
 
-  constructor(private locationService: LocationServiceService,private fb:FormBuilder,private _flowtypeserv:FlowtypeServService,private _status:StatusServService){}
+  constructor(private locationService: LocationServiceService,private fb:FormBuilder,private _flowtypeserv:FlowtypeServService,private _status:StatusServService){
+  
+  
+  }
 
   insertform :FormGroup;
   updateformflow :FormGroup;
-  ngOnInit(){
 
 
 
-  this.device = this.locationService.all_info();
+   ngOnInit(){
+
+    this.locationService.all_info(this.page_number).then(res => {
+      this.device =this.locationService.status;
+      console.log(this.device.tokean);
+    });
+
 
 
     
@@ -47,6 +56,14 @@ this._status.getallstatus()
          flowdescription: ['' ,[Validators.required,Validators.minLength(3)]],
          flowstatus: ['',[Validators.required]]
          });
+
+
+
+
+ 
+  
+     
+   
 
   }
 

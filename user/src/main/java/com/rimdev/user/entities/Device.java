@@ -115,6 +115,13 @@ public class Device implements Serializable {
     private boolean isDesktopDevice;
     @Column(name = "Tablet", length = 45)
     private boolean isTablet;
+    @JoinColumn(name = "Device_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private DeviceStatus devicestatusID;
+    @Column(name = "Page")
+    private Integer page;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<DevicePage> devicePageCollection;
 
     public Device() {
     }
@@ -219,27 +226,29 @@ public class Device implements Serializable {
         this.devicecreate = devicecreate;
     }
 
-    public boolean getIsMobile() {
+  
+
+	public boolean isMobile() {
 		return isMobile;
 	}
 
-	public void setIsMobile(boolean isMobile) {
+	public void setMobile(boolean isMobile) {
 		this.isMobile = isMobile;
 	}
 
-	public boolean getIsDesktopDevice() {
+	public boolean isDesktopDevice() {
 		return isDesktopDevice;
 	}
 
-	public void setIsDesktopDevice(boolean isDesktopDevice) {
+	public void setDesktopDevice(boolean isDesktopDevice) {
 		this.isDesktopDevice = isDesktopDevice;
 	}
 
-	public boolean getIsTablet() {
+	public boolean isTablet() {
 		return isTablet;
 	}
 
-	public void setIsTablet(boolean isTablet) {
+	public void setTablet(boolean isTablet) {
 		this.isTablet = isTablet;
 	}
 
@@ -252,8 +261,41 @@ public class Device implements Serializable {
     public void setUserDeviceCollection(Collection<UserDevice> userDeviceCollection) {
         this.userDeviceCollection = userDeviceCollection;
     }
+    
+    
+    public Integer getPage() {
+        return page;
+    }
 
-    public DeviceOs getDeviceOSID() {
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    
+	@XmlTransient
+    @JsonIgnore
+    public Collection<DevicePage> getDevicePageCollection() {
+        return devicePageCollection;
+    }
+
+    public void setDevicePageCollection(Collection<DevicePage> devicePageCollection) {
+        this.devicePageCollection = devicePageCollection;
+    }
+    
+    
+    
+    
+	@XmlTransient
+    @JsonIgnore
+    public DeviceStatus getDevicestatusID() {
+		return devicestatusID;
+	}
+
+	public void setDevicestatusID(DeviceStatus devicestatusID) {
+		this.devicestatusID = devicestatusID;
+	}
+
+	public DeviceOs getDeviceOSID() {
         return deviceOSID;
     }
 

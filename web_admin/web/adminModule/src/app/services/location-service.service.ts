@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { HttpClient } from '@angular/common/http';
-import { DeviceServService } from './device-serv.service';
 import { IDevice } from '../objects/IDevice';
 import { IdeviceOS } from '../objects/IdeviceOS';
 import { Idevicetype } from '../objects/Idevicetype';
+import { Router } from '@angular/router';
+import { devicetoken } from '../objects/devicetoken';
 
 
 
@@ -15,30 +16,19 @@ export class LocationServiceService {
 
   public device =  <IDevice>{};
 
-  constructor(private deviceService: DeviceDetectorService,private _http:HttpClient,private _DeviceServService:DeviceServService) { }
+  constructor(private router: Router,private deviceService: DeviceDetectorService,private _http:HttpClient) { }
 
-  getPosition(): Promise<any>
-  {
-    return new Promise((resolve, reject) => {
+  
 
-      navigator.geolocation.getCurrentPosition(resp => {
-
-          resolve({lng: resp.coords.longitude, lat: resp.coords.latitude});
-        },
-        err => {
-          reject(err);
-        });
-    });
-
-  }
-
-  _urlgetallos='http://192.168.3.76:8081/DeviceOS/all';
-  _urlgetalltype='  http://192.168.3.76:8081/DeviceType/all';
+  _urlgetallos='http://localhost:8081/DeviceOS/all';
+  _urlgetalltype='  http://localhost:8081/DeviceType/all';
+  _urlpost='http://localhost:8081/Device/saveorupdate';
 
   public deviceos = [];
   public devicetype = [];
+  public status :devicetoken;
 
-  all_info() :any
+   async all_info(page : number) 
   {
 
     
@@ -56,23 +46,31 @@ export class LocationServiceService {
       const userAgent=deviceInfo.userAgent;
 
 
+    //  console.log('finish1');
+      await   this.getos().then(res => {
+        
+        this.deviceos=res;
+    //     console.log('finish2');
+    //     console.log(this.deviceos);
+        for(var i = 0; i < this.deviceos.length; i++) {
+       //   console.log(this.deviceos[i].deviceOS);
+            if (this.deviceos[i].deviceOS == os) {
+              this.device.deviceOSID=this.deviceos[i];
+                break;
+            }
+        }  
+  
+      //  console.log('finish4');
+ 
+ 
+      });
 
-      this._http.get<IdeviceOS[]>(this._urlgetallos)
-      .subscribe(data => {this.deviceos = data;
+     await this.gettype().then(data => {
 
-      for(var i = 0; i < this.deviceos.length; i++) {
-        console.log(this.deviceos[i].deviceOS);
-          if (this.deviceos[i].deviceOS == os) {
-            this.device.deviceOSID=this.deviceos[i];
-              break;
-          }
-      }  
-
-      this._http.get<Idevicetype[]>(this._urlgetalltype)
-      .subscribe(data1 => {this.devicetype = data1;
+        this.devicetype = data;
 
       for(var i = 0; i < this.devicetype.length; i++) {
-        console.log(this.devicetype[i].devtype);
+      //  console.log(this.devicetype[i].devtype);
           if (this.devicetype[i].devtype == devicename) {
             this.device.devicetypeID=this.devicetype[i];
               break;
@@ -89,65 +87,79 @@ export class LocationServiceService {
       this.device.isMobile=isMobilea;
       this.device.isTablet=isTableta;
       this.device.isDesktopDevice=isDesktopDevicea;
-
-
-      this._http.get<{ip:string}>('https://jsonip.com')
-      .subscribe( data => {
-        const ip= data.ip ;
-        this.device.deviceip=ip;
-        navigator.geolocation.getCurrentPosition(resp => {
-
-          const lng= resp.coords.longitude;
-          const lat= resp.coords.latitude;
-          this.device.devicelong=lng;
-          this.device.devicelatitude= lat;
-
-
-          this.insertdevice();
-
-        },
-        err => {
-          const lng= 0;
-          const lat= 0;
-          this.insertdevice();
-
-
-        });
-
-      })
-
-
-      
-      
-
-    
-    });
-
-    });
+      this.device.page=page;
 
 
 
+      });
 
-    console.log('ahmed '+devicename);
-    return devicename;
 
-    
-        
- 
+    await   this.getip().then(data => {
+        this.device.deviceip=data['ip'];
+      });
+
+
+      await this.getnavigation()
+      .then(position => {
+        this.device.devicelong=position.coords.longitude;
+        this.device.devicelatitude= position.coords.latitude;
+      });
+
+
+      await this.insert().then(res => {
+        this.status =res;
+        if(this.status.status !== 0){
+          this.router.navigate(['/blocked']);
+        }
+      });
+   
+
 
   }
 
 
 
+async  insert() : Promise<devicetoken>{
 
-  insertdevice(){
-    console.log(this.device);
-    this._DeviceServService.insert(this.device)
-    .subscribe(
-    data => console.log(data)
-    );
+  // console.log('finish3');
+  return await   this._http.post<devicetoken>(this._urlpost,this.device).toPromise();
   
-   } 
+}
+
+
+async  getos() : Promise<IdeviceOS[]>{
+
+  // console.log('finish3');
+  return await   this._http.get<IdeviceOS[]>(this._urlgetallos).toPromise();
+  
+}
+
+async  gettype() : Promise<Idevicetype[]>{
+
+ // console.log('finish5');
+  return await   this._http.get<Idevicetype[]>(this._urlgetalltype).toPromise();
+  
+}
+
+
+async  getip() : Promise<string>{
+
+//  console.log('finish ip');
+  return await   this._http.get<string>('https://jsonip.com').toPromise();
+  
+}
+
+
+async  getnavigation():Promise<any>{
+
+  return await new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+  
+}
+
+
+
 
   
 }

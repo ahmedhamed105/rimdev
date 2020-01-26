@@ -2,6 +2,11 @@ package com.rimdev.user.ouputobject;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rimdev.user.entities.Device;
+
 
 public class response_all {
 	
@@ -9,6 +14,7 @@ public class response_all {
 	String message;
 	String Tokean;
 	Date expiretime;
+	Device device;
 	
 	
 	
@@ -48,6 +54,19 @@ public class response_all {
 	public void setExpiretime(Date expiretime) {
 		this.expiretime = expiretime;
 	}
+
+    @XmlTransient
+    @JsonIgnore
+	public Device getDevice() {
+		return device;
+	}
+
+
+	public void setDevice(Device device) {
+		this.device = device;
+	}
+	
+	
 
 
 

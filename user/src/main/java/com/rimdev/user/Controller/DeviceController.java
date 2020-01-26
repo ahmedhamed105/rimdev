@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DeviceOsServ;
 import com.rimdev.user.Services.DeviceServ;
+import com.rimdev.user.Services.DeviceStatusServ;
 import com.rimdev.user.Services.DeviceTypeServ;
+import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
+import com.rimdev.user.entities.Pages;
 import com.rimdev.user.ouputobject.response_all;
 
 
@@ -34,6 +37,13 @@ public class DeviceController {
 	@Autowired
 	DeviceTypeServ deviceTypeServ;
 	
+	@Autowired
+	DeviceStatusServ deviceStatusServ;
+	
+	
+	@Autowired
+	PagesServ pagesServ;
+	
 	  @RequestMapping(value = "/all", method = RequestMethod.GET)
 	  public  ResponseEntity<List<Device>> getAllUsers(){
 		return new ResponseEntity<List<Device>>(deviceServ.getall(), HttpStatus.OK);
@@ -45,7 +55,7 @@ public class DeviceController {
 @RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<response_all> saveorupdate(@RequestBody Device input) {
   // This returns a JSON or XML with the users
-	
+	response_all saveobject;
 	
 	if(input.getDeviceOSID()==null || input.getDeviceOSID().getId()==null) {
 		System.out.println("here 1");
@@ -57,6 +67,7 @@ public @ResponseBody ResponseEntity<response_all> saveorupdate(@RequestBody Devi
 		input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));
 		
 	}
+	
 
 	try {
 		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()).get(0);
@@ -68,18 +79,45 @@ public @ResponseBody ResponseEntity<response_all> saveorupdate(@RequestBody Devi
 		if(dev != null ) {
 			
 			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
+			  saveobject=deviceServ.Save(dev);
+			  if(dev.getDevicestatusID().getId() == 2) {
+				  saveobject.setStatus(1);
+				  saveobject.setMessage("block device");
+				  saveobject.setTokean(null);
+				  saveobject.setExpiretime(null);
+				  
+			  }
+	
 
-		return new ResponseEntity<response_all>(deviceServ.Save(dev), HttpStatus.OK);
-
-			} else
-			return new ResponseEntity<response_all>(deviceServ.Save(input), HttpStatus.OK);	
-
+			} else {
+				input.setDevicestatusID(deviceStatusServ.getbyid(1));
+				saveobject=deviceServ.Save(input);
+			}
 		
 	} catch (Exception e) {
 		// TODO: handle exception
-		return new ResponseEntity<response_all>(deviceServ.Save(input), HttpStatus.OK);
+		input.setDevicestatusID(deviceStatusServ.getbyid(1));
+		saveobject=deviceServ.Save(input);
+		
 
 	}
+	
+	
+	if(input.getPage() != null) {	
+		try {
+			Pages p= pagesServ.getbyid(input.getPage());
+			pagesServ.savedevpag(saveobject.getDevice(), p);
+		} catch (Exception e) {
+			// TODO: handle exception
+			saveobject.getDevice().setDevicestatusID(deviceStatusServ.getbyid(2));
+			saveobject=deviceServ.Save(saveobject.getDevice());
+			saveobject.setStatus(2);
+		}
+
+	}
+	
+	return new ResponseEntity<response_all>(saveobject, HttpStatus.OK);
+
 	
 }
 	

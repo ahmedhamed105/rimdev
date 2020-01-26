@@ -21,6 +21,7 @@ export interface IDevice {
     deviceBVersion : String,
     isMobile: boolean,
     isDesktopDevice : boolean,
-    isTablet : boolean
+    isTablet : boolean,
+    page:number
 }
 

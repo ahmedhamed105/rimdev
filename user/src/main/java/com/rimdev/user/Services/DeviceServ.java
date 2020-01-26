@@ -56,6 +56,7 @@ public response_all Save(Device input) {
 		res.setMessage("ok");
 		res.setTokean(tokean);
 		res.setExpiretime(c.getTime());
+		res.setDevice(ouput);
 		return res;
 	} catch (Exception e) {
 		// TODO: handle exception

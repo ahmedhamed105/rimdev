@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CurrencyServService } from '../services/currency-serv.service';
 import { StatusServService } from '../services/status-serv.service';
+import { LocationServiceService } from '../services/location-service.service';
 
 @Component({
   selector: 'app-currency',
@@ -13,11 +14,20 @@ export class CurrencyComponent implements OnInit {
   public currency = [];
   public status = [];
 
-  constructor(private fb:FormBuilder,private _currencyserv:CurrencyServService,private _status:StatusServService){}
+  constructor(private locationService: LocationServiceService,private fb:FormBuilder,private _currencyserv:CurrencyServService,private _status:StatusServService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
+  public device ;
+  public page_number:number = 3 ;
+
   ngOnInit(){
+
+    this.locationService.all_info(this.page_number).then(res => {
+      this.device =this.locationService.status;
+      console.log(this.device.tokean);
+    });
+
 this._currencyserv.getall()
 .subscribe(data => this.currency = data);
 
@@ -92,6 +102,7 @@ onUpdate(){
   );
   
   this.updateform.reset();
+  
   
   }
 
