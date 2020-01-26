@@ -6,6 +6,7 @@ import { DasboardComponent } from './dasboard/dasboard.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { FlowtypeComponent } from './flowtype/flowtype.component';
 import { BlockedComponent } from './blocked/blocked.component';
+import { DevicesComponent } from './devices/devices.component';
 
 
 
@@ -28,6 +29,10 @@ const routes: Routes = [
   component: FlowtypeComponent,
 },
 {
+  path: 'devices',
+  component: DevicesComponent,
+},
+{
   path: 'blocked',
   component: BlockedComponent,
 },
@@ -42,4 +47,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
+export const routingComponents=[DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]

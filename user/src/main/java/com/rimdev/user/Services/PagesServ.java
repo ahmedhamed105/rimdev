@@ -1,5 +1,6 @@
 package com.rimdev.user.Services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import com.rimdev.user.Repo.PagesRepo;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Pages;
+import com.rimdev.user.ouputobject.pagesdevice;
 
 @Service
 public class PagesServ {
@@ -29,6 +31,24 @@ public List<Pages> getall() {
 		return (List<Pages>) pagesRepo.findAll();
 		
 	}
+	
+	
+public List<pagesdevice> getpagesbydevice(int id) {
+	
+	List<DevicePage> p= (List<DevicePage>)devicePageRepo.findbydeviceid(id);
+	List<pagesdevice> c= new ArrayList<pagesdevice>();
+	for(DevicePage dev:p) {
+		pagesdevice pa=new pagesdevice();
+		pa.setPage_name(dev.getPagesID().getPagename());
+		pa.setPage_Date(dev.getVisittime());
+		c.add(pa);
+		
+	}
+		
+		return c;
+		
+	}
+
 
 public void savedevpag(Device dev,Pages pa) {
 	Date visittime = new Date();

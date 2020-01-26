@@ -19,9 +19,9 @@ export interface IDevice {
     },
     devicebrowser: String,
     deviceBVersion : String,
-    isMobile: boolean,
-    isDesktopDevice : boolean,
-    isTablet : boolean,
+    mobile: boolean,
+    desktopDevice : boolean,
+    tablet : boolean,
     page:number
 }
 

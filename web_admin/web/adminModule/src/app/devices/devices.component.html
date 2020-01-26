@@ -1,0 +1,72 @@
+<section class="content-header">
+    <h1>
+      Devices
+      <small>Devices</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#">Admin</a></li>
+      <li class="active">Devices</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Hover Data Table</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <button class="btn btn-primary" (click)="blocked()">block devices</button>
+            <button class="btn btn-secondary" (click)="unblocked()">unblock devices</button>
+            <button class="btn btn-primary" (click)="getpages()">display pages</button>
+            <br/>
+            <ag-grid-angular
+                #agGrid
+                style="width:100%;height:500px"
+                class="ag-theme-balham"
+                [rowData]="rowData | async"
+                [columnDefs]="columnDefs"
+                rowSelection="single"
+                >
+            </ag-grid-angular>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">Hover Data Table</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <ag-grid-angular
+                style="width:100%;height:500px"
+                class="ag-theme-balham"
+                [rowData]="rowDatapage | async"
+                [columnDefs]="columnDefspage"
+                >
+            </ag-grid-angular>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </section>
+  <!-- /.content -->

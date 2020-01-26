@@ -29,7 +29,9 @@
               "src/assets/bower_components/Ionicons/css/ionicons.min.css",
               "src/assets/css/AdminLTE.min.css",
               "src/assets/css/skins/_all-skins.min.css",
-              "src/assets/bower_components/jvectormap/jquery-jvectormap.css"
+              "src/assets/bower_components/jvectormap/jquery-jvectormap.css",
+              "./node_modules/ag-grid-community/dist/styles/ag-grid.css",
+              "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css"
             ],
             "scripts": [
               "src/assets/bower_components/jquery/dist/jquery.min.js",

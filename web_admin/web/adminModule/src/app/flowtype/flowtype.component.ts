@@ -3,8 +3,6 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { StatusServService } from '../services/status-serv.service';
 import { FlowtypeServService } from '../services/flowtype-serv.service';
 import { LocationServiceService } from '../services/location-service.service';
-import { IDevice } from '../objects/IDevice';
-import { devicetoken } from '../objects/devicetoken';
 
 @Component({
   selector: 'app-flowtype',

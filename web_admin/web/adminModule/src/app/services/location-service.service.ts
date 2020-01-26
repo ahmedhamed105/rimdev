@@ -84,9 +84,9 @@ export class LocationServiceService {
       this.device.deviceosversion=os_version;
       this.device.deviceosunknow=userAgent;
 
-      this.device.isMobile=isMobilea;
-      this.device.isTablet=isTableta;
-      this.device.isDesktopDevice=isDesktopDevicea;
+      this.device.mobile=isMobilea;
+      this.device.tablet=isTableta;
+      this.device.desktopDevice=isDesktopDevicea;
       this.device.page=page;
 
 

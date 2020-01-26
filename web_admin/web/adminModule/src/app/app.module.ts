@@ -11,6 +11,8 @@ import { HttpErrorInterceptor } from './Error/HttpErrorInterceptor';
 import { FlowtypeComponent } from './flowtype/flowtype.component';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { BlockedComponent } from './blocked/blocked.component';
+import { DevicesComponent } from './devices/devices.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 
 @NgModule({
@@ -18,13 +20,15 @@ import { BlockedComponent } from './blocked/blocked.component';
     routingComponents,
     FlowtypeComponent,
     BlockedComponent,
+    DevicesComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    DeviceDetectorModule.forRoot()
+    DeviceDetectorModule.forRoot(),
+    AgGridModule.withComponents([])
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
