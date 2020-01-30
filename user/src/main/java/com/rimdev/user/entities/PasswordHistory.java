@@ -21,9 +21,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -101,7 +103,8 @@ public class PasswordHistory implements Serializable {
     public void setPassModify(Date passModify) {
         this.passModify = passModify;
     }
-
+	@XmlTransient
+    @JsonIgnore
     public Date getPassCreate() {
         return passCreate;
     }

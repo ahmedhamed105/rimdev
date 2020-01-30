@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,9 +21,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -49,6 +53,7 @@ public class Adress implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
     @Basic(optional = false)
@@ -148,7 +153,8 @@ public class Adress implements Serializable {
     public void setAdlatitude(String adlatitude) {
         this.adlatitude = adlatitude;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getAddModify() {
         return addModify;
     }
@@ -156,7 +162,8 @@ public class Adress implements Serializable {
     public void setAddModify(Date addModify) {
         this.addModify = addModify;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getAddCreate() {
         return addCreate;
     }

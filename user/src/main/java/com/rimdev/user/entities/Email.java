@@ -21,9 +21,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -39,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     @NamedQuery(name = "Email.findAll", query = "SELECT e FROM Email e")
     , @NamedQuery(name = "Email.findById", query = "SELECT e FROM Email e WHERE e.id = :id")
     , @NamedQuery(name = "Email.findByEmailuser", query = "SELECT e FROM Email e WHERE e.emailuser = :emailuser")
-    , @NamedQuery(name = "Email.findByPrimary", query = "SELECT e FROM Email e WHERE e.primary = :primary")
+    , @NamedQuery(name = "Email.findByEmailPrimary", query = "SELECT e FROM Email e WHERE e.emailPrimary = :emailPrimary")
     , @NamedQuery(name = "Email.findByEmailModify", query = "SELECT e FROM Email e WHERE e.emailModify = :emailModify")
     , @NamedQuery(name = "Email.findByEmailCreate", query = "SELECT e FROM Email e WHERE e.emailCreate = :emailCreate")})
 public class Email implements Serializable {
@@ -54,8 +56,8 @@ public class Email implements Serializable {
     @Column(name = "Email_user", nullable = false, length = 45)
     private String emailuser;
     @Basic(optional = false)
-    @Column(name = "primary", nullable = false)
-    private int primary;
+    @Column(name = "email_primary", nullable = false)
+    private int emailPrimary;
     @Basic(optional = false)
     @Column(name = "email_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -75,13 +77,7 @@ public class Email implements Serializable {
         this.id = id;
     }
 
-    public Email(Integer id, String emailuser, int primary, Date emailModify, Date emailCreate) {
-        this.id = id;
-        this.emailuser = emailuser;
-        this.primary = primary;
-        this.emailModify = emailModify;
-        this.emailCreate = emailCreate;
-    }
+
 
     public Integer getId() {
         return id;
@@ -99,14 +95,17 @@ public class Email implements Serializable {
         this.emailuser = emailuser;
     }
 
-    public int getPrimary() {
-        return primary;
-    }
+    
+    public int getEmailPrimary() {
+		return emailPrimary;
+	}
 
-    public void setPrimary(int primary) {
-        this.primary = primary;
-    }
+	public void setEmailPrimary(int emailPrimary) {
+		this.emailPrimary = emailPrimary;
+	}
 
+	@XmlTransient
+    @JsonIgnore
     public Date getEmailModify() {
         return emailModify;
     }
@@ -114,7 +113,8 @@ public class Email implements Serializable {
     public void setEmailModify(Date emailModify) {
         this.emailModify = emailModify;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getEmailCreate() {
         return emailCreate;
     }

@@ -108,7 +108,8 @@ public class UserType implements Serializable {
     public void setPublishnot(int publishnot) {
         this.publishnot = publishnot;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getTypeModify() {
         return typeModify;
     }
@@ -116,7 +117,8 @@ public class UserType implements Serializable {
     public void setTypeModify(Date typeModify) {
         this.typeModify = typeModify;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getTypeCreate() {
         return typeCreate;
     }

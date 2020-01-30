@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -214,7 +215,8 @@ public class User implements Serializable {
     public void setUsernameConfig(int usernameConfig) {
         this.usernameConfig = usernameConfig;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getUsermodify() {
         return usermodify;
     }
@@ -222,7 +224,8 @@ public class User implements Serializable {
     public void setUsermodify(Date usermodify) {
         this.usermodify = usermodify;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getUsercreate() {
         return usercreate;
     }
@@ -242,7 +245,7 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
+   @JsonIgnore
     public Collection<Adress> getAdressCollection() {
         return adressCollection;
     }

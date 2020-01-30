@@ -21,9 +21,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -39,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     @NamedQuery(name = "Telephones.findAll", query = "SELECT t FROM Telephones t")
     , @NamedQuery(name = "Telephones.findById", query = "SELECT t FROM Telephones t WHERE t.id = :id")
     , @NamedQuery(name = "Telephones.findByPhoneNo", query = "SELECT t FROM Telephones t WHERE t.phoneNo = :phoneNo")
-    , @NamedQuery(name = "Telephones.findByPrimary", query = "SELECT t FROM Telephones t WHERE t.primary = :primary")
+    , @NamedQuery(name = "Telephones.findByTelePrimary", query = "SELECT t FROM Telephones t WHERE t.telePrimary = :telePrimary")
     , @NamedQuery(name = "Telephones.findByTeleModify", query = "SELECT t FROM Telephones t WHERE t.teleModify = :teleModify")
     , @NamedQuery(name = "Telephones.findByTeleCreate", query = "SELECT t FROM Telephones t WHERE t.teleCreate = :teleCreate")})
 public class Telephones implements Serializable {
@@ -54,8 +56,8 @@ public class Telephones implements Serializable {
     @Column(name = "phone_no", nullable = false, length = 45)
     private String phoneNo;
     @Basic(optional = false)
-    @Column(name = "primary", nullable = false)
-    private int primary;
+    @Column(name = "tele_primary", nullable = false)
+    private int telePrimary;
     @Basic(optional = false)
     @Column(name = "tele_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -75,13 +77,7 @@ public class Telephones implements Serializable {
         this.id = id;
     }
 
-    public Telephones(Integer id, String phoneNo, int primary, Date teleModify, Date teleCreate) {
-        this.id = id;
-        this.phoneNo = phoneNo;
-        this.primary = primary;
-        this.teleModify = teleModify;
-        this.teleCreate = teleCreate;
-    }
+
 
     public Integer getId() {
         return id;
@@ -99,14 +95,18 @@ public class Telephones implements Serializable {
         this.phoneNo = phoneNo;
     }
 
-    public int getPrimary() {
-        return primary;
-    }
+    
 
-    public void setPrimary(int primary) {
-        this.primary = primary;
-    }
+    public int getTelePrimary() {
+		return telePrimary;
+	}
 
+	public void setTelePrimary(int telePrimary) {
+		this.telePrimary = telePrimary;
+	}
+
+	@XmlTransient
+    @JsonIgnore
     public Date getTeleModify() {
         return teleModify;
     }
@@ -115,6 +115,8 @@ public class Telephones implements Serializable {
         this.teleModify = teleModify;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Date getTeleCreate() {
         return teleCreate;
     }

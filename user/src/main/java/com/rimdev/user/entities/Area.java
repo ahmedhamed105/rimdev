@@ -174,7 +174,8 @@ public class Area implements Serializable {
     public void setArealat4(String arealat4) {
         this.arealat4 = arealat4;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getAreamodify() {
         return areamodify;
     }
@@ -182,7 +183,8 @@ public class Area implements Serializable {
     public void setAreamodify(Date areamodify) {
         this.areamodify = areamodify;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getAreacreate() {
         return areacreate;
     }

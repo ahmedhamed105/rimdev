@@ -38,7 +38,7 @@ export class DevicesService {
       getpages(pageid: number):Observable<pages[]>{
         var url =this._urlgetpages;
         url=url+pageid;
-        console.log(url);
+      //  console.log(url);
         return  this._http.get<pages[]>(url);
       
         }

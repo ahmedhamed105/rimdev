@@ -21,9 +21,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -117,7 +119,8 @@ public class UserLogin implements Serializable {
     public void setExpiredate(Date expiredate) {
         this.expiredate = expiredate;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getCreatedate() {
         return createdate;
     }
@@ -141,7 +144,8 @@ public class UserLogin implements Serializable {
     public void setPasswordEncy(String passwordEncy) {
         this.passwordEncy = passwordEncy;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getLoginModfiy() {
         return loginModfiy;
     }
@@ -149,7 +153,8 @@ public class UserLogin implements Serializable {
     public void setLoginModfiy(Date loginModfiy) {
         this.loginModfiy = loginModfiy;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getLoginCreate() {
         return loginCreate;
     }
