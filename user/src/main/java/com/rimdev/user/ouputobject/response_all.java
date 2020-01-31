@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rimdev.user.entities.Device;
+import com.rimdev.user.entities.User;
 
 
 public class response_all {
@@ -15,6 +16,7 @@ public class response_all {
 	String Tokean;
 	Date expiretime;
 	Device device;
+	User user;
 	
 	
 	
@@ -65,6 +67,20 @@ public class response_all {
 	public void setDevice(Device device) {
 		this.device = device;
 	}
+
+    @XmlTransient
+    @JsonIgnore
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
+	
 	
 	
 
