@@ -1,21 +1,27 @@
 package com.rimdev.user.ouputobject;
 
+import com.rimdev.user.entities.User;
+
 public class UploadFileResponse {
 	
 	   private String fileName;
-	    private String fileDownloadUri;
-	    private String fileType;
-	    private long size;
+	   private String fileDownloadUri;
+	   private String fileType;
+	   private long size;
+	   private int error;
+	   private String error_message;
 
 
-
-		public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, long size) {
-			super();
-			this.fileName = fileName;
-			this.fileDownloadUri = fileDownloadUri;
-			this.fileType = fileType;
-			this.size = size;
-		}
+		public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, long size, int error,
+			String error_message) {
+		super();
+		this.fileName = fileName;
+		this.fileDownloadUri = fileDownloadUri;
+		this.fileType = fileType;
+		this.size = size;
+		this.error = error;
+		this.error_message = error_message;
+	}
 
 		public String getFileName() {
 			return fileName;
@@ -49,7 +55,24 @@ public class UploadFileResponse {
 			this.size = size;
 		}
 
-	    
-	    
+		public int getError() {
+			return error;
+		}
+
+		public void setError(int error) {
+			this.error = error;
+		}
+
+		public String getError_message() {
+			return error_message;
+		}
+
+		public void setError_message(String error_message) {
+			this.error_message = error_message;
+		}
+		
+		
+	
+    
 
 }

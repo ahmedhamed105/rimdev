@@ -33,19 +33,9 @@ public class FilesController {
 	    private FileStorageService fileStorageService;
 	    
 	    
-	    public UploadFileResponse uploadFile(MultipartFile file) {
-			  UploadFileResponse a=null;
-		        String fileName = fileStorageService.storeFile(file);
-		        
+	    public UploadFileResponse uploadFile(MultipartFile file,int type,int userid) {
+			  UploadFileResponse a = fileStorageService.storeFile(file,type,userid);
 
-		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-		                .path("file/downloadFile/")
-		                .path(fileName)
-		                .toUriString();
-		  
-		    	    a= new UploadFileResponse(fileName, fileDownloadUri,
-			                file.getContentType(), file.getSize());
-			
 				return a;
 
 
@@ -53,27 +43,31 @@ public class FilesController {
 	
 	
 	  @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public ResponseEntity<UploadFileResponse> uploadsingleFile(@RequestParam("file") MultipartFile file) {
-		 UploadFileResponse a=uploadFile(file);
+    public ResponseEntity<UploadFileResponse> uploadsingleFile(@RequestParam("file") MultipartFile file,@RequestParam("type") int type,@RequestParam("userid") int userid) {
+		 UploadFileResponse a=uploadFile(file,type,userid);
+		 
+		 if (a.getError() > 0) {
+		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.OK);
 
     }
 
     @PostMapping("/uploadMultipleFiles")
-    public ResponseEntity<List<UploadFileResponse>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<List<UploadFileResponse>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@RequestParam("type") int type,@RequestParam("userid") int userid) {
        
     	List<UploadFileResponse>  a = Arrays.asList(files)
         .stream()
-        .map(file -> uploadFile(file))
+        .map(file -> uploadFile(file,type,userid))
         .collect(Collectors.toList());
     	
     	return new ResponseEntity<List<UploadFileResponse>>(a, HttpStatus.OK);
     }
 
     @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request,@RequestParam("type") int type,@RequestParam("userid") int userid) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
+        Resource resource = fileStorageService.loadFileAsResource(fileName,type,userid);
 
         // Try to determine file's content type
         String contentType = null;
