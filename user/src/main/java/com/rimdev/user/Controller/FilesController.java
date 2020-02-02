@@ -33,6 +33,15 @@ public class FilesController {
 	    private FileStorageService fileStorageService;
 	    
 	    
+	    public UploadFileResponse deleteFile(String fileName,int type,int userid) {
+	    	 UploadFileResponse a =  fileStorageService.deleteFile(fileName,type,userid);
+
+				return a;
+
+
+	    }
+	    
+	    
 	    public UploadFileResponse uploadFile(MultipartFile file,int type,int userid) {
 			  UploadFileResponse a = fileStorageService.storeFile(file,type,userid);
 
@@ -88,4 +97,19 @@ public class FilesController {
                 .body(resource);
     }
 
+    
+    
+    @GetMapping("/deleteFile/{fileName:.+}")
+    public ResponseEntity<UploadFileResponse> deleteFile(@PathVariable String fileName, HttpServletRequest request,@RequestParam("type") int type,@RequestParam("userid") int userid) {
+      UploadFileResponse a=deleteFile(fileName,type,userid);
+		 
+		 if (a.getError() > 0) {
+		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.OK);
+   
+
+ 	
+
+    }
 }
