@@ -1,11 +1,8 @@
 package com.rimdev.user.Services;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,32 +10,58 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.List;
+import java.util.Optional;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.rimdev.user.Config.FileStorageProperties;
 import com.rimdev.user.Excep.FileStorageException;
 import com.rimdev.user.Excep.MyFileNotFoundException;
+import com.rimdev.user.Repo.FileappTypeRepo;
+import com.rimdev.user.Repo.FilesUploadRepo;
+import com.rimdev.user.Repo.UserFileRepo;
+import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
+import com.rimdev.user.entities.FileappType;
+import com.rimdev.user.entities.FilesUpload;
+import com.rimdev.user.entities.User;
+import com.rimdev.user.entities.UserFile;
 import com.rimdev.user.ouputobject.UploadFileResponse;
-
-import org.springframework.util.StringUtils;
 
 @Service
 public class FileStorageService {
+	
+	@Autowired
+	UserFileRepo userFileRepo;
+	
+	@Autowired
+	UserRepo userRepo;
+	
+	
+	@Autowired
+	FilesUploadRepo filesUploadRepo;
+	
+	
+	@Autowired
+	FileappTypeRepo fileappTypeRepo;
+	
+	
 	 private  Path fileStorageLocation;
 	 
 	 int stype;
 	 int suserid;
 	 String sfilename;
+	 BigDecimal comtime;
 
 	    @Autowired
 	    public FileStorageService(FileStorageProperties fileStorageProperties) {
@@ -151,6 +174,50 @@ public class FileStorageService {
 	    }
 
 	    public UploadFileResponse storeFile(MultipartFile file,int type,int userid) {
+	    	 User  userouput =new User();
+	    	 FileappType  typeouput =new FileappType();
+	    
+	    	try {
+	    		Optional<User> userreq =userRepo.findById(userid);
+	    	
+	    		 
+	    		 if (userreq.isPresent()){
+	    			 userouput = userreq.get();
+	    			   
+	    			}
+	    			else{
+	    			   // alternative processing....
+	    				
+			    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"User not found");	
+			    		return a;
+	    			}
+	    	} catch (Exception e) {
+	    		// TODO: handle exception
+	    		
+	    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"User  not found");	
+	    		return a;
+	    	}
+	    	
+	    	 
+	    	try {
+	    		
+	    		Optional<FileappType> typereq =fileappTypeRepo.findById(type);
+	    		 
+	    		 if (typereq.isPresent()){
+	    			   typeouput=typereq.get();
+	    			}
+	    			else{
+	    			   // alternative processing....
+	    				
+			    		UploadFileResponse a= new UploadFileResponse("", "","",0,4,"type not found");	
+			    		return a;
+	    			}
+	    	} catch (Exception e) {
+	    		// TODO: handle exception
+	    		
+	    		UploadFileResponse a= new UploadFileResponse("", "","",0,4,"type not found");	
+	    		return a;
+	    	}
 	    	
 	    	stype=type;
 	    	suserid=userid;
@@ -161,7 +228,9 @@ public class FileStorageService {
 			    	
 		    	Path filetemp =save_file(file, temp);
 		    	
-		    	if(fileEquals(filetemp.toFile(),main.toFile())) {
+		    	boolean ind=fileEquals(filetemp.toFile(),main.toFile());
+		    	
+		    	if(ind) {
 		    		filetemp.toFile().delete();
 		    		UploadFileResponse a= new UploadFileResponse("", "","",0,2,"file duplicate");	
 		    		return a;
@@ -177,17 +246,31 @@ public class FileStorageService {
 			                .path("file/downloadFile/")
 			                .path(sfilename)
 			                .toUriString();
-			  
-
-		            UploadFileResponse a= new UploadFileResponse(sfilename, fileDownloadUri,
+	       
+	       FilesUpload fileu=new FilesUpload();
+	       fileu.setFilesName(sfilename);
+	       fileu.setFilesUrl(fileDownloadUri);
+	       fileu.setFilesSize(new BigDecimal(file.getSize()/1000));
+	       fileu.setFilesType(file.getContentType());
+	       fileu.setFilecomruntime(comtime);
+	       filesUploadRepo.save(fileu);
+	       
+	       UserFile userf=new UserFile();
+	       userf.setFilesuploadID(fileu);
+	       userf.setUserID(userouput);
+	       userf.setFileApptypeID(typeouput);
+	       userFileRepo.save(userf);
+	       
+	       
+	        UploadFileResponse a= new UploadFileResponse(sfilename, fileDownloadUri,
 			                file.getContentType(), file.getSize(),0,"Sucess");
 		            
 		            
 		            return a;
 			} catch (Exception e) {
 				// TODO: handle exception
-				
-		 		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"error while saving");	
+				e.printStackTrace();
+		 		UploadFileResponse a= new UploadFileResponse("", "","",0,30,"error while saving");	
 	    		return a;
 			}
 	    
@@ -219,6 +302,57 @@ public class FileStorageService {
 	    public UploadFileResponse deleteFile(String fileName, int type,int userid) {
 	    //	System.out.println("load");
 	    	
+	    	FilesUpload filedel=new FilesUpload();
+	    	try {
+	    		
+	    		Optional<FilesUpload> filed= filesUploadRepo.findbyfilename(fileName);
+	    		 
+	    		 if (filed.isPresent()){
+	    			 filedel=filed.get();
+	    			}
+	    			else{
+	    			   // alternative processing....
+	    				
+			    		UploadFileResponse a= new UploadFileResponse("", "","",0,2,"file not found");	
+			    		return a;
+	    			}
+	    	} catch (Exception e) {
+	    		// TODO: handle exception
+	    		
+	    		UploadFileResponse a= new UploadFileResponse("", "","",0,2,"file not found");	
+	    		return a;
+	    	}
+	    	
+	    	UserFile userf=new UserFile();
+	    	try {
+	    		
+	    		Optional<UserFile> filed= userFileRepo.findbyusertypefile(userid,type,filedel.getId());
+	    		 
+	    		 if (filed.isPresent()){
+	    			 userf=filed.get();
+	    			}
+	    			else{
+	    			   // alternative processing....
+	    				
+			    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"file not found");	
+			    		return a;
+	    			}
+	    	} catch (Exception e) {
+	    		// TODO: handle exception
+	    		
+	    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"file not found");	
+	    		return a;
+	    	}
+	    	
+	    	try {
+	    		userFileRepo.delete(userf);
+	    		filesUploadRepo.delete(filedel);
+			} catch (Exception e) {
+				// TODO: handle exception
+				UploadFileResponse a= new UploadFileResponse("", "","",0,4,"file not found");	
+	    		return a;
+			}
+	    	
 	      try {
 	 	     Path targetLocation1 = this.fileStorageLocation.resolve(userid+"\\"+type+"\\");
 
@@ -242,6 +376,8 @@ public class FileStorageService {
 	    
 	    
 	    public  boolean fileEquals(File file1,File directory) {
+	    	
+	    	comtime=new BigDecimal(0);
 	    	
 	    System.out.println("path : "+file1.getParentFile());	
 	    File[] files;
@@ -306,12 +442,16 @@ public class FileStorageService {
 	            long runTime = System.nanoTime() - start;
 	            if (Arrays.equals(dgStream1.getMessageDigest().digest(), dgStream2
 	                    .getMessageDigest().digest())) {
+	            	BigDecimal a=new BigDecimal(runTime / 1000000);
+	    	       comtime=comtime.add(a);
 	                System.out.println("Files are identical. completed in "
 	                        + (runTime / 1000000) + " ms. [" + runTime + " ns.]");
 	                fis1.close();
 		            fis2.close();
 	                return true;
 	            } else {
+	            	BigDecimal a=new BigDecimal(runTime / 1000000);
+	            	comtime=comtime.add(a);
 	                System.out.println("Files are not identical. completed in "
 	                        + (runTime / 1000000) + " ms. [" + runTime + " ns.]");
 	                fis1.close();
@@ -324,19 +464,37 @@ public class FileStorageService {
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
+	            return true;
 	        	
 	        }
         }
         
         
 		return false;
-	    
-	
-	    	
 
-		
 
 	    }
+	    
+	    
+	    
+	    public List<FilesUpload> getfile(int userid,int filetype) {
+			// TODO Auto-generated method stub
+	    	
+	    	
+	    	System.out.println(userid+" "+filetype);
+	    	
+	    	List<FilesUpload> files=new ArrayList<FilesUpload>();
+	    	
+	    	List<UserFile> userfiles=(List<UserFile>) userFileRepo.findbyusertype(userid, filetype);
+	    	
+	    	for (UserFile userFile : userfiles) {
+	    		files.add(userFile.getFilesuploadID());
+			}
+	    	
+	    	return files;
+	    	
+	    	
+		}
 	    
 	    
 }

@@ -112,6 +112,8 @@ public class User implements Serializable {
     private Collection<Email> emailCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<PasswordHistory> passwordHistoryCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
+    private Collection<UserFile> userFileCollection;
 
     public User() {
     }
@@ -312,6 +314,15 @@ public class User implements Serializable {
         this.passwordHistoryCollection = passwordHistoryCollection;
     }
 
+    @XmlTransient
+    @JsonIgnore
+    public Collection<UserFile> getUserFileCollection() {
+        return userFileCollection;
+    }
+
+    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
+        this.userFileCollection = userFileCollection;
+    }
     @Override
     public int hashCode() {
         int hash = 0;
