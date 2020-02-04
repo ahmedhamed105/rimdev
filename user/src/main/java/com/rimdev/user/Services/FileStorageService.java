@@ -379,7 +379,7 @@ public class FileStorageService {
 	    	
 	    	comtime=new BigDecimal(0);
 	    	
-	    System.out.println("path : "+file1.getParentFile());	
+	  //  System.out.println("path : "+file1.getParentFile());	
 	    File[] files;
 	    files=directory.listFiles();
 	    File file2=null;
@@ -392,11 +392,10 @@ public class FileStorageService {
 
 	    	try {
 	            if (!file1.exists() || !file2.exists()) {
-	                System.out.println("One of the file not found.");   
+	            	 continue;
 	            }
 	            if (file1.length() != file2.length()) {
-	                System.out
-	                        .println("Files are not identical - not equal length.");  
+	                continue;
 	            }
 
 	            long f1Length = file1.length();
