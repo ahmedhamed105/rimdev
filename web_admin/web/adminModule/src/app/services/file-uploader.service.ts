@@ -9,7 +9,8 @@ export enum FileQueueStatus {
     Pending,
     Success,
     Error,
-    Progress
+    Progress,
+    duplicate
   }
   
   
@@ -20,10 +21,14 @@ export enum FileQueueStatus {
     public request: Subscription = null;
     public response: HttpResponse<any> | HttpErrorResponse = null;
     public filename;
+    public type: any;
+    public userid: any;
 
   
-    constructor(file: any) {
+    constructor(file: any,type: any,userid: any) {
       this.file = file;
+      this.type = type;
+      this.userid= userid;
     }
   
     // actions
@@ -35,6 +40,7 @@ export enum FileQueueStatus {
     public isPending = () => this.status === FileQueueStatus.Pending;
     public isSuccess = () => this.status === FileQueueStatus.Success;
     public isError = () => this.status === FileQueueStatus.Error;
+    public isduplicate = () => this.status === FileQueueStatus.duplicate;
     public inProgress = () => this.status === FileQueueStatus.Progress;
     public isUploadable = () => this.status === FileQueueStatus.Pending || this.status === FileQueueStatus.Error;
   
@@ -64,7 +70,7 @@ export class FileUploaderService {
   }
 
   // public events
-  public onCompleteItem(queueObj: FileQueueObject, response: any,type:string,userid:string): any {
+  public onCompleteItem(queueObj: FileQueueObject, response: any): any {
     return { queueObj, response };
   }
 
@@ -80,22 +86,22 @@ export class FileUploaderService {
     this._queue.next(this._files);
   }
 
-  public uploadAll(type:string,userid:string) {
+  public uploadAll() {
     // upload all except already successfull or in progress
     _.each(this._files, (queueObj: FileQueueObject) => {
       if (queueObj.isUploadable()) {
-        this._upload(queueObj,type,userid);
+        this._upload(queueObj);
       }
     });
   }
 
   // private functions
   private _addToQueue(file: any,type:string,userid:string) {
-    const queueObj = new FileQueueObject(file);
+    const queueObj = new FileQueueObject(file,type,userid);
 
     // set the individual object events
-    queueObj.upload = () => this._upload(queueObj,type,userid);
-    queueObj.remove = () => this._removeFromQueue(queueObj,type,userid);
+    queueObj.upload = () => this._upload(queueObj);
+    queueObj.remove = () => this._removeFromQueue(queueObj);
     queueObj.cancel = () => this._cancel(queueObj);
 
     // push to the queue
@@ -103,11 +109,11 @@ export class FileUploaderService {
     this._queue.next(this._files);
   }
 
-  private _removeFromQueue(queueObj: FileQueueObject,type:string,userid:string) {
+  private _removeFromQueue(queueObj: FileQueueObject) {
 
     const form = new FormData();
-    form.append('type', type);
-    form.append('userid', userid);
+    form.append('type', queueObj.type);
+    form.append('userid', queueObj.userid);
 
     var urldelete=this.urlremove;
 
@@ -124,8 +130,8 @@ export class FileUploaderService {
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event,type,userid);
-          _.remove(this._files, queueObj,type,userid);
+          this._uploadComplete(queueObj, event);
+          _.remove(this._files, queueObj);
         }
       },
       (err: HttpErrorResponse) => {
@@ -142,12 +148,14 @@ export class FileUploaderService {
   
   }
 
-  private _upload(queueObj: FileQueueObject,type:string,userid:string) {
+  private _upload(queueObj: FileQueueObject) {
+
+
     // create form data for file
     const form = new FormData();
     form.append('file', queueObj.file, queueObj.file.name);
-    form.append('type', type);
-    form.append('userid', userid);
+    form.append('type', queueObj.type);
+    form.append('userid', queueObj.userid);
     // upload file and report progress
     const req = new HttpRequest('POST', this.urladd, form, {
       reportProgress: true,
@@ -159,7 +167,7 @@ export class FileUploaderService {
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event,type,userid);
+          this._uploadComplete(queueObj, event);
         }
       },
       (err: HttpErrorResponse) => {
@@ -192,20 +200,27 @@ export class FileUploaderService {
     this._queue.next(this._files);
   }
 
-  private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>,type:string,userid:string) {
+  private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>) {
     // update the FileQueueObject as completed
     queueObj.progress = 100;
     queueObj.status = FileQueueStatus.Success;
     queueObj.response = response;
     queueObj.filename = response.body.fileName;
     this._queue.next(this._files);
-    this.onCompleteItem(queueObj, response.body,type,userid);
+    this.onCompleteItem(queueObj, response.body);
   }
 
   private _uploadFailed(queueObj: FileQueueObject, response: HttpErrorResponse) {
     // update the FileQueueObject as errored
     queueObj.progress = 0;
+
+    console.log(response);
+
+    if(response.status == 409){
+   queueObj.status = FileQueueStatus.duplicate;
+    }else{
     queueObj.status = FileQueueStatus.Error;
+    }
     queueObj.response = response;
     this._queue.next(this._files);
   }

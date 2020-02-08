@@ -69,7 +69,7 @@ public class FilesController {
 		  UploadFileResponse a=uploadFile(file,type,userid);
 		 
 		 if (a.getError() > 0) {
-		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.OK);
 

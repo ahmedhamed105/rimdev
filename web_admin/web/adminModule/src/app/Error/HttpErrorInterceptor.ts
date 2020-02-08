@@ -31,7 +31,7 @@ import {
 
             }
             window.alert(errorMessage);
-            return throwError(errorMessage);
+            return throwError(error);
           })
         )
     }

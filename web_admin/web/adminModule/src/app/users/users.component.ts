@@ -97,7 +97,8 @@ this._usertype.getall()
    this.onCompleteItem.emit({ item, response });
   }
 
-  addToQueue() {
+  addIDimgaes() {
+    this.type = '1';
     const fileBrowser = this.fileInput.nativeElement;
     this.uploader.addToQueue(fileBrowser.files,this.type,this.userid);
   }
