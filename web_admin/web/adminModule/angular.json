@@ -24,6 +24,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/assets/bower_components/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/bower_components/font-awesome/css/font-awesome.min.css",
               "src/assets/bower_components/Ionicons/css/ionicons.min.css",
@@ -36,6 +37,9 @@
             "scripts": [
               "src/assets/bower_components/jquery/dist/jquery.min.js",
               "src/assets/bower_components/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/plugins/input-mask/jquery.inputmask.js",
+              "src/assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
+              "src/assets/plugins/input-mask/jquery.inputmask.extensions.js",
               "src/assets/bower_components/fastclick/lib/fastclick.js",
               "src/assets/js/adminlte.min.js",
               "src/assets/js/demo.js",
@@ -44,7 +48,6 @@
               "src/assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js",
               "src/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
               "src/assets/bower_components/chart.js/Chart.js"
-             // "src/assets/js/pages/dashboard2.js"
             ]
           },
           "configurations": {
@@ -108,6 +111,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -139,6 +143,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "adminModule"
 }

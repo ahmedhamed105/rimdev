@@ -55,7 +55,7 @@ public class FilesUpload implements Serializable {
     @Column(name = "files_name", nullable = false, length = 45)
     private String filesName;
     @Basic(optional = false)
-    @Column(name = "files_type", nullable = false, length = 45)
+    @Column(name = "files_type", nullable = false, length = 500)
     private String filesType;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "filesuploadID")
     private Collection<UserFile> userFileCollection;

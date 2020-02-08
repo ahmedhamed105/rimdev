@@ -64,7 +64,9 @@ public class FilesController {
 	
 	  @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public ResponseEntity<UploadFileResponse> uploadsingleFile(@RequestParam("file") MultipartFile file,@RequestParam("type") int type,@RequestParam("userid") int userid) {
-		 UploadFileResponse a=uploadFile(file,type,userid);
+		 System.out.println(type+" "+userid);
+		  
+		  UploadFileResponse a=uploadFile(file,type,userid);
 		 
 		 if (a.getError() > 0) {
 		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.BAD_REQUEST);
@@ -110,7 +112,7 @@ public class FilesController {
 
     
     
-    @GetMapping("/deleteFile/{fileName:.+}")
+    @PostMapping("/deleteFile/{fileName:.+}")
     public ResponseEntity<UploadFileResponse> deleteFile(@PathVariable String fileName, HttpServletRequest request,@RequestParam("type") int type,@RequestParam("userid") int userid) {
       UploadFileResponse a=deleteFile(fileName,type,userid);
 		 

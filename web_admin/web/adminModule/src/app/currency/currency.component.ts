@@ -20,6 +20,7 @@ export class CurrencyComponent implements OnInit {
   updateform :FormGroup;
   public device ;
   public page_number:number = 3 ;
+  public selectcurrency;
 
   ngOnInit(){
 
@@ -78,7 +79,7 @@ this.insertform.reset();
 
 }
 
-public selectcurrency;
+
 
 
 getcur(){

@@ -59,20 +59,23 @@ public class UserController {
 	  
 
 @RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<User> saveorupdate(@RequestBody User input) {
+public @ResponseBody ResponseEntity<List<User>> saveorupdate(@RequestBody User input) {
   // This returns a JSON or XML with the users
-
-	User user= new User();
+//System.out.println("enter 1");
+//System.out.println(input.getFirstName());
+	 
 	try {
-		 user= userServ.getuser(input.getId());
-		
+		User user= userServ.getuser(input.getId());
+	//	 System.out.println("enter 2");
 
 		if(user == null ) {
+		//	System.out.println("enter 3");
 			user=userServ.Save(input);
 			  
 		}else {
-
+	//		System.out.println("enter 4");
 	    BeanUtils.copyProperties(input, user, ObjectUtils.getNullPropertyNames(input));
+	 //   System.out.println(user.getFirstName());
 	    user=userServ.update(user);
 			
 		}
@@ -80,13 +83,13 @@ public @ResponseBody ResponseEntity<User> saveorupdate(@RequestBody User input) 
 
 	} catch (Exception e) {
 		// TODO: handle exception
-	
-		user=userServ.Save(input);
+		System.out.println("enter 5");
+		userServ.Save(input);
 
 	}
 	
 	
-	return new ResponseEntity<User>(user, HttpStatus.OK);
+	return getAllUsers();
 
 	
 }

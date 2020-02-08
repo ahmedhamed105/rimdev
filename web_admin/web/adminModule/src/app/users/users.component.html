@@ -1,0 +1,320 @@
+   <!-- Content Header (Page header) -->
+   <section class="content-header">
+
+    <h1>
+      Users
+      <small>ISO parser</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#">Admin</a></li>
+      <li class="active">Users</li>
+    </ol>
+  </section>
+  
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">New</h3>
+          </div>
+          <!-- /.box-header -->
+          <!-- form start -->
+          <form [formGroup]="insertform" (ngSubmit)="onSubmit()">
+            
+            <div class="box-body">
+              <pre>{{insertform.value | json}}</pre>
+           
+                <div class="form-group" >
+                  <label>First name</label>
+                  <input [class.is-invalid]="firstName.invalid && firstName.touched" formControlName="firstName" type="text"   class="form-control"  >
+               <div *ngIf="firstName.invalid && firstName.touched">
+                <small *ngIf="firstName.errors?.required" class="text-danger">firstName is required</small>
+                <small *ngIf="firstName.errors?.minlength" class="text-danger">firstName must be 3 characters</small>   
+               </div>
+               
+                </div>
+
+
+                <div class="form-group" >
+                  <label>middle name</label>
+                  <input [class.is-invalid]="middleName.invalid && middleName.touched" formControlName="middleName" type="text"   class="form-control"  >
+               <div *ngIf="middleName.invalid && middleName.touched">
+                <small *ngIf="middleName.errors?.required" class="text-danger">middleName is required</small>
+                <small *ngIf="middleName.errors?.minlength" class="text-danger">middleName must be 3 characters</small>
+               </div>
+               
+                </div>
+
+
+                <div class="form-group" >
+                  <label>last name</label>
+                  <input [class.is-invalid]="lastname.invalid && lastname.touched" formControlName="lastname" type="text"   class="form-control"  >
+               <div *ngIf="lastname.invalid && lastname.touched">
+                <small *ngIf="lastname.errors?.required" class="text-danger">lastname is required</small>
+                <small *ngIf="lastname.errors?.minlength" class="text-danger">lastname must be 3 characters</small>
+               </div>
+               
+                </div>
+
+
+
+              <div class="form-group">
+                <label>Birth date</label>
+
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input  [class.is-invalid]="birthdate.invalid && birthdate.touched" formControlName="birthdate" type="date"   class="form-control"  >
+                  <div *ngIf="birthdate.invalid && birthdate.touched">
+                    <small *ngIf="birthdate.errors?.required" class="text-danger">birthdate is required</small>
+                    <small *ngIf="birthdate.errors?.minlength" class="text-danger">birthdate must be 3 characters</small>
+                   </div>
+                </div>
+                <!-- /.input group -->
+              </div>
+              <!-- /.form group -->
+
+
+              <div class="form-group" >
+                <label>passport number</label>
+                <input [class.is-invalid]="passportnumber.invalid && passportnumber.touched" formControlName="passportnumber" type="text"   class="form-control"  >
+             <div *ngIf="passportnumber.invalid && passportnumber.touched">
+              <small *ngIf="passportnumber.errors?.required" class="text-danger">passport number is required</small>
+              <small *ngIf="passportnumber.errors?.minlength" class="text-danger">passport number must be 3 characters</small>
+             </div>
+             
+              </div>
+
+
+              <div class="form-group">
+                <h3>Select files</h3>
+                <input type="file" #fileInput multiple (change)="addToQueue()" />
+            </div>
+
+            <div class="form-group" >
+          		<h3>Upload queue</h3>
+		<table class="table">
+			<thead>
+				<tr>
+          <th class="text-left">Name</th>
+          <th class="text-left">Remote name</th>
+					<th class="text-right">Size</th>
+					<th class="text-left">Progress</th>
+					<th class="text-left">Status</th>
+					<th class="text-right">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let item of queue | async">
+          <td>{{ item.file.name }}</td>
+          <td>{{ item.filename }}</td>
+					<td class="text-right">{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+					<td>{{ item.progress + ' %' }}</td>
+					<td>
+						<span *ngIf="item.isPending()" class="tag tag-default"></span>
+						<span *ngIf="item.isSuccess()" class="tag tag-success"></span>
+						<span *ngIf="item.inProgress()" class="tag tag-warning"></span>
+						<span *ngIf="item.isError()" class="tag tag-danger"></span>
+					</td>
+					<td class="text-right">
+						<a tooltip="Upload file" (click)="item.upload()" *ngIf="item.isUploadable()">
+							<i class="fa fa-upload"></i>
+						</a>
+						<a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
+							<i class="fa fa-times-circle"></i>
+						</a>
+						<a tooltip="Remove from queue" (click)="item.remove()" *ngIf="item.isSuccess()">
+							<i class="fa fa-trash"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div>
+			<a class="btn btn-primary" (click)="uploader.clearQueue()">Clear queue</a>
+			<a class="btn btn-secondary" (click)="uploader.uploadAll()">Upload all</a>
+		</div>
+            </div>
+
+
+              <div class="form-group" >
+                <label>iD number</label>
+                <input [class.is-invalid]="iDnumber.invalid && iDnumber.touched" formControlName="iDnumber" type="text"   class="form-control"  >
+             <div *ngIf="iDnumber.invalid && lastname.touched">
+              <small *ngIf="iDnumber.errors?.required" class="text-danger">iD number is required</small>
+              <small *ngIf="iDnumber.errors?.minlength" class="text-danger">iD number must be 3 characters</small>
+             </div>
+             
+              </div>
+
+          
+
+
+            
+                <div class="form-group" formGroupName="usertypeID">
+                  <label>User type</label>
+                  <select required formControlName="id"  class="form-control" >
+                        <option *ngFor="let ut of usertypes" value="{{ut.id}}">{{ut.usertype}}</option>
+                  </select>              
+                </div>
+               
+
+
+            </div>
+            <!-- /.box-body -->
+  
+            <div class="box-footer">
+              <button  [disabled]="!insertform.valid" class="btn btn-primary" type="submit">Submit</button>            
+            </div>
+          </form>
+        </div>
+        <!-- /.box -->
+
+       
+  
+      <!--/.col (right) -->
+    </div>
+
+  </div>
+     <!--/.row (right) -->
+
+    <div class="row">
+
+          <!-- right column -->
+          <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+              <div class="box-header with-border">
+                <h3 class="box-title">Update</h3>
+              </div>
+              <!-- /.box-header -->
+              <!-- form start -->
+              <form [formGroup]="updateform" (ngSubmit)="onUpdate()">
+                
+                <div class="box-body">
+                  <pre>{{updateform.value | json}}</pre>
+    
+    
+                  <div class="form-group" >
+                    <label>users</label>
+                    <select formControlName="id"  class="form-control" (blur)="getuser()" (change)="getuser()">
+                          <option *ngFor="let user of users" value="{{user.id}}">{{user.firstName}}</option>
+                    </select>              
+                  </div>
+
+                  <div class="form-group" >
+                    <label>User ID</label>
+                    <input  formControlName="useridnumber" type="text"   class="form-control"  disabled>           
+                  </div>
+    
+                  <div class="form-group" >
+                    <label>First name</label>
+                    <input [class.is-invalid]="firstName.invalid && firstName.touched" formControlName="firstName" type="text"   class="form-control"  >
+                 <div *ngIf="firstName.invalid && firstName.touched">
+                  <small *ngIf="firstName.errors?.required" class="text-danger">firstName is required</small>
+                  <small *ngIf="firstName.errors?.minlength" class="text-danger">firstName must be 3 characters</small>   
+                 </div>
+                 
+                  </div>
+  
+  
+                  <div class="form-group" >
+                    <label>middle name</label>
+                    <input [class.is-invalid]="middleName.invalid && middleName.touched" formControlName="middleName" type="text"   class="form-control"  >
+                 <div *ngIf="middleName.invalid && middleName.touched">
+                  <small *ngIf="middleName.errors?.required" class="text-danger">middleName is required</small>
+                  <small *ngIf="middleName.errors?.minlength" class="text-danger">middleName must be 3 characters</small>
+                 </div>
+                 
+                  </div>
+  
+  
+                  <div class="form-group" >
+                    <label>last name</label>
+                    <input [class.is-invalid]="lastname.invalid && lastname.touched" formControlName="lastname" type="text"   class="form-control"  >
+                 <div *ngIf="lastname.invalid && lastname.touched">
+                  <small *ngIf="lastname.errors?.required" class="text-danger">lastname is required</small>
+                  <small *ngIf="lastname.errors?.minlength" class="text-danger">lastname must be 3 characters</small>
+                 </div>
+                 
+                  </div>
+  
+  
+  
+                <div class="form-group">
+                  <label>Birth date</label>
+  
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input  [class.is-invalid]="birthdate.invalid && birthdate.touched" formControlName="birthdate" type="date"   class="form-control"  >
+                    <div *ngIf="birthdate.invalid && birthdate.touched">
+                      <small *ngIf="birthdate.errors?.required" class="text-danger">birthdate is required</small>
+                      <small *ngIf="birthdate.errors?.minlength" class="text-danger">birthdate must be 3 characters</small>
+                     </div>
+                  </div>
+                  <!-- /.input group -->
+                </div>
+                <!-- /.form group -->
+  
+  
+                <div class="form-group" >
+                  <label>passport number</label>
+                  <input [class.is-invalid]="passportnumber.invalid && passportnumber.touched" formControlName="passportnumber" type="text"   class="form-control"  >
+               <div *ngIf="passportnumber.invalid && passportnumber.touched">
+                <small *ngIf="passportnumber.errors?.required" class="text-danger">passport number is required</small>
+                <small *ngIf="passportnumber.errors?.minlength" class="text-danger">passport number must be 3 characters</small>
+               </div>
+               
+                </div>
+  
+                <div class="form-group" >
+                  <label>iD number</label>
+                  <input [class.is-invalid]="iDnumber.invalid && iDnumber.touched" formControlName="iDnumber" type="text"   class="form-control"  >
+               <div *ngIf="iDnumber.invalid && lastname.touched">
+                <small *ngIf="iDnumber.errors?.required" class="text-danger">iD number is required</small>
+                <small *ngIf="iDnumber.errors?.minlength" class="text-danger">iD number must be 3 characters</small>
+               </div>
+               
+                </div>
+  
+  
+                <div class="form-group" formGroupName="usertypeID">
+                  <label>User type</label>
+                  <select required formControlName="id"  class="form-control" >
+                        <option *ngFor="let ut of usertypes" value="{{ut.id}}">{{ut.usertype}}</option>
+                  </select>              
+                </div>
+    
+               
+                 
+    
+    
+                
+                  
+                   
+    
+    
+                </div>
+                <!-- /.box-body -->
+      
+                <div class="box-footer">
+                  <button  [disabled]="!updateform.valid" class="btn btn-primary" type="submit">Update</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.box -->
+      
+          <!--/.col (right) -->
+        </div>
+    <!-- /.row -->
+    </div>
+  </section>
+  <!-- /.content -->

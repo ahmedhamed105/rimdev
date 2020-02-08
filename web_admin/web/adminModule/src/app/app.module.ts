@@ -13,14 +13,17 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
 import { BlockedComponent } from './blocked/blocked.component';
 import { DevicesComponent } from './devices/devices.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { UsersComponent } from './users/users.component';
+import { NgxMaskModule } from 'ngx-mask';
+import { IConfig } from 'ngx-mask';
+import {FileUploadModule} from 'ng2-file-upload';
+
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 
 @NgModule({
   declarations: [
-    routingComponents,
-    FlowtypeComponent,
-    BlockedComponent,
-    DevicesComponent
+    routingComponents
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,10 @@ import { AgGridModule } from 'ag-grid-angular';
     AppRoutingModule,
     ReactiveFormsModule,
     DeviceDetectorModule.forRoot(),
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([]),
+    NgxMaskModule.forRoot(options),
+    FileUploadModule
+
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

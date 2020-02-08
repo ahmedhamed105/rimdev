@@ -50,10 +50,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "User.findByBirthdate", query = "SELECT u FROM User u WHERE u.birthdate = :birthdate")
     , @NamedQuery(name = "User.findByUseridnumber", query = "SELECT u FROM User u WHERE u.useridnumber = :useridnumber")
     , @NamedQuery(name = "User.findByPassportnumber", query = "SELECT u FROM User u WHERE u.passportnumber = :passportnumber")
-    , @NamedQuery(name = "User.findByIdImage", query = "SELECT u FROM User u WHERE u.idImage = :idImage")
-    , @NamedQuery(name = "User.findByPassportImage", query = "SELECT u FROM User u WHERE u.passportImage = :passportImage")
-    , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
-    , @NamedQuery(name = "User.findByUsernameConfig", query = "SELECT u FROM User u WHERE u.usernameConfig = :usernameConfig")
     , @NamedQuery(name = "User.findByUsermodify", query = "SELECT u FROM User u WHERE u.usermodify = :usermodify")
     , @NamedQuery(name = "User.findByUsercreate", query = "SELECT u FROM User u WHERE u.usercreate = :usercreate")})
 public class User implements Serializable {
@@ -77,16 +73,8 @@ public class User implements Serializable {
     private String useridnumber;
     @Column(name = "Passport_number", length = 45)
     private String passportnumber;
-    @Column(name = "id_image", length = 45)
-    private String idImage;
-    @Column(name = "passport_image", length = 45)
-    private String passportImage;
-    @Basic(optional = false)
-    @Column(name = "password", nullable = false, length = 45)
-    private String password;
-    @Basic(optional = false)
-    @Column(name = "username_config", nullable = false)
-    private int usernameConfig;
+    @Column(name = "ID_number", length = 45)
+    private String iDnumber;
     @Basic(optional = false)
     @Column(name = "User_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -122,15 +110,10 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String password, int usernameConfig, Date usermodify, Date usercreate) {
-        this.id = id;
-        this.password = password;
-        this.usernameConfig = usernameConfig;
-        this.usermodify = usermodify;
-        this.usercreate = usercreate;
-    }
 
-    public Integer getId() {
+
+
+	public Integer getId() {
         return id;
     }
 
@@ -186,38 +169,16 @@ public class User implements Serializable {
         this.passportnumber = passportnumber;
     }
 
-    public String getIdImage() {
-        return idImage;
-    }
+  
+    public String getiDnumber() {
+		return iDnumber;
+	}
 
-    public void setIdImage(String idImage) {
-        this.idImage = idImage;
-    }
+	public void setiDnumber(String iDnumber) {
+		this.iDnumber = iDnumber;
+	}
 
-    public String getPassportImage() {
-        return passportImage;
-    }
-
-    public void setPassportImage(String passportImage) {
-        this.passportImage = passportImage;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getUsernameConfig() {
-        return usernameConfig;
-    }
-
-    public void setUsernameConfig(int usernameConfig) {
-        this.usernameConfig = usernameConfig;
-    }
-    @XmlTransient
+	@XmlTransient
     @JsonIgnore
     public Date getUsermodify() {
         return usermodify;
