@@ -34,7 +34,8 @@ export enum FileQueueStatus {
     // actions
     public upload = () => { /* set in service */ };
     public cancel = () => { /* set in service */ };
-    public remove = () => { /* set in service */ };
+    public delete = () => { /* set in service */ };
+    public removefromquery = () => { /* set in service */ };
   
     // statuses
     public isPending = () => this.status === FileQueueStatus.Pending;
@@ -102,15 +103,16 @@ export class FileUploaderService {
 
     // set the individual object events
     queueObj.upload = () => this._upload(queueObj);
-    queueObj.remove = () => this._removeFromQueue(queueObj);
+    queueObj.delete = () => this._deleteFromQueuepost(queueObj);
     queueObj.cancel = () => this._cancel(queueObj);
+    queueObj.removefromquery = () => this._removeFromQueue(queueObj);
 
     // push to the queue
     this._files.push(queueObj);
     this._queue.next(this._files);
   }
 
-  private _removeFromQueue(queueObj: FileQueueObject) {
+  private _deleteFromQueuepost(queueObj: FileQueueObject) {
 
     const form = new FormData();
     form.append('type', queueObj.type);
@@ -147,6 +149,13 @@ export class FileUploaderService {
     );
 
   
+  }
+
+
+  private _removeFromQueue(queueObj: FileQueueObject) {
+
+          _.remove(this._files, queueObj);
+
   }
 
   private _upload(queueObj: FileQueueObject) {

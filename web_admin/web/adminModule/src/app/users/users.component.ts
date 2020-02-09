@@ -41,7 +41,6 @@ export class UsersComponent implements OnInit {
   public userid= '2';
 
   @Output() onCompleteItem = new EventEmitter();
-  @Output() onCompleteItem1 = new EventEmitter();
 
   @ViewChild('fileInput',{static: true}) fileInput;
   @ViewChild('fileInput1',{static: true}) fileInput1;
@@ -98,7 +97,7 @@ this._usertype.getall()
          this.idimg.onCompleteItem = this.completeItem;
 
          this.queueCV = this.passimg.queue;
-         this.passimg.onCompleteItem = this.completeItem1;
+         this.passimg.onCompleteItem = this.completeItem;
          
   }
 
@@ -107,9 +106,7 @@ this._usertype.getall()
    this.onCompleteItem.emit({ item, response });
   }
 
-  completeItem1 = (item: FileQueueObject, response: any) => {
-    this.onCompleteItem1.emit({ item, response });
-   }
+
 
   addIDimgaes() {
     this.type = '1';

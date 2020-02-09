@@ -94,7 +94,7 @@
 
               <div class="form-group">
                 <h3>Select files</h3>
-                <input type="file" #fileInput1 [class.is-invalid]="Paimgaes.invalid && Paimgaes.touched" formControlName="Paimgaes" multiple (change)="addpassimgaes()" />
+                <input type="file" accept="image/x-png,image/gif,image/jpeg" #fileInput1 [class.is-invalid]="Paimgaes.invalid && Paimgaes.touched" formControlName="Paimgaes" multiple (change)="addpassimgaes()" />
                 <div *ngIf="Paimgaes.invalid && Paimgaes.touched">
                   <small *ngIf="Paimgaes.errors?.required" class="text-danger">Passport images is required</small>
                   <small *ngIf="Paimgaes.errors?.minlength" class="text-danger">Passport images must be 3 characters</small>
@@ -114,7 +114,8 @@
           <th>Name</th>
 					<th>Size</th>
 					<th>Progress</th>
-					<th>Status</th>
+          <th>Status</th>
+          <th>Action</th>
 				</tr>
 				<tr *ngFor="let item of queueCV | async">
           <td>{{ item.file.name }}</td>
@@ -131,7 +132,15 @@
 						<span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
             <span *ngIf="item.isError()" class="label label-danger">Denied</span>
             <span *ngIf="item.isduplicate()" class="label label-danger">Duplicate</span>
-					</td>		
+          </td>	
+          <td>
+            <a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
+							<i class="fa fa-times-circle"></i>
+						</a>
+						<a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
+							<i class="fa fa-trash"></i>
+						</a>
+					</td>	
 				</tr>
     </table>
   </div>
@@ -154,7 +163,7 @@
 
               <div class="form-group">
                 <h3>Select files</h3>
-                <input type="file" #fileInput [class.is-invalid]="iDimgaes.invalid && iDimgaes.touched" formControlName="iDimgaes" multiple (change)="addIDimgaes()" />
+                <input type="file" accept="image/x-png,image/gif,image/jpeg" #fileInput [class.is-invalid]="iDimgaes.invalid && iDimgaes.touched" formControlName="iDimgaes" multiple (change)="addIDimgaes()" />
                 <div *ngIf="iDimgaes.invalid && iDimgaes.touched">
                   <small *ngIf="iDimgaes.errors?.required" class="text-danger">iD images is required</small>
                   <small *ngIf="iDimgaes.errors?.minlength" class="text-danger">iD images must be 3 characters</small>
@@ -174,7 +183,8 @@
           <th>Name</th>
 					<th>Size</th>
 					<th>Progress</th>
-					<th>Status</th>
+          <th>Status</th>
+          <th>Action</th>
 				</tr>
 				<tr *ngFor="let item of queue | async">
           <td>{{ item.file.name }}</td>
@@ -191,7 +201,15 @@
 						<span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
             <span *ngIf="item.isError()" class="label label-danger">Denied</span>
             <span *ngIf="item.isduplicate()" class="label label-danger">Duplicate</span>
-					</td>		
+          </td>		
+          <td>
+            <a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
+							<i class="fa fa-times-circle"></i>
+						</a>
+						<a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
+							<i class="fa fa-trash"></i>
+						</a>
+					</td>	
 				</tr>
     </table>
   </div>
