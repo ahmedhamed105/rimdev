@@ -66,7 +66,8 @@ export class FileUploaderService {
 
   // the queue
   public get queue() {
-    return this._queue.asObservable();
+      return this._queue.asObservable();
+
   }
 
   // public events

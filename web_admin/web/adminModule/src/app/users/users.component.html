@@ -92,6 +92,55 @@
               </div>
 
 
+              <div class="form-group">
+                <h3>Select files</h3>
+                <input type="file" #fileInput1 [class.is-invalid]="Paimgaes.invalid && Paimgaes.touched" formControlName="Paimgaes" multiple (change)="addpassimgaes()" />
+                <div *ngIf="Paimgaes.invalid && Paimgaes.touched">
+                  <small *ngIf="Paimgaes.errors?.required" class="text-danger">Passport images is required</small>
+                  <small *ngIf="Paimgaes.errors?.minlength" class="text-danger">Passport images must be 3 characters</small>
+                 </div>
+              </div>
+
+            <div class="form-group" >
+
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Passport images</h3>
+                </div>
+              <div class="box-body no-padding">
+		<table class="table table-condensed">
+			
+				<tr>
+          <th>Name</th>
+					<th>Size</th>
+					<th>Progress</th>
+					<th>Status</th>
+				</tr>
+				<tr *ngFor="let item of queueCV | async">
+          <td>{{ item.file.name }}</td>
+          <td>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+        
+        <td >
+          <div class="progress progress-xs">
+            <div class="progress-bar progress-bar-success" [style.width.%]="item.progress">{{item.progress + '%'}}</div>
+          </div>
+        </td>
+					<td >
+						<span *ngIf="item.isPending()" class="label label-warning">Pending</span>
+						<span *ngIf="item.isSuccess()" class="label label-success">Approved</span>
+						<span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
+            <span *ngIf="item.isError()" class="label label-danger">Denied</span>
+            <span *ngIf="item.isduplicate()" class="label label-danger">Duplicate</span>
+					</td>		
+				</tr>
+    </table>
+  </div>
+              </div>
+	
+            </div>
+
+
+
 
               <div class="form-group" >
                 <label>iD number</label>
@@ -105,8 +154,12 @@
 
               <div class="form-group">
                 <h3>Select files</h3>
-                <input type="file" #fileInput multiple (change)="addIDimgaes()" />
-            </div>
+                <input type="file" #fileInput [class.is-invalid]="iDimgaes.invalid && iDimgaes.touched" formControlName="iDimgaes" multiple (change)="addIDimgaes()" />
+                <div *ngIf="iDimgaes.invalid && iDimgaes.touched">
+                  <small *ngIf="iDimgaes.errors?.required" class="text-danger">iD images is required</small>
+                  <small *ngIf="iDimgaes.errors?.minlength" class="text-danger">iD images must be 3 characters</small>
+                 </div>
+              </div>
 
             <div class="form-group" >
 
@@ -122,11 +175,10 @@
 					<th>Size</th>
 					<th>Progress</th>
 					<th>Status</th>
-					<th>Actions</th>
 				</tr>
 				<tr *ngFor="let item of queue | async">
           <td>{{ item.file.name }}</td>
-        <td>	{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+          <td>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
         
         <td >
           <div class="progress progress-xs">
@@ -139,26 +191,12 @@
 						<span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
             <span *ngIf="item.isError()" class="label label-danger">Denied</span>
             <span *ngIf="item.isduplicate()" class="label label-danger">Duplicate</span>
-					</td>
-					<td>
-						<a tooltip="Upload file" (click)="item.upload()" *ngIf="item.isUploadable()">
-							<i class="fa fa-upload"></i>
-						</a>
-						<a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
-							<i class="fa fa-times-circle"></i>
-						</a>
-						<a tooltip="Remove from queue" (click)="item.remove()" *ngIf="item.isSuccess()">
-							<i class="fa fa-trash"></i>
-						</a>
-					</td>
+					</td>		
 				</tr>
     </table>
   </div>
               </div>
-		<div>
-			<a class="btn btn-primary" (click)="uploader.clearQueue()">Clear queue</a>
-			<a class="btn btn-secondary" (click)="uploader.uploadAll()">Upload all</a>
-		</div>
+	
             </div>
 
 

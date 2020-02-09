@@ -10,7 +10,6 @@ export class UsersService {
 
   _urlgetall='http://localhost:8081/User/all';
   _urlpost='http://localhost:8081/User/saveorupdate';
-  _urlpostfile='http://localhost:8081/file/uploadFile';
   
   constructor(private _http:HttpClient) { }
 
