@@ -4,6 +4,7 @@ public class filesearching {
 	
 	int userid;
 	int filetype;
+	String filename;
 	
 	
 	
@@ -22,6 +23,12 @@ public class filesearching {
 	}
 	public void setFiletype(int filetype) {
 		this.filetype = filetype;
+	}
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 	
 	

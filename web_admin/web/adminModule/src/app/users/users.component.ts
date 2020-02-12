@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { FileUploaderService, FileQueueObject } from '../services/file-uploader.service';
 import { fileidimages } from '../services/FileIDImages-serv.service';
 import { filepassimages } from '../services/file-pass.service';
+import { Ifiledownload } from '../objects/ifiledownload';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var $: any;
 
@@ -24,13 +26,13 @@ export class UsersComponent implements OnInit {
   public useridnumber ;
    format = 'yyyy-MM-dd';
   locale = 'en-US';
-  
+  public file: any;
 
 
  
 
 
-  constructor(public passimg: filepassimages,public idimg: fileidimages,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService,private _usertype:UsertypeService){}
+  constructor(private sanitizer: DomSanitizer,public passimg: filepassimages,public idimg: fileidimages,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService,private _usertype:UsertypeService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
@@ -91,8 +93,8 @@ this._usertype.getall()
          id : ['',[Validators.required]]
           }),
          });
-    
-
+         
+         
          this.queue = this.idimg.queue;
          this.idimg.onCompleteItem = this.completeItem;
 
@@ -214,6 +216,19 @@ onUpdate(){
     
     }
 
+
+downloadfile(){
+
+  let newSquare = {filetype: 1, userid: 2,filename:"lKNFM10bdpgita2mcwrr4OHf2ddIzN.jpeg"};
+
+  this.idimg.download(newSquare).subscribe(
+    data => {
+      const blob =  new Blob([data], { type: 'application/octet-stream' });
+
+      var fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      console.log(fileUrl);
+  });
+}
 
 
 

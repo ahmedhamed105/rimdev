@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { HttpEventType } from '@angular/common/http';
 import { Subscription, BehaviorSubject } from 'rxjs';
+import { Ifiledownload } from '../objects/ifiledownload';
 
 
 export enum FileQueueStatus {
@@ -58,6 +59,8 @@ export class FileUploaderService {
   public urladd: string = 'http://localhost:8081/file/uploadFile';
   public urlremove: string = 'http://localhost:8081/file/deleteFile/';
 
+  public urldownload: string = 'http://localhost:8081/file/downloadFile';
+
   private _queue: BehaviorSubject<FileQueueObject[]>;
   private _files: FileQueueObject[] = [];
 
@@ -95,6 +98,13 @@ export class FileUploaderService {
         this._upload(queueObj);
       }
     });
+  }
+
+  public download(file : Ifiledownload) {
+
+    return  this.http.post<any>(this.urldownload,file);
+  
+    
   }
 
   // private functions

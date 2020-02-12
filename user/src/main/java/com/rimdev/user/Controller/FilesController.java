@@ -85,11 +85,12 @@ public class FilesController {
     	
     	return new ResponseEntity<List<UploadFileResponse>>(a, HttpStatus.OK);
     }
-
-    @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request,@RequestParam("type") int type,@RequestParam("userid") int userid) {
+    
+    
+    @RequestMapping(value = "/downloadFile", method = RequestMethod.POST)
+    public ResponseEntity<Resource> downloadFile(HttpServletRequest request,@RequestBody filesearching file) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName,type,userid);
+        Resource resource = fileStorageService.loadFileAsResource(file.getFilename(),file.getFiletype(),file.getUserid());
 
         // Try to determine file's content type
         String contentType = null;
