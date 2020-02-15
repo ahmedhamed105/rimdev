@@ -96,6 +96,17 @@ export class FileUploaderService {
     this._queue.next(this._files);
   }
 
+  public uploadAllinsert(userid) {
+    // upload all except already successfull or in progress
+    _.each(this._files, (queueObj: FileQueueObject) => {
+      if (queueObj.isUploadable()) {
+        queueObj.userid = userid;
+        this._upload(queueObj);
+      }
+    });
+  }
+
+
   public uploadAll() {
     // upload all except already successfull or in progress
     _.each(this._files, (queueObj: FileQueueObject) => {
@@ -107,7 +118,7 @@ export class FileUploaderService {
 
   private _downloadfile(queueObj: FileQueueObject){
 
-    this.download(queueObj.userid, queueObj.type,queueObj.file.name).subscribe(data => saveAs(data, queueObj.file.name));
+    this.download(queueObj.userid, queueObj.type,queueObj.filename).subscribe(data => saveAs(data, queueObj.filename));
   }
   
 
@@ -128,14 +139,14 @@ console.log(url);
           data.forEach(singlefile => {
 
             var file= {name : singlefile.filesName,size : singlefile.filesSize*1024}
-            const queueObj = new FileQueueObject(file,filetype,userid);
+            var queueObj = new FileQueueObject(file,filetype,userid);
 
             queueObj.delete = () => this._deleteFromQueuepost(queueObj);
             queueObj.download = () => this._downloadfile(queueObj);
         
             queueObj.progress = 100;
             queueObj.status = FileQueueStatus.Success;
-            queueObj.filename = 'ahmed';
+            queueObj.filename = singlefile.filesName;
                // push to the queue
                this._files.push(queueObj);
                this._queue.next(this._files);
@@ -151,7 +162,8 @@ console.log(url);
 
   // private functions
   private _addToQueue(file: any,type:string,userid:string) {
-    const queueObj = new FileQueueObject(file,type,userid);
+    var queueObj = new FileQueueObject(file,type,userid);
+    queueObj.filename = file.name;
 
     // set the individual object events
     queueObj.upload = () => this._upload(queueObj);
@@ -166,16 +178,16 @@ console.log(url);
 
   private _deleteFromQueuepost(queueObj: FileQueueObject) {
 
-    const form = new FormData();
+    var form = new FormData();
     form.append('type', queueObj.type);
     form.append('userid', queueObj.userid);
 
     var urldelete=this.urlremove;
 
-    urldelete=urldelete+queueObj.file.name;
+    urldelete=urldelete+queueObj.filename;
 
     // upload file and report progress
-    const req = new HttpRequest('POST', urldelete, form, {
+    var req = new HttpRequest('POST', urldelete, form, {
       reportProgress: true,
     });
 
@@ -219,12 +231,12 @@ console.log(url);
 
 
     // create form data for file
-    const form = new FormData();
-    form.append('file', queueObj.file, queueObj.file.name);
+    var form = new FormData();
+    form.append('file', queueObj.file, queueObj.filename);
     form.append('type', queueObj.type);
     form.append('userid', queueObj.userid);
     // upload file and report progress
-    const req = new HttpRequest('POST', this.urladd, form, {
+    var req = new HttpRequest('POST', this.urladd, form, {
       reportProgress: true,
     });
 
@@ -261,7 +273,7 @@ console.log(url);
 
   private _uploadProgress(queueObj: FileQueueObject, event: any) {
     // update the FileQueueObject with the current progress
-    const progress = Math.round(100 * event.loaded / event.total);
+    var progress = Math.round(100 * event.loaded / event.total);
     queueObj.progress = progress;
     queueObj.status = FileQueueStatus.Progress;
     this._queue.next(this._files);

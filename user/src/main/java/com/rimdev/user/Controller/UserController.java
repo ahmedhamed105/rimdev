@@ -59,13 +59,13 @@ public class UserController {
 	  
 
 @RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<User>> saveorupdate(@RequestBody User input) {
+public @ResponseBody ResponseEntity<User> saveorupdate(@RequestBody User input) {
   // This returns a JSON or XML with the users
 //System.out.println("enter 1");
 //System.out.println(input.getFirstName());
-	 
+	User user=null;
 	try {
-		User user= userServ.getuser(input.getId());
+		 user= userServ.getuser(input.getId());
 	//	 System.out.println("enter 2");
 
 		if(user == null ) {
@@ -89,7 +89,7 @@ public @ResponseBody ResponseEntity<List<User>> saveorupdate(@RequestBody User i
 	}
 	
 	
-	return getAllUsers();
+	 return new ResponseEntity<User>(user, HttpStatus.NOT_FOUND);
 
 	
 }

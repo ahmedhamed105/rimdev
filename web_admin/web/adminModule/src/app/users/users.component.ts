@@ -10,6 +10,8 @@ import { FileUploaderService, FileQueueObject } from '../services/file-uploader.
 import { fileidimages } from '../services/FileIDImages-serv.service';
 import { filepassimages } from '../services/file-pass.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FileupdatepassportService } from '../services/fileupdatepassport.service';
+import { FileupdateidService } from '../services/fileupdateid.service';
 
 declare var $: any;
 
@@ -23,15 +25,15 @@ export class UsersComponent implements OnInit {
   public users = [];
   public usertypes = [];
   public useridnumber ;
-   format = 'yyyy-MM-dd';
+  format = 'yyyy-MM-dd';
   locale = 'en-US';
-  public file: any;
+  public errormessage;
 
 
  
 
 
-  constructor(private sanitizer: DomSanitizer,public passimg: filepassimages,public idimg: fileidimages,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService,private _usertype:UsertypeService){}
+  constructor(public fileupdateid :FileupdateidService,public fileupdatepassport :FileupdatepassportService,public passimg: filepassimages,public idimg: fileidimages,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService,private _usertype:UsertypeService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
@@ -47,6 +49,12 @@ export class UsersComponent implements OnInit {
   @ViewChild('fileInput1',{static: true}) fileInput1;
   queue: Observable<FileQueueObject[]>;
   queueCV: Observable<FileQueueObject[]>;
+
+
+  @ViewChild('fileInput2',{static: true}) fileInput2;
+  @ViewChild('fileInput3',{static: true}) fileInput3;
+  queueupdate: Observable<FileQueueObject[]>;
+  queueCVupdate: Observable<FileQueueObject[]>;
 
   ngOnInit() {
 
@@ -88,6 +96,8 @@ this._usertype.getall()
          useridnumber: [{value: '', disabled: true},[Validators.required]],
          passportnumber: ['',[]],
          iDnumber: ['',[]],
+         iDupdateimgaes :['',[Validators.required]],
+         Paupdateimgaes:['',[Validators.required]],
          usertypeID : this.fb.group({
          id : ['',[Validators.required]]
           }),
@@ -96,11 +106,20 @@ this._usertype.getall()
          
          this.queue = this.idimg.queue;
          this.idimg.onCompleteItem = this.completeItem;
-         this.idimg.addfilesuser('2','2');
+       //  this.idimg.addfilesuser('2','2');
 
          this.queueCV = this.passimg.queue;
          this.passimg.onCompleteItem = this.completeItem;
-         this.passimg.addfilesuser('2','1');
+      //   this.passimg.addfilesuser('2','1');
+
+
+      this.queueupdate = this.fileupdateid.queue;
+      this.fileupdateid.onCompleteItem = this.completeItem;
+    //  this.fileupdateid.addfilesuser('2','2');
+
+      this.queueCVupdate = this.fileupdatepassport.queue;
+      this.fileupdatepassport.onCompleteItem = this.completeItem;
+   //   this.fileupdatepassport.addfilesuser('2','1');
          
   }
 
@@ -123,6 +142,40 @@ this._usertype.getall()
     this.passimg.addToQueue(fileBrowser.files,this.type,this.userid);
   }
 
+
+  addupdatepassimgaes() {
+    if(this.selectuser == null){
+      this.errormessage ='please select user First';
+
+    }else{
+      this.type = '2';
+      const fileBrowser = this.fileInput2.nativeElement;
+      this.fileupdatepassport.addToQueue(fileBrowser.files,this.type,this.selectuser.id);
+    }
+
+  }
+
+  addupdateIDimgaes() {
+    if(this.selectuser == null){
+      this.errormessage ='please select user First';
+
+    }else{
+    this.type = '1';
+    const fileBrowser = this.fileInput3.nativeElement;
+    this.fileupdateid.addToQueue(fileBrowser.files,this.type,this.selectuser.id);
+    }
+  }
+
+
+  get Paupdateimgaes(){
+    return this.updateform.get('Paupdateimgaes');
+  }
+
+  get iDupdateimgaes(){
+    return this.updateform.get('iDupdateimgaes');
+  }
+
+
   get Paimgaes(){
     return this.insertform.get('Paimgaes');
   }
@@ -130,6 +183,7 @@ this._usertype.getall()
   get iDimgaes(){
     return this.insertform.get('iDimgaes');
   }
+
   get iDnumber(){
     return this.insertform.get('iDnumber');
  
@@ -160,6 +214,9 @@ this._usertype.getall()
    }
   
 getuser(){
+  this.fileupdateid.clearQueue();
+  this.fileupdatepassport.clearQueue();
+
   var id = this.updateform.get('id').value;
 
   this.selectuser = this.users.filter(x => x.id == id)[0];
@@ -178,6 +235,8 @@ getuser(){
 
   });
   //console.log(this.selectcurrency);
+  this.fileupdateid.addfilesuser(this.selectuser.id,'1');
+  this.fileupdatepassport.addfilesuser(this.selectuser.id,'2');
 }
 
 
@@ -200,13 +259,13 @@ onUpdate(){
     this._usersservice.insert(this.insertform.value)
     .subscribe(
       data => {
-        this.users = data;
+        let insertuser = data;
 
-        this.idimg.uploadAll();
+        this.idimg.uploadAllinsert(insertuser.id);
 
         this.idimg.clearQueue();
         
-        this.passimg.uploadAll();
+        this.passimg.uploadAllinsert(insertuser.id);
 
         this.passimg.clearQueue();
         
