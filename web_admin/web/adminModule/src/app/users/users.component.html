@@ -93,7 +93,7 @@
 
 
               <div class="form-group">
-                <h3>Select files</h3>
+                <h3>Passport files</h3>
                 <input type="file" accept="image/x-png,image/gif,image/jpeg" #fileInput1 [class.is-invalid]="Paimgaes.invalid && Paimgaes.touched" formControlName="Paimgaes" multiple (change)="addpassimgaes()" />
                 <div *ngIf="Paimgaes.invalid && Paimgaes.touched">
                   <small *ngIf="Paimgaes.errors?.required" class="text-danger">Passport images is required</small>
@@ -123,7 +123,7 @@
         
         <td >
           <div class="progress progress-xs">
-            <div class="progress-bar progress-bar-success" [style.width.%]="item.progress">{{item.progress + '%'}}</div>
+            <div class="progress-bar progress-bar-success" [style.width.%]="item.progress"></div>
           </div>
         </td>
 					<td >
@@ -132,6 +132,7 @@
 						<span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
             <span *ngIf="item.isError()" class="label label-danger">Denied</span>
             <span *ngIf="item.isduplicate()" class="label label-danger">Duplicate</span>
+            <span *ngIf="item.isDownload()" class="label label-success">uploaded</span>
           </td>	
           <td>
             <a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
@@ -139,6 +140,9 @@
 						</a>
 						<a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
 							<i class="fa fa-trash"></i>
+            </a>
+            <a tooltip="download from queue" (click)="downloadfile(1,item.file.name)" *ngIf="item.isDownload()">
+							<i class="fa fa-save"></i>
 						</a>
 					</td>	
 				</tr>
@@ -162,7 +166,7 @@
               </div>
 
               <div class="form-group">
-                <h3>Select files</h3>
+                <h3>ID files</h3>
                 <input type="file" accept="image/x-png,image/gif,image/jpeg" #fileInput [class.is-invalid]="iDimgaes.invalid && iDimgaes.touched" formControlName="iDimgaes" multiple (change)="addIDimgaes()" />
                 <div *ngIf="iDimgaes.invalid && iDimgaes.touched">
                   <small *ngIf="iDimgaes.errors?.required" class="text-danger">iD images is required</small>
@@ -208,6 +212,9 @@
 						</a>
 						<a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
 							<i class="fa fa-trash"></i>
+            </a>
+            <a tooltip="download from queue" (click)="item.download()" *ngIf="item.isDownload()">
+							<i class="fa fa-save"></i>
 						</a>
 					</td>	
 				</tr>

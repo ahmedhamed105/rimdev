@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,11 +52,11 @@ public class FilesController {
 	    
 	    
 		
-		  @RequestMapping(value = "/all", method = RequestMethod.GET)
-		  public  ResponseEntity<List<FilesUpload>> getAllfiles(@RequestBody filesearching filesearching){
+		  @RequestMapping(value = "/all/{Userid}/{Filetype}", method = RequestMethod.GET)
+		  public  ResponseEntity<List<FilesUpload>> getAllfiles(@PathVariable("Userid") int Userid,@PathVariable("Filetype") int Filetype){
 		
 			  
-			  return new ResponseEntity<List<FilesUpload>>(fileStorageService.getfile(filesearching.getUserid(),filesearching.getFiletype()), HttpStatus.OK);
+			  return new ResponseEntity<List<FilesUpload>>(fileStorageService.getfile(Userid,Filetype), HttpStatus.OK);
 		  }
 		  
 	
@@ -87,10 +86,10 @@ public class FilesController {
     }
     
     
-    @RequestMapping(value = "/downloadFile", method = RequestMethod.POST)
-    public ResponseEntity<Resource> downloadFile(HttpServletRequest request,@RequestBody filesearching file) {
+    @RequestMapping(value = "/downloadFile/{Userid}/{Filetype}/{fileName:.+}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadFile(HttpServletRequest request,@PathVariable("Userid") int Userid,@PathVariable("Filetype") int Filetype,@PathVariable("fileName") String fileName) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(file.getFilename(),file.getFiletype(),file.getUserid());
+        Resource resource = fileStorageService.loadFileAsResource(fileName,Filetype,Userid);
 
         // Try to determine file's content type
         String contentType = null;

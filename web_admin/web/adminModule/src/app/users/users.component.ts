@@ -9,8 +9,8 @@ import { Observable } from 'rxjs';
 import { FileUploaderService, FileQueueObject } from '../services/file-uploader.service';
 import { fileidimages } from '../services/FileIDImages-serv.service';
 import { filepassimages } from '../services/file-pass.service';
-import { Ifiledownload } from '../objects/ifiledownload';
 import { DomSanitizer } from '@angular/platform-browser';
+import { saveAs } from 'file-saver';
 
 declare var $: any;
 
@@ -100,6 +100,7 @@ this._usertype.getall()
 
          this.queueCV = this.passimg.queue;
          this.passimg.onCompleteItem = this.completeItem;
+         this.passimg.addfilesuser('2','1');
          
   }
 
@@ -217,17 +218,9 @@ onUpdate(){
     }
 
 
-downloadfile(){
+downloadfile(filetype,filename){
 
-  let newSquare = {filetype: 1, userid: 2,filename:"lKNFM10bdpgita2mcwrr4OHf2ddIzN.jpeg"};
-
-  this.idimg.download(newSquare).subscribe(
-    data => {
-      const blob =  new Blob([data], { type: 'application/octet-stream' });
-
-      var fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-      console.log(fileUrl);
-  });
+  this.idimg.download(2, filetype,filename).subscribe(data => saveAs(data, filename));
 }
 
 

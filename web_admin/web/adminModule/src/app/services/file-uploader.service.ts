@@ -2,13 +2,14 @@ import * as _ from 'lodash';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { HttpEventType } from '@angular/common/http';
-import { Subscription, BehaviorSubject } from 'rxjs';
-import { Ifiledownload } from '../objects/ifiledownload';
+import { Subscription, BehaviorSubject, Observable } from 'rxjs';
+import { Ifiledownload } from '../objects/Ifiledownload';
 
 
 export enum FileQueueStatus {
     Pending,
     Success,
+    download,
     Error,
     Progress,
     duplicate
@@ -31,6 +32,7 @@ export enum FileQueueStatus {
       this.type = type;
       this.userid= userid;
     }
+
   
     // actions
     public upload = () => { /* set in service */ };
@@ -45,7 +47,7 @@ export enum FileQueueStatus {
     public isduplicate = () => this.status === FileQueueStatus.duplicate;
     public inProgress = () => this.status === FileQueueStatus.Progress;
     public isUploadable = () => this.status === FileQueueStatus.Pending || this.status === FileQueueStatus.Error;
-  
+    public isDownload = () => this.status === FileQueueStatus.download;
   }
 
 @Injectable({
@@ -59,7 +61,9 @@ export class FileUploaderService {
   public urladd: string = 'http://localhost:8081/file/uploadFile';
   public urlremove: string = 'http://localhost:8081/file/deleteFile/';
 
-  public urldownload: string = 'http://localhost:8081/file/downloadFile';
+  public urldownload: string = 'http://localhost:8081/file/downloadFile/';
+
+  public urlgetfiles: string = 'http://localhost:8081/file/all/';
 
   private _queue: BehaviorSubject<FileQueueObject[]>;
   private _files: FileQueueObject[] = [];
@@ -100,11 +104,39 @@ export class FileUploaderService {
     });
   }
 
-  public download(file : Ifiledownload) {
+  public download(userid, filetype,filename) {
+var url=this.urldownload+userid+'/'+filetype+'/'+filename;
+console.log(url);
+    return this.http.get(url, 
+      {responseType: 'blob'});
+  }
 
-    return  this.http.post<any>(this.urldownload,file);
+
+  public addfilesuser(userid:string,filetype:string,){
+
+    var url=this.urlgetfiles+userid+'/'+filetype;
+      this.http.get<Ifiledownload[]>(url).subscribe(
+        
+        data => {
+          data.forEach(singlefile => {
+
+            var file= {name : singlefile.filesName,size : singlefile.filesSize*1024}
+            const queueObj = new FileQueueObject(file,filetype,userid);
+        
+            queueObj.progress = 100;
+            queueObj.status = FileQueueStatus.download;
+            queueObj.filename = 'ahmed';
+               // push to the queue
+               this._files.push(queueObj);
+               this._queue.next(this._files);
   
+            });
+         
+
+        });
+
     
+
   }
 
   // private functions
@@ -160,7 +192,12 @@ export class FileUploaderService {
 
   
   }
+  private downloadfile(queueObj: FileQueueObject) {
 
+    console.log('ahmed');
+  return  this.download(2,1,'lKNFM10bdpgita2mcwrr4OHf2ddIzN.jpeg').subscribe(data => saveAs(data, 'lKNFM10bdpgita2mcwrr4OHf2ddIzN.jpeg'));;
+
+}
 
   private _removeFromQueue(queueObj: FileQueueObject) {
 

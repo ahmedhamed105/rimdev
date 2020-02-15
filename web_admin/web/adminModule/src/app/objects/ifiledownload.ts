@@ -1,5 +1,8 @@
 export interface Ifiledownload {
-    userid : number,
-    filetype : number,
-    filename : String
+    id : number,
+    filesUrl : String,
+    filesSize : number,
+    filesName : String,
+    filesType : String,
+    filecomruntime : number
  }
