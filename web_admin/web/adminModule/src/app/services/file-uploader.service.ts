@@ -4,12 +4,12 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpRequest, HttpResponse }
 import { HttpEventType } from '@angular/common/http';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { Ifiledownload } from '../objects/Ifiledownload';
+import { saveAs } from 'file-saver';
 
 
 export enum FileQueueStatus {
     Pending,
     Success,
-    download,
     Error,
     Progress,
     duplicate
@@ -39,6 +39,7 @@ export enum FileQueueStatus {
     public cancel = () => { /* set in service */ };
     public delete = () => { /* set in service */ };
     public removefromquery = () => { /* set in service */ };
+    public download = () => { /* set in service */ };
   
     // statuses
     public isPending = () => this.status === FileQueueStatus.Pending;
@@ -47,7 +48,7 @@ export enum FileQueueStatus {
     public isduplicate = () => this.status === FileQueueStatus.duplicate;
     public inProgress = () => this.status === FileQueueStatus.Progress;
     public isUploadable = () => this.status === FileQueueStatus.Pending || this.status === FileQueueStatus.Error;
-    public isDownload = () => this.status === FileQueueStatus.download;
+
   }
 
 @Injectable({
@@ -104,6 +105,12 @@ export class FileUploaderService {
     });
   }
 
+  private _downloadfile(queueObj: FileQueueObject){
+
+    this.download(queueObj.userid, queueObj.type,queueObj.file.name).subscribe(data => saveAs(data, queueObj.file.name));
+  }
+  
+
   public download(userid, filetype,filename) {
 var url=this.urldownload+userid+'/'+filetype+'/'+filename;
 console.log(url);
@@ -112,7 +119,7 @@ console.log(url);
   }
 
 
-  public addfilesuser(userid:string,filetype:string,){
+  public addfilesuser(userid:string,filetype:string){
 
     var url=this.urlgetfiles+userid+'/'+filetype;
       this.http.get<Ifiledownload[]>(url).subscribe(
@@ -122,9 +129,12 @@ console.log(url);
 
             var file= {name : singlefile.filesName,size : singlefile.filesSize*1024}
             const queueObj = new FileQueueObject(file,filetype,userid);
+
+            queueObj.delete = () => this._deleteFromQueuepost(queueObj);
+            queueObj.download = () => this._downloadfile(queueObj);
         
             queueObj.progress = 100;
-            queueObj.status = FileQueueStatus.download;
+            queueObj.status = FileQueueStatus.Success;
             queueObj.filename = 'ahmed';
                // push to the queue
                this._files.push(queueObj);
@@ -148,7 +158,7 @@ console.log(url);
     queueObj.delete = () => this._deleteFromQueuepost(queueObj);
     queueObj.cancel = () => this._cancel(queueObj);
     queueObj.removefromquery = () => this._removeFromQueue(queueObj);
-
+    queueObj.download = () => this._downloadfile(queueObj);
     // push to the queue
     this._files.push(queueObj);
     this._queue.next(this._files);
@@ -162,7 +172,7 @@ console.log(url);
 
     var urldelete=this.urlremove;
 
-    urldelete=urldelete+queueObj.filename;
+    urldelete=urldelete+queueObj.file.name;
 
     // upload file and report progress
     const req = new HttpRequest('POST', urldelete, form, {

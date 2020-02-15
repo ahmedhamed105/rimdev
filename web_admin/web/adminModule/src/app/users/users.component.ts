@@ -10,7 +10,6 @@ import { FileUploaderService, FileQueueObject } from '../services/file-uploader.
 import { fileidimages } from '../services/FileIDImages-serv.service';
 import { filepassimages } from '../services/file-pass.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { saveAs } from 'file-saver';
 
 declare var $: any;
 
@@ -97,6 +96,7 @@ this._usertype.getall()
          
          this.queue = this.idimg.queue;
          this.idimg.onCompleteItem = this.completeItem;
+         this.idimg.addfilesuser('2','2');
 
          this.queueCV = this.passimg.queue;
          this.passimg.onCompleteItem = this.completeItem;
@@ -218,10 +218,6 @@ onUpdate(){
     }
 
 
-downloadfile(filetype,filename){
-
-  this.idimg.download(2, filetype,filename).subscribe(data => saveAs(data, filename));
-}
 
 
 
