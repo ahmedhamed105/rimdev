@@ -355,13 +355,8 @@
 
                 <div class="form-group">
                   <h3>Passport files</h3>
-                  <input type="file" accept="image/x-png,image/gif,image/jpeg" #fileInput2 [class.is-invalid]="Paupdateimgaes.invalid && Paupdateimgaes.touched" formControlName="Paupdateimgaes" multiple (change)="addupdatepassimgaes()" />
-                  <div *ngIf="Paupdateimgaes.invalid && Paupdateimgaes.touched">
-                    <small *ngIf="Paupdateimgaes.errors?.required" class="text-danger">Passport images is required</small>
-                    <small *ngIf="Paupdateimgaes.errors?.minlength" class="text-danger">Passport images must be 3 characters</small>
-                   </div>
+                  <input type="file" accept="image/*" #fileInput2   multiple (change)="addupdatepassimgaes()" />
                 </div>
-
 
                 <div class="form-group" >
 
@@ -438,11 +433,7 @@
 
                 <div class="form-group">
                   <h3>ID files</h3>
-                  <input type="file" accept="image/x-png,image/gif,image/jpeg" #fileInput3 [class.is-invalid]="iDupdateimgaes.invalid && iDupdateimgaes.touched" formControlName="iDupdateimgaes" multiple (change)="addupdateIDimgaes()" />
-                  <div *ngIf="iDupdateimgaes.invalid && iDupdateimgaes.touched">
-                    <small *ngIf="iDupdateimgaes.errors?.required" class="text-danger">Passport images is required</small>
-                    <small *ngIf="iDupdateimgaes.errors?.minlength" class="text-danger">Passport images must be 3 characters</small>
-                   </div>
+                  <input type="file" accept="image/*" #fileInput3   multiple (change)="addupdateIDimgaes()" />
                 </div>
   
               <div class="form-group" >

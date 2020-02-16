@@ -69,13 +69,21 @@ export class FileUploaderService {
   private _queue: BehaviorSubject<FileQueueObject[]>;
   private _files: FileQueueObject[] = [];
 
+
   constructor(private http: HttpClient) {
     this._queue = <BehaviorSubject<FileQueueObject[]>>new BehaviorSubject(this._files);
+    
   }
 
   // the queue
   public get queue() {
       return this._queue.asObservable();
+
+  }
+
+    // the filelength
+    public get filelength() {
+      return this._files.length;
 
   }
 
@@ -140,7 +148,7 @@ console.log(url);
 
             var file= {name : singlefile.filesName,size : singlefile.filesSize*1024}
             var queueObj = new FileQueueObject(file,filetype,userid);
-
+           
             queueObj.delete = () => this._deleteFromQueuepost(queueObj);
             queueObj.download = () => this._downloadfile(queueObj);
         
@@ -149,14 +157,14 @@ console.log(url);
             queueObj.filename = singlefile.filesName;
                // push to the queue
                this._files.push(queueObj);
-               this._queue.next(this._files);
+               this._queue.next(this._files); 
   
             });
          
 
         });
 
-    
+      
 
   }
 
@@ -164,7 +172,7 @@ console.log(url);
   private _addToQueue(file: any,type:string,userid:string) {
     var queueObj = new FileQueueObject(file,type,userid);
     queueObj.filename = file.name;
-
+    
     // set the individual object events
     queueObj.upload = () => this._upload(queueObj);
     queueObj.delete = () => this._deleteFromQueuepost(queueObj);

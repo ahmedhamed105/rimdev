@@ -89,7 +89,7 @@ public @ResponseBody ResponseEntity<User> saveorupdate(@RequestBody User input) 
 	}
 	
 	
-	 return new ResponseEntity<User>(user, HttpStatus.NOT_FOUND);
+	 return new ResponseEntity<User>(user, HttpStatus.OK);
 
 	
 }
