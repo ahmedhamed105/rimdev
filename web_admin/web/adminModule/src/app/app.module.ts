@@ -17,6 +17,7 @@ import { UsersComponent } from './users/users.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { IConfig } from 'ngx-mask';
 import {FileUploadModule} from 'ng2-file-upload';
+import { UsermailComponent } from './usermail/usermail.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 

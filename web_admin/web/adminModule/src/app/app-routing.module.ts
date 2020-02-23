@@ -8,6 +8,7 @@ import { FlowtypeComponent } from './flowtype/flowtype.component';
 import { BlockedComponent } from './blocked/blocked.component';
 import { DevicesComponent } from './devices/devices.component';
 import { UsersComponent } from './users/users.component';
+import { UsermailComponent } from './usermail/usermail.component';
 
 
 
@@ -21,6 +22,10 @@ const routes: Routes = [
       path: 'dashboard',
       component: DasboardComponent,
   },
+  {
+    path: 'usermail',
+    component: UsermailComponent,
+},
   {
     path: 'user',
     component: UsersComponent,
@@ -52,4 +57,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
+export const routingComponents=[UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]

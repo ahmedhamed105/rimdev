@@ -79,7 +79,7 @@ export class UsersComponent implements OnInit {
 this._usersservice.getall()
 .subscribe(data => this.users = data);
 
-console.log(this.users);
+//console.log(this.users);
 
 this._usertype.getall()
 .subscribe(data => this.usertypes = data);
