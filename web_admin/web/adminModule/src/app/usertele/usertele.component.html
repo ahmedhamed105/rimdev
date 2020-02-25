@@ -59,6 +59,14 @@
               </div>
 
 
+              <div class="form-group" formGroupName="datastatusID">
+                <label>User</label>
+                <select formControlName="id"  class="form-control" (blur)="getuser()" (change)="getuser()">
+                  <option *ngFor="let status of data_status" value="{{status.id}}">{{status.dstatus}}</option>
+            </select>    
+             </div>
+
+
             </div>
             <!-- /.box-body -->
   

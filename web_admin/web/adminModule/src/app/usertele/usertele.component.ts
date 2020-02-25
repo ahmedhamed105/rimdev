@@ -16,6 +16,7 @@ export class UserteleComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
 
   public users = [];
+  public data_status = [];
 
   public show:boolean = false;
 
@@ -64,12 +65,49 @@ export class UserteleComponent implements OnInit {
      filter: true,        
      editable: true,
      resizable: true
+   },
+   {
+     headerName : "status",
+     field : "datastatusID.dstatus",
+     sortable: true, 
+     filter: true,        
+     resizable: true,
+     cellRenderer: this.CustomCombobox
    }
    
  
  ];
 
+  CustomCombobox(params) {  
+  //Find RowIndex   
+  var rowIndex = params.rowIndex;  
+  //create select element using javascript  
+  var eSelect = document.createElement("select");  
+  //Set attributes   
+  eSelect.setAttribute('class', 'custom-select form-control');  
+  eSelect.setAttribute('style', 'padding:0px');  
+  eSelect.setAttribute('name', params.colDef.field);  
+  eSelect.setAttribute('id', params.colDef.field + "_" + rowIndex);  
+  //get the value of the select option  
+  var value = params.data.CompanyID;  
+  //create the default option of the select element  
+  var eOption = document.createElement("option");  
+  eOption.text = "Select";  
+  eOption.value = "";  
+  eSelect.appendChild(eOption);  
+  if (params.colDef.field == "datastatusID.dstatus") {  
+   
+      var eOptionVal = document.createElement("option");  
+      //Statical set data in grid ComboBox  
+      this.data_status.forEach(element => {
+        eOptionVal.text = element.dstatus;  
+        eOptionVal.value = element;  
+        eSelect.appendChild(eOptionVal); 
+      });
 
+  }  
+  return eSelect;  
+}  
 
 
   ngOnInit(){
@@ -84,12 +122,20 @@ export class UserteleComponent implements OnInit {
 
 
 
+    this._TelesService.getstatus()
+    .subscribe(data => this.data_status = data);
+
+
+
     this.insertform = this.fb.group({
       phoneNo: ['' ,[Validators.required,Validators.minLength(8),Validators.maxLength(11),Validators.pattern('^\\d{8,11}$')]],
       telePrimary: ['' ,[Validators.required]],
       userID: this.fb.group({
         id : ['',[Validators.required]]
-         })
+         }),
+         datastatusID: this.fb.group({
+          id : ['',[Validators.required]]
+           }),
       });
 
 

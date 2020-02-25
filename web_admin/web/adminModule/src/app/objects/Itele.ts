@@ -4,6 +4,10 @@ export interface Itele {
     telePrimary: number,
     userID: {
         id: number
+    },
+    datastatusID: {
+        id: number,
+        dstatus: String
     }
 
 }
