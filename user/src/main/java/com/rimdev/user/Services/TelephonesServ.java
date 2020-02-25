@@ -82,12 +82,50 @@ public Telephones getbyid(int id) {
 
 
 
+public List<Telephones> getbyuser(int userid) {
+	
+	try {
+		
+		List<Telephones> cu=(List<Telephones>) telephonesRepo.findbyuser(userid);
+		
+		return cu;
+		
+		
+	} catch (Exception e) {
+		// TODO: handle exception
+		return null;
+	}
+	
+}
+
+
+
 
 public List<Telephones> save(Telephones input) {
+
+	
+	User  usero ;
+	
+	try {
+		Optional<User> use=userRepo.findById(input.getUserID().getId());
+		 
+		 if (use.isPresent()){
+			   usero = use.get();
+
+			}
+			else{
+			   // alternative processing....
+				return (List<Telephones>) telephonesRepo.findAll();
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return (List<Telephones>) telephonesRepo.findAll();
+	}
 	
 	Date date = new Date();
 	input.setTeleCreate(date);
 	input.setTeleModify(date);
+	input.setUserID(usero);
 	Telephones ouput =telephonesRepo.save(input);	
 	
 	return (List<Telephones>) telephonesRepo.findAll();
@@ -104,5 +142,13 @@ public List<Telephones> update(Telephones input) {
 	return (List<Telephones>) telephonesRepo.findAll();
 	
 }
+
+
+public void delete(Telephones input) {	
+
+	telephonesRepo.delete(input);	
+	
+}
+
 
 }

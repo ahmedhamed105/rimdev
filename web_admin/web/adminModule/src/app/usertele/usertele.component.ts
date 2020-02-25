@@ -1,30 +1,30 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
-import { CurrencyServService } from '../services/currency-serv.service';
-import { StatusServService } from '../services/status-serv.service';
 import { UsersService } from '../services/users.service';
 import { EmailsService } from '../services/emails.service';
 import { AgGridAngular } from 'ag-grid-angular';
+import { TelesService } from '../services/teles.service';
 
 @Component({
-  selector: 'app-usermail',
-  templateUrl: './usermail.component.html',
-  styleUrls: ['./usermail.component.css']
+  selector: 'app-usertele',
+  templateUrl: './usertele.component.html',
+  styleUrls: ['./usertele.component.css']
 })
-export class UsermailComponent implements OnInit {
+export class UserteleComponent implements OnInit {
+
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
 
   public users = [];
 
   public show:boolean = false;
 
-  constructor(private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
   public device ;
-  public page_number:number = 6 ;
+  public page_number:number = 7 ;
   public selectuser;
   public selectemail;
 
@@ -50,8 +50,8 @@ export class UsermailComponent implements OnInit {
      filter: true
    },
    {
-     headerName : "email",
-     field : "emailuser",
+     headerName : "phone No",
+     field : "phoneNo",
      sortable: true, 
      filter: true,        
      editable: true,
@@ -59,7 +59,7 @@ export class UsermailComponent implements OnInit {
    },
    {
      headerName : "Primary",
-     field : "emailPrimary",
+     field : "telePrimary",
      sortable: true, 
      filter: true,        
      editable: true,
@@ -85,8 +85,8 @@ export class UsermailComponent implements OnInit {
 
 
     this.insertform = this.fb.group({
-      emailuser: ['' ,[Validators.required,Validators.email]],
-      emailPrimary: ['' ,[Validators.required]],
+      phoneNo: ['' ,[Validators.required,Validators.minLength(8),Validators.maxLength(11),Validators.pattern('^\\d{8,11}$')]],
+      telePrimary: ['' ,[Validators.required]],
       userID: this.fb.group({
         id : ['',[Validators.required]]
          })
@@ -109,22 +109,22 @@ export class UsermailComponent implements OnInit {
    console.log(this.selectuser);
 
 
-   this.rowData =this._EmailsService.getbyuser(this.selectuser.id);
+   this.rowData =this._TelesService.getbyuser(this.selectuser.id);
 
     
   }
 
 
-  savemail(){
+  savetele(){
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
         console.log(node)
-        console.log(node.emailPrimary)
+        console.log(node.telePrimary)
 
-if(node.emailPrimary == 0 || node.emailPrimary == 1 ){
-this.rowData= this._EmailsService.insert(node);
+if(node.telePrimary == 0 || node.telePrimary == 1 ){
+this.rowData= this._TelesService.insert(node);
 }else{
   alert('enter correct value in primary field 0 or 1');
 
@@ -133,7 +133,7 @@ this.rowData= this._EmailsService.insert(node);
 
   }
 
-  deletemail(){
+  deletetel(){
 
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     const selectedData = selectedNodes.map( node => node.data );
@@ -141,7 +141,7 @@ this.rowData= this._EmailsService.insert(node);
        {
 
   
-  this.rowData= this._EmailsService.delete(node);
+  this.rowData= this._TelesService.delete(node);
 
 
       });
@@ -154,7 +154,7 @@ onSubmit(){
 if(this.selectuser != null){
   console.log(this.insertform.value);
 
-  this.rowData=  this._EmailsService.insert(this.insertform.value);
+  this.rowData=  this._TelesService.insert(this.insertform.value);
 
   this.insertform.reset();
 
@@ -165,8 +165,6 @@ if(this.selectuser != null){
 
 
 }
-
-
 
 
 

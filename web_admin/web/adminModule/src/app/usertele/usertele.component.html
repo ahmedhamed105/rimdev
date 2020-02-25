@@ -3,13 +3,13 @@
 
     <h1>
       user 
-      <small>Email</small>
+      <small>Telephone</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href="#">Admin</a></li>
       <li><a href="#">User</a></li>
-      <li class="active">Email</li>
+      <li class="active">Telephone</li>
     </ol>
   </section>
   
@@ -38,18 +38,21 @@
              </div>
 
               <div class="form-group" >
-                <label>Email</label>
-                <input  [class.is-invalid]="iform.emailuser.invalid && iform.emailuser.touched" formControlName="emailuser" type="email"   class="form-control"  >
-             <div *ngIf="iform.emailuser.invalid && iform.emailuser.touched" class="invalid-feedback">
-              <small *ngIf="iform.emailuser.errors?.required" class="text-danger">email is required</small> 
-              <small *ngIf="iform.emailuser.errors?.email" class="text-danger">email must enter correctly</small> 
+                <label>Telephone</label>
+                <input  [class.is-invalid]="iform.phoneNo.invalid && iform.phoneNo.touched" formControlName="phoneNo" type="tel"   class="form-control"  >
+             <div *ngIf="iform.phoneNo.invalid && iform.phoneNo.touched" class="invalid-feedback">
+              <small *ngIf="iform.phoneNo.errors?.required" class="text-danger">telephone is required</small> 
+              <small *ngIf="iform.phoneNo.errors?.pattern" class="text-danger">telephone must enter correctly</small> 
+              <small *ngIf="iform.phoneNo.errors?.minLength" class="text-danger">telephone length must enter correctly</small> 
+              <small *ngIf="iform.phoneNo.errors?.maxLength" class="text-danger">telephone length must enter correctly</small> 
+
             </div>
              
               </div>
 
               <div class="form-group" >
                 <label>Primary</label>
-                <select formControlName="emailPrimary"  class="form-control">
+                <select formControlName="telePrimary"  class="form-control">
                   <option value="0">No</option>
                   <option value="1">Yes</option>
             </select>   
@@ -68,12 +71,12 @@
 
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Emails</h3>
+            <h3 class="box-title">Telephones</h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
-            <button class="btn btn-primary" (click)="deletemail()">Delete Email</button>
-            <button class="btn btn-primary" (click)="savemail()">Save Email</button>
+            <button class="btn btn-primary" (click)="deletetel()">Delete Telephone</button>
+            <button class="btn btn-primary" (click)="savetele()">Save Telephone</button>
             <br/>
             <ag-grid-angular
                 #agGrid

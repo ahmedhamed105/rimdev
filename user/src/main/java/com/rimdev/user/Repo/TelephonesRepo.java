@@ -14,6 +14,9 @@ public interface TelephonesRepo extends CrudRepository<Telephones, Integer>{
 	
 	@Query(value ="SELECT * FROM rim_user.telephones where phone_no =?1" , nativeQuery = true)
 	Optional<Telephones> findbytele(String tele);
+	
+	@Query(value ="SELECT * FROM rim_user.telephones where User_ID =?1" , nativeQuery = true)
+	Iterable<Telephones> findbyuser(int userid);
 
 
 }

@@ -18,6 +18,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { IConfig } from 'ngx-mask';
 import {FileUploadModule} from 'ng2-file-upload';
 import { UsermailComponent } from './usermail/usermail.component';
+import { UserteleComponent } from './usertele/usertele.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 

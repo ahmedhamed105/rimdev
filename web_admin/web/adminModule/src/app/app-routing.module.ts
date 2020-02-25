@@ -9,6 +9,7 @@ import { BlockedComponent } from './blocked/blocked.component';
 import { DevicesComponent } from './devices/devices.component';
 import { UsersComponent } from './users/users.component';
 import { UsermailComponent } from './usermail/usermail.component';
+import { UserteleComponent } from './usertele/usertele.component';
 
 
 
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'usermail',
     component: UsermailComponent,
+},
+{
+  path: 'usertele',
+  component: UserteleComponent,
 },
   {
     path: 'user',
@@ -57,4 +62,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
+export const routingComponents=[UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]

@@ -69,12 +69,24 @@ public class Telephones implements Serializable {
     @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private User userID;
+    
+    @JoinColumn(name = "Data_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private DataStatus datastatusID;
 
     public Telephones() {
     }
 
     public Telephones(Integer id) {
         this.id = id;
+    }
+    
+    public DataStatus getDatastatusID() {
+        return datastatusID;
+    }
+
+    public void setDatastatusID(DataStatus datastatusID) {
+        this.datastatusID = datastatusID;
     }
 
 
