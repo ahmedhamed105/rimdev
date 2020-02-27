@@ -9,9 +9,21 @@
 </div>
 
 <div *ngIf="params.colDef.field == 'telePrimary'">
-  <form [formGroup]="primaryform">
+  <form [formGroup]="tprimaryform">
 <div class="form-group">
-  <select formControlName="primary"  class="form-control" (blur)="setprimary()" (change)="setprimary()">
+  <select formControlName="primary"  class="form-control" (blur)="settprimary()" (change)="settprimary()">
+    <option  value="0">0</option>
+    <option  value="1">1</option>
+</select>    
+</div>
+</form>
+</div>
+
+
+<div *ngIf="params.colDef.field == 'emailPrimary'">
+  <form [formGroup]="eprimaryform">
+<div class="form-group">
+  <select formControlName="primary"  class="form-control" (blur)="seteprimary()" (change)="seteprimary()">
     <option  value="0">0</option>
     <option  value="1">1</option>
 </select>    

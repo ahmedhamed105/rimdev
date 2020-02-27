@@ -20,7 +20,6 @@ export class UserteleComponent implements OnInit {
   public users = [];
  
 
-  public show:boolean = false;
 
   constructor(private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 

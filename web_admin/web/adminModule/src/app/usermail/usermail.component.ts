@@ -6,6 +6,8 @@ import { StatusServService } from '../services/status-serv.service';
 import { UsersService } from '../services/users.service';
 import { EmailsService } from '../services/emails.service';
 import { AgGridAngular } from 'ag-grid-angular';
+import { GridOptions } from 'ag-grid-community';
+import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 
 @Component({
   selector: 'app-usermail',
@@ -17,7 +19,6 @@ export class UsermailComponent implements OnInit {
 
   public users = [];
 
-  public show:boolean = false;
 
   constructor(private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
@@ -27,6 +28,8 @@ export class UsermailComponent implements OnInit {
   public page_number:number = 6 ;
   public selectuser;
   public selectemail;
+
+  gridOptions:GridOptions;
 
 
 
@@ -63,7 +66,16 @@ export class UsermailComponent implements OnInit {
      sortable: true, 
      filter: true,        
      editable: true,
-     resizable: true
+     resizable: true,
+     cellRenderer: "cellRenderer",
+   },
+   {
+     headerName : "status",
+     field : "datastatusID",
+     sortable: true, 
+     filter: true,  
+     resizable: true,
+     cellRenderer: "cellRenderer"
    }
    
  
@@ -81,6 +93,9 @@ export class UsermailComponent implements OnInit {
 
     this._usersservice.getall()
     .subscribe(data => this.users = data);
+
+    this.gridOptions = <GridOptions>{};
+    this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
 
 

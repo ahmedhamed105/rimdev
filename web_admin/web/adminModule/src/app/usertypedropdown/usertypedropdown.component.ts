@@ -16,7 +16,8 @@ export class UsertypedropdownComponent implements AgRendererComponent {
 
 
   statusform :FormGroup;
-  primaryform :FormGroup;
+  tprimaryform :FormGroup;
+  eprimaryform :FormGroup;
 
 
   private params:any = {
@@ -30,10 +31,17 @@ export class UsertypedropdownComponent implements AgRendererComponent {
   }
   
 
-  setprimary(){
+  settprimary(){
 
-    var status = this.primaryform.get('primary').value;
+    var status = this.tprimaryform.get('primary').value;
     this.params.data.telePrimary = status;
+  }
+
+
+  seteprimary(){
+
+    var status = this.eprimaryform.get('primary').value;
+    this.params.data.emailPrimary = status;
   }
   
   agInit(params:any):void {
@@ -51,9 +59,13 @@ export class UsertypedropdownComponent implements AgRendererComponent {
       });
 
 
-      this.primaryform = this.fb.group({
+      this.tprimaryform = this.fb.group({
         primary: [this.params.data.telePrimary ,[Validators.required]],
         });
+
+        this.eprimaryform = this.fb.group({
+          primary: [this.params.data.emailPrimary ,[Validators.required]],
+          });
   
 
 
