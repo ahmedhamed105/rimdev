@@ -5,6 +5,8 @@ import { UsersService } from '../services/users.service';
 import { EmailsService } from '../services/emails.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { TelesService } from '../services/teles.service';
+import { GridOptions } from 'ag-grid-community';
+import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 
 @Component({
   selector: 'app-usertele',
@@ -16,7 +18,7 @@ export class UserteleComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
 
   public users = [];
-  public data_status = [];
+ 
 
   public show:boolean = false;
 
@@ -28,7 +30,7 @@ export class UserteleComponent implements OnInit {
   public page_number:number = 7 ;
   public selectuser;
   public selectemail;
-
+  gridOptions:GridOptions;
 
 
 
@@ -63,51 +65,22 @@ export class UserteleComponent implements OnInit {
      field : "telePrimary",
      sortable: true, 
      filter: true,        
-     editable: true,
+     cellRenderer: "cellRenderer",
      resizable: true
    },
    {
      headerName : "status",
-     field : "datastatusID.dstatus",
+     field : "datastatusID",
      sortable: true, 
-     filter: true,        
+     filter: true,  
      resizable: true,
-     cellRenderer: this.CustomCombobox
+     cellRenderer: "cellRenderer"
    }
    
  
  ];
 
-  CustomCombobox(params) {  
-  //Find RowIndex   
-  var rowIndex = params.rowIndex;  
-  //create select element using javascript  
-  var eSelect = document.createElement("select");  
-  //Set attributes   
-  eSelect.setAttribute('class', 'custom-select form-control');  
-  eSelect.setAttribute('style', 'padding:0px');  
-  eSelect.setAttribute('name', params.colDef.field);  
-  eSelect.setAttribute('id', params.colDef.field + "_" + rowIndex);  
-  //get the value of the select option  
-  var value = params.data.CompanyID;  
-  //create the default option of the select element  
-  var eOption = document.createElement("option");  
-  eOption.text = "Select";  
-  eOption.value = "";  
-  eSelect.appendChild(eOption);  
-  if (params.colDef.field == "datastatusID.dstatus") {  
-   
-      var eOptionVal = document.createElement("option");  
-      //Statical set data in grid ComboBox  
-      this.data_status.forEach(element => {
-        eOptionVal.text = element.dstatus;  
-        eOptionVal.value = element;  
-        eSelect.appendChild(eOptionVal); 
-      });
-
-  }  
-  return eSelect;  
-}  
+  
 
 
   ngOnInit(){
@@ -120,10 +93,10 @@ export class UserteleComponent implements OnInit {
     this._usersservice.getall()
     .subscribe(data => this.users = data);
 
+    this.gridOptions = <GridOptions>{};
+    this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
 
-    this._TelesService.getstatus()
-    .subscribe(data => this.data_status = data);
 
 
 
@@ -143,6 +116,7 @@ export class UserteleComponent implements OnInit {
   }
 
 
+
   get iform() { return this.insertform.controls; }
 
 
@@ -152,7 +126,7 @@ export class UserteleComponent implements OnInit {
   
     this.selectuser = this.users.filter(x => x.id == id)[0];
   
-   console.log(this.selectuser);
+
 
 
    this.rowData =this._TelesService.getbyuser(this.selectuser.id);
@@ -167,7 +141,7 @@ export class UserteleComponent implements OnInit {
     const selectedDataStringPresentation = selectedData.map( node =>
        {
         console.log(node)
-        console.log(node.telePrimary)
+     //   console.log(node.telePrimary)
 
 if(node.telePrimary == 0 || node.telePrimary == 1 ){
 this.rowData= this._TelesService.insert(node);

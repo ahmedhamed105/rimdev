@@ -10,6 +10,7 @@ import { DevicesComponent } from './devices/devices.component';
 import { UsersComponent } from './users/users.component';
 import { UsermailComponent } from './usermail/usermail.component';
 import { UserteleComponent } from './usertele/usertele.component';
+import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 
 
 
@@ -62,4 +63,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
+export const routingComponents=[UsertypedropdownComponent,UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]

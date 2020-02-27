@@ -1,0 +1,75 @@
+.dropbtn {
+    background-color:  #f1f1f1;
+    min-width: 90%;;
+    color: white;
+    padding: 2px;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+}
+
+.mydropdown {
+  z-index: 9999;
+}
+.dropbtn:hover, .dropbtn:focus {
+    background-color: lightgreen;
+   
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-hide {
+    display: none;
+}
+.dropdown-content {
+   /*  display: none; */
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: -1 !important;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 2px 6px;
+    text-decoration: none;
+    display: block;
+    z-index: -1 !important;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: red}
+ /* ag-cell-not-inline-editing ag-cell-with-height ag-cell-value ag-cell-focus */
+
+
+   .tooltip {
+    padding: 0;
+    opacity: 1;
+ /*   position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; */
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+

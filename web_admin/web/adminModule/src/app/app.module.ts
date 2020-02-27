@@ -19,13 +19,15 @@ import { IConfig } from 'ngx-mask';
 import {FileUploadModule} from 'ng2-file-upload';
 import { UsermailComponent } from './usermail/usermail.component';
 import { UserteleComponent } from './usertele/usertele.component';
+import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 
 @NgModule({
   declarations: [
-    routingComponents
+    routingComponents,
+    
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     AppRoutingModule,
     ReactiveFormsModule,
     DeviceDetectorModule.forRoot(),
-    AgGridModule.withComponents([]),
+    AgGridModule.withComponents([
+      UsertypedropdownComponent
+    ]),
     NgxMaskModule.forRoot(options),
     FileUploadModule
 

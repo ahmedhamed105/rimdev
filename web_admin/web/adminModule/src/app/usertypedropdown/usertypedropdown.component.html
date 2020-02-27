@@ -1,0 +1,25 @@
+ <div *ngIf="params.colDef.field == 'datastatusID'">
+  <form [formGroup]="statusform">
+<div class="form-group">
+  <select formControlName="datastatusID"  class="form-control" (blur)="setstatus()" (change)="setstatus()">
+    <option *ngFor="let status of data_status"   value="{{status.id}}">{{status.dstatus}}</option>
+</select>    
+</div>
+</form>
+</div>
+
+<div *ngIf="params.colDef.field == 'telePrimary'">
+  <form [formGroup]="primaryform">
+<div class="form-group">
+  <select formControlName="primary"  class="form-control" (blur)="setprimary()" (change)="setprimary()">
+    <option  value="0">0</option>
+    <option  value="1">1</option>
+</select>    
+</div>
+</form>
+</div>
+ 
+
+
+
+
