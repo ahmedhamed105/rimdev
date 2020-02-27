@@ -35,8 +35,14 @@ public class EmailController {
 	  
 	  
 	  @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getUsersbyuser(@PathVariable("id") int userid){ 
+	  public  ResponseEntity<List<Email>> getUsersbyuserd(@PathVariable("id") int userid){ 
 		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid), HttpStatus.OK);
+	  }
+	  
+	  
+	  
+	  public  List<Email> getUsersbyuser(int userid){ 
+		  return emailServ.getbyuser(userid);
 	  }
 	  
 	  
@@ -54,8 +60,17 @@ public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestBody Email
 			Email found= emailServ.getbyid(emails.getId());
 			if(found != null) {
               BeanUtils.copyProperties(emails, found, ObjectUtils.getNullPropertyNames(emails));
+              Email as= emailServ.check_email(emails.getEmailuser());
+  			if(as == null) {
+  				
 
-				emailServ.update(found);
+  				emailServ.update(found);
+
+  			}else {
+  				
+  				return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.CONFLICT);
+  			}
+				
 
 			}
 			
@@ -89,63 +104,10 @@ public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestBody Email
 	
 	
 	
-	return getUsersbyuser(emails.getUserID().getId());
+		return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.OK);
 }
 
 
-
-@RequestMapping(value = "/saveorupdatearray", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> saveorupdatearray(@RequestBody List<Email> emails) {
-  // This returns a JSON or XML with the users
-	
-	for (Email input : emails) {
-		
-	
-	
-	if(input.getId() !=null) {
-		
-		try {
-			Email found= emailServ.getbyid(input.getId());
-			if(found != null) {
-				
-				  BeanUtils.copyProperties(input, found, ObjectUtils.getNullPropertyNames(input));
-
-				emailServ.update(found);
-
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-			
-
-		}
-
-	}else {
-		try {
-			Email found= emailServ.check_email(input.getEmailuser());
-			if(found == null) {
-				
-				emailServ.save(input);
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-		
-
-		}
-
-
-
-	}
-		
-	}
-	
-	
-	return new ResponseEntity<List<Email>>(emailServ.getall(), HttpStatus.OK);
-
-}
 
 
 
@@ -167,13 +129,13 @@ public @ResponseBody ResponseEntity<List<Email>> delete(@RequestBody Email email
 		} catch (Exception e) {
 			// TODO: handle exception
 			
-			return	getUsersbyuser(emails.getUserID().getId());
+				return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.BAD_REQUEST);
 
 		}
 
 	}
 		
-	return getUsersbyuser(emails.getUserID().getId());
+	return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.OK);
 }
 
 

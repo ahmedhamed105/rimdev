@@ -93,7 +93,7 @@ public List<Telephones> getbyuser(int userid) {
 		
 	} catch (Exception e) {
 		// TODO: handle exception
-		return null;
+		throw new NullPointerException();
 	}
 	
 }

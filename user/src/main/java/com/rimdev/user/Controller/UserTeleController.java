@@ -37,9 +37,24 @@ public class UserTeleController {
 	  }
 	  
 	  @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Telephones>> getUsersbyuser(@PathVariable("id") int userid){ 
-		  return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid), HttpStatus.OK);
+	  public  ResponseEntity<List<Telephones>> getUsersbyuserd(@PathVariable("id") int userid){ 
+	
+		  try {
+			  return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid), HttpStatus.OK);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			
+			  return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid), HttpStatus.BAD_REQUEST);
+
+		}
 	  }
+	  
+	  
+	  public  List<Telephones> getUsersbyuser(int userid){ 
+		  return telephonesServ.getbyuser(userid);
+	  }
+	  
 	  
 	  
 
@@ -55,15 +70,25 @@ public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@RequestBody 
 			Telephones found= telephonesServ.getbyid(teles.getId());
 			if(found != null) {
               BeanUtils.copyProperties(teles, found, ObjectUtils.getNullPropertyNames(teles));
+              Telephones as= telephonesServ.check_tele(teles.getPhoneNo());
+  			if(as == null) {	
 
-              telephonesServ.update(found);
+  				telephonesServ.update(found);
 
+
+  			}else {
+  				
+  			  return new ResponseEntity<List<Telephones>>(getUsersbyuser(teles.getUserID().getId()), HttpStatus.CONFLICT);
+
+  			}
+              
 			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 			
 			e.printStackTrace();
+			  return new ResponseEntity<List<Telephones>>(getUsersbyuser(teles.getUserID().getId()), HttpStatus.BAD_REQUEST);
 
 		}
 
@@ -75,12 +100,19 @@ public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@RequestBody 
 
 				telephonesServ.save(teles);
 
+			}else {
+				
+			return new ResponseEntity<List<Telephones>>(getUsersbyuser(teles.getUserID().getId()), HttpStatus.CONFLICT);
+
 			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 
 			e.printStackTrace();
+			
+			  return new ResponseEntity<List<Telephones>>(getUsersbyuser(teles.getUserID().getId()), HttpStatus.BAD_REQUEST);
+
 		}
 
 
@@ -88,65 +120,11 @@ public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@RequestBody 
 	}
 		
 	
-	
-	
-	return getUsersbyuser(teles.getUserID().getId());
+	  return new ResponseEntity<List<Telephones>>(getUsersbyuser(teles.getUserID().getId()), HttpStatus.OK);
+
 }
 
 
-
-@RequestMapping(value = "/saveorupdatearray", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Telephones>> saveorupdatearray(@RequestBody List<Telephones> teles) {
-  // This returns a JSON or XML with the users
-	
-	for (Telephones input : teles) {
-		
-	
-	
-	if(input.getId() !=null) {
-		
-		try {
-			Telephones found= telephonesServ.getbyid(input.getId());
-			if(found != null) {
-				
-				  BeanUtils.copyProperties(input, found, ObjectUtils.getNullPropertyNames(input));
-
-				  telephonesServ.update(found);
-
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-			
-
-		}
-
-	}else {
-		try {
-			Telephones found= telephonesServ.check_tele(input.getPhoneNo());
-			if(found == null) {
-				
-				telephonesServ.save(input);
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-		
-
-		}
-
-
-
-	}
-		
-	}
-	
-	
-	return new ResponseEntity<List<Telephones>>(telephonesServ.getall(), HttpStatus.OK);
-
-}
 
 
 
@@ -168,13 +146,15 @@ public @ResponseBody ResponseEntity<List<Telephones>> delete(@RequestBody Teleph
 		} catch (Exception e) {
 			// TODO: handle exception
 			
-			return	getUsersbyuser(teles.getUserID().getId());
+			  return new ResponseEntity<List<Telephones>>(getUsersbyuser(teles.getUserID().getId()), HttpStatus.BAD_REQUEST);
+
 
 		}
 
 	}
 		
-	return getUsersbyuser(teles.getUserID().getId());
+	  return new ResponseEntity<List<Telephones>>(getUsersbyuser(teles.getUserID().getId()), HttpStatus.OK);
+
 }
 
 
