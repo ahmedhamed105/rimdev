@@ -18,6 +18,7 @@ export class UserteleComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
 
   public users = [];
+  public data_status = [];
  
 
 
@@ -96,6 +97,8 @@ export class UserteleComponent implements OnInit {
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
 
+    this._TelesService.getstatus()
+    .subscribe(data => this.data_status = data);
 
 
 

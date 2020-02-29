@@ -6,14 +6,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
+import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.EmailRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.Email;
+import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 
 @Service
@@ -23,32 +29,40 @@ public class EmailServ {
 	private EmailRepo emailRepo;
 	
 	@Autowired 
-	private UserRepo userRepo;
+	private UserServ userServ;
 	
 	
 public List<Email> getall() {
-		
-		return (List<Email>) emailRepo.findAll();
-		
-	}
-
-
-
-public List<Email> getbyuser(int userid) {
+	
+List<Email> emails;
 	
 	try {
 		
-		List<Email> cu=(List<Email>) emailRepo.findbyuser(userid);
+		emails = (List<Email>) emailRepo.findAll();
+
+	//    throw new NoDataException("no data found in users");
+
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException("TransientDataAccessException");
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException("RecoverableDataAccessException");
+    }catch (ScriptException  se) {
+		throw new NullPointerException("ScriptException");
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException("NonTransientDataAccessException");
+    }
+	
+	if(emails == null || emails.size() <= 0) {
 		
-		return cu;
+		throw new NoDataException("no data found in "+ this.getClass().getName());
 		
-		
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
 	}
 	
-}
+		return emails;
+	
+		
+	}
+
 
 
 public Email check_email(String email) {
@@ -73,6 +87,25 @@ public Email check_email(String email) {
 
 	
 }
+
+
+
+public List<Email> getbyuser(int userid) {
+	
+	try {
+		
+		List<Email> cu=(List<Email>) emailRepo.findbyuser(userid);
+		
+		return cu;
+		
+		
+	} catch (Exception e) {
+		// TODO: handle exception
+		return null;
+	}
+	
+}
+
 
 
 public Email getbyid(int id) {

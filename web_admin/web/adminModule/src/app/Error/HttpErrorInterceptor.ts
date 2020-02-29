@@ -30,7 +30,7 @@ import {
               }
 
             }
-            window.alert(errorMessage);
+          //  window.alert(errorMessage);
             return throwError(error);
           })
         )

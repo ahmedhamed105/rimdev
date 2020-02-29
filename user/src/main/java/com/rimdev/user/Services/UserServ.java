@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
@@ -30,6 +31,28 @@ public List<User> getall() {
 	}
 
 
+public void checkuser(int id) {
+	
+	try {
+		Optional<User> flowid =userRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 User  ouput = flowid.get();
+		
+			 
+					}
+			else{
+			   // alternative processing....
+				throw new NoDataException("User Not found");
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		throw new NoDataException("User Not found");
+	}
+		
+}
+
+
 public User getuser(int id) {
 	
 	try {
@@ -42,11 +65,11 @@ public User getuser(int id) {
 					}
 			else{
 			   // alternative processing....
-				return null;
+				throw new NoDataException("User Not found");
 			}
 	} catch (Exception e) {
 		// TODO: handle exception
-		return null;
+		throw new NoDataException("User Not found");
 	}
 		
 }
