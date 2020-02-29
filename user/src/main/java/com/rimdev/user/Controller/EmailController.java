@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Services.AreaServ;
 import com.rimdev.user.Services.EmailServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Area;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.Email;
+import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.ouputobject.response_all;
 
 @Controller // This means that this class is a Controller
@@ -35,76 +37,45 @@ public class EmailController {
 	  
 	  
 	  @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getUsersbyuserd(@PathVariable("id") int userid){ 
+	  public  ResponseEntity<List<Email>> getUsersbyuser(@PathVariable("id") int userid){ 
 		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid), HttpStatus.OK);
 	  }
 	  
 	  
-	  
-	  public  List<Email> getUsersbyuser(int userid){ 
-		  return emailServ.getbyuser(userid);
-	  }
-	  
-	  
+
 
 @RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestBody Email emails) {
   // This returns a JSON or XML with the users
 	
-	System.out.println(emails.getEmailuser());
-	System.out.println(emails.getUserID().getId());
+	
 	
 	if(emails.getId() !=null) {
 		
-		try {
+	
 			Email found= emailServ.getbyid(emails.getId());
+			
 			if(found != null) {
               BeanUtils.copyProperties(emails, found, ObjectUtils.getNullPropertyNames(emails));
-              Email as= emailServ.check_email(emails.getEmailuser());
-  			if(as == null) {
-  				
-
-  				emailServ.update(found);
-
-  			}else {
-  				
-  				return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.CONFLICT);
-  			}
-				
+            
+              if(!found.getEmailuser().equals(emails.getEmailuser())) {
+            	  emailServ.check_email(emails.getEmailuser());
+              }
+              
+  			
+              emailServ.update(found);
 
 			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-			e.printStackTrace();
-
-		}
-
 	}else {
-		try {
-			Email found= emailServ.check_email(emails.getEmailuser());
-			if(found == null) {
-				
-
-			emailServ.save(emails);
-
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-
-			e.printStackTrace();
-		}
-
-
-
+	
+			 emailServ.check_email(emails.getEmailuser());
+		     emailServ.save(emails);
 	}
 		
 	
 	
 	
-		return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.OK);
+		return getUsersbyuser(emails.getUserID().getId());
 }
 
 
@@ -117,25 +88,25 @@ public @ResponseBody ResponseEntity<List<Email>> delete(@RequestBody Email email
   // This returns a JSON or XML with the users
 	
 	
-	if(emails.getId() !=null) {
+	if(emails.getId() !=null  && emails.getUserID() != null && emails.getUserID().getId() != null) {
 		
-		try {
-			Email found= emailServ.getbyid(emails.getId());	
-			if(found != null) {
-				
-				emailServ.delete(emails);
-			}
+		
+		Email found= emailServ.getbyid(emails.getId());	
+		if(found != null) {
 			
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-				return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.BAD_REQUEST);
-
+			emailServ.delete(emails);
 		}
-
-	}
 		
-	return new ResponseEntity<List<Email>>(getUsersbyuser(emails.getUserID().getId()), HttpStatus.OK);
+	
+
+}else {
+	
+	throw new NoDataException("ID not Found or user id not found");
+
+}
+	
+	
+	return getUsersbyuser(emails.getUserID().getId());
 }
 
 

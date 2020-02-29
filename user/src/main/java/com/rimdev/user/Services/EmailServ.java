@@ -12,6 +12,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.EmailRepo;
 import com.rimdev.user.Repo.UserRepo;
@@ -65,7 +66,7 @@ List<Email> emails;
 
 
 
-public Email check_email(String email) {
+public void check_email(String email) {
 	
 	try {
 		Optional<Email> flowid =emailRepo.findbyemail(email);
@@ -73,39 +74,25 @@ public Email check_email(String email) {
 		 if (flowid.isPresent()){
 			 Email  ouput = flowid.get();
 		
-			  return ouput;
+				throw new DuplicationException("Email duplicate");
+
 					}
 			else{
 			   // alternative processing....
-				return null;
+				
 			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}
-	
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException("TransientDataAccessException");
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException("RecoverableDataAccessException");
+    }catch (ScriptException  se) {
+		throw new NullPointerException("ScriptException");
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException("NonTransientDataAccessException");
+    }
 
 	
 }
-
-
-
-public List<Email> getbyuser(int userid) {
-	
-	try {
-		
-		List<Email> cu=(List<Email>) emailRepo.findbyuser(userid);
-		
-		return cu;
-		
-		
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}
-	
-}
-
 
 
 public Email getbyid(int id) {
@@ -120,12 +107,17 @@ public Email getbyid(int id) {
 					}
 			else{
 			   // alternative processing....
-				return null;
+				throw new NoDataException("no Email found in "+ this.getClass().getName());
 			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException("TransientDataAccessException");
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException("RecoverableDataAccessException");
+    }catch (ScriptException  se) {
+		throw new NullPointerException("ScriptException");
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException("NonTransientDataAccessException");
+    }
 	
 
 	
@@ -133,55 +125,123 @@ public Email getbyid(int id) {
 
 
 
-public List<Email> save(Email input) {
+
+public List<Email> getbyuser(int userid) {
 	
 
-	
-	User  usero ;
-	
-	try {
-		Optional<User> use=userRepo.findById(input.getUserID().getId());
-		 
-		 if (use.isPresent()){
-			   usero = use.get();
+		List<Email> cu;
+		try {
+			
+			cu=(List<Email>) emailRepo.findbyuser(userid);
 
-			}
-			else{
-			   // alternative processing....
-				return (List<Email>) emailRepo.findAll();
-			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return (List<Email>) emailRepo.findAll();
+		} catch (TransientDataAccessException  se) {
+			throw new NullPointerException("TransientDataAccessException");
+	    } catch (RecoverableDataAccessException  se) {
+			throw new NullPointerException("RecoverableDataAccessException");
+	    }catch (ScriptException  se) {
+			throw new NullPointerException("ScriptException");
+	    }catch (NonTransientDataAccessException  se) {
+			throw new NullPointerException("NonTransientDataAccessException");
+	    }
+		
+		if(cu == null || cu.size() <= 0) {
+			
+			userServ.checkuser(userid);	
+			throw new NoDataException("no Email found in "+ this.getClass().getName());
+
+		}
+		
+
+		return cu;
+	
+}
+
+
+
+
+
+public void save(Email input) {
+	
+	
+	if(input.getUserID() != null || input.getUserID().getId() != null) {
+		User  usero = userServ.getuser(input.getUserID().getId());
+		input.setUserID(usero);
+		
+		Date date = new Date();
+		input.setEmailCreate(date);
+		input.setEmailModify(date);
+		
+		try {
+			emailRepo.save(input);	
+		} catch (TransientDataAccessException  se) {
+			throw new NullPointerException("TransientDataAccessException");
+	    } catch (RecoverableDataAccessException  se) {
+			throw new NullPointerException("RecoverableDataAccessException");
+	    }catch (ScriptException  se) {
+			throw new NullPointerException("ScriptException");
+	    }catch (NonTransientDataAccessException  se) {
+	    	se.printStackTrace();
+			throw new NullPointerException("NonTransientDataAccessException");
+	    }
+		
+	}else {
+		
+		throw new NoDataException("No User found");
+	
+	}
+	
+
+
+	
+}
+
+
+
+public void update(Email input) {
+	
+	if(input.getUserID() != null || input.getUserID().getId() != null) {
+		User  usero = userServ.getuser(input.getUserID().getId());
+		input.setUserID(usero);
 	}
 	
 	Date date = new Date();
-	input.setEmailCreate(date);
 	input.setEmailModify(date);
-	input.setUserID(usero);
-	Email ouput =emailRepo.save(input);	
 	
-	return (List<Email>) emailRepo.findAll();
+	try {
+		emailRepo.save(input);	
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException("TransientDataAccessException");
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException("RecoverableDataAccessException");
+    }catch (ScriptException  se) {
+		throw new NullPointerException("ScriptException");
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException("NonTransientDataAccessException");
+    }
+	
 	
 }
+
 
 
 public void delete(Email input) {	
-
-	emailRepo.delete(input);	
+	
+	try {
+		userServ.checkuser(input.getUserID().getId());	
+		emailRepo.delete(input);	
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException("TransientDataAccessException");
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException("RecoverableDataAccessException");
+    }catch (ScriptException  se) {
+		throw new NullPointerException("ScriptException");
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException("NonTransientDataAccessException");
+    }
+	
 	
 }
 
 
-
-public List<Email> update(Email input) {
-	
-	Date date = new Date();
-	input.setEmailModify(date);
-	Email ouput =emailRepo.save(input);	
-	
-	return (List<Email>) emailRepo.findAll();
-	
-}
 
 }

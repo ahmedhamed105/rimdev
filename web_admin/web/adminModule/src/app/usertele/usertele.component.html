@@ -32,7 +32,7 @@
    
               <div class="form-group" formGroupName="userID">
                 <label>User</label>
-                <select formControlName="id"  class="form-control" (blur)="getuser()" (change)="getuser()">
+                <select formControlName="id"  class="form-control">
                   <option *ngFor="let user of users" value="{{user.id}}">{{user.firstName}}</option>
             </select>    
              </div>
@@ -61,7 +61,7 @@
 
               <div class="form-group" formGroupName="datastatusID">
                 <label>Telephone Status</label>
-                <select formControlName="id"  class="form-control" (blur)="getuser()" (change)="getuser()">
+                <select formControlName="id"  class="form-control" (change)="getuser()">
                   <option *ngFor="let status of data_status" value="{{status.id}}">{{status.dstatus}}</option>
             </select>    
              </div>
@@ -84,7 +84,11 @@
           <!-- /.box-header -->
           <div class="box-body">
             <button class="btn btn-primary" (click)="deletetel()">Delete Telephone</button>
-            <button class="btn btn-primary" (click)="savetele()">Save Telephone</button>
+            <button class="btn btn-secondary" (click)="savetele()">Save Telephone</button>
+            <button class="btn btn-success" (click)="getuser()">Refersh</button>
+            <button class="btn btn-success" (click)="frnch()">french</button>
+            <button class="btn btn-success" (click)="english()">English</button>
+            <button class="btn btn-success" (click)="arabic()">Arabic</button>
             <br/>
             <ag-grid-angular
                 #agGrid

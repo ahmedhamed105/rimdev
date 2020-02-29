@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +21,8 @@ import {FileUploadModule} from 'ng2-file-upload';
 import { UsermailComponent } from './usermail/usermail.component';
 import { UserteleComponent } from './usertele/usertele.component';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -39,7 +42,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
       UsertypedropdownComponent
     ]),
     NgxMaskModule.forRoot(options),
-    FileUploadModule
+    FileUploadModule,
+    MatDialogModule,
+    BrowserAnimationsModule
 
   ],
   providers: [{
@@ -47,6 +52,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     useClass: HttpErrorInterceptor,
     multi: true
   }],
+  entryComponents: [ErrorDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

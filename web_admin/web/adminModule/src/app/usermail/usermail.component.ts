@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
-import { CurrencyServService } from '../services/currency-serv.service';
-import { StatusServService } from '../services/status-serv.service';
 import { UsersService } from '../services/users.service';
 import { EmailsService } from '../services/emails.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
+import { ErrorDialogService } from '../services/error-dialog.service';
+import { Ilangsearch } from '../objects/Ilangsearch';
+import { GlobalConstants } from '../GlobalConstants';
+import { LanguagegoService } from '../services/languagego.service';
 
 @Component({
   selector: 'app-usermail',
@@ -18,9 +20,12 @@ export class UsermailComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
 
   public users = [];
+  public data_status = [];
+
+  public error_message;
 
 
-  constructor(private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(public _LanguagegoService:LanguagegoService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
@@ -97,14 +102,18 @@ export class UsermailComponent implements OnInit {
     this.gridOptions = <GridOptions>{};
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
-
+    this._EmailsService.getstatus()
+    .subscribe(data => this.data_status = data);
 
     this.insertform = this.fb.group({
       emailuser: ['' ,[Validators.required,Validators.email]],
       emailPrimary: ['' ,[Validators.required]],
       userID: this.fb.group({
         id : ['',[Validators.required]]
-         })
+         }),
+         datastatusID: this.fb.group({
+          id : ['',[Validators.required]]
+           }),
       });
 
 
@@ -118,6 +127,17 @@ export class UsermailComponent implements OnInit {
 
   getuser(){  
     var id = this.insertform.get('userID').get('id').value;
+
+    if(id == null || id == "" ){
+      var  data : Ilangsearch = {
+        code: "E100" ,
+        langcode: GlobalConstants.language
+     };
+   this._LanguagegoService.getlang(data).subscribe(data => {
+
+     this.errorDialogService.display_error(data.returnLang)
+   });
+    }
   
     this.selectuser = this.users.filter(x => x.id == id)[0];
   
@@ -132,16 +152,37 @@ export class UsermailComponent implements OnInit {
 
   savemail(){
     const selectedNodes = this.agGrid.api.getSelectedNodes();
+
+    if(selectedNodes.length === 0 ){
+
+      var  data : Ilangsearch = {
+        code: "E103" ,
+        langcode: GlobalConstants.language
+     };
+   this._LanguagegoService.getlang(data).subscribe(data => {
+
+     this.errorDialogService.display_error(data.returnLang)
+   });
+
+    }
+
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
-        console.log(node)
-        console.log(node.emailPrimary)
+    //    console.log(node)
+    //    console.log(node.emailPrimary)
 
 if(node.emailPrimary == 0 || node.emailPrimary == 1 ){
 this.rowData= this._EmailsService.insert(node);
 }else{
-  alert('enter correct value in primary field 0 or 1');
+  var  data : Ilangsearch = {
+    code: "E102" ,
+    langcode: GlobalConstants.language
+ };
+this._LanguagegoService.getlang(data).subscribe(data => {
+
+ this.errorDialogService.display_error(data.returnLang)
+});
 
 }
       });
@@ -151,6 +192,19 @@ this.rowData= this._EmailsService.insert(node);
   deletemail(){
 
     const selectedNodes = this.agGrid.api.getSelectedNodes();
+
+    if(selectedNodes.length === 0 ){
+    
+      var  data : Ilangsearch = {
+        code: "E103" ,
+        langcode: GlobalConstants.language
+     };
+   this._LanguagegoService.getlang(data).subscribe(data => {
+
+     this.errorDialogService.display_error(data.returnLang)
+   });
+
+    }
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
@@ -175,11 +229,24 @@ if(this.selectuser != null){
 
 }else{
 
-  alert("select User first");
+  var  data : Ilangsearch = {
+    code: "E100" ,
+    langcode: GlobalConstants.language
+ };
+this._LanguagegoService.getlang(data).subscribe(data => {
+
+ this.errorDialogService.display_error(data.returnLang)
+});
 }
 
 
 }
+
+
+
+
+
+
 
 
 

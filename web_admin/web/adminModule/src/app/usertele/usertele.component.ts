@@ -2,11 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
-import { EmailsService } from '../services/emails.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { TelesService } from '../services/teles.service';
 import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
+import { ErrorDialogService } from '../services/error-dialog.service';
+import { LanguagegoService } from '../services/languagego.service';
+import { Ilangsearch } from '../objects/Ilangsearch';
+import { GlobalConstants } from '../GlobalConstants';
 
 @Component({
   selector: 'app-usertele',
@@ -22,7 +25,7 @@ export class UserteleComponent implements OnInit {
  
 
 
-  constructor(private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(public _LanguagegoService:LanguagegoService,public errorDialogService: ErrorDialogService,private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
@@ -122,9 +125,39 @@ export class UserteleComponent implements OnInit {
   get iform() { return this.insertform.controls; }
 
 
+  frnch(){
+
+    GlobalConstants.language= 'FR';
+  }
+
+  english(){
+
+    GlobalConstants.language= 'EN';
+  }
+
+  arabic(){
+
+    GlobalConstants.language= 'AR';
+  }
 
   getuser(){  
     var id = this.insertform.get('userID').get('id').value;
+
+    if(id == null || id == "" ){
+
+    
+      var  data : Ilangsearch = {
+           code: "E100" ,
+           langcode: GlobalConstants.language
+        };
+      this._LanguagegoService.getlang(data).subscribe(data => {
+
+        this.errorDialogService.display_error(data.returnLang)
+      });
+  
+    }
+
+   
   
     this.selectuser = this.users.filter(x => x.id == id)[0];
   
@@ -139,6 +172,18 @@ export class UserteleComponent implements OnInit {
 
   savetele(){
     const selectedNodes = this.agGrid.api.getSelectedNodes();
+    if(selectedNodes.length === 0 ){
+      
+  var  data : Ilangsearch = {
+    code: "E101" ,  //user first
+    langcode: GlobalConstants.language
+ };
+this._LanguagegoService.getlang(data).subscribe(data => {
+
+ this.errorDialogService.display_error(data.returnLang)
+});
+  
+    }
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
@@ -148,7 +193,16 @@ export class UserteleComponent implements OnInit {
 if(node.telePrimary == 0 || node.telePrimary == 1 ){
 this.rowData= this._TelesService.insert(node);
 }else{
-  alert('enter correct value in primary field 0 or 1');
+ 
+  var  data : Ilangsearch = {
+    code: "E102" ,  //user first
+    langcode: GlobalConstants.language
+ };
+this._LanguagegoService.getlang(data).subscribe(data => {
+
+ this.errorDialogService.display_error(data.returnLang)
+});
+  
 
 }
       });
@@ -158,6 +212,16 @@ this.rowData= this._TelesService.insert(node);
   deletetel(){
 
     const selectedNodes = this.agGrid.api.getSelectedNodes();
+    if(selectedNodes.length === 0 ){
+      var  data : Ilangsearch = {
+        code: "E101" ,  //user first
+        langcode: GlobalConstants.language
+     };
+    this._LanguagegoService.getlang(data).subscribe(data => {
+    
+     this.errorDialogService.display_error(data.returnLang)
+    });
+    }
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
@@ -182,11 +246,24 @@ if(this.selectuser != null){
 
 }else{
 
-  alert("select User first");
+  
+  var  data : Ilangsearch = {
+    code: "E100" ,  //user first
+    langcode: GlobalConstants.language
+ };
+this._LanguagegoService.getlang(data).subscribe(data => {
+
+ this.errorDialogService.display_error(data.returnLang)
+});
+  
 }
 
 
 }
+
+
+
+
 
 
 

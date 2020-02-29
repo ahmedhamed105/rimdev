@@ -62,7 +62,9 @@ public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@RequestBody 
 			
 			if(found != null) {
               BeanUtils.copyProperties(teles, found, ObjectUtils.getNullPropertyNames(teles));
-               telephonesServ.check_tele(teles.getPhoneNo());
+              if(!found.getPhoneNo().equals(teles.getPhoneNo())) {
+            	  telephonesServ.check_tele(teles.getPhoneNo());
+              }
   		       telephonesServ.update(found);      
 			}
 	}else {
