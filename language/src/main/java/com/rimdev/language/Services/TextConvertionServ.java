@@ -67,13 +67,13 @@ public class TextConvertionServ {
 					throw new NoDataException("no TextConvertion found in "+ this.getClass().getName());
 				}
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("TransientDataAccessException");
+			throw new NullPointerException("E104");
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("RecoverableDataAccessException");
+			throw new NullPointerException("E104");
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("ScriptException");
+			throw new NullPointerException("E104");
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("NonTransientDataAccessException");
+			throw new NullPointerException("E104");
 	    }
 		
 		

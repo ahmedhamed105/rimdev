@@ -43,7 +43,7 @@ import { Injectable } from '@angular/core';
                     status: error.status
                 };
           //  window.alert(errorMessage);
-          this.errorDialogService.openDialog(data);
+          this.errorDialogService.display_error(errorMessage);
             return throwError(error);
           })
         )

@@ -7,8 +7,6 @@ import { TelesService } from '../services/teles.service';
 import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
-import { LanguagegoService } from '../services/languagego.service';
-import { Ilangsearch } from '../objects/Ilangsearch';
 import { GlobalConstants } from '../GlobalConstants';
 
 @Component({
@@ -25,14 +23,13 @@ export class UserteleComponent implements OnInit {
  
 
 
-  constructor(public _LanguagegoService:LanguagegoService,public errorDialogService: ErrorDialogService,private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(public errorDialogService: ErrorDialogService,private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
   public device ;
   public page_number:number = 7 ;
   public selectuser;
-  public selectemail;
   gridOptions:GridOptions;
 
 
@@ -127,7 +124,7 @@ export class UserteleComponent implements OnInit {
 
   frnch(){
 
-    GlobalConstants.language= 'FR';
+    GlobalConstants.language= 'fr';
   }
 
   english(){
@@ -145,24 +142,12 @@ export class UserteleComponent implements OnInit {
 
     if(id == null || id == "" ){
 
-    
-      var  data : Ilangsearch = {
-           code: "E100" ,
-           langcode: GlobalConstants.language
-        };
-      this._LanguagegoService.getlang(data).subscribe(data => {
-
-        this.errorDialogService.display_error(data.returnLang)
-      });
-  
+        this.errorDialogService.display_error("E100")
     }
 
    
-  
     this.selectuser = this.users.filter(x => x.id == id)[0];
-  
-
-
+console.log(this.selectuser);
 
    this.rowData =this._TelesService.getbyuser(this.selectuser.id);
 
@@ -174,15 +159,8 @@ export class UserteleComponent implements OnInit {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     if(selectedNodes.length === 0 ){
       
-  var  data : Ilangsearch = {
-    code: "E101" ,  //user first
-    langcode: GlobalConstants.language
- };
-this._LanguagegoService.getlang(data).subscribe(data => {
+ this.errorDialogService.display_error("E101")
 
- this.errorDialogService.display_error(data.returnLang)
-});
-  
     }
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
@@ -194,16 +172,8 @@ if(node.telePrimary == 0 || node.telePrimary == 1 ){
 this.rowData= this._TelesService.insert(node);
 }else{
  
-  var  data : Ilangsearch = {
-    code: "E102" ,  //user first
-    langcode: GlobalConstants.language
- };
-this._LanguagegoService.getlang(data).subscribe(data => {
-
- this.errorDialogService.display_error(data.returnLang)
-});
+ this.errorDialogService.display_error("E102")
   
-
 }
       });
 
@@ -213,14 +183,7 @@ this._LanguagegoService.getlang(data).subscribe(data => {
 
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     if(selectedNodes.length === 0 ){
-      var  data : Ilangsearch = {
-        code: "E101" ,  //user first
-        langcode: GlobalConstants.language
-     };
-    this._LanguagegoService.getlang(data).subscribe(data => {
-    
-     this.errorDialogService.display_error(data.returnLang)
-    });
+     this.errorDialogService.display_error("E101")
     }
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
@@ -246,15 +209,8 @@ if(this.selectuser != null){
 
 }else{
 
-  
-  var  data : Ilangsearch = {
-    code: "E100" ,  //user first
-    langcode: GlobalConstants.language
- };
-this._LanguagegoService.getlang(data).subscribe(data => {
 
- this.errorDialogService.display_error(data.returnLang)
-});
+ this.errorDialogService.display_error("E100")
   
 }
 

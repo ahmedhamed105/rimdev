@@ -7,9 +7,6 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
-import { Ilangsearch } from '../objects/Ilangsearch';
-import { GlobalConstants } from '../GlobalConstants';
-import { LanguagegoService } from '../services/languagego.service';
 
 @Component({
   selector: 'app-usermail',
@@ -25,14 +22,13 @@ export class UsermailComponent implements OnInit {
   public error_message;
 
 
-  constructor(public _LanguagegoService:LanguagegoService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
   public device ;
   public page_number:number = 6 ;
   public selectuser;
-  public selectemail;
 
   gridOptions:GridOptions;
 
@@ -129,14 +125,8 @@ export class UsermailComponent implements OnInit {
     var id = this.insertform.get('userID').get('id').value;
 
     if(id == null || id == "" ){
-      var  data : Ilangsearch = {
-        code: "E100" ,
-        langcode: GlobalConstants.language
-     };
-   this._LanguagegoService.getlang(data).subscribe(data => {
 
-     this.errorDialogService.display_error(data.returnLang)
-   });
+     this.errorDialogService.display_error("E100");
     }
   
     this.selectuser = this.users.filter(x => x.id == id)[0];
@@ -155,14 +145,7 @@ export class UsermailComponent implements OnInit {
 
     if(selectedNodes.length === 0 ){
 
-      var  data : Ilangsearch = {
-        code: "E103" ,
-        langcode: GlobalConstants.language
-     };
-   this._LanguagegoService.getlang(data).subscribe(data => {
-
-     this.errorDialogService.display_error(data.returnLang)
-   });
+     this.errorDialogService.display_error("E103");
 
     }
 
@@ -175,15 +158,7 @@ export class UsermailComponent implements OnInit {
 if(node.emailPrimary == 0 || node.emailPrimary == 1 ){
 this.rowData= this._EmailsService.insert(node);
 }else{
-  var  data : Ilangsearch = {
-    code: "E102" ,
-    langcode: GlobalConstants.language
- };
-this._LanguagegoService.getlang(data).subscribe(data => {
-
- this.errorDialogService.display_error(data.returnLang)
-});
-
+ this.errorDialogService.display_error("E102");
 }
       });
 
@@ -195,15 +170,7 @@ this._LanguagegoService.getlang(data).subscribe(data => {
 
     if(selectedNodes.length === 0 ){
     
-      var  data : Ilangsearch = {
-        code: "E103" ,
-        langcode: GlobalConstants.language
-     };
-   this._LanguagegoService.getlang(data).subscribe(data => {
-
-     this.errorDialogService.display_error(data.returnLang)
-   });
-
+     this.errorDialogService.display_error("E103");
     }
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
@@ -229,14 +196,8 @@ if(this.selectuser != null){
 
 }else{
 
-  var  data : Ilangsearch = {
-    code: "E100" ,
-    langcode: GlobalConstants.language
- };
-this._LanguagegoService.getlang(data).subscribe(data => {
+ this.errorDialogService.display_error("E100")
 
- this.errorDialogService.display_error(data.returnLang)
-});
 }
 
 

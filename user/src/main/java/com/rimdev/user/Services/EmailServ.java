@@ -44,13 +44,13 @@ List<Email> emails;
 	//    throw new NoDataException("no data found in users");
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 	if(emails == null || emails.size() <= 0) {
@@ -74,7 +74,7 @@ public void check_email(String email) {
 		 if (flowid.isPresent()){
 			 Email  ouput = flowid.get();
 		
-				throw new DuplicationException("Email duplicate");
+				throw new DuplicationException("E105");
 
 					}
 			else{
@@ -82,13 +82,13 @@ public void check_email(String email) {
 				
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 
 	
@@ -110,13 +110,13 @@ public Email getbyid(int id) {
 				throw new NoDataException("no Email found in "+ this.getClass().getName());
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 
@@ -174,14 +174,14 @@ public void save(Email input) {
 		try {
 			emailRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("TransientDataAccessException");
+			throw new NullPointerException("E104");
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("RecoverableDataAccessException");
+			throw new NullPointerException("E104");
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("ScriptException");
+			throw new NullPointerException("E104");
 	    }catch (NonTransientDataAccessException  se) {
 	    	se.printStackTrace();
-			throw new NullPointerException("NonTransientDataAccessException");
+			throw new NullPointerException("E104");
 	    }
 		
 	}else {
@@ -210,13 +210,13 @@ public void update(Email input) {
 	try {
 		emailRepo.save(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 	
@@ -230,13 +230,13 @@ public void delete(Email input) {
 		userServ.checkuser(input.getUserID().getId());	
 		emailRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 	

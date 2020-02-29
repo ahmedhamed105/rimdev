@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { LanguagegoService } from './languagego.service';
+import { GlobalConstants } from '../GlobalConstants';
+import { Ilangsearch } from '../objects/Ilangsearch';
 
 
 @Injectable({
@@ -9,7 +12,7 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 export class ErrorDialogService {
 
   public isDialogOpen: Boolean = false;
-    constructor(public dialog: MatDialog) { }
+    constructor(public dialog: MatDialog,public _LanguagegoService:LanguagegoService) { }
     openDialog(data): any {
         if (this.isDialogOpen) {
             return false;
@@ -31,13 +34,22 @@ export class ErrorDialogService {
 
     display_error(error){
 
-        let data = {};
+        var  data : Ilangsearch = {
+            code: error ,
+            langcode: GlobalConstants.language
+         };
+         
+       this._LanguagegoService.getlang(data).subscribe(data => {
+ 
         data = {
-            reason: error ,
+            reason: data.returnLang ,
             status: 403
         };
       //  window.alert(errorMessage);
       this.openDialog(data);
+       });
+
+     
       
       }
 
