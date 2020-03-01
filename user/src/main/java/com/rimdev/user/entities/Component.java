@@ -72,9 +72,12 @@ public class Component implements Serializable {
     private String patterndesgin;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
+    private Collection<ComponentInput> componentInputCollection;
     @JoinColumn(name = "Pages_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Pages pagesID;
+    
 
     public Component() {
     }
@@ -180,6 +183,18 @@ public class Component implements Serializable {
     public void setComponentSelectCollection(Collection<ComponentSelect> componentSelectCollection) {
         this.componentSelectCollection = componentSelectCollection;
     }
+    
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<ComponentInput> getComponentInputCollection() {
+        return componentInputCollection;
+    }
+
+    public void setComponentInputCollection(Collection<ComponentInput> componentInputCollection) {
+        this.componentInputCollection = componentInputCollection;
+    }
+    
     @XmlTransient
     @JsonIgnore
     public Pages getPagesID() {

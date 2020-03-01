@@ -15,10 +15,19 @@
         select : {
             id: number,
             arrayName: String,
-            arrayObject: String,
+            arrayObject: number,
             selectValue: String,
-            selectDisplay: String
+            selectDisplay: String,
+            changemethod : String
 
-        }  
+        },
+        input: {
+            id: number,
+            inputActions: String,
+            inputtypeID: {
+                id: number,
+                itype: String
+            }
+        }
       }
-      
+    

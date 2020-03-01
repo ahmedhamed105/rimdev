@@ -20,7 +20,7 @@ export class UsermailComponent implements OnInit {
   public users = [];
   public data_status = [];
   public components = [];
-
+  public arraystatic = [];
   public error_message;
 
 
@@ -100,11 +100,7 @@ export class UsermailComponent implements OnInit {
 
         this.errorDialogService.converttext(element.comp.ccode)
         .subscribe(data => {
-
-        
-          element.comp.ccode = data.returnLang;
-        
-       //   console.log(element.comp.ccode);
+          element.comp.ccode = data.returnLang;        
           this.components.push(element);
         });
 
@@ -136,17 +132,35 @@ export class UsermailComponent implements OnInit {
            }),
       });
 
-
-
   }
 
 
   get iform() { return this.insertform.controls; }
 
 
-  getArray(i: any): any[] {
-       return this[i];
-  }
+  getArray(i: any,j: any,st : number): any[] {
+   
+    if(st === 1){
+      return this[i];
+    }
+    else{
+      this.arraystatic= [];
+      var res = i.replace('[', '').replace(']', '').split(",");
+      var res1 = j.replace('[', '').replace(']', '').split(",");
+      res1.forEach((element, index) => {
+        let  prearray = {
+          key : element,
+          value :res[index]
+        };
+        this.arraystatic.push(prearray);
+      });
+
+     
+
+      return this.arraystatic;
+    }
+
+      }
 
 
 

@@ -44,12 +44,14 @@ public class ComponentSelect implements Serializable {
     @Column(name = "array_name", nullable = false, length = 450)
     private String arrayName;
     @Basic(optional = false)
-    @Column(name = "array_object", nullable = false, length = 450)
-    private String arrayObject;
+    @Column(name = "array_object", nullable = false)
+    private Integer arrayObject;
     @Column(name = "select_value", length = 450)
     private String selectValue;
     @Column(name = "select_display", length = 450)
     private String selectDisplay;
+    @Column(name = "Change_method", length = 45)
+    private String changemethod;
     @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Component componentID;
@@ -61,7 +63,7 @@ public class ComponentSelect implements Serializable {
         this.id = id;
     }
 
-    public ComponentSelect(Integer id, String arrayName, String arrayObject) {
+    public ComponentSelect(Integer id, String arrayName, Integer arrayObject) {
         this.id = id;
         this.arrayName = arrayName;
         this.arrayObject = arrayObject;
@@ -83,11 +85,11 @@ public class ComponentSelect implements Serializable {
         this.arrayName = arrayName;
     }
 
-    public String getArrayObject() {
+    public Integer getArrayObject() {
         return arrayObject;
     }
 
-    public void setArrayObject(String arrayObject) {
+    public void setArrayObject(Integer arrayObject) {
         this.arrayObject = arrayObject;
     }
 
@@ -106,7 +108,16 @@ public class ComponentSelect implements Serializable {
     public void setSelectDisplay(String selectDisplay) {
         this.selectDisplay = selectDisplay;
     }
+        
     
+	public String getChangemethod() {
+		return changemethod;
+	}
+
+	public void setChangemethod(String changemethod) {
+		this.changemethod = changemethod;
+	}
+
 	@XmlTransient
     @JsonIgnore
     public Component getComponentID() {

@@ -30,12 +30,48 @@
    
   <div *ngIf="component.comp.ctype == 'select'">
         <!-- Execute code here if statement true -->
-        <div class="form-group" formGroupName="{{component.comp.groupname}}">
-          <label>{{component.comp.ccode}}</label>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="getuser()">
-            <option *ngFor="let object of getArray(component.select.arrayName)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
-      </select>    
-      </div>
+        <ng-container *ngIf="component.comp.groupname; then withgroup;else withoutgroup">
+    </ng-container>
+
+
+    <ng-template #withgroup>
+      <div class="form-group" formGroupName="{{component.comp.groupname}}">
+        <label>{{component.comp.ccode}}</label>
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="getuser()">
+          <ng-container *ngIf="component.select.arrayObject === 1;then dymaicarray;else staticarray">
+        </ng-container>
+
+        <ng-template #dymaicarray>
+        <option *ngFor="let object of getArray(component.select.arrayName,'',1)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+      </ng-template>
+
+      <ng-template #staticarray>
+        <option *ngFor="let object of  getArray(component.select.selectValue,component.select.selectDisplay,0)" [value]="object.value">{{object.key}}</option>
+      </ng-template>
+  
+        </select>    
+    </div>
+    </ng-template>
+
+    <ng-template #withoutgroup>
+      <div class="form-group">
+        <label>{{component.comp.ccode}}</label>
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod">
+        
+          <ng-container *ngIf="component.select.arrayObject === 1;then dymaicarray;else staticarray">
+          </ng-container>
+  
+          <ng-template #dymaicarray>
+          <option *ngFor="let object of getArray(component.select.arrayName,'',1)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+        </ng-template>
+  
+        <ng-template #staticarray>
+          <option *ngFor="let object of  getArray(component.select.selectValue,component.select.selectDisplay,0)" [value]="object.value">{{object.key}}</option>
+        </ng-template>
+  
+        </select>    
+    </div>
+    </ng-template>
 
   </div>
      
