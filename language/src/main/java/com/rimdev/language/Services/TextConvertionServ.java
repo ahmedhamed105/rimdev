@@ -38,7 +38,7 @@ public class TextConvertionServ {
 		if(search.getCode() == null || search.getLangcode() == null) {	
 			 new NoDataException("please enter code");
 		}
-		
+		System.out.println(search.getLangcode() + " "+search.getCode());
 		Languages lan= languagesServ.getbycode(search.getLangcode());
 		LanguageMap lanmap= languageMapServ.getbycode(search.getCode());
 		

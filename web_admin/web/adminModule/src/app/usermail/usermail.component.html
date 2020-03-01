@@ -26,42 +26,21 @@
           <!-- /.box-header -->
           <!-- form start -->
           <form [formGroup]="insertform" (ngSubmit)="onSubmit()">
-            
-            <div class="box-body">
-              <pre>{{insertform.value | json}}</pre>
+ <div class="box-body" *ngFor="let component of components; let i = index;">
    
-              <div class="form-group" formGroupName="userID">
-                <label>User</label>
-                <select formControlName="id"  class="form-control"  (change)="getuser()">
-                  <option *ngFor="let user of users" value="{{user.id}}">{{user.firstName}}</option>
-            </select>    
-             </div>
+  <div *ngIf="component.comp.ctype == 'select'">
+        <!-- Execute code here if statement true -->
+        <div class="form-group" formGroupName="{{component.comp.groupname}}">
+          <label>{{component.comp.ccode}}</label>
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="getuser()">
+            <option *ngFor="let object of getArray(component.select.arrayName)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+      </select>    
+      </div>
 
-              <div class="form-group" >
-                <label>Email</label>
-                <input  [class.is-invalid]="iform.emailuser.invalid && iform.emailuser.touched" formControlName="emailuser" type="email"   class="form-control"  >
-             <div *ngIf="iform.emailuser.invalid && iform.emailuser.touched" class="invalid-feedback">
-              <small *ngIf="iform.emailuser.errors?.required" class="text-danger">email is required</small> 
-              <small *ngIf="iform.emailuser.errors?.email" class="text-danger">email must enter correctly</small> 
-            </div>
-             
-              </div>
+  </div>
+     
 
-              <div class="form-group" >
-                <label>Primary</label>
-                <select formControlName="emailPrimary"  class="form-control">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-            </select>   
-              </div>
-
-
-              <div class="form-group" formGroupName="datastatusID">
-                <label>Email Status</label>
-                <select formControlName="id"  class="form-control">
-                  <option *ngFor="let status of data_status" value="{{status.id}}">{{status.dstatus}}</option>
-            </select>    
-             </div>
+  
 
 
             </div>

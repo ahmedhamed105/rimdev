@@ -1,6 +1,5 @@
 package com.rimdev.user.Services;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +14,7 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.EmailRepo;
-import com.rimdev.user.Repo.UserRepo;
-import com.rimdev.user.Utils.Generate;
-import com.rimdev.user.entities.Device;
-import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.Email;
-import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 
 @Service
@@ -55,7 +49,7 @@ List<Email> emails;
 	
 	if(emails == null || emails.size() <= 0) {
 		
-		throw new NoDataException("no data found in "+ this.getClass().getName());
+		throw new NoDataException("E108");
 		
 	}
 	
@@ -72,7 +66,7 @@ public void check_email(String email) {
 		Optional<Email> flowid =emailRepo.findbyemail(email);
 		 
 		 if (flowid.isPresent()){
-			 Email  ouput = flowid.get();
+			  flowid.get();
 		
 				throw new DuplicationException("E105");
 
@@ -107,7 +101,7 @@ public Email getbyid(int id) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("no Email found in "+ this.getClass().getName());
+				throw new NoDataException("E109");
 			}
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException("E104");
@@ -147,7 +141,7 @@ public List<Email> getbyuser(int userid) {
 		if(cu == null || cu.size() <= 0) {
 			
 			userServ.checkuser(userid);	
-			throw new NoDataException("no Email found in "+ this.getClass().getName());
+			throw new NoDataException("E109");
 
 		}
 		
@@ -186,7 +180,7 @@ public void save(Email input) {
 		
 	}else {
 		
-		throw new NoDataException("No User found");
+		throw new NoDataException("E107");
 	
 	}
 	

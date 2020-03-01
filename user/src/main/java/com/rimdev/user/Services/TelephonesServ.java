@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.TelephonesRepo;
-import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 
@@ -42,18 +41,18 @@ public List<Telephones> getall() {
 	//    throw new NoDataException("no data found in users");
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 	if(teles == null || teles.size() <= 0) {
 		
-		throw new NoDataException("no data found in "+ this.getClass().getName());
+		throw new NoDataException("E108");
 		
 	}
 	
@@ -71,9 +70,9 @@ public void check_tele(String tele) {
 		Optional<Telephones> flowid =telephonesRepo.findbytele(tele);
 		 
 		 if (flowid.isPresent()){
-			 Telephones  ouput = flowid.get();
+			 flowid.get();
 		
-			throw new DuplicationException("Telephone duplicate");
+			throw new DuplicationException("E105");
 					}
 			else{
 			   // alternative processing....
@@ -81,13 +80,13 @@ public void check_tele(String tele) {
 
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 
@@ -109,16 +108,16 @@ public Telephones getbyid(int id) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("no Telephone found in "+ this.getClass().getName());
+				throw new NoDataException("E107");
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 
@@ -134,19 +133,19 @@ public List<Telephones> getbyuser(int userid) {
 		cu=(List<Telephones>) telephonesRepo.findbyuser(userid);
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 	if(cu == null || cu.size() <= 0) {
 		
 		userServ.checkuser(userid);	
-		throw new NoDataException("no Telephone found in "+ this.getClass().getName());
+		throw new NoDataException("E107");
 
 	}
 	
@@ -170,18 +169,18 @@ public void save(Telephones input) {
 		try {
 			telephonesRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("TransientDataAccessException");
+			throw new NullPointerException("E104");
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("RecoverableDataAccessException");
+			throw new NullPointerException("E104");
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("ScriptException");
+			throw new NullPointerException("E104");
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("NonTransientDataAccessException");
+			throw new NullPointerException("E104");
 	    }
 		
 	}else {
 		
-		throw new NoDataException("No User found");
+		throw new NoDataException("E107");
 	
 	}
 
@@ -205,13 +204,13 @@ public void update(Telephones input) {
 	try {
 		telephonesRepo.save(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 	
@@ -226,13 +225,13 @@ public void delete(Telephones input) {
 		userServ.checkuser(input.getUserID().getId());	
 		telephonesRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("TransientDataAccessException");
+		throw new NullPointerException("E104");
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("RecoverableDataAccessException");
+		throw new NullPointerException("E104");
     }catch (ScriptException  se) {
-		throw new NullPointerException("ScriptException");
+		throw new NullPointerException("E104");
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("NonTransientDataAccessException");
+		throw new NullPointerException("E104");
     }
 	
 	

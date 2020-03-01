@@ -7,6 +7,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
+import { ComponentService } from '../services/component.service';
 
 @Component({
   selector: 'app-usermail',
@@ -18,11 +19,12 @@ export class UsermailComponent implements OnInit {
 
   public users = [];
   public data_status = [];
+  public components = [];
 
   public error_message;
 
 
-  constructor(public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
@@ -92,6 +94,28 @@ export class UsermailComponent implements OnInit {
       console.log(this.device.tokean);
     });
 
+
+    this._ComponentService.getbypage(this.page_number).subscribe(res =>{
+      res.forEach(element => {
+
+        this.errorDialogService.converttext(element.comp.ccode)
+        .subscribe(data => {
+
+        
+          element.comp.ccode = data.returnLang;
+        
+       //   console.log(element.comp.ccode);
+          this.components.push(element);
+        });
+
+       
+
+});
+
+
+    } );
+
+
     this._usersservice.getall()
     .subscribe(data => this.users = data);
 
@@ -118,6 +142,11 @@ export class UsermailComponent implements OnInit {
 
 
   get iform() { return this.insertform.controls; }
+
+
+  getArray(i: any): any[] {
+       return this[i];
+  }
 
 
 
@@ -202,8 +231,6 @@ if(this.selectuser != null){
 
 
 }
-
-
 
 
 

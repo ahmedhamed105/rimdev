@@ -53,4 +53,16 @@ export class ErrorDialogService {
       
       }
 
+
+      converttext(text){
+
+        var  data : Ilangsearch = {
+            code: text ,
+            langcode: GlobalConstants.language
+         };
+         
+        return this._LanguagegoService.getlang(data);
+      
+      }
+
 }

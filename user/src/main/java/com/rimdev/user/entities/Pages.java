@@ -50,6 +50,8 @@ public class Pages implements Serializable {
     private String pagemenu;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagesID")
     private Collection<DevicePage> devicePageCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagesID")
+    private Collection<Component> componentCollection;
 
     public Pages() {
     }
@@ -91,6 +93,18 @@ public class Pages implements Serializable {
     public void setDevicePageCollection(Collection<DevicePage> devicePageCollection) {
         this.devicePageCollection = devicePageCollection;
     }
+    
+    
+    @XmlTransient
+    @JsonIgnore 
+    public Collection<Component> getComponentCollection() {
+        return componentCollection;
+    }
+
+    public void setComponentCollection(Collection<Component> componentCollection) {
+        this.componentCollection = componentCollection;
+    }
+
 
     @Override
     public int hashCode() {
