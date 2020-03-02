@@ -49,6 +49,8 @@ public class Component implements Serializable {
     @Column(name = "ID", nullable = false)
     private Integer id;
     @Basic(optional = false)
+    @Column(name = "seq_num", nullable = false)
+    private int seqNum;
     @Column(name = "name", nullable = false, length = 450)
     private String name;
     @Column(name = "Group_name", length = 45)
@@ -101,8 +103,18 @@ public class Component implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+    
+    
 
-    public String getName() {
+    public int getSeqNum() {
+		return seqNum;
+	}
+
+	public void setSeqNum(int seqNum) {
+		this.seqNum = seqNum;
+	}
+
+	public String getName() {
         return name;
     }
 

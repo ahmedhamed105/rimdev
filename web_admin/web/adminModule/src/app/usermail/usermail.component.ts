@@ -104,9 +104,8 @@ export class UsermailComponent implements OnInit {
 
         this.errorDialogService.converttext(element.comp.ccode)
         .subscribe(data => {
+
           element.comp.ccode = data.returnLang;   
-       //   this.items = this.insertform.get('items') as FormArray;
-        //  this.items.push(this.createItem(element.comp.name));
 
         this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
           

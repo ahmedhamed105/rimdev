@@ -28,5 +28,6 @@ public class ComponentController {
 	  public  ResponseEntity<List<Component_object>> getUsersbyuser(@PathVariable("id") int pageid){ 
 		  return new ResponseEntity<List<Component_object>>(componentServ.getbypage(pageid), HttpStatus.OK);
 	  }
+	  
 
 }
