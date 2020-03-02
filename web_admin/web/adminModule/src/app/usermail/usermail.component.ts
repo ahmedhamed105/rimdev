@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
 import { EmailsService } from '../services/emails.service';
@@ -27,7 +27,8 @@ export class UsermailComponent implements OnInit {
   constructor(public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
-  updateform :FormGroup;
+  tmpform :FormGroup;
+  public items: FormArray;
   public device ;
   public page_number:number = 6 ;
   public selectuser;
@@ -95,21 +96,29 @@ export class UsermailComponent implements OnInit {
     });
 
 
+    this.insertform = this.fb.group({
+    });
+    
     this._ComponentService.getbypage(this.page_number).subscribe(res =>{
       res.forEach(element => {
 
         this.errorDialogService.converttext(element.comp.ccode)
         .subscribe(data => {
-          element.comp.ccode = data.returnLang;        
+          element.comp.ccode = data.returnLang;   
+       //   this.items = this.insertform.get('items') as FormArray;
+        //  this.items.push(this.createItem(element.comp.name));
+
+        this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
+          
           this.components.push(element);
         });
-
-       
+   
 
 });
 
 
     } );
+    
 
 
     this._usersservice.getall()
@@ -121,17 +130,43 @@ export class UsermailComponent implements OnInit {
     this._EmailsService.getstatus()
     .subscribe(data => this.data_status = data);
 
-    this.insertform = this.fb.group({
-      emailuser: ['' ,[Validators.required,Validators.email]],
-      emailPrimary: ['' ,[Validators.required]],
-      userID: this.fb.group({
-        id : ['',[Validators.required]]
-         }),
-         datastatusID: this.fb.group({
-          id : ['',[Validators.required]]
-           }),
-      });
 
+  }
+
+
+createItem(child,group,req,pat,dpattern) {
+if(group != null){
+  if(this.insertform.get(group)== null){
+    this.insertform.addControl(group, new FormGroup({}));
+  }
+  this.tmpform = this.insertform.get(group) as FormGroup;
+
+  if(req === 1 && pat === 1){
+    
+    this.tmpform.addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
+  }else if(req === 1 && pat === 0){
+    this.tmpform.addControl(child,  new FormControl('', [Validators.required]));
+  }else if(req === 0 && pat === 1){
+    this.tmpform.addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
+  }else{
+    this.tmpform.addControl(child,  new FormControl(''));
+  }
+}else{
+
+
+  if(req === 1 && pat === 1){
+    
+    this.insertform.addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
+  }else if(req === 1 && pat === 0){
+    this.insertform.addControl(child,  new FormControl('', [Validators.required]));
+  }else if(req === 0 && pat === 1){
+    this.insertform.addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
+  }else{
+    this.insertform.addControl(child,  new FormControl(''));
+  }
+
+}
+ 
   }
 
 

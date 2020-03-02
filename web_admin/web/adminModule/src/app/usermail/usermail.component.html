@@ -26,7 +26,11 @@
           <!-- /.box-header -->
           <!-- form start -->
           <form [formGroup]="insertform" (ngSubmit)="onSubmit()">
+
+            <pre>{{insertform.value | json}}</pre>
  <div class="box-body" *ngFor="let component of components; let i = index;">
+
+
    
   <div *ngIf="component.comp.ctype == 'select'">
         <!-- Execute code here if statement true -->
@@ -37,7 +41,7 @@
     <ng-template #withgroup>
       <div class="form-group" formGroupName="{{component.comp.groupname}}">
         <label>{{component.comp.ccode}}</label>
-        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="getuser()">
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod]()">
           <ng-container *ngIf="component.select.arrayObject === 1;then dymaicarray;else staticarray">
         </ng-container>
 
@@ -56,7 +60,7 @@
     <ng-template #withoutgroup>
       <div class="form-group">
         <label>{{component.comp.ccode}}</label>
-        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod">
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod]()">
         
           <ng-container *ngIf="component.select.arrayObject === 1;then dymaicarray;else staticarray">
           </ng-container>
@@ -74,6 +78,38 @@
     </ng-template>
 
   </div>
+
+
+  
+  <div *ngIf="component.comp.ctype == 'input'">
+    <!-- Execute code here if statement true -->
+    <ng-container *ngIf="component.comp.groupname; then withgroup;else withoutgroup">
+</ng-container>
+
+
+<ng-template #withgroup>
+  <div class="form-group" formGroupName="{{component.comp.groupname}}">
+    <label>{{component.comp.ccode}}</label>
+    <input  [class.is-invalid]="iform.emailuser.invalid && iform.emailuser.touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="iform.emailuser.invalid && iform.emailuser.touched" class="invalid-feedback">
+     <small *ngIf="iform.emailuser.errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="iform.emailuser.errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+   </div>
+</div>
+</ng-template>
+
+<ng-template #withoutgroup>
+  <div class="form-group">
+    <label>{{component.comp.ccode}}</label>
+    <input  [class.is-invalid]="iform.emailuser.invalid && iform.emailuser.touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="iform.emailuser.invalid && iform.emailuser.touched" class="invalid-feedback">
+     <small *ngIf="iform.emailuser.errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="iform.emailuser.errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+   </div>  
+</div>
+</ng-template>
+
+</div>
      
 
   
