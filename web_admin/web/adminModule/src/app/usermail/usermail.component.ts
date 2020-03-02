@@ -100,16 +100,21 @@ export class UsermailComponent implements OnInit {
     });
     
     this._ComponentService.getbypage(this.page_number).subscribe(res =>{
-      res.forEach(element => {
+
+    var a=  res.sort((a, b) => {
+        return a.comp.seqNum -b.comp.seqNum;
+      });
+
+      a.forEach(element => {
+
+        this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
+          
+        this.components.push(element);
 
         this.errorDialogService.converttext(element.comp.ccode)
         .subscribe(data => {
 
           element.comp.ccode = data.returnLang;   
-
-        this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
-          
-          this.components.push(element);
         });
    
 
@@ -127,8 +132,7 @@ export class UsermailComponent implements OnInit {
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
     this._EmailsService.getstatus()
-    .subscribe(data => this.data_status = data);
-
+    .subscribe(data => this.data_status = data);  
 
   }
 

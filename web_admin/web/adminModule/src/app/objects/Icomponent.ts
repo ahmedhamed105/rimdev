@@ -2,6 +2,7 @@
         comp :{
 
             id: number,
+            seqNum :number,
             name: String,
             groupname: String,
             labelname : String,
