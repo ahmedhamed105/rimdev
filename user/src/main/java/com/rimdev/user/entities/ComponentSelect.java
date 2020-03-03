@@ -52,6 +52,8 @@ public class ComponentSelect implements Serializable {
     private String selectDisplay;
     @Column(name = "Change_method", length = 45)
     private String changemethod;
+    @Column(name = "web_service", length = 450)
+    private String webService;
     @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Component componentID;
@@ -116,6 +118,16 @@ public class ComponentSelect implements Serializable {
 
 	public void setChangemethod(String changemethod) {
 		this.changemethod = changemethod;
+	}
+	
+	
+
+	public String getWebService() {
+		return webService;
+	}
+
+	public void setWebService(String webService) {
+		this.webService = webService;
 	}
 
 	@XmlTransient

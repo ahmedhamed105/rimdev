@@ -46,11 +46,11 @@
         </ng-container>
 
         <ng-template #dymaicarray>
-        <option *ngFor="let object of getArray(component.select.arrayName,'',1)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+        <option *ngFor="let object of getArray(component.select.arrayName,'',component.select.webService,1)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </ng-template>
 
       <ng-template #staticarray>
-        <option *ngFor="let object of  getArray(component.select.selectValue,component.select.selectDisplay,0)" [value]="object.value">{{object.key}}</option>
+        <option *ngFor="let object of  getArray(component.select.selectValue,component.select.selectDisplay,'',0)" [value]="object.value">{{object.key}}</option>
       </ng-template>
   
         </select>    
@@ -66,11 +66,11 @@
           </ng-container>
   
           <ng-template #dymaicarray>
-          <option *ngFor="let object of getArray(component.select.arrayName,'',1)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+          <option *ngFor="let object of getArray(component.select.arrayName,'',component.select.webService,1)" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </ng-template>
   
         <ng-template #staticarray>
-          <option *ngFor="let object of  getArray(component.select.selectValue,component.select.selectDisplay,0)" [value]="object.value">{{object.key}}</option>
+          <option *ngFor="let object of  getArray(component.select.selectValue,component.select.selectDisplay,'',0)" [value]="object.value">{{object.key}}</option>
         </ng-template>
   
         </select>    

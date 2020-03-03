@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Iuser } from '../objects/Iuser';
 import { Observable } from 'rxjs';
+import { GlobalConstants } from '../GlobalConstants';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,15 @@ export class UsersService {
   
   constructor(private _http:HttpClient) { }
 
-  getall():Observable<Iuser[]>{
-
-    return  this._http.get<Iuser[]>(this._urlgetall);
-  
+  getbyurl(url):Observable<[]>{
+    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url;
+    return  this._http.get<[]>(urlall);  
     }
+
+
+    getall():Observable<[]>{
+      return  this._http.get<[]>(this._urlgetall);  
+      }
 
     insert(user : Iuser){
       console.log(user);

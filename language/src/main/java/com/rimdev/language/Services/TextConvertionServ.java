@@ -50,10 +50,10 @@ public class TextConvertionServ {
 	
 	
 	
-	public TextConvertion getbylangmap(int Languages_ID,int language_map_ID){
+	public TextConvertion getbylangmap(int Lang,int map){
 		
 		try {
-			Optional<TextConvertion> flowid =textConvertionRepo.getbylangandmap(Languages_ID, language_map_ID);
+			Optional<TextConvertion> flowid =textConvertionRepo.getbylangandmap(Lang, map);
 			
 			
 			 

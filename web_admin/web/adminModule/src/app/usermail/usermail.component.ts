@@ -125,8 +125,7 @@ export class UsermailComponent implements OnInit {
     
 
 
-    this._usersservice.getall()
-    .subscribe(data => this.users = data);
+ 
 
     this.gridOptions = <GridOptions>{};
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
@@ -176,10 +175,16 @@ if(group != null){
   get iform() { return this.insertform.controls; }
 
 
-  getArray(i: any,j: any,st : number): any[] {
+  getArray(i: any,j: any,serv: any,st : number): any[] {
+
+     if(i === 'users'){
+      this._usersservice.getbyurl(serv)
+     .subscribe(data => {this.users = data});
+     return this.users;
+   }
    
     if(st === 1){
-      return this[i];
+        return this[i];
     }
     else{
       this.arraystatic= [];
