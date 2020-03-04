@@ -1,6 +1,7 @@
 package com.rimdev.user.ouputobject;
 
 import com.rimdev.user.entities.Component;
+import com.rimdev.user.entities.ComponentButton;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
 
@@ -9,6 +10,7 @@ public class Component_object {
 	Component comp;
 	ComponentSelect select;
 	ComponentInput input;
+	ComponentButton button;
 	
 	 
 	
@@ -34,6 +36,12 @@ public class Component_object {
 	}
 	public void setInput(ComponentInput input) {
 		this.input = input;
+	}
+	public ComponentButton getButton() {
+		return button;
+	}
+	public void setButton(ComponentButton button) {
+		this.button = button;
 	}
 	
 	

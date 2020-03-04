@@ -79,6 +79,8 @@ public class Component implements Serializable {
     @JoinColumn(name = "Pages_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Pages pagesID;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
+    private Collection<ComponentButton> componentButtonCollection;
     
 
     public Component() {
@@ -206,6 +208,17 @@ public class Component implements Serializable {
     public void setComponentInputCollection(Collection<ComponentInput> componentInputCollection) {
         this.componentInputCollection = componentInputCollection;
     }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<ComponentButton> getComponentButtonCollection() {
+        return componentButtonCollection;
+    }
+
+    public void setComponentButtonCollection(Collection<ComponentButton> componentButtonCollection) {
+        this.componentButtonCollection = componentButtonCollection;
+    }
+    
     
     @XmlTransient
     @JsonIgnore

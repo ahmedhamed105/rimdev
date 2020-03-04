@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.ComponentRepo;
 import com.rimdev.user.entities.Component;
+import com.rimdev.user.entities.ComponentButton;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
 import com.rimdev.user.ouputobject.Component_object;
@@ -28,6 +29,9 @@ public class ComponentServ {
 	
 	@Autowired
 	ComponentInputServ componentInputServ;
+	
+	@Autowired
+	ComponentButtonServ componentButtonServ;
 	
 	
 	
@@ -49,6 +53,7 @@ public class ComponentServ {
 				Component_object a = new Component_object();
 				ComponentSelect select = new ComponentSelect();
 				ComponentInput input=new ComponentInput();
+				ComponentButton button=new ComponentButton();
 				try {
 					 select =componentSelectServ.getbycomponent(component.getId()).get(0);
 
@@ -60,10 +65,17 @@ public class ComponentServ {
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
+				
+				try {
+					button =componentButtonServ.getbycomponent(component.getId()).get(0);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 
 				a.setComp(component);
 				a.setSelect(select);
 				a.setInput(input);
+				a.setButton(button);
 				coms.add(a);
 				
 			}

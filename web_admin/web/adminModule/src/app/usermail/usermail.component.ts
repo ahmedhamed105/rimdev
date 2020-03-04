@@ -106,9 +106,10 @@ export class UsermailComponent implements OnInit {
 
 
       a.forEach((element,index) => {
-
-        this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
-          
+        if(element.comp.ctype == 'button'){
+        }else{
+          this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
+        }
         this.components.push(element);
 
         console.log(element.select.webService)
@@ -268,21 +269,10 @@ this.rowData= this._EmailsService.insert(node);
   
   
 
-onSubmit(){
-//console.log(this.insertform.value);
-if(this.selectuser != null){
-  console.log(this.insertform.value);
-
-  this.rowData=  this._EmailsService.insert(this.insertform.value);
-
-  this.insertform.reset();
-
-}else{
-
- this.errorDialogService.display_error("E100")
-
-}
-
+onSubmit(form){
+  console.log(form.value);
+  this.rowData=  this._EmailsService.insert(form.value);
+  form.reset();
 
 }
 

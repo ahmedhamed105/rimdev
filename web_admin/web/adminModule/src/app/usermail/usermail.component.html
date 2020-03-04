@@ -25,7 +25,7 @@
           </div>
           <!-- /.box-header -->
           <!-- form start -->
-          <form [formGroup]="insertform" (ngSubmit)="onSubmit()">
+          <form [formGroup]="insertform" >
 
             <pre>{{insertform.value | json}}</pre>
  <div class="box-body" *ngFor="let component of components; let i = index">
@@ -118,15 +118,15 @@
 </div>
      
 
-  
+<div class="box-footer" *ngIf="component.comp.ctype == 'button'">
 
+    <button  [disabled]="!insertform.valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform)" >{{component.comp.ccode}}</button>             
+</div>
 
             </div>
             <!-- /.box-body -->
   
-            <div class="box-footer">
-              <button  [disabled]="!insertform.valid" class="btn btn-primary" type="submit">Submit</button>            
-            </div>
+        
           </form>
         </div>
         <!-- /.box -->
