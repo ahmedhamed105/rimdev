@@ -14,6 +14,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -44,6 +47,8 @@ public class ComponentButton implements Serializable {
     private String buttonMethod;
     @Column(name = "button_type", length = 450)
     private String buttonType;
+    @Column(name = "button_service", length = 450)
+    private String buttonService;
     @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Component componentID;
@@ -92,7 +97,18 @@ public class ComponentButton implements Serializable {
     public void setButtonType(String buttonType) {
         this.buttonType = buttonType;
     }
+    
+    
+	public String getButtonService() {
+		return buttonService;
+	}
 
+	public void setButtonService(String buttonService) {
+		this.buttonService = buttonService;
+	}
+
+	@XmlTransient
+    @JsonIgnore
     public Component getComponentID() {
         return componentID;
     }

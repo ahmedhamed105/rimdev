@@ -19,6 +19,11 @@ export class UsersService {
     return  this._http.get<[]>(urlall);  
     }
 
+    insertbyurl(object,url):Observable<[]>{
+      var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url;
+      return this._http.post<any>(urlall,object);    
+      }
+
 
     getall():Observable<[]>{
       return  this._http.get<[]>(this._urlgetall);  

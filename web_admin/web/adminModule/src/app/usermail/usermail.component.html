@@ -120,7 +120,7 @@
 
 <div class="box-footer" *ngIf="component.comp.ctype == 'button'">
 
-    <button  [disabled]="!insertform.valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform)" >{{component.comp.ccode}}</button>             
+    <button  [disabled]="!insertform.valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform,component.button.buttonService)" >{{component.comp.ccode}}</button>             
 </div>
 
             </div>
