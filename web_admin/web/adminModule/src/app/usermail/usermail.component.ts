@@ -17,8 +17,7 @@ import { ComponentService } from '../services/component.service';
 export class UsermailComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
 
-  public users = [];
-  public data_status = [];
+  public objects = [[]];
   public components = [];
   public arraystatic = [];
   public error_message;
@@ -105,11 +104,45 @@ export class UsermailComponent implements OnInit {
         return a.comp.seqNum -b.comp.seqNum;
       });
 
-      a.forEach(element => {
+
+      a.forEach((element,index) => {
 
         this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
           
         this.components.push(element);
+
+        console.log(element.select.webService)
+
+if(element.comp.ctype == 'select'){
+
+        if(element.select.arrayObject === 1){
+          if(element.select.webService != null){
+
+            this._usersservice.getbyurl(element.select.webService)
+            .subscribe(data => {this.objects[index] = data;
+              console.log(index);
+            console.log(this.objects[index])});
+           }
+
+           }else{
+            this.objects[index]=[];
+             var res = element.select.selectValue.replace('[', '').replace(']', '').split(",");
+             var res1 = element.select.selectDisplay.replace('[', '').replace(']', '').split(",");
+             res1.forEach((element, index1) => {
+               let  prearray = {
+                 key : element,
+                 value :res[index1]
+               };
+               this.objects[index].push(prearray);
+             });
+       
+            
+       
+           }
+
+          }
+
+
 
         this.errorDialogService.converttext(element.comp.ccode)
         .subscribe(data => {
@@ -117,21 +150,14 @@ export class UsermailComponent implements OnInit {
           element.comp.ccode = data.returnLang;   
         });
    
-
+       
 });
 
 
     } );
     
-
-
- 
-
     this.gridOptions = <GridOptions>{};
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
-
-    this._EmailsService.getstatus()
-    .subscribe(data => this.data_status = data);  
 
   }
 
@@ -175,39 +201,10 @@ if(group != null){
   get iform() { return this.insertform.controls; }
 
 
-  getArray(i: any,j: any,serv: any,st : number): any[] {
-
-     if(i === 'users'){
-      this._usersservice.getbyurl(serv)
-     .subscribe(data => {this.users = data});
-     return this.users;
-   }
-   
-    if(st === 1){
-        return this[i];
-    }
-    else{
-      this.arraystatic= [];
-      var res = i.replace('[', '').replace(']', '').split(",");
-      var res1 = j.replace('[', '').replace(']', '').split(",");
-      res1.forEach((element, index) => {
-        let  prearray = {
-          key : element,
-          value :res[index]
-        };
-        this.arraystatic.push(prearray);
-      });
-
-     
-
-      return this.arraystatic;
-    }
-
-      }
+ 
 
 
-
-  getuser(){  
+  getuser(array){  
     var id = this.insertform.get('userID').get('id').value;
 
     if(id == null || id == "" ){
@@ -215,7 +212,7 @@ if(group != null){
      this.errorDialogService.display_error("E100");
     }
   
-    this.selectuser = this.users.filter(x => x.id == id)[0];
+    this.selectuser = array.filter(x => x.id == id)[0];
   
    console.log(this.selectuser);
 

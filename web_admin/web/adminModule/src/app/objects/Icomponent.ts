@@ -19,7 +19,8 @@
             arrayObject: number,
             selectValue: String,
             selectDisplay: String,
-            changemethod : String
+            changemethod : String,
+            webService : String
 
         },
         input: {
