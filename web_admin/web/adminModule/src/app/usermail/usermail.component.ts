@@ -242,8 +242,6 @@ if(group != null){
   }
 
 
-  get iform() { return this.insertform[0].controls; }
-
 
  
 

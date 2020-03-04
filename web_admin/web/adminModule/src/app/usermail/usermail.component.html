@@ -95,10 +95,10 @@
 <ng-template #withgroup>
   <div class="form-group" formGroupName="{{component.comp.groupname}}">
     <label>{{component.comp.ccode}}</label>
-    <input  [class.is-invalid]="iform.emailuser.invalid && iform.emailuser.touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-    <div *ngIf="iform.emailuser.invalid && iform.emailuser.touched" class="invalid-feedback">
-     <small *ngIf="iform.emailuser.errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-     <small *ngIf="iform.emailuser.errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+    <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>
 </div>
 </ng-template>
@@ -106,10 +106,10 @@
 <ng-template #withoutgroup>
   <div class="form-group">
     <label>{{component.comp.ccode}}</label>
-    <input  [class.is-invalid]="iform.emailuser.invalid && iform.emailuser.touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-    <div *ngIf="iform.emailuser.invalid && iform.emailuser.touched" class="invalid-feedback">
-     <small *ngIf="iform.emailuser.errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-     <small *ngIf="iform.emailuser.errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+    <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>  
 </div>
 </ng-template>
