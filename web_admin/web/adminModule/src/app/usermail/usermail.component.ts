@@ -25,8 +25,11 @@ export class UsermailComponent implements OnInit {
 
   constructor(public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
-  insertform :FormGroup;
+  insertform :FormGroup []=[];
   tmpform :FormGroup;
+
+
+
   public items: FormArray;
   public device ;
   public page_number:number = 6 ;
@@ -95,24 +98,55 @@ export class UsermailComponent implements OnInit {
     });
 
 
-    this.insertform = this.fb.group({
-    });
+   
     
     this._ComponentService.getbypage(this.page_number).subscribe(res =>{
 
-    var a=  res.sort((a, b) => {
-        return a.comp.seqNum -b.comp.seqNum;
-      });
+ 
+      
 
+      res.forEach((parent,indexp) => {
+
+        this.insertform.push(new FormGroup({}));
+
+        this.insertform[indexp] = this.fb.group({
+        });
+
+
+        this.errorDialogService.converttext(parent.parent.pcodeTittle)
+        .subscribe(data => {
+  
+          parent.parent.pcodeTittle = data.returnLang;   
+        });
+
+
+        this.components.push(parent);
+
+
+        if(parent.child == null){
+
+
+        }else{
+
+       
+        
+        var a=  parent.child.sort((a, b) => {
+          return a.comp.seqNum -b.comp.seqNum;
+        });
+
+        
 
       a.forEach((element,index) => {
+     
+        var parentin=indexp*a.length;
+
+
         if(element.comp.ctype == 'button'){
         }else{
-          this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin);
+          this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,indexp);
         }
-        this.components.push(element);
+        
 
-        console.log(element.select.webService)
 
 if(element.comp.ctype == 'select'){
 
@@ -120,13 +154,14 @@ if(element.comp.ctype == 'select'){
           if(element.select.webService != null){
 
             this._usersservice.getbyurl(element.select.webService)
-            .subscribe(data => {this.objects[index] = data;
-              console.log(index);
-            console.log(this.objects[index])});
+            .subscribe(data => {this.objects[index+parentin] = data;
+           //  console.log(index+indexp);
+          //  console.log(element.select.webService)
+        });
            }
 
            }else{
-            this.objects[index]=[];
+            this.objects[index+parentin]=[];
              var res = element.select.selectValue.replace('[', '').replace(']', '').split(",");
              var res1 = element.select.selectDisplay.replace('[', '').replace(']', '').split(",");
              res1.forEach((element, index1) => {
@@ -134,7 +169,7 @@ if(element.comp.ctype == 'select'){
                  key : element,
                  value :res[index1]
                };
-               this.objects[index].push(prearray);
+               this.objects[index+parentin].push(prearray);
              });
        
             
@@ -155,20 +190,26 @@ if(element.comp.ctype == 'select'){
 });
 
 
-    } );
+}
+
+});
+
+
+    });
     
     this.gridOptions = <GridOptions>{};
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
+    console.log(this.objects)
   }
 
 
-createItem(child,group,req,pat,dpattern) {
+createItem(child,group,req,pat,dpattern,formindex) {
 if(group != null){
-  if(this.insertform.get(group)== null){
-    this.insertform.addControl(group, new FormGroup({}));
+  if(this.insertform[formindex].get(group)== null){
+    this.insertform[formindex].addControl(group, new FormGroup({}));
   }
-  this.tmpform = this.insertform.get(group) as FormGroup;
+  this.tmpform = this.insertform[formindex].get(group) as FormGroup;
 
   if(req === 1 && pat === 1){
     
@@ -185,28 +226,30 @@ if(group != null){
 
   if(req === 1 && pat === 1){
     
-    this.insertform.addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
+    this.insertform[formindex].addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
   }else if(req === 1 && pat === 0){
-    this.insertform.addControl(child,  new FormControl('', [Validators.required]));
+    this.insertform[formindex].addControl(child,  new FormControl('', [Validators.required]));
   }else if(req === 0 && pat === 1){
-    this.insertform.addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
+    this.insertform[formindex].addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
   }else{
-    this.insertform.addControl(child,  new FormControl(''));
+    this.insertform[formindex].addControl(child,  new FormControl(''));
   }
 
 }
+
+
  
   }
 
 
-  get iform() { return this.insertform.controls; }
+  get iform() { return this.insertform[0].controls; }
 
 
  
 
 
-  getuser(array){  
-    var id = this.insertform.get('userID').get('id').value;
+  getuser(array,form){  
+    var id = form.get('userID').get('id').value;
 
     if(id == null || id == "" ){
 

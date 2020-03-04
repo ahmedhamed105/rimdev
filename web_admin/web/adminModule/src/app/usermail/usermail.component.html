@@ -15,23 +15,22 @@
   
   <!-- Main content -->
   <section class="content">
-    <div class="row">
+    <div class="row" *ngFor="let parent of components; let j = index">
       <!-- left column -->
-      <div class="col-md-12">
+      <div class="col-md-12" *ngIf="parent.parent.parentType == 'form'">
         <!-- general form elements -->
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title">New</h3>
+            <h3 class="box-title">{{parent.parent.pcodeTittle}}</h3>
           </div>
           <!-- /.box-header -->
           <!-- form start -->
-          <form [formGroup]="insertform" >
-
-            <pre>{{insertform.value | json}}</pre>
- <div class="box-body" *ngFor="let component of components; let i = index">
-
-
-   
+          <form [formGroup]="insertform[j]" >
+            <pre>{{j | json}}</pre>
+            <pre>{{insertform[j].value | json}}</pre>
+ <div class="box-body" *ngFor="let component of parent.child; let i = index; let parentlen = count">
+ 
+  
   <div *ngIf="component.comp.ctype == 'select'">
         <!-- Execute code here if statement true -->
         <ng-container *ngTemplateOutlet="component.comp.groupname? withgroup: withoutgroup">
@@ -44,14 +43,14 @@
            </ng-container>
 
         <ng-template #dymaicarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod](objects[i])">
-        <option *ngFor="let object of objects[i]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod](objects[i+(j*parentlen)],insertform[j])">
+        <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </select> 
       </ng-template>
 
       <ng-template #staticarray>
-        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod]()">
-        <option *ngFor="let object of  objects[i]" [value]="object.value">{{object.key}}</option>
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod](objects[i+(j*parentlen)],insertform[j])">
+        <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
       </select> 
       </ng-template>
  
@@ -67,14 +66,14 @@
           </ng-container>
   
           <ng-template #dymaicarray>
-            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod]()">
-          <option *ngFor="let object of objects[i]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod](objects[i+(j*parentlen)],insertform[j])">
+          <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </select>  
         </ng-template>
   
         <ng-template #staticarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod]()">
-          <option *ngFor="let object of  objects[i]" [value]="object.value">{{object.key}}</option>       
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':this[component.select.changemethod](objects[i+(j*parentlen)],insertform[j])">
+          <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
         </select>  
         </ng-template>
 
@@ -120,7 +119,7 @@
 
 <div class="box-footer" *ngIf="component.comp.ctype == 'button'">
 
-    <button  [disabled]="!insertform.valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform,component.button.buttonService)" >{{component.comp.ccode}}</button>             
+    <button  [disabled]="!insertform[j].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[j],component.button.buttonService)" >{{component.comp.ccode}}</button>             
 </div>
 
             </div>
@@ -131,37 +130,40 @@
         </div>
         <!-- /.box -->
 
-        <div class="box">
-          <div class="box-header">
-            <h3 class="box-title">Emails</h3>
-          </div>
-          <!-- /.box-header -->
-          <div class="box-body">
-            <button class="btn btn-primary " (click)="deletemail()">Delete Email</button>
-            <button class="btn btn-secondary" (click)="savemail()">Save Email</button>
-            <button class="btn btn-success" (click)="getuser()">Refersh</button>
-            
-            <br/>
-            <ag-grid-angular
-                #agGrid
-                style="width:100%;height:500px"
-                class="ag-theme-balham"
-                [rowData]="rowData | async"
-                [columnDefs]="columnDefs"
-                rowSelection="single"
-                [gridOptions]="gridOptions" 
-                [enableColResize]="true"
-                >
-            </ag-grid-angular>
-          </div>
-          <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
-  
+
+
       <!--/.col (right) -->
     </div>
+    <div class="col-md-12" *ngIf="parent.parent.parentType == 'table'">
 
-       
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">Emails</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <button class="btn btn-primary " (click)="deletemail()">Delete Email</button>
+          <button class="btn btn-secondary" (click)="savemail()">Save Email</button>
+          <button class="btn btn-success" (click)="getuser()">Refersh</button>
+          
+          <br/>
+          <ag-grid-angular
+              #agGrid
+              style="width:100%;height:500px"
+              class="ag-theme-balham"
+              [rowData]="rowData | async"
+              [columnDefs]="columnDefs"
+              rowSelection="single"
+              [gridOptions]="gridOptions" 
+              [enableColResize]="true"
+              >
+          </ag-grid-angular>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+
+    </div>
     <!-- /.row -->
     </div>
   </section>

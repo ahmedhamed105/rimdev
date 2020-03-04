@@ -12,21 +12,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.rimdev.user.Repo.ComponentRepo;
 import com.rimdev.user.Services.ComponentServ;
+import com.rimdev.user.Services.ParentComponentServ;
 import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.ouputobject.Component_object;
+import com.rimdev.user.ouputobject.parent_comp;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/Component") // 
 public class ComponentController {
 	
 	@Autowired
-	ComponentServ componentServ;
+	ParentComponentServ parentComponentServ;
 	
 	
 	  @RequestMapping(value = "/page/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Component_object>> getUsersbyuser(@PathVariable("id") int pageid){ 
-		  return new ResponseEntity<List<Component_object>>(componentServ.getbypage(pageid), HttpStatus.OK);
+	  public  ResponseEntity<List<parent_comp>> getUsersbyuser(@PathVariable("id") int pageid){ 
+		  return new ResponseEntity<List<parent_comp>>(parentComponentServ.getbypage(pageid), HttpStatus.OK);
 	  }
 	  
 

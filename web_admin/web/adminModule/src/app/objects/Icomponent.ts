@@ -1,4 +1,12 @@
       export interface Icomponent {
+        parent: {
+            id: number,
+            pcodeTittle: String,
+            parentPostion: number,
+            parentType: String,
+            parentName: String
+        },
+      child : [{
         comp :{
 
             id: number,
@@ -30,6 +38,16 @@
                 id: number,
                 itype: String
             }
+        },
+        button: {
+            id: number,
+            buttonClass: String,
+            buttonMethod: String,
+            buttonType: String,
+            buttonService: String
         }
+
+      }]  
+       
       }
     

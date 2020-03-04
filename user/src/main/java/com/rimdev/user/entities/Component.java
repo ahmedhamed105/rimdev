@@ -76,11 +76,12 @@ public class Component implements Serializable {
     private Collection<ComponentSelect> componentSelectCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentInput> componentInputCollection;
-    @JoinColumn(name = "Pages_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Pages pagesID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentButton> componentButtonCollection;
+    
+    @JoinColumn(name = "parent_component_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private ParentComponent parentcomponentID;
     
 
     public Component() {
@@ -222,12 +223,12 @@ public class Component implements Serializable {
     
     @XmlTransient
     @JsonIgnore
-    public Pages getPagesID() {
-        return pagesID;
+    public ParentComponent getParentcomponentID() {
+        return parentcomponentID;
     }
 
-    public void setPagesID(Pages pagesID) {
-        this.pagesID = pagesID;
+    public void setParentcomponentID(ParentComponent parentcomponentID) {
+        this.parentcomponentID = parentcomponentID;
     }
 
     @Override

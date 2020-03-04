@@ -51,7 +51,8 @@ public class Pages implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagesID")
     private Collection<DevicePage> devicePageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagesID")
-    private Collection<Component> componentCollection;
+    private Collection<ParentComponent> parentComponentCollection;
+    
 
     public Pages() {
     }
@@ -97,12 +98,12 @@ public class Pages implements Serializable {
     
     @XmlTransient
     @JsonIgnore 
-    public Collection<Component> getComponentCollection() {
-        return componentCollection;
+    public Collection<ParentComponent> getParentComponentCollection() {
+        return parentComponentCollection;
     }
 
-    public void setComponentCollection(Collection<Component> componentCollection) {
-        this.componentCollection = componentCollection;
+    public void setParentComponentCollection(Collection<ParentComponent> parentComponentCollection) {
+        this.parentComponentCollection = parentComponentCollection;
     }
 
 

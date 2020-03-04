@@ -9,8 +9,8 @@ import com.rimdev.user.entities.Component;
 @Repository
 public interface ComponentRepo extends CrudRepository<Component, Integer>{
 	
-	@Query(value ="SELECT * FROM rim_user.component where Pages_ID =?1 ORDER BY seq_num ASC" , nativeQuery = true)
-	Iterable<Component> getbypage(int pageid);
+	@Query(value ="SELECT * FROM rim_user.component where parent_component_ID =?1 ORDER BY seq_num ASC" , nativeQuery = true)
+	Iterable<Component> getbyparent(int parentid);
 
 	
 }
