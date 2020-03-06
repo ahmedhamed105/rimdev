@@ -25,6 +25,16 @@ export class UsersService {
       }
 
 
+      getbyvalue(url,value):Observable<[]>{
+        var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url;
+        urlall=urlall+value;
+        return  this._http.get<[]>(urlall);  
+        }
+
+
+
+
+
     getall():Observable<[]>{
       return  this._http.get<[]>(this._urlgetall);  
       }

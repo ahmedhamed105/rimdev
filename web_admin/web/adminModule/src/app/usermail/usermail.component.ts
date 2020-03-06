@@ -242,24 +242,20 @@ if(group != null){
   }
 
 
-
- 
-
-
-  getuser(array,form){  
-    var id = form.get('userID').get('id').value;
+  Makeaction(array,form,group,comp,serv){  
+    var id ; 
+    if(group != null){
+      id = form.get(group).get(comp).value; 
+    }
 
     if(id == null || id == "" ){
 
      this.errorDialogService.display_error("E100");
     }
   
-    this.selectuser = array.filter(x => x.id == id)[0];
-  
-   console.log(this.selectuser);
+    this.selectuser = array.filter(x => x[comp] == id)[0];
 
-
-   this.rowData =this._EmailsService.getbyuser(this.selectuser.id);
+   this.rowData =this._usersservice.getbyvalue(serv,this.selectuser.id);
 
     
   }
