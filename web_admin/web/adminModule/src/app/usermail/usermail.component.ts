@@ -43,54 +43,26 @@ export class UsermailComponent implements OnInit {
   rowData: any;
  
  
- columnDefs=[
+ columnDefs=[{
+  headerName : "select row",
+  field : null,
+  sortable: true, 
+  filter: true, 
+  editable: false,      
+  resizable: true,
+  checkboxSelection: true
+}];
  
-   {
-     headerName : "select row",
-     sortable: true, 
-     width : 100,
-     filter: true,
-     checkboxSelection: true
-   },
-   {
-     headerName : "ID",
-     field : "id",
-     sortable: true, 
-     filter: true
-   },
-   {
-     headerName : "email",
-     field : "emailuser",
-     sortable: true, 
-     filter: true,        
-     editable: true,
-     resizable: true
-   },
-   {
-     headerName : "Primary",
-     field : "emailPrimary",
-     sortable: true, 
-     filter: true,        
-     editable: true,
-     resizable: true,
-     cellRenderer: "cellRenderer",
-   },
-   {
-     headerName : "status",
-     field : "datastatusID",
-     sortable: true, 
-     filter: true,  
-     resizable: true,
-     cellRenderer: "cellRenderer"
-   }
-   
- 
- ];
+  
 
 
 
 
   ngOnInit(){
+
+
+    this.gridOptions = <GridOptions>{};
+    this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
     this.locationService.all_info(this.page_number).then(res => {
       this.device =this.locationService.status;
@@ -123,12 +95,8 @@ export class UsermailComponent implements OnInit {
         this.components.push(parent);
 
 
-        if(parent.child == null){
+        if(parent.child != null && parent.parent.parentType === 'form'){
 
-
-        }else{
-
-       
         
         var a=  parent.child.sort((a, b) => {
           return a.comp.seqNum -b.comp.seqNum;
@@ -190,6 +158,90 @@ if(element.comp.ctype == 'select'){
 });
 
 
+}else if(parent.child != null && parent.parent.parentType === 'table'){
+
+
+
+  var a=  parent.child.sort((a, b) => {
+    return a.comp.seqNum -b.comp.seqNum;
+  });
+
+  
+
+a.forEach((element,index) => {
+
+  var parentin=indexp*a.length;
+
+if(element.comp.ctype === 'label'){
+
+  var b = {
+    headerName : element.comp.ccode.toString(),
+    field : element.comp.name,
+    sortable: true, 
+    filter: true, 
+    editable: false,      
+    resizable: true,
+    checkboxSelection: false
+  };
+  this.columnDefs[index+1]= b;
+
+  this.errorDialogService.converttext(element.comp.ccode)
+  .subscribe(data => {    
+    var col = this.gridOptions.columnApi.getColumn(element.comp.name);
+
+    // obtain the column definition from the column
+    var colDef = col.getColDef();
+
+    // update the header name
+    colDef.headerName = data.returnLang;
+
+    // the column is now updated. to reflect the header change, get the grid refresh the header
+    this.gridOptions.api.refreshHeader();
+    
+  });
+
+ 
+
+}else if(element.comp.ctype === 'input'){
+
+  var b = {
+    headerName : element.comp.ccode.toString(),
+    field : element.comp.name,
+    sortable: true, 
+    filter: true, 
+    editable: true,      
+    resizable: true,
+    checkboxSelection: false
+  };
+  this.columnDefs[index+1]= b;
+
+  this.errorDialogService.converttext(element.comp.ccode)
+  .subscribe(data => {    
+    var col = this.gridOptions.columnApi.getColumn(element.comp.name);
+
+    // obtain the column definition from the column
+    var colDef = col.getColDef();
+
+    // update the header name
+    colDef.headerName = data.returnLang;
+
+    // the column is now updated. to reflect the header change, get the grid refresh the header
+    this.gridOptions.api.refreshHeader();
+    
+  });
+
+ 
+
+}
+
+
+
+
+
+ 
+});
+
+
 }
 
 });
@@ -197,8 +249,7 @@ if(element.comp.ctype == 'select'){
 
     });
     
-    this.gridOptions = <GridOptions>{};
-    this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
+  
 
     console.log(this.objects)
   }
