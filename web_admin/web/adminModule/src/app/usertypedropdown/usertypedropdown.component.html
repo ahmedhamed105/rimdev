@@ -1,36 +1,10 @@
- <div *ngIf="params.colDef.field == 'datastatusID'">
-  <form [formGroup]="statusform">
+<form [formGroup]="jform[params.colDef.formnum]">
 <div class="form-group">
-  <select formControlName="datastatusID"  class="form-control" (blur)="setstatus()" (change)="setstatus()">
-    <option *ngFor="let status of data_status"   value="{{status.id}}">{{status.dstatus}}</option>
+  <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
+    <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
 </select>    
 </div>
 </form>
-</div>
-
-<div *ngIf="params.colDef.field == 'telePrimary'">
-  <form [formGroup]="tprimaryform">
-<div class="form-group">
-  <select formControlName="primary"  class="form-control" (blur)="settprimary()" (change)="settprimary()">
-    <option  value="0">0</option>
-    <option  value="1">1</option>
-</select>    
-</div>
-</form>
-</div>
-
-
-<div *ngIf="params.colDef.field == 'emailPrimary'">
-  <form [formGroup]="eprimaryform">
-<div class="form-group">
-  <select formControlName="primary"  class="form-control" (blur)="seteprimary()" (change)="seteprimary()">
-    <option  value="0">0</option>
-    <option  value="1">1</option>
-</select>    
-</div>
-</form>
-</div>
- 
 
 
 

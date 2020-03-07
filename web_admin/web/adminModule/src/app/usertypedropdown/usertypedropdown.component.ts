@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AgRendererComponent } from 'ag-grid-angular';
 import { TelesService } from '../services/teles.service';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-usertypedropdown',
@@ -10,64 +11,50 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 })
 export class UsertypedropdownComponent implements AgRendererComponent {
 
-  constructor(private _TelesService:TelesService,private fb:FormBuilder) { }
+  constructor(private fb:FormBuilder,private _usersservice:UsersService) { }
 
-  public data_status = [];
-
-
-  statusform :FormGroup;
-  tprimaryform :FormGroup;
-  eprimaryform :FormGroup;
+  public objects = [[]];
+  jform :FormGroup  []=[];
 
 
   private params:any = {
     value : "none"
   };
 
-  setstatus(){
-
-    var status = this.statusform.get('datastatusID').value;
-    this.params.data.datastatusID = this.data_status.filter(x => x.id == status)[0];
-  }
-  
-
-  settprimary(){
-
-    var status = this.tprimaryform.get('primary').value;
-    this.params.data.telePrimary = status;
-  }
 
 
-  seteprimary(){
-
-    var status = this.eprimaryform.get('primary').value;
-    this.params.data.emailPrimary = status;
+  setvalue(form){
+    var status = form.get(this.params.colDef.field).value;
+    this.params.data[this.params.colDef.field] = status;
   }
   
   agInit(params:any):void {
       this.params = params;
-    //  console.dir(params);
+   // console.log(this.params);
 
 
+    
 
-      this._TelesService.getstatus()
-      .subscribe(data => this.data_status = data);
+    if(this.params.colDef.Serv === ""){
+    }else{
 
-          
-    this.statusform = this.fb.group({
-      datastatusID: [this.params.data.datastatusID.id ,[Validators.required]],
-      });
+      this._usersservice.getbyurl(this.params.colDef.Serv)
+      .subscribe(data => {
+        this.objects[this.params.colDef.formnum] = data;
+  });
+    }
+ 
 
+    this.jform[this.params.colDef.formnum] = this.fb.group({
+    });
+if(this.params.colDef.fieldgroup === 0){
 
-      this.tprimaryform = this.fb.group({
-        primary: [this.params.data.telePrimary ,[Validators.required]],
-        });
+  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl(this.params.data[this.params.colDef.field], [Validators.required]));
 
-        this.eprimaryform = this.fb.group({
-          primary: [this.params.data.emailPrimary ,[Validators.required]],
-          });
-  
+}else{
+  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl(this.params.data[this.params.colDef.field][this.params.colDef.selectValue], [Validators.required]));
 
+}
 
   }
 

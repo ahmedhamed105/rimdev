@@ -1,5 +1,6 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.ouputobject.response_all;
+import com.rimdev.user.ouputobject.select_object;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/Email") // 
@@ -29,6 +31,21 @@ public class EmailController {
 	
 	@Autowired
 	EmailServ emailServ;
+	
+	
+	  @RequestMapping(value = "/primary", method = RequestMethod.GET)
+	  public  ResponseEntity<List<select_object>> getprimary(){
+		  List<select_object> sel =new ArrayList<select_object>();
+		  select_object a =new select_object();
+		  a.setKey("YES");
+		  a.setValue("1");
+		  sel.add(a);
+		  select_object b =new select_object();
+		  b.setKey("No");
+		  b.setValue("0");
+		  sel.add(b);
+		return new ResponseEntity<List<select_object>>(sel, HttpStatus.OK);
+	  }
 
 	  @RequestMapping(value = "/all", method = RequestMethod.GET)
 	  public  ResponseEntity<List<Email>> getAllUsers(){

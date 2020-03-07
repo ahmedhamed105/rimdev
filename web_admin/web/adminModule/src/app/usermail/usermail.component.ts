@@ -46,11 +46,17 @@ export class UsermailComponent implements OnInit {
  columnDefs=[{
   headerName : "select row",
   field : null,
+  Serv: "",
+  selectDisplay:"",
+  selectValue:"",
+  fieldgroup:0,
+  formnum:0,
   sortable: true, 
   filter: true, 
   editable: false,      
   resizable: true,
-  checkboxSelection: true
+  checkboxSelection: true,
+  cellRenderer: ""
 }];
  
   
@@ -177,11 +183,17 @@ if(element.comp.ctype === 'label'){
   var b = {
     headerName : element.comp.ccode.toString(),
     field : element.comp.name,
+    Serv: "",
+    selectDisplay:"",
+    selectValue:"",
+    fieldgroup:0,
+    formnum:0,
     sortable: true, 
     filter: true, 
     editable: false,      
     resizable: true,
-    checkboxSelection: false
+    checkboxSelection: false,
+    cellRenderer: ""
   };
   this.columnDefs[index+1]= b;
 
@@ -207,17 +219,60 @@ if(element.comp.ctype === 'label'){
   var b = {
     headerName : element.comp.ccode.toString(),
     field : element.comp.name,
+    Serv: "",
+    selectDisplay:"",
+    selectValue:"",
+    fieldgroup:0,
+    formnum:0,
     sortable: true, 
     filter: true, 
     editable: true,      
     resizable: true,
-    checkboxSelection: false
+    checkboxSelection: false,
+    cellRenderer : ""
   };
   this.columnDefs[index+1]= b;
 
   this.errorDialogService.converttext(element.comp.ccode)
   .subscribe(data => {    
     var col = this.gridOptions.columnApi.getColumn(element.comp.name);
+
+    // obtain the column definition from the column
+    var colDef = col.getColDef();
+
+    // update the header name
+    colDef.headerName = data.returnLang;
+
+    // the column is now updated. to reflect the header change, get the grid refresh the header
+    this.gridOptions.api.refreshHeader();
+    
+  });
+
+ 
+
+}else if(element.comp.ctype === 'select'){
+
+  var b = {
+    headerName : element.comp.ccode.toString(),
+    field :  element.comp.groupname === null? element.comp.name:element.comp.groupname,
+    Serv: element.select.webService.toString(),
+    selectDisplay:element.select.selectDisplay.toString(),
+    selectValue:element.select.selectValue.toString(),
+    fieldgroup: element.comp.groupname === null?0 : 1,
+    formnum:index,
+    sortable: true, 
+    filter: true, 
+    editable: true,      
+    resizable: true,
+    checkboxSelection: false,
+    cellRenderer: "cellRenderer"
+  };
+  this.columnDefs[index+1]= b;
+
+
+  this.errorDialogService.converttext(element.comp.ccode)
+  .subscribe(data => {    
+    var col = this.gridOptions.columnApi.getColumn( element.comp.groupname === null? element.comp.name:element.comp.groupname);
 
     // obtain the column definition from the column
     var colDef = col.getColDef();
