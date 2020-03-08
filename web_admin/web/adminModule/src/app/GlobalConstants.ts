@@ -5,5 +5,6 @@ export class GlobalConstants {
     public static portlang: string = "8083";
     public static language: string = "En";
     public static iserror: Boolean = false;
+    public static menuurl: string = "/menu/all";
 
 }

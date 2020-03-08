@@ -76,6 +76,8 @@ new RegExp('^[a-zA-Z]{1}[0-9]$');
 
       converttext(text){
 
+        
+
         if(!GlobalConstants.iserror){
 
           var  data : Ilangsearch = {

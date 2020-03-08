@@ -8,6 +8,7 @@ import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { GlobalConstants } from '../GlobalConstants';
+import { CookiesService } from '../services/cookies.service';
 
 @Component({
   selector: 'app-usertele',
@@ -23,7 +24,7 @@ export class UserteleComponent implements OnInit {
  
 
 
-  constructor(public errorDialogService: ErrorDialogService,private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private cookieService: CookiesService,public errorDialogService: ErrorDialogService,private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
@@ -125,16 +126,19 @@ export class UserteleComponent implements OnInit {
   frnch(){
 
     GlobalConstants.language= 'fr';
+    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
   }
 
   english(){
 
     GlobalConstants.language= 'EN';
+    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
   }
 
   arabic(){
 
     GlobalConstants.language= 'AR';
+    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
   }
 
   getuser(){  

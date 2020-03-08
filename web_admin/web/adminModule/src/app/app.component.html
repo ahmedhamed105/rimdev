@@ -294,35 +294,51 @@
         <ul class="sidebar-menu" data-widget="tree">
           <li class="header">MAIN NAVIGATION</li>
 
-          <li>
-            <a routerLink="/dashboard" routerLinkActive="active" >
-              <i class="fa fa-dashboard"></i> <span>dashboard</span>
-              <span class="pull-right-container">
-                <span class="label label-primary pull-right">4</span>
-              </span>
-            </a>
-          </li>
+          <ng-container *ngFor="let parent of menus; let j = index">
+
+            <ng-container *ngTemplateOutlet="parent.parent.hasChild == 0? withnosub: withsub">
+            </ng-container>
+
+            <ng-template #withnosub>
+              <li>
+                <a routerLink="{{parent.parent.parentLink}}" routerLinkActive="active" >
+                  <i class="fa {{parent.parent.faIcon}}"></i> <span>{{parent.parent.pmenu}}</span>
+                  <span class="pull-right-container">
+                    <span class="label label-primary pull-right">4</span>
+                  </span>
+                </a>
+              </li>
+
+            </ng-template>
+
+            <ng-template #withsub>
+              <li class="treeview active">
+                <a href="{{parent.parent.parentLink}}">
+                  <i class="fa {{parent.parent.faIcon}}"></i> <span>{{parent.parent.pmenu}}</span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+                <ul class="treeview-menu">
+                  <li class="active" *ngFor="let child of parent.child; let i = index">
+                    <a routerLink="{{child.menulink}}" routerLinkActive="active">
+                      <i class="fa {{child.faIcon}}"></i>
+                       {{child.menuname}}</a>
+                  </li>
+                
+                </ul>
+              </li>
+
+            </ng-template>
+
+          </ng-container>
+
+         
 
      
 
          
-          <li class="treeview active">
-            <a href="#">
-              <i class="fa fa-edit"></i> <span>Admin</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li class="active"><a routerLink="/currency" routerLinkActive="active"><i class="fa fa-circle-o"></i> Currency</a></li>
-              <li class="active"><a routerLink="/flowtype" routerLinkActive="active"><i class="fa fa-circle-o"></i> flow type</a></li>
-              <li class="active"><a routerLink="/devices" routerLinkActive="active"><i class="fa fa-circle-o"></i>Devices</a></li>
-              <li class="active"><a routerLink="/user" routerLinkActive="active"><i class="fa fa-circle-o"></i>User</a></li>
-              <li class="active"><a routerLink="/usermail" routerLinkActive="active"><i class="fa fa-circle-o"></i>User email</a></li>
-              <li class="active"><a routerLink="/usertele" routerLinkActive="active"><i class="fa fa-circle-o"></i>User telelphone</a></li>
-
-            </ul>
-          </li>
+       
         </ul>
       </section>
       <!-- /.sidebar -->

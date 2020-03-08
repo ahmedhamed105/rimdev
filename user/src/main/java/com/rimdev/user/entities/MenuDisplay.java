@@ -14,9 +14,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -109,7 +111,9 @@ public class MenuDisplay implements Serializable {
     public void setPagesID(Pages pagesID) {
         this.pagesID = pagesID;
     }
-
+    
+    @XmlTransient
+    @JsonIgnore 
     public ParentMenu getParentmenuID() {
         return parentmenuID;
     }
