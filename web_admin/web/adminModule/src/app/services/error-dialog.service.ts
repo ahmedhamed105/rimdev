@@ -37,37 +37,35 @@ export class ErrorDialogService {
 
     display_error(error){
 
-      console.log(this.isDialogOpen +'  '+GlobalConstants.iserror);
+   //   console.log(this.isDialogOpen +'  '+GlobalConstants.iserror);
+
+      let data1 = {
+        reason: error.error ,
+        status: error.code
+    };
+
+      var  data : Ilangsearch = {
+        code: error.error ,
+        langcode: GlobalConstants.language
+     };
+     let regexplang = 
+new RegExp('^[a-zA-Z]{1}[0-9]$');
+     if(regexplang.test(error.error)){
+      this._LanguagegoService.getlang(data).subscribe(data => {
+
+        data1 = {
+            reason: data.returnLang ,
+            status: error.code
+        };
+      
+       });
+     }
 
 
       if(!GlobalConstants.iserror){
-        let data1 = {
-          reason: error.error ,
-          status: error.code
-      };
-  
-
-        var  data : Ilangsearch = {
-          code: error.error ,
-          langcode: GlobalConstants.language
-       };
-       let regexplang = 
-  new RegExp('^[a-zA-Z]{1}[0-9]$');
-       if(regexplang.test(error.error)){
-        this._LanguagegoService.getlang(data).subscribe(data => {
-
-          data1 = {
-              reason: data.returnLang ,
-              status: error.code
-          };
-        
-         });
-       }
-
      this.openDialog(data1);
       }else{
-        this.router.navigate(['/error'],{ queryParams: { status: error.code,reason :error.error } });
-
+        this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
       }
 
      

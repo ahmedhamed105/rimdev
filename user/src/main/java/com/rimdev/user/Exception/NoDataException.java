@@ -3,7 +3,7 @@ package com.rimdev.user.Exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.OK)
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class NoDataException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
