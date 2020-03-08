@@ -1,5 +1,6 @@
 package com.rimdev.language.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,14 @@ public class LanguagesServ {
 	
 	@Autowired 
 	private LanguagesRepo languagesRepo;
+	
+	
+	public List<Languages> getalllang() {
+		
+		return (List<Languages>) languagesRepo.findAll();
+				
+		
+	}
 	
 	
 	

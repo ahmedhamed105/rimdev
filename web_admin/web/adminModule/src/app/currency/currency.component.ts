@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { CurrencyServService } from '../services/currency-serv.service';
 import { StatusServService } from '../services/status-serv.service';
 import { LocationServiceService } from '../services/location-service.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-currency',
@@ -14,15 +15,17 @@ export class CurrencyComponent implements OnInit {
   public currency = [];
   public status = [];
 
-  constructor(private locationService: LocationServiceService,private fb:FormBuilder,private _currencyserv:CurrencyServService,private _status:StatusServService){}
+  constructor(private route: ActivatedRoute,private locationService: LocationServiceService,private fb:FormBuilder,private _currencyserv:CurrencyServService,private _status:StatusServService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
   public device ;
-  public page_number:number = 3 ;
+  public page_number;
   public selectcurrency;
 
   ngOnInit(){
+
+    this.page_number =this.route.snapshot.paramMap.get("id");
 
     this.locationService.all_info(this.page_number).then(res => {
       this.device =this.locationService.status;

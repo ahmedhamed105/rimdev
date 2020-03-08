@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { StatusServService } from '../services/status-serv.service';
 import { FlowtypeServService } from '../services/flowtype-serv.service';
 import { LocationServiceService } from '../services/location-service.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-flowtype',
@@ -14,9 +15,9 @@ export class FlowtypeComponent implements OnInit {
   public flowtypes = [];
   public status = [];
   public device ;
-  public page_number:number = 2 ;
+  public page_number;
 
-  constructor(private locationService: LocationServiceService,private fb:FormBuilder,private _flowtypeserv:FlowtypeServService,private _status:StatusServService){
+  constructor(private route: ActivatedRoute,private locationService: LocationServiceService,private fb:FormBuilder,private _flowtypeserv:FlowtypeServService,private _status:StatusServService){
   
   
   }
@@ -27,7 +28,8 @@ export class FlowtypeComponent implements OnInit {
 
 
    ngOnInit(){
-
+    this.page_number =this.route.snapshot.paramMap.get("id");
+    
     this.locationService.all_info(this.page_number).then(res => {
       this.device =this.locationService.status;
       console.log(this.device.tokean);

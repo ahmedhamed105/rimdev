@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DevicesService } from '../services/devices.service';
 import { LocationServiceService } from '../services/location-service.service';
 import { AgGridAngular } from 'ag-grid-angular';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-devices',
@@ -15,7 +16,7 @@ export class DevicesComponent implements OnInit {
 
   public devices = [];
   public device ;
-  public page_number:number = 4 ;
+  public page_number ;
 
  
  rowData: any;
@@ -99,10 +100,10 @@ columnDefspage=[
 
 ];
 
-  constructor(private locationService: LocationServiceService,private _DevicesService: DevicesService) { }
+  constructor(private route: ActivatedRoute,private locationService: LocationServiceService,private _DevicesService: DevicesService) { }
 
   ngOnInit() {
-
+    this.page_number =this.route.snapshot.paramMap.get("id");
     
     this.locationService.all_info(this.page_number).then(res => {
       this.device =this.locationService.status;

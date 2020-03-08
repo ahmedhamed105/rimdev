@@ -9,6 +9,7 @@ import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { GlobalConstants } from '../GlobalConstants';
 import { CookiesService } from '../services/cookies.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-usertele',
@@ -24,12 +25,12 @@ export class UserteleComponent implements OnInit {
  
 
 
-  constructor(private cookieService: CookiesService,public errorDialogService: ErrorDialogService,private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private route: ActivatedRoute,private cookieService: CookiesService,public errorDialogService: ErrorDialogService,private _TelesService:TelesService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
   public device ;
-  public page_number:number = 7 ;
+  public page_number;
   public selectuser;
   gridOptions:GridOptions;
 
@@ -86,6 +87,10 @@ export class UserteleComponent implements OnInit {
 
   ngOnInit(){
 
+
+  this.page_number =this.route.snapshot.paramMap.get("id");
+
+
     this.locationService.all_info(this.page_number).then(res => {
       this.device =this.locationService.status;
       console.log(this.device.tokean);
@@ -122,24 +127,6 @@ export class UserteleComponent implements OnInit {
 
   get iform() { return this.insertform.controls; }
 
-
-  frnch(){
-
-    GlobalConstants.language= 'fr';
-    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
-  }
-
-  english(){
-
-    GlobalConstants.language= 'EN';
-    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
-  }
-
-  arabic(){
-
-    GlobalConstants.language= 'AR';
-    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
-  }
 
   getuser(){  
     var id = this.insertform.get('userID').get('id').value;

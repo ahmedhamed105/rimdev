@@ -12,13 +12,17 @@ import { GlobalConstants } from './GlobalConstants';
 export class AppComponent implements OnInit {
   title = 'adminModule';
   public menus =[];
+  public langs =[];
 
   constructor(private cookieService: CookiesService,public _MenulistService : MenulistService,public errorDialogService: ErrorDialogService){}
 
   ngOnInit() {
     GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
 
-
+    this._MenulistService.getlang().subscribe(data => {
+ this.langs=data;
+      
+    });
 
     this._MenulistService.getmenu()
 .subscribe(data => {
@@ -56,10 +60,17 @@ this.menus.push(parent);
 
   }
 
-  public convert(text):any{
 
+  language(code){
+
+    GlobalConstants.language= code;
+    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
+    location.reload();
 
   }
+
+
+
 
 
 }

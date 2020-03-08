@@ -19,35 +19,35 @@ import { ErrorpageComponent } from './errorpage/errorpage.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo : '/dashboard',
+    redirectTo : '/dashboard/1',
     pathMatch: 'full'
 },
   {
-      path: 'dashboard',
+      path: 'dashboard/:id',
       component: DasboardComponent,
   },
   {
-    path: 'usermail',
+    path: 'usermail/:id',
     component: UsermailComponent,
 },
 {
-  path: 'usertele',
+  path: 'usertele/:id',
   component: UserteleComponent,
 },
   {
-    path: 'user',
+    path: 'user/:id',
     component: UsersComponent,
 },
   {
-    path: 'currency',
+    path: 'currency/:id',
     component: CurrencyComponent,
 },
 {
-  path: 'flowtype',
+  path: 'flowtype/:id',
   component: FlowtypeComponent,
 },
 {
-  path: 'devices',
+  path: 'devices/:id',
   component: DevicesComponent,
 },
 {

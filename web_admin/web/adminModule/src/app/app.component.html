@@ -248,10 +248,15 @@
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <div class="pull-left" *ngFor="let lang of langs">
+                    <a class="btn btn-default btn-flat" (click)="language(lang.languagecode)">{{lang.languagename}}</a>
                   </div>
-                  <div class="pull-right">
+                  
+     
+                </li>
+                <li class="user-footer">
+                  
+                  <div class="pull-left">
                     <a href="#" class="btn btn-default btn-flat">Sign out</a>
                   </div>
                 </li>
@@ -301,7 +306,7 @@
 
             <ng-template #withnosub>
               <li>
-                <a routerLink="{{parent.parent.parentLink}}" routerLinkActive="active" >
+                <a [routerLink]="[parent.parent.parentLink,parent.parent.pagesID.id]" routerLinkActive="active" >
                   <i class="fa {{parent.parent.faIcon}}"></i> <span>{{parent.parent.pmenu}}</span>
                   <span class="pull-right-container">
                     <span class="label label-primary pull-right">4</span>
@@ -321,7 +326,7 @@
                 </a>
                 <ul class="treeview-menu">
                   <li class="active" *ngFor="let child of parent.child; let i = index">
-                    <a routerLink="{{child.menulink}}" routerLinkActive="active">
+                    <a [routerLink]="[child.menulink, child.pagesID.id]" routerLinkActive="active">
                       <i class="fa {{child.faIcon}}"></i>
                        {{child.menuname}}</a>
                   </li>

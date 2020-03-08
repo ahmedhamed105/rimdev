@@ -8,6 +8,7 @@ import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-usermail',
@@ -23,12 +24,12 @@ export class UsermailComponent implements OnInit {
   public error_message;
 
 
-  constructor(public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
   public device ;
-  public page_number:number = 6 ;
+  public page_number;
   gridOptions:GridOptions;
   rowData: any;
 
@@ -55,7 +56,7 @@ export class UsermailComponent implements OnInit {
 
 
   ngOnInit(){
-
+    this.page_number =this.route.snapshot.paramMap.get("id");
 
     this.gridOptions = <GridOptions>{};
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };

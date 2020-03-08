@@ -14,6 +14,7 @@ import { FileupdatepassportService } from '../services/fileupdatepassport.servic
 import { FileupdateidService } from '../services/fileupdateid.service';
 import { FileValidate } from '../Validation/FileValidate';
 import { map, defaultIfEmpty, finalize } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 declare var $: any;
 
@@ -35,12 +36,12 @@ export class UsersComponent implements OnInit {
  
 
 
-  constructor(public fileupdateid :FileupdateidService,public fileupdatepassport :FileupdatepassportService,public passimg: filepassimages,public idimg: fileidimages,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService,private _usertype:UsertypeService){}
+  constructor(private route: ActivatedRoute,public fileupdateid :FileupdateidService,public fileupdatepassport :FileupdatepassportService,public passimg: filepassimages,public idimg: fileidimages,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService,private _usertype:UsertypeService){}
 
   insertform :FormGroup;
   updateform :FormGroup;
   public device ;
-  public page_number:number = 5 ;
+  public page_number;
   public selectuser;
   public type = '1';
   public userid= '2';
@@ -68,6 +69,7 @@ export class UsersComponent implements OnInit {
    count:number=0;
   count1:number=0;
   ngOnInit() {
+    this.page_number =this.route.snapshot.paramMap.get("id");
 
 
     this.locationService.all_info(this.page_number).then(res => {
