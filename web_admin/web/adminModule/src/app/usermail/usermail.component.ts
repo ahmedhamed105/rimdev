@@ -368,7 +368,9 @@ if(group != null){
 
 
   savemail(){
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
+
+    console.log(this.gridOptions)
+    const selectedNodes = this.gridOptions.api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
 
@@ -393,7 +395,7 @@ this.rowData= this._EmailsService.insert(node);
 
   deletemail(){
 
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    const selectedNodes = this.gridOptions.api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
     

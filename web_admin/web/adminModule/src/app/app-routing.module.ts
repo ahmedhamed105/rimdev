@@ -12,6 +12,7 @@ import { UsermailComponent } from './usermail/usermail.component';
 import { UserteleComponent } from './usertele/usertele.component';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
+import { ErrorpageComponent } from './errorpage/errorpage.component';
 
 
 
@@ -54,6 +55,10 @@ const routes: Routes = [
   component: BlockedComponent,
 },
 {
+  path: 'error',
+  component: ErrorpageComponent,
+},
+{
   path: '**',
   component: PageNotFoundComponent,
 },
@@ -64,4 +69,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[ErrorDialogComponent,UsertypedropdownComponent,UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
+export const routingComponents=[ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]

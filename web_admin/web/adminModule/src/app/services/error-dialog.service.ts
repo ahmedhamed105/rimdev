@@ -4,6 +4,8 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { LanguagegoService } from './languagego.service';
 import { GlobalConstants } from '../GlobalConstants';
 import { Ilangsearch } from '../objects/Ilangsearch';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -12,7 +14,8 @@ import { Ilangsearch } from '../objects/Ilangsearch';
 export class ErrorDialogService {
 
   public isDialogOpen: Boolean = false;
-    constructor(public dialog: MatDialog,public _LanguagegoService:LanguagegoService) { }
+
+    constructor(private router: Router,public dialog: MatDialog,public _LanguagegoService:LanguagegoService) { }
     openDialog(data): any {
         if (this.isDialogOpen) {
             return false;
@@ -34,21 +37,40 @@ export class ErrorDialogService {
 
     display_error(error){
 
-        var  data : Ilangsearch = {
-            code: error ,
-            langcode: GlobalConstants.language
-         };
-         
-       this._LanguagegoService.getlang(data).subscribe(data => {
- 
-        data = {
-            reason: data.returnLang ,
-            status: 403
-        };
-      //  window.alert(errorMessage);
-      this.openDialog(data);
-       });
+      console.log(this.isDialogOpen +'  '+GlobalConstants.iserror);
 
+
+      if(!GlobalConstants.iserror){
+        let data1 = {
+          reason: error.error ,
+          status: error.code
+      };
+  
+
+        var  data : Ilangsearch = {
+          code: error.error ,
+          langcode: GlobalConstants.language
+       };
+       let regexplang = 
+  new RegExp('^[a-zA-Z]{1}[0-9]$');
+       if(regexplang.test(error.error)){
+        this._LanguagegoService.getlang(data).subscribe(data => {
+
+          data1 = {
+              reason: data.returnLang ,
+              status: error.code
+          };
+        
+         });
+       }
+
+     this.openDialog(data1);
+      }else{
+        this.router.navigate(['/error'],{ queryParams: { status: error.code,reason :error.error } });
+
+      }
+
+     
      
       
       }
@@ -56,13 +78,18 @@ export class ErrorDialogService {
 
       converttext(text){
 
-        var  data : Ilangsearch = {
+        if(!GlobalConstants.iserror){
+
+          var  data : Ilangsearch = {
             code: text ,
             langcode: GlobalConstants.language
          };
          
         return this._LanguagegoService.getlang(data);
+
+     
       
       }
+    }
 
 }

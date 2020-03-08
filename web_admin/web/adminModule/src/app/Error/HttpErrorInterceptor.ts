@@ -7,9 +7,11 @@ import {
     HttpErrorResponse
    } from '@angular/common/http';
    import { Observable, throwError } from 'rxjs';
-   import { retry, catchError } from 'rxjs/operators';
+   import { retry, catchError, tap, finalize } from 'rxjs/operators';
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { GlobalConstants } from '../GlobalConstants';
 
 
 @Injectable({
@@ -18,34 +20,73 @@ import { Injectable } from '@angular/core';
    export class HttpErrorInterceptor implements HttpInterceptor {
 
 
-    constructor(public errorDialogService: ErrorDialogService) { }
+    constructor(private router: Router,public errorDialogService: ErrorDialogService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+      const startTime = Date.now();
+      let status: string;
+      let errorMessage = '';
+
       return next.handle(request)
         .pipe(
-          retry(1),
-          catchError((error: HttpErrorResponse) => {
-            let errorMessage = '';
+          tap(
+            event => {
+              status = '';
+              if (event instanceof HttpResponse) {
+                status = 'succeeded';
+                GlobalConstants.iserror =false;
 
+                console.log(event);
+              }
+            },
+            error => {
+              
+              status = 'failed'; 
+              console.log(error); 
+            
             if (error.error instanceof ErrorEvent) {
               // client-side error
               errorMessage = `${error.error.message}`;
             } else {
               // server-side error
           
-               errorMessage = `${error.error.message}`;
+               errorMessage = `${error.message}`;
               
 
             }
-            let data = {};
-                data = {
-                    reason: errorMessage ,
-                    status: error.status
-                };
-          //  window.alert(errorMessage);
-          this.errorDialogService.display_error(errorMessage);
-            return throwError(error);
+
+            if(error.status === 400){
+              GlobalConstants.iserror =false;
+         //window.alert(error.status);
+
+
+            }else{
+             // console.log("ahmed hamed");
+            //  console.log(error);
+              GlobalConstants.iserror =true; 
+            } 
+
+            let error_ob={
+              code : error.status,
+              error :errorMessage
+            }
+
+            this.errorDialogService.display_error(error_ob);
+      
+         
+          }
+          ),
+          finalize(() => {
+            const elapsedTime = Date.now() - startTime;
+            const message = request.method + " " + request.urlWithParams +" "+ status 
+            + " in " + elapsedTime + "ms";
+            
+            this.logDetails(message);
           })
-        )
+      );
     }
-   }
+    private logDetails(msg: string) {
+      console.log(msg);
+    }
+
+  }

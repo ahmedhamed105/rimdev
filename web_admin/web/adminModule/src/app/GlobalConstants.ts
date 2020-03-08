@@ -4,5 +4,6 @@ export class GlobalConstants {
     public static portuser: string = "8081";
     public static portlang: string = "8083";
     public static language: string = "En";
+    public static iserror: Boolean = false;
 
 }

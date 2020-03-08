@@ -23,6 +23,7 @@ import { UserteleComponent } from './usertele/usertele.component';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ErrorpageComponent } from './errorpage/errorpage.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -30,6 +31,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 @NgModule({
   declarations: [
     routingComponents,
+    ErrorpageComponent,
     
   ],
   imports: [

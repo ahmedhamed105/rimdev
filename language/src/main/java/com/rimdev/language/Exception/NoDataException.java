@@ -3,7 +3,7 @@ package com.rimdev.language.Exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.FORBIDDEN)
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class NoDataException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
@@ -11,7 +11,7 @@ public class NoDataException extends RuntimeException{
 	        super();
 	    }
 	    public NoDataException(String message, Throwable cause) {
-	        super(message, cause);
+	        super(message, cause,false,false);
 	    }
 	    public NoDataException(String message) {
 	        super(message);
