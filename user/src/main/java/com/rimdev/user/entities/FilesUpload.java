@@ -20,7 +20,10 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -29,6 +32,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "files_upload", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "FilesUpload.findAll", query = "SELECT f FROM FilesUpload f")
     , @NamedQuery(name = "FilesUpload.findById", query = "SELECT f FROM FilesUpload f WHERE f.id = :id")

@@ -53,6 +53,13 @@ public class Pages implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagesID")
     private Collection<ParentComponent> parentComponentCollection;
     
+    @Column(name = "Link_router", length = 450)
+    private String linkrouter;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagesID")
+    private Collection<MenuDisplay> menuDisplayCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pagesID")
+    private Collection<ParentMenu> parentMenuCollection;
+    
 
     public Pages() {
     }
@@ -106,6 +113,34 @@ public class Pages implements Serializable {
         this.parentComponentCollection = parentComponentCollection;
     }
 
+    
+    public String getLinkrouter() {
+        return linkrouter;
+    }
+
+    public void setLinkrouter(String linkrouter) {
+        this.linkrouter = linkrouter;
+    }
+
+    @XmlTransient
+    @JsonIgnore 
+    public Collection<MenuDisplay> getMenuDisplayCollection() {
+        return menuDisplayCollection;
+    }
+
+    public void setMenuDisplayCollection(Collection<MenuDisplay> menuDisplayCollection) {
+        this.menuDisplayCollection = menuDisplayCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore 
+    public Collection<ParentMenu> getParentMenuCollection() {
+        return parentMenuCollection;
+    }
+
+    public void setParentMenuCollection(Collection<ParentMenu> parentMenuCollection) {
+        this.parentMenuCollection = parentMenuCollection;
+    }
 
     @Override
     public int hashCode() {
