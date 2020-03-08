@@ -27,22 +27,11 @@ export class UsermailComponent implements OnInit {
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
-
-
-
-  public items: FormArray;
   public device ;
   public page_number:number = 6 ;
-  public selectuser;
-
   gridOptions:GridOptions;
-
-
-
-
   rowData: any;
- 
- 
+
  columnDefs=[{
   headerName : "select row",
   field : null,
@@ -50,6 +39,7 @@ export class UsermailComponent implements OnInit {
   selectDisplay:"",
   selectValue:"",
   fieldgroup:0,
+  groupname:"",
   formnum:0,
   sortable: true, 
   filter: true, 
@@ -182,11 +172,12 @@ if(element.comp.ctype === 'label'){
 
   var b = {
     headerName : element.comp.ccode.toString(),
-    field : element.comp.name,
+    field : element.comp.groupname === null? element.comp.name:element.comp.groupname+'.'+element.comp.labelname.toString(),
     Serv: "",
     selectDisplay:"",
     selectValue:"",
     fieldgroup:0,
+    groupname:"",
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -199,7 +190,7 @@ if(element.comp.ctype === 'label'){
 
   this.errorDialogService.converttext(element.comp.ccode)
   .subscribe(data => {    
-    var col = this.gridOptions.columnApi.getColumn(element.comp.name);
+    var col = this.gridOptions.columnApi.getColumn(this.columnDefs[index+1].field);
 
     // obtain the column definition from the column
     var colDef = col.getColDef();
@@ -218,11 +209,12 @@ if(element.comp.ctype === 'label'){
 
   var b = {
     headerName : element.comp.ccode.toString(),
-    field : element.comp.name,
+    field : element.comp.groupname === null? element.comp.name:element.comp.groupname+'.'+element.comp.name.toString(),
     Serv: "",
     selectDisplay:"",
     selectValue:"",
     fieldgroup:0,
+    groupname:"",
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -235,7 +227,7 @@ if(element.comp.ctype === 'label'){
 
   this.errorDialogService.converttext(element.comp.ccode)
   .subscribe(data => {    
-    var col = this.gridOptions.columnApi.getColumn(element.comp.name);
+    var col = this.gridOptions.columnApi.getColumn(this.columnDefs[index+1].field);
 
     // obtain the column definition from the column
     var colDef = col.getColDef();
@@ -254,11 +246,12 @@ if(element.comp.ctype === 'label'){
 
   var b = {
     headerName : element.comp.ccode.toString(),
-    field :  element.comp.groupname === null? element.comp.name:element.comp.groupname,
+    field : element.comp.groupname === null? element.comp.name:element.comp.groupname.toString(),
     Serv: element.select.webService.toString(),
     selectDisplay:element.select.selectDisplay.toString(),
     selectValue:element.select.selectValue.toString(),
     fieldgroup: element.comp.groupname === null?0 : 1,
+    groupname : element.comp.groupname === null?'':element.comp.groupname.toString(),
     formnum:index,
     sortable: true, 
     filter: true, 
@@ -272,7 +265,9 @@ if(element.comp.ctype === 'label'){
 
   this.errorDialogService.converttext(element.comp.ccode)
   .subscribe(data => {    
-    var col = this.gridOptions.columnApi.getColumn( element.comp.groupname === null? element.comp.name:element.comp.groupname);
+//console.log(element.comp.groupname === null? element.comp.name:element.comp.groupname.toString());
+
+    var col = this.gridOptions.columnApi.getColumn(this.columnDefs[index+1].field);
 
     // obtain the column definition from the column
     var colDef = col.getColDef();
@@ -306,7 +301,7 @@ if(element.comp.ctype === 'label'){
     
   
 
-    console.log(this.objects)
+    console.log(this.columnDefs)
   }
 
 
@@ -359,15 +354,15 @@ if(group != null){
      this.errorDialogService.display_error("E100");
     }
   
-    this.selectuser = array.filter(x => x[comp] == id)[0];
+    var selectobject = array.filter(x => x[comp] == id)[0];
 
-   this.rowData =this._usersservice.getbyvalue(serv,this.selectuser.id);
+   this.rowData =this._usersservice.getbyvalue(serv,selectobject.id);
 
     
   }
 
 
-  savemail(){
+  tableaction(serv){
 
     console.log(this.gridOptions)
     const selectedNodes = this.gridOptions.api.getSelectedNodes();
@@ -381,37 +376,15 @@ if(group != null){
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
-    //    console.log(node)
+     console.log(node)
     //    console.log(node.emailPrimary)
 
-if(node.emailPrimary == 0 || node.emailPrimary == 1 ){
-this.rowData= this._EmailsService.insert(node);
-}else{
- this.errorDialogService.display_error("E102");
-}
+this.rowData= this._usersservice.insertbyurl(node,serv);
+
       });
 
   }
 
-  deletemail(){
-
-    const selectedNodes = this.gridOptions.api.getSelectedNodes();
-
-    if(selectedNodes.length === 0 ){
-    
-     this.errorDialogService.display_error("E103");
-    }
-    const selectedData = selectedNodes.map( node => node.data );
-    const selectedDataStringPresentation = selectedData.map( node =>
-       {
-
-  
-  this.rowData= this._EmailsService.delete(node);
-
-
-      });
-  }
-  
   
 
 onSubmit(form,serv){

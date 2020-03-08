@@ -1,9 +1,13 @@
 <form [formGroup]="jform[params.colDef.formnum]">
-<div class="form-group">
-  <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
-    <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
-</select>    
-</div>
+
+ 
+    <div class="form-group">
+      <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
+        <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
+    </select>  
+  </div>
+ 
+  
 </form>
 
 

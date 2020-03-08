@@ -24,8 +24,17 @@ export class UsertypedropdownComponent implements AgRendererComponent {
 
 
   setvalue(form){
-    var status = form.get(this.params.colDef.field).value;
-    this.params.data[this.params.colDef.field] = status;
+    var status;
+    if(this.params.colDef.fieldgroup === 0){
+     status = form.get(this.params.colDef.field).value;
+     this.params.data[this.params.colDef.field] = status;
+
+    }else{
+       status = form.get(this.params.colDef.field).value;
+       this.params.data[this.params.colDef.field][this.params.colDef.selectValue] = status;
+
+
+    }
   }
   
   agInit(params:any):void {
@@ -47,11 +56,14 @@ export class UsertypedropdownComponent implements AgRendererComponent {
 
     this.jform[this.params.colDef.formnum] = this.fb.group({
     });
+
+ 
 if(this.params.colDef.fieldgroup === 0){
 
   this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl(this.params.data[this.params.colDef.field], [Validators.required]));
 
 }else{
+
   this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl(this.params.data[this.params.colDef.field][this.params.colDef.selectValue], [Validators.required]));
 
 }

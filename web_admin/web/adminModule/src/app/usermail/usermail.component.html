@@ -142,10 +142,11 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <button class="btn btn-primary " (click)="deletemail()">Delete Email</button>
-          <button class="btn btn-secondary" (click)="savemail()">Save Email</button>
-          <button class="btn btn-success" (click)="getuser()">Refersh</button>
-          
+          <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
+          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService)" >{{component.comp.ccode}}</button> 
+
+          </ng-container>
+      
           <br/>
           <ag-grid-angular
               #agGrid
