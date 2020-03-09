@@ -84,6 +84,9 @@ new RegExp('^[a-zA-Z]{1}[0-9]$');
             code: text ,
             langcode: GlobalConstants.language
          };
+
+
+         console.log(data);
          
         return this._LanguagegoService.getlang(data);
 

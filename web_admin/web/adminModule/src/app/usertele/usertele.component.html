@@ -3,110 +3,168 @@
 
     <h1>
       user 
-      <small>Telephone</small>
+      <small>Email</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href="#">Admin</a></li>
       <li><a href="#">User</a></li>
-      <li class="active">Telephone</li>
+      <li class="active">Email</li>
     </ol>
   </section>
   
   <!-- Main content -->
   <section class="content">
-    <div class="row">
+    <div class="row" *ngFor="let parent of components; let j = index">
       <!-- left column -->
-      <div class="col-md-12">
+      <div class="col-md-12" *ngIf="parent.parent.parentType == 'form'">
         <!-- general form elements -->
         <div class="box box-primary">
           <div class="box-header with-border">
-            <h3 class="box-title">New</h3>
+            <h3 class="box-title">{{parent.parent.pcodeTittle}}</h3>
           </div>
           <!-- /.box-header -->
           <!-- form start -->
-          <form [formGroup]="insertform" (ngSubmit)="onSubmit()">
-            
-            <div class="box-body">
-              <pre>{{insertform.value | json}}</pre>
-   
-              <div class="form-group" formGroupName="userID" >
-                <label>User</label>
-                <select formControlName="id"  class="form-control" (change)="getuser()">
-                  <option *ngFor="let user of users" value="{{user.id}}">{{user.firstName}}</option>
-            </select>    
-             </div>
+          <form [formGroup]="insertform[j]" >
+            <pre>{{j | json}}</pre>
+            <pre>{{insertform[j].value | json}}</pre>
+ <div class="box-body" *ngFor="let component of parent.child; let i = index; let parentlen = count">
+ 
+  
+  <div *ngIf="component.comp.ctype == 'select'">
+        <!-- Execute code here if statement true -->
+        <ng-container *ngTemplateOutlet="component.comp.groupname? withgroup: withoutgroup">
+        </ng-container>
 
-              <div class="form-group" >
-                <label>Telephone</label>
-                <input  [class.is-invalid]="iform.phoneNo.invalid && iform.phoneNo.touched" formControlName="phoneNo" type="tel"   class="form-control"  >
-             <div *ngIf="iform.phoneNo.invalid && iform.phoneNo.touched" class="invalid-feedback">
-              <small *ngIf="iform.phoneNo.errors?.required" class="text-danger">telephone is required</small> 
-              <small *ngIf="iform.phoneNo.errors?.pattern" class="text-danger">telephone must enter correctly</small> 
-              <small *ngIf="iform.phoneNo.errors?.minLength" class="text-danger">telephone length must enter correctly</small> 
-              <small *ngIf="iform.phoneNo.errors?.maxLength" class="text-danger">telephone length must enter correctly</small> 
+    <ng-template #withgroup>
+      <div class="form-group" formGroupName="{{component.comp.groupname}}">
+        <label>{{component.comp.ccode}}</label>
+          <ng-container *ngTemplateOutlet="component.select.arrayObject === 1? dymaicarray: staticarray">
+           </ng-container>
 
-            </div>
-             
-              </div>
+        <ng-template #dymaicarray>
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],component.comp.groupname,component.comp.name,component.select.changemethod)">
+        <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+      </select> 
+      </ng-template>
 
-              <div class="form-group" >
-                <label>Primary</label>
-                <select formControlName="telePrimary"  class="form-control">
-                  <option value="0">No</option>
-                  <option value="1">Yes</option>
-            </select>   
-              </div>
+      <ng-template #staticarray>
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],component.comp.groupname,component.comp.name,component.select.changemethod)">
+        <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
+      </select> 
+      </ng-template>
+ 
+           
+    </div>
+    </ng-template>
+
+    <ng-template #withoutgroup>
+      <div class="form-group">
+        <label>{{component.comp.ccode}}</label>
+        
+          <ng-container *ngTemplateOutlet="component.select.arrayObject === 1? dymaicarray: staticarray">
+          </ng-container>
+  
+          <ng-template #dymaicarray>
+            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],null,component.comp.name,component.select.changemethod)">
+          <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+        </select>  
+        </ng-template>
+  
+        <ng-template #staticarray>
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],null,component.comp.name,component.select.changemethod)">
+          <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
+        </select>  
+        </ng-template>
+
+      
+    
+    </div>
+    </ng-template>
+
+  </div> 
+ <!-- End of condition of select -->
+
+  
+  <div *ngIf="component.comp.ctype == 'input'">
+    <!-- Execute code here if statement true -->
+    <ng-container *ngIf="component.comp.groupname; then withgroup;else withoutgroup">
+</ng-container>
 
 
-              <div class="form-group" formGroupName="datastatusID">
-                <label>Telephone Status</label>
-                <select formControlName="id"  class="form-control">
-                  <option *ngFor="let status of data_status" value="{{status.id}}">{{status.dstatus}}</option>
-            </select>    
-             </div>
+<ng-template #withgroup>
+  <div class="form-group" formGroupName="{{component.comp.groupname}}">
+    <label>{{component.comp.ccode}}</label>
+    <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+   </div>
+</div>
+</ng-template>
 
+<ng-template #withoutgroup>
+  <div class="form-group">
+    <label>{{component.comp.ccode}}</label>
+    <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+   </div>  
+</div>
+</ng-template>
+
+</div>
+     
+
+<div class="box-footer" *ngIf="component.comp.ctype == 'button'">
+
+    <button  [disabled]="!insertform[j].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[j],component.button.buttonService)" >{{component.comp.ccode}}</button>             
+</div>
 
             </div>
             <!-- /.box-body -->
   
-            <div class="box-footer">
-              <button  [disabled]="!insertform.valid" class="btn btn-primary" type="submit">Submit</button>            
-            </div>
+        
           </form>
         </div>
         <!-- /.box -->
 
-        <div class="box">
-          <div class="box-header">
-            <h3 class="box-title">Telephones</h3>
-          </div>
-          <!-- /.box-header -->
-          <div class="box-body">
-            <button class="btn btn-primary" (click)="deletetel()">Delete Telephone</button>
-            <button class="btn btn-secondary" (click)="savetele()">Save Telephone</button>
-            <button class="btn btn-success" (click)="getuser()">Refersh</button>
-            <br/>
-            <ag-grid-angular
-                #agGrid
-                style="width:100%;height:500px"
-                class="ag-theme-balham"
-                [rowData]="rowData | async"
-                [columnDefs]="columnDefs"
-                rowSelection="single"
-                [gridOptions]="gridOptions" 
-                [enableColResize]="true"
-                >
-            </ag-grid-angular>
-          </div>
-          <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
-  
+
+
       <!--/.col (right) -->
     </div>
+    <div class="col-md-12" *ngIf="parent.parent.parentType == 'table'">
 
-       
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">{{parent.parent.pcodeTittle}}</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
+          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService)" >{{component.comp.ccode}}</button> 
+
+          </ng-container>
+      
+          <br/>
+          <ag-grid-angular
+              #agGrid
+              style="width:100%;height:500px"
+              class="ag-theme-balham"
+              [rowData]="rowData | async"
+              [columnDefs]="columnDefs"
+              rowSelection="single"
+              [gridOptions]="gridOptions" 
+              [enableColResize]="true"
+              >
+          </ag-grid-angular>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+
+    </div>
     <!-- /.row -->
     </div>
   </section>

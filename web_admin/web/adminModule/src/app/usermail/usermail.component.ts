@@ -9,6 +9,7 @@ import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
 import { ActivatedRoute } from '@angular/router';
+import { Icolumdef } from '../objects/Icolumdef';
 
 @Component({
   selector: 'app-usermail',
@@ -33,7 +34,7 @@ export class UsermailComponent implements OnInit {
   gridOptions:GridOptions;
   rowData: any;
 
- columnDefs=[{
+ columnDefs: Icolumdef []=[{
   headerName : "select row",
   field : null,
   Serv: "",
@@ -116,7 +117,7 @@ export class UsermailComponent implements OnInit {
 if(element.comp.ctype == 'select'){
 
         if(element.select.arrayObject === 1){
-          if(element.select.webService != null){
+          if(element.select.webService != undefined){
 
             this._usersservice.getbyurl(element.select.webService)
             .subscribe(data => {this.objects[index+parentin] = data;
@@ -171,9 +172,9 @@ a.forEach((element,index) => {
 
 if(element.comp.ctype === 'label'){
 
-  var b = {
-    headerName : element.comp.ccode.toString(),
-    field : element.comp.groupname === null? element.comp.name:element.comp.groupname+'.'+element.comp.labelname.toString(),
+  var b : Icolumdef = {
+    headerName : element.comp.ccode,
+    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
     Serv: "",
     selectDisplay:"",
     selectValue:"",
@@ -208,9 +209,9 @@ if(element.comp.ctype === 'label'){
 
 }else if(element.comp.ctype === 'input'){
 
-  var b = {
-    headerName : element.comp.ccode.toString(),
-    field : element.comp.groupname === null? element.comp.name:element.comp.groupname+'.'+element.comp.name.toString(),
+  var b : Icolumdef= {
+    headerName : element.comp.ccode,
+    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
     Serv: "",
     selectDisplay:"",
     selectValue:"",
@@ -245,14 +246,16 @@ if(element.comp.ctype === 'label'){
 
 }else if(element.comp.ctype === 'select'){
 
-  var b = {
-    headerName : element.comp.ccode.toString(),
-    field : element.comp.groupname === null? element.comp.name:element.comp.groupname.toString(),
-    Serv: element.select.webService.toString(),
-    selectDisplay:element.select.selectDisplay.toString(),
-    selectValue:element.select.selectValue.toString(),
-    fieldgroup: element.comp.groupname === null?0 : 1,
-    groupname : element.comp.groupname === null?'':element.comp.groupname.toString(),
+  console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
+
+  var b : Icolumdef= {
+    headerName : element.comp.ccode,
+    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
+    Serv: element.select.webService,
+    selectDisplay:element.select.selectDisplay,
+    selectValue:element.select.selectValue,
+    fieldgroup: element.comp.groupname === undefined? 0 : 1,
+    groupname : element.comp.groupname === undefined?null:element.comp.groupname,
     formnum:index,
     sortable: true, 
     filter: true, 
@@ -282,6 +285,16 @@ if(element.comp.ctype === 'label'){
   });
 
  
+
+}else{
+
+  this.errorDialogService.converttext(element.comp.ccode)
+  .subscribe(data => {    
+    // update the header name
+    element.comp.ccode = data.returnLang;
+
+    
+  });
 
 }
 

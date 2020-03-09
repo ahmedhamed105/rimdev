@@ -1,50 +1,50 @@
       export interface Icomponent {
         parent: {
             id: number,
-            pcodeTittle: String,
+            pcodeTittle: string,
             parentPostion: number,
-            parentType: String,
-            parentName: String
+            parentType: string,
+            parentName: string
         },
       child : [{
         comp :{
 
             id: number,
             seqNum :number,
-            name: String,
-            groupname: String,
-            labelname : String,
-            formname: String,
-            ccode: String,
-            ctype : String,
+            name: string,
+            groupname: string,
+            labelname : string,
+            formname: string,
+            ccode: string,
+            ctype : string,
             crequired: number,
             cpattern: number,
-            patterndesgin : String
+            patterndesgin : string
         },
         select : {
             id: number,
-            arrayName: String,
+            arrayName: string,
             arrayObject: number,
-            selectValue: String,
-            selectDisplay: String,
-            changemethod : String,
-            webService : String
+            selectValue: string,
+            selectDisplay: string,
+            changemethod : string,
+            webService : string
 
         },
         input: {
             id: number,
-            inputActions: String,
+            inputActions: string,
             inputtypeID: {
                 id: number,
-                itype: String
+                itype: string
             }
         },
         button: {
             id: number,
-            buttonClass: String,
-            buttonMethod: String,
-            buttonType: String,
-            buttonService: String
+            buttonClass: string,
+            buttonMethod: string,
+            buttonType: string,
+            buttonService: string
         }
 
       }]  
