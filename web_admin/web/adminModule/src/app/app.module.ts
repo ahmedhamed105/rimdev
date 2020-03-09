@@ -24,14 +24,14 @@ import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.c
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
+import { PagesComponent } from './pages/pages.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 
 @NgModule({
   declarations: [
-    routingComponents,
-    ErrorpageComponent,
+    routingComponents
     
   ],
   imports: [

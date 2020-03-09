@@ -306,7 +306,7 @@
 
             <ng-template #withnosub>
               <li>
-                <a [routerLink]="[parent.parent.parentLink,parent.parent.pagesID.id]" routerLinkActive="active" >
+                <a [routerLink]="[parent.parent.parentLink,'P',parent.parent.id]" routerLinkActive="active" >
                   <i class="fa {{parent.parent.faIcon}}"></i> <span>{{parent.parent.pmenu}}</span>
                   <span class="pull-right-container">
                     <span class="label label-primary pull-right">4</span>
@@ -326,7 +326,7 @@
                 </a>
                 <ul class="treeview-menu">
                   <li class="active" *ngFor="let child of parent.child; let i = index">
-                    <a [routerLink]="[child.menulink, child.pagesID.id]" routerLinkActive="active">
+                    <a [routerLink]="[child.menulink,'C', child.id]" routerLinkActive="active">
                       <i class="fa {{child.faIcon}}"></i>
                        {{child.menuname}}</a>
                   </li>

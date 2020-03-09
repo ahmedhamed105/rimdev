@@ -36,28 +36,27 @@ import { GlobalConstants } from '../GlobalConstants';
                 status = 'succeeded';
                 GlobalConstants.iserror =false;
 
-                console.log(event);
+            //    console.log(event);
               }
             },
             error => {
               
               status = 'failed'; 
-              console.log(error); 
+          //    console.log(error); 
             
-            if (error.error instanceof ErrorEvent) {
-              // client-side error
-              errorMessage = `${error.error.message}`;
-            } else {
+            if (error.error === undefined) {
               // server-side error
-          
-               errorMessage = `${error.message}`;
+              errorMessage = error.message;
               
-
+            } else {
+              
+          // client-side error
+            errorMessage = error.error.message;
             }
 
             if(error.status === 400){
               GlobalConstants.iserror =false;
-         //window.alert(error.status);
+       // window.alert(errorMessage);
 
 
             }else{

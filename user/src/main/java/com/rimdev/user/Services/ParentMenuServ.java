@@ -7,17 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Repo.MenuDisplayRepo;
 import com.rimdev.user.Repo.ParentMenuRepo;
 import com.rimdev.user.entities.MenuDisplay;
 import com.rimdev.user.entities.ParentComponent;
 import com.rimdev.user.entities.ParentMenu;
 import com.rimdev.user.ouputobject.menu_object;
+import com.rimdev.user.ouputobject.menuparsub;
 
 @Service
 public class ParentMenuServ {
 	
 	@Autowired
 	ParentMenuRepo parentMenuRepo;
+	
+	@Autowired
+	MenuDisplayRepo menuDisplayRepo;
 	
 	@Autowired
 	MenuDisplayServ menuDisplayServ;
@@ -31,7 +36,7 @@ public class ParentMenuServ {
 
 		if(com == null || com.size() <= 0) {
 			
-			throw new NoDataException("E108");
+			throw new NoDataException("E109");
 			
 		}
 		
@@ -49,5 +54,24 @@ public class ParentMenuServ {
 		return menu;
 		
 	}
+	
+	
+	
+public menuparsub getmenus(String type,int menuid) {
+	
+	menuparsub a= new menuparsub();
+
+		if(type.equals("P")) {
+			ParentMenu pa = parentMenuRepo.findById(menuid).get();
+			a.setParent(pa);
+		}
+		if(type.equals("C")) {
+			MenuDisplay pa = menuDisplayRepo.findById(menuid).get();
+			a.setParent(pa.getParentmenuID());
+			a.setChild(pa);		
+		}
+		
+return a;
+}
 
 }

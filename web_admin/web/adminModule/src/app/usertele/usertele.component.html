@@ -1,15 +1,18 @@
    <!-- Content Header (Page header) -->
    <section class="content-header">
-
     <h1>
-      user 
-      <small>Email</small>
+      {{page.parent.pmenu}} 
+      <small *ngIf="type ==='C'"> {{page.child.menuname}}</small>
     </h1>
-    <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href="#">Admin</a></li>
-      <li><a href="#">User</a></li>
-      <li class="active">Email</li>
+    <ol class="breadcrumb"  *ngIf="type ==='C'">
+      <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="{{page.parent.parentLink}}">{{page.parent.pmenu}}</a></li>
+      <li class="active">{{page.child.menuname}}</li>
+    </ol>
+
+    <ol class="breadcrumb"  *ngIf="type ==='P'">
+      <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a class="active" >{{page.parent.pmenu}}</a></li>
     </ol>
   </section>
   

@@ -13,11 +13,11 @@ import { Icolumdef } from '../objects/Icolumdef';
 import { Idirectory } from '../objects/idirectory';
 
 @Component({
-  selector: 'app-usermail',
-  templateUrl: './usermail.component.html',
-  styleUrls: ['./usermail.component.css']
+  selector: 'app-pages',
+  templateUrl: './pages.component.html',
+  styleUrls: ['./pages.component.css']
 })
-export class UsermailComponent implements OnInit {
+export class PagesComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
 
   public objects = [[]];
@@ -74,6 +74,7 @@ export class UsermailComponent implements OnInit {
       .subscribe(data => {
         res.child.menuname = data.returnLang;   
       });
+
 
     this.page=res;
 

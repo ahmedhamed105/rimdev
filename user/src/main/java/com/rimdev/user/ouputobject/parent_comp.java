@@ -8,6 +8,9 @@ public class parent_comp {
 	
 	ParentComponent parent;
 	List<Component_object> child;
+	String pagename;
+	String menuname;
+	String parentname;
 
 	public parent_comp() {
 		super();
@@ -28,6 +31,32 @@ public class parent_comp {
 	public void setChild(List<Component_object> child) {
 		this.child = child;
 	}
+
+	public String getPagename() {
+		return pagename;
+	}
+
+	public void setPagename(String pagename) {
+		this.pagename = pagename;
+	}
+
+	public String getMenuname() {
+		return menuname;
+	}
+
+	public void setMenuname(String menuname) {
+		this.menuname = menuname;
+	}
+
+	public String getParentname() {
+		return parentname;
+	}
+
+	public void setParentname(String parentname) {
+		this.parentname = parentname;
+	}
+	
+	
 
 
 

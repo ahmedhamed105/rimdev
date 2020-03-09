@@ -27,8 +27,10 @@ public class ParentComponentServ {
 	
    @Autowired
    ParentComponentRepo parentComponentRepo;
-	
-	
+   
+   
+   @Autowired
+   ParentMenuServ parentMenuServ;
 	
 
 	public List<parent_comp> getbypage(int pageid){
@@ -41,7 +43,7 @@ public class ParentComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new NoDataException("E108");
+				throw new NoDataException("E109");
 				
 			}
 			
@@ -53,6 +55,7 @@ public class ParentComponentServ {
 					if(select.size() > 0 ) {
 						a.setParent(component);
 						a.setChild(select);
+						a.setPagename(component.getPagesID().getPagename());
 						coms.add(a);							
 					}else {
 						if(!component.getParentType().equals("form")) {
@@ -93,7 +96,7 @@ public class ParentComponentServ {
 		
 		if(coms == null || coms.size() <= 0) {
 			
-			throw new NoDataException("E108");
+			throw new NoDataException("E109");
 			
 		}
 		

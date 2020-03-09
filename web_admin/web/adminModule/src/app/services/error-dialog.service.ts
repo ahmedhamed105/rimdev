@@ -48,8 +48,9 @@ export class ErrorDialogService {
         code: error.error ,
         langcode: GlobalConstants.language
      };
+
      let regexplang = 
-new RegExp('^[a-zA-Z]{1}[0-9]$');
+new RegExp('^[a-zA-Z]{1}[0-9]{0,10}$');
      if(regexplang.test(error.error)){
       this._LanguagegoService.getlang(data).subscribe(data => {
 
@@ -57,16 +58,25 @@ new RegExp('^[a-zA-Z]{1}[0-9]$');
             reason: data.returnLang ,
             status: error.code
         };
+
+        if(!GlobalConstants.iserror){
+          this.openDialog(data1);
+           }else{
+             this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
+           }
       
        });
+     }else{
+
+      if(!GlobalConstants.iserror){
+        this.openDialog(data1);
+         }else{
+           this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
+         }
      }
 
 
-      if(!GlobalConstants.iserror){
-     this.openDialog(data1);
-      }else{
-        this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
-      }
+  
 
      
      

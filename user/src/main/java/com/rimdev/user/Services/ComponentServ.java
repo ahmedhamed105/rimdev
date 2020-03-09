@@ -45,7 +45,7 @@ public class ComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new NoDataException("E108");
+				throw new NoDataException("E109");
 				
 			}
 			
@@ -94,7 +94,7 @@ public class ComponentServ {
 		
 		if(coms == null || coms.size() <= 0) {
 			
-			throw new NoDataException("E108");
+			throw new NoDataException("E109");
 			
 		}
 		

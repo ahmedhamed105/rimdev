@@ -13,41 +13,42 @@ import { UserteleComponent } from './usertele/usertele.component';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
+import { PagesComponent } from './pages/pages.component';
 
 
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo : '/dashboard/1',
+    redirectTo : '/dashboard/P/1',
     pathMatch: 'full'
 },
   {
-      path: 'dashboard/:id',
+      path: 'dashboard/:type/:id',
       component: DasboardComponent,
   },
   {
-    path: 'usermail/:id',
+    path: 'usermail/:type/:id',
     component: UsermailComponent,
 },
 {
-  path: 'usertele/:id',
+  path: 'usertele/:type/:id',
   component: UserteleComponent,
 },
   {
-    path: 'user/:id',
+    path: 'user/:type/:id',
     component: UsersComponent,
 },
   {
-    path: 'currency/:id',
+    path: 'currency/:type/:id',
     component: CurrencyComponent,
 },
 {
-  path: 'flowtype/:id',
+  path: 'flowtype/:type/:id',
   component: FlowtypeComponent,
 },
 {
-  path: 'devices/:id',
+  path: 'devices/:type/:id',
   component: DevicesComponent,
 },
 {
@@ -57,6 +58,10 @@ const routes: Routes = [
 {
   path: 'error',
   component: ErrorpageComponent,
+},
+{
+  path: 'pages/:type/:id',
+  component: PagesComponent,
 },
 {
   path: '**',
@@ -69,4 +74,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
+export const routingComponents=[PagesComponent,ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]

@@ -1,5 +1,8 @@
       export interface Icomponent {
-        parent: {
+        pagename: string,
+        menuname: string,
+        parentname: string
+        ,parent: {
             id: number,
             pcodeTittle: string,
             parentPostion: number,

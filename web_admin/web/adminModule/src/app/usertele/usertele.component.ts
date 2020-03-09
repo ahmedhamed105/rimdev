@@ -10,6 +10,7 @@ import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
 import { ActivatedRoute } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
+import { Idirectory } from '../objects/idirectory';
 
 @Component({
   selector: 'app-usertele',
@@ -23,6 +24,8 @@ export class UserteleComponent implements OnInit {
   public components = [];
   public arraystatic = [];
   public error_message;
+  public page : Idirectory;
+  public type ;
 
 
   constructor(private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
@@ -30,7 +33,6 @@ export class UserteleComponent implements OnInit {
   insertform :FormGroup []=[];
   tmpform :FormGroup;
   public device ;
-  public page_number;
   gridOptions:GridOptions;
   rowData: any;
 
@@ -57,12 +59,31 @@ export class UserteleComponent implements OnInit {
 
 
   ngOnInit(){
-    this.page_number =this.route.snapshot.paramMap.get("id");
+    var menuid =this.route.snapshot.paramMap.get("id").toString();
+    this.type =this.route.snapshot.paramMap.get("type");
+
+    this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
+
+      this.errorDialogService.converttext(res.parent.pmenu)
+      .subscribe(data => {
+
+        res.parent.pmenu = data.returnLang;   
+      });
+
+      this.errorDialogService.converttext(res.child.menuname)
+      .subscribe(data => {
+        res.child.menuname = data.returnLang;   
+      });
+
+    this.page=res;
+
+
+
 
     this.gridOptions = <GridOptions>{};
     this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
-    this.locationService.all_info(this.page_number).then(res => {
+    this.locationService.all_info(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).then(res => {
       this.device =this.locationService.status;
       console.log(this.device.tokean);
     });
@@ -70,9 +91,9 @@ export class UserteleComponent implements OnInit {
 
    
     
-    this._ComponentService.getbypage(this.page_number).subscribe(res =>{
+    this._ComponentService.getbypage(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).subscribe(res =>{
 
- 
+      
       
 
       res.forEach((parent,indexp) => {
@@ -313,9 +334,9 @@ if(element.comp.ctype === 'label'){
 
     });
     
-  
+  });
 
-    console.log(this.columnDefs)
+   // console.log(this.columnDefs)
   }
 
 
@@ -406,6 +427,7 @@ onSubmit(form,serv){
   this.rowData=  this._usersservice.insertbyurl(form.value,serv);
   form.reset();
 }
+
 
 
 }
