@@ -6,8 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
+import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
@@ -23,15 +28,27 @@ public class UserServ {
 	@Autowired 
 	private UserRepo userRepo;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
-public List<User> getall() {
-		
+	
+public List<User> getall(String langcode) {
+	
+	try {
 		return (List<User>) userRepo.findAll();
-		
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
 	}
 
 
-public void checkuser(int id) {
+public void checkuser(int id,String langcode) {
 	
 	try {
 		Optional<User> flowid =userRepo.findById(id);
@@ -42,18 +59,23 @@ public void checkuser(int id) {
 			 
 					}
 			else{
-			   // alternative processing....
-				throw new NoDataException("User Not found");
-			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		throw new NoDataException("User Not found");
-	}
+				   // alternative processing....
+							throw new NoDataException(textConvertionServ.search("E108", langcode));
+				}
+				} catch (TransientDataAccessException  se) {
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			    } catch (RecoverableDataAccessException  se) {
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			    }catch (ScriptException  se) {
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			    }catch (NonTransientDataAccessException  se) {
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			    }
 		
 }
 
 
-public User getuser(int id) {
+public User getuser(int id,String langcode) {
 	
 	try {
 		Optional<User> flowid =userRepo.findById(id);
@@ -65,17 +87,21 @@ public User getuser(int id) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("User Not found");
+				throw new NoDataException(textConvertionServ.search("E108", langcode));
 			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		throw new NoDataException("User Not found");
-	}
-		
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
 }
 
 
-public User check_user(String firstname,String middlename,String lastname) {
+public void check_user(String firstname,String middlename,String lastname,String langcode) {
 	
 	try {
 		Optional<User> flowid =userRepo.findbyname( firstname, middlename, lastname);
@@ -83,23 +109,28 @@ public User check_user(String firstname,String middlename,String lastname) {
 		 if (flowid.isPresent()){
 			 User  ouput = flowid.get();
 		
-			  return ouput;
+				throw new DuplicationException(textConvertionServ.search("E105", langcode));
+
 					}
 			else{
 			   // alternative processing....
-				return null;
 			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
 		
 }
 
 
 
 
-public User Save(User input) {
+public User Save(User input,String langcode) {
 	
 	try {	
 		Date date = new Date();
@@ -109,26 +140,35 @@ public User Save(User input) {
 		input.setUsermodify(date);
 		User ouput =userRepo.save(input);	
 		return ouput;
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}			
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }			
 		
 	}
 
 
-public User update(User input) {
-	
+public User update(User input,String langcode) {
 
 	try {	
 		Date date = new Date();
 		input.setUsermodify(date);
 		User ouput =userRepo.save(input);	
 		return ouput;
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}			
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }		
 		
 	}
 

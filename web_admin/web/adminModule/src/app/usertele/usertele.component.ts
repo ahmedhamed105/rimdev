@@ -63,8 +63,6 @@ export class UserteleComponent implements OnInit {
     this.type =this.route.snapshot.paramMap.get("type");
 
     this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
-
-
     this.page=res;
 
 
@@ -312,7 +310,7 @@ if(group != null){
 
     if(id == null || id == "" ){
 
-     this.errorDialogService.display_error("E100");
+     this.errorDialogService.display_error(1,"E100");
     }
   
     var selectobject = array.filter(x => x[comp] == id)[0];
@@ -325,12 +323,14 @@ if(group != null){
 
   tableaction(serv){
 
-    console.log(this.gridOptions)
+  //  console.log(this.gridOptions)
     const selectedNodes = this.gridOptions.api.getSelectedNodes();
+
+    console.log(selectedNodes)
 
     if(selectedNodes.length === 0 ){
 
-     this.errorDialogService.display_error("E103");
+     this.errorDialogService.display_error(1,"E103");
 
     }
 

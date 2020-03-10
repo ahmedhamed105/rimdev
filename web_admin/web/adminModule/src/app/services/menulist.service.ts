@@ -18,9 +18,5 @@ export class MenulistService {
 
   }
 
-  getlang(){
-    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.langurl+"/"+GlobalConstants.language;
-    return  this._http.get<Ilanguage[]>(urlall);
 
-  }
 }

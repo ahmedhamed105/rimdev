@@ -3,6 +3,7 @@ import { MenulistService } from './services/menulist.service';
 import { ErrorDialogService } from './services/error-dialog.service';
 import { CookiesService } from './services/cookies.service';
 import { GlobalConstants } from './GlobalConstants';
+import { LanguagegoService } from './services/languagego.service';
 
 @Component({
   selector: 'app-root',
@@ -14,12 +15,12 @@ export class AppComponent implements OnInit {
   public menus =[];
   public langs =[];
 
-  constructor(private cookieService: CookiesService,public _MenulistService : MenulistService,public errorDialogService: ErrorDialogService){}
+  constructor(private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private errorDialogService: ErrorDialogService){}
 
   ngOnInit() {
     GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
 
-    this._MenulistService.getlang().subscribe(data => {
+    this._LanguagegoService.getalllang().subscribe(data => {
  this.langs=data;
       
     });
@@ -33,7 +34,6 @@ export class AppComponent implements OnInit {
 
 
   language(code){
-
     GlobalConstants.language= code;
     this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
     location.reload();

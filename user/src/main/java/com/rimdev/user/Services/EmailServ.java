@@ -26,8 +26,11 @@ public class EmailServ {
 	@Autowired 
 	private UserServ userServ;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
-public List<Email> getall() {
+	
+public List<Email> getall(String langcode) {
 	
 List<Email> emails;
 	
@@ -38,18 +41,18 @@ List<Email> emails;
 	//    throw new NoDataException("no data found in users");
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	if(emails == null || emails.size() <= 0) {
 		
-		throw new NoDataException("E108");
+		throw new NoDataException(textConvertionServ.search("E108", langcode));
 		
 	}
 	
@@ -60,7 +63,7 @@ List<Email> emails;
 
 
 
-public void check_email(String email) {
+public void check_email(String email,String langcode) {
 	
 	try {
 		Optional<Email> flowid =emailRepo.findbyemail(email);
@@ -68,7 +71,7 @@ public void check_email(String email) {
 		 if (flowid.isPresent()){
 			  flowid.get();
 		
-				throw new DuplicationException("E105");
+				throw new DuplicationException(textConvertionServ.search("E105", langcode));
 
 					}
 			else{
@@ -76,20 +79,20 @@ public void check_email(String email) {
 				
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 
 	
 }
 
 
-public Email getbyid(int id) {
+public Email getbyid(int id,String langcode) {
 	
 	try {
 		Optional<Email> flowid =emailRepo.findById(id);
@@ -101,16 +104,16 @@ public Email getbyid(int id) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("E109");
+				throw new NoDataException(textConvertionServ.search("E109", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 
@@ -120,7 +123,7 @@ public Email getbyid(int id) {
 
 
 
-public List<Email> getbyuser(int userid) {
+public List<Email> getbyuser(int userid,String langcode) {
 	
 
 		List<Email> cu;
@@ -140,8 +143,8 @@ public List<Email> getbyuser(int userid) {
 		
 		if(cu == null || cu.size() <= 0) {
 			
-			userServ.checkuser(userid);	
-			throw new NoDataException("E109");
+			userServ.checkuser(userid, langcode);	
+			throw new NoDataException(textConvertionServ.search("E109", langcode));
 
 		}
 		
@@ -154,11 +157,11 @@ public List<Email> getbyuser(int userid) {
 
 
 
-public void save(Email input) {
+public void save(Email input,String langcode) {
 	
 	
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId());
+		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
 		input.setUserID(usero);
 		
 		Date date = new Date();
@@ -168,19 +171,19 @@ public void save(Email input) {
 		try {
 			emailRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
 	    	se.printStackTrace();
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
 	}else {
 		
-		throw new NoDataException("E107");
+		throw new NoDataException(textConvertionServ.search("E107", langcode));
 	
 	}
 	
@@ -191,10 +194,10 @@ public void save(Email input) {
 
 
 
-public void update(Email input) {
+public void update(Email input,String langcode) {
 	
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId());
+		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
 		input.setUserID(usero);
 	}
 	
@@ -204,13 +207,13 @@ public void update(Email input) {
 	try {
 		emailRepo.save(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	
@@ -218,19 +221,19 @@ public void update(Email input) {
 
 
 
-public void delete(Email input) {	
+public void delete(Email input,String langcode) {	
 	
 	try {
-		userServ.checkuser(input.getUserID().getId());	
+		userServ.checkuser(input.getUserID().getId(), langcode);	
 		emailRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	

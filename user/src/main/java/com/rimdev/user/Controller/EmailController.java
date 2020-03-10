@@ -33,8 +33,8 @@ public class EmailController {
 	EmailServ emailServ;
 	
 	
-	  @RequestMapping(value = "/primary", method = RequestMethod.GET)
-	  public  ResponseEntity<List<select_object>> getprimary(){
+	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<select_object>> getprimary(@PathVariable("langcode") String langcode){
 		  List<select_object> sel =new ArrayList<select_object>();
 		  select_object a =new select_object();
 		  a.setKey("YES");
@@ -47,22 +47,22 @@ public class EmailController {
 		return new ResponseEntity<List<select_object>>(sel, HttpStatus.OK);
 	  }
 
-	  @RequestMapping(value = "/all", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getAllUsers(){
-		return new ResponseEntity<List<Email>>(emailServ.getall(), HttpStatus.OK);
+	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<Email>> getAllUsers(@PathVariable("langcode") String langcode){
+		return new ResponseEntity<List<Email>>(emailServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
-	  @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getUsersbyuser(@PathVariable("id") int userid){ 
-		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid), HttpStatus.OK);
+	  @RequestMapping(value = "/user/{langcode}/{id}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<Email>> getUsersbyuser(@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
+		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid,langcode), HttpStatus.OK);
 	  }
 	  
 	  
 
 
-@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestBody Email emails) {
+@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody Email emails) {
   // This returns a JSON or XML with the users
 	
 	
@@ -70,29 +70,29 @@ public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestBody Email
 	if(emails.getId() !=null) {
 		
 	
-			Email found= emailServ.getbyid(emails.getId());
+			Email found= emailServ.getbyid(emails.getId(),langcode);
 			
 			if(found != null) {
               BeanUtils.copyProperties(emails, found, ObjectUtils.getNullPropertyNames(emails));
             
               if(!found.getEmailuser().equals(emails.getEmailuser())) {
-            	  emailServ.check_email(emails.getEmailuser());
+            	  emailServ.check_email(emails.getEmailuser(),langcode);
               }
               
   			
-              emailServ.update(found);
+              emailServ.update(found,langcode);
 
 			}
 	}else {
 	
-			 emailServ.check_email(emails.getEmailuser());
-		     emailServ.save(emails);
+			 emailServ.check_email(emails.getEmailuser(),langcode);
+		     emailServ.save(emails,langcode);
 	}
 		
 	
 	
 	
-		return getUsersbyuser(emails.getUserID().getId());
+		return getUsersbyuser(langcode,emails.getUserID().getId());
 }
 
 
@@ -100,18 +100,18 @@ public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestBody Email
 
 
 
-@RequestMapping(value = "/delete", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> delete(@RequestBody Email emails) {
+@RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Email>> delete(@PathVariable("langcode") String langcode,@RequestBody Email emails) {
   // This returns a JSON or XML with the users
 	
 	
 	if(emails.getId() !=null  && emails.getUserID() != null && emails.getUserID().getId() != null) {
 		
 		
-		Email found= emailServ.getbyid(emails.getId());	
+		Email found= emailServ.getbyid(emails.getId(),langcode);	
 		if(found != null) {
 			
-			emailServ.delete(emails);
+			emailServ.delete(emails,langcode);
 		}
 		
 	
@@ -123,7 +123,7 @@ public @ResponseBody ResponseEntity<List<Email>> delete(@RequestBody Email email
 }
 	
 	
-	return getUsersbyuser(emails.getUserID().getId());
+	return getUsersbyuser(langcode,emails.getUserID().getId());
 }
 
 

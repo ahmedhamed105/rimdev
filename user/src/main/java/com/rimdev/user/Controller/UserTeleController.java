@@ -33,7 +33,7 @@ public class UserTeleController {
 	TelephonesServ telephonesServ;
 	
 	
-	  @RequestMapping(value = "/primary", method = RequestMethod.GET)
+	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<select_object>> getprimary(){
 		  List<select_object> sel =new ArrayList<select_object>();
 		  select_object a =new select_object();
@@ -48,18 +48,18 @@ public class UserTeleController {
 	  }
 	
 	
-	  @RequestMapping(value = "/all", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Telephones>> getAllUsers(){
+	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<Telephones>> getAllUsers(@PathVariable("langcode") String langcode){
 		  //exception handled
-		return new ResponseEntity<List<Telephones>>(telephonesServ.getall(), HttpStatus.OK);
+		return new ResponseEntity<List<Telephones>>(telephonesServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 
 	  
-	  @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Telephones>> getUsersbyuser(@PathVariable("id") int userid){ 
+	  @RequestMapping(value = "/user/{langcode}/{id}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<Telephones>> getUsersbyuser(@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
 		  //exception handled
-	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid), HttpStatus.OK);
+	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid,langcode), HttpStatus.OK);
 
 		
 	  }
@@ -68,31 +68,31 @@ public class UserTeleController {
 
 	  
 
-@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@RequestBody Telephones teles) {
+@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody Telephones teles) {
   // This returns a JSON or XML with the users
 
 	
 	if(teles.getId() !=null) {
 				
-			Telephones found= telephonesServ.getbyid(teles.getId());
+			Telephones found= telephonesServ.getbyid(teles.getId(),langcode);
 			
 			if(found != null) {
               BeanUtils.copyProperties(teles, found, ObjectUtils.getNullPropertyNames(teles));
               if(!found.getPhoneNo().equals(teles.getPhoneNo())) {
-            	  telephonesServ.check_tele(teles.getPhoneNo());
+            	  telephonesServ.check_tele(teles.getPhoneNo(),langcode);
               }
-  		       telephonesServ.update(found);      
+  		       telephonesServ.update(found,langcode);      
 			}
 	}else {
 		
-			 telephonesServ.check_tele(teles.getPhoneNo());
-		      telephonesServ.save(teles);
+			 telephonesServ.check_tele(teles.getPhoneNo(),langcode);
+		      telephonesServ.save(teles,langcode);
 
 	}
 		
 	
-	  return getUsersbyuser(teles.getUserID().getId());
+	  return getUsersbyuser(langcode,teles.getUserID().getId());
 
 }
 
@@ -101,18 +101,18 @@ public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@RequestBody 
 
 
 
-@RequestMapping(value = "/delete", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Telephones>> delete(@RequestBody Telephones teles) {
+@RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Telephones>> delete(@PathVariable("langcode") String langcode,@RequestBody Telephones teles) {
   // This returns a JSON or XML with the users
 	
 	
 	if(teles.getId() !=null  && teles.getUserID() != null && teles.getUserID().getId() != null) {
 		
 		
-			Telephones found= telephonesServ.getbyid(teles.getId());	
+			Telephones found= telephonesServ.getbyid(teles.getId(),langcode);	
 			if(found != null) {
 				
-				telephonesServ.delete(teles);
+				telephonesServ.delete(teles,langcode);
 			}
 			
 		
@@ -123,7 +123,7 @@ public @ResponseBody ResponseEntity<List<Telephones>> delete(@RequestBody Teleph
 
 	}
 		
-	  return getUsersbyuser(teles.getUserID().getId());
+	  return getUsersbyuser(langcode,teles.getUserID().getId());
 
 }
 

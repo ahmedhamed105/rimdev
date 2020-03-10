@@ -8,6 +8,7 @@ export class GlobalConstants {
     public static langurl: string = "/langs/all";
     public static pagefrommenu: string = "/menu/get/";
     public static Componentpage: string = "/Component/page/";
+    public static searchlang: string = "/lang/code";
     
 
 }

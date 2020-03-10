@@ -35,26 +35,37 @@ export class ErrorDialogService {
     }
 
 
-    display_error(error){
+    display_error(type,error){
 
-   //   console.log(this.isDialogOpen +'  '+GlobalConstants.iserror);
+ // console.log(this.isDialogOpen +'  '+GlobalConstants.iserror);
+
+     if(type === 1){
+      this._LanguagegoService.getlang(error).subscribe(data => {
+
+       let data1 = {
+            reason: data['message'] === undefined?error.error:data['message'] ,
+            status: error.code
+        };
+
+        if(!GlobalConstants.iserror){
+          this.openDialog(data1);
+           }else{
+             this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
+           }
+      
+       });
+     }else{
 
       let data1 = {
         reason: error.error ,
         status: error.code
     };
-
-      var  data : Ilangsearch = {
-        code: error.error ,
-        langcode: GlobalConstants.language
-     };
-
-  
       if(!GlobalConstants.iserror){
         this.openDialog(data1);
          }else{
            this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
          }
+     }
 
      
       

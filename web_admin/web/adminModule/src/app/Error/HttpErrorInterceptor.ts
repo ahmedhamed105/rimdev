@@ -70,7 +70,7 @@ import { GlobalConstants } from '../GlobalConstants';
               error :errorMessage
             }
 
-            this.errorDialogService.display_error(error_ob);
+            this.errorDialogService.display_error(0,error_ob);
       
          
           }

@@ -29,8 +29,11 @@ public class TelephonesServ {
 	@Autowired 
 	private UserServ userServ;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
-public List<Telephones> getall() {
+	
+public List<Telephones> getall(String langcode) {
 	
 	List<Telephones> teles;
 	
@@ -41,18 +44,18 @@ public List<Telephones> getall() {
 	//    throw new NoDataException("no data found in users");
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	if(teles == null || teles.size() <= 0) {
 		
-		throw new NoDataException("E108");
+		throw new NoDataException(textConvertionServ.search("E108", langcode));
 		
 	}
 	
@@ -63,7 +66,7 @@ public List<Telephones> getall() {
 
 
 
-public void check_tele(String tele) {
+public void check_tele(String tele,String langcode) {
 	
 
 	try {
@@ -72,7 +75,7 @@ public void check_tele(String tele) {
 		 if (flowid.isPresent()){
 			 flowid.get();
 		
-			throw new DuplicationException("E105");
+			throw new DuplicationException(textConvertionServ.search("E105", langcode));
 					}
 			else{
 			   // alternative processing....
@@ -80,13 +83,13 @@ public void check_tele(String tele) {
 
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 
@@ -94,7 +97,7 @@ public void check_tele(String tele) {
 }
 
 
-public Telephones getbyid(int id) {
+public Telephones getbyid(int id,String langcode) {
 	
 	try {
 		Optional<Telephones> flowid =telephonesRepo.findById(id);
@@ -108,16 +111,16 @@ public Telephones getbyid(int id) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("E107");
+				throw new NoDataException(textConvertionServ.search("E107", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 
@@ -126,26 +129,26 @@ public Telephones getbyid(int id) {
 
 
 
-public List<Telephones> getbyuser(int userid) {
+public List<Telephones> getbyuser(int userid,String langcode) {
 	List<Telephones> cu;
 	try {
 		
 		cu=(List<Telephones>) telephonesRepo.findbyuser(userid);
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	if(cu == null || cu.size() <= 0) {
 		
 		userServ.checkuser(userid);	
-		throw new NoDataException("E107");
+		throw new NoDataException(textConvertionServ.search("E107", langcode));
 
 	}
 	
@@ -156,7 +159,7 @@ public List<Telephones> getbyuser(int userid) {
 
 
 
-public void save(Telephones input) {
+public void save(Telephones input,String langcode) {
 
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
 		User  usero = userServ.getuser(input.getUserID().getId());
@@ -169,18 +172,18 @@ public void save(Telephones input) {
 		try {
 			telephonesRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
 	}else {
 		
-		throw new NoDataException("E107");
+		throw new NoDataException(textConvertionServ.search("E107", langcode));
 	
 	}
 
@@ -191,7 +194,7 @@ public void save(Telephones input) {
 }
 
 
-public void update(Telephones input) {
+public void update(Telephones input,String langcode) {
 	
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
 		User  usero = userServ.getuser(input.getUserID().getId());
@@ -204,13 +207,13 @@ public void update(Telephones input) {
 	try {
 		telephonesRepo.save(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	
@@ -219,19 +222,19 @@ public void update(Telephones input) {
 }
 
 
-public void delete(Telephones input) {	
+public void delete(Telephones input,String langcode) {	
 
 	try {
 		userServ.checkuser(input.getUserID().getId());	
 		telephonesRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException("E104");
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	
