@@ -7,7 +7,8 @@
             pcodeTittle: string,
             parentPostion: number,
             parentType: string,
-            parentName: string
+            parentName: string,
+            firstmethod:string
         },
       child : [{
         comp :{

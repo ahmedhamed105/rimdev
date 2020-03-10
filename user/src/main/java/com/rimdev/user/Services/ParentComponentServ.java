@@ -62,7 +62,6 @@ public class ParentComponentServ {
 					if(select.size() > 0 ) {
 						a.setParent(component);
 						a.setChild(select);
-						a.setPagename(component.getPagesID().getPagename());
 						coms.add(a);							
 					}else {
 						if(!component.getParentType().equals("form")) {

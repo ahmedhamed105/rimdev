@@ -3,6 +3,8 @@ package com.rimdev.user.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -63,6 +67,16 @@ public class ParentComponent implements Serializable {
     private Pages pagesID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentcomponentID")
     private Collection<Component> componentCollection;
+    @Column(name = "First_method", length = 450)
+    private String firstmethod;
+    @Basic(optional = false)
+    @Column(name = "date_modify", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateModify;
+    @Basic(optional = false)
+    @Column(name = "date_create", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreate;
 
     public ParentComponent() {
     }
@@ -75,6 +89,35 @@ public class ParentComponent implements Serializable {
         this.id = id;
         this.pcodeTittle = pcodeTittle;
         this.parentPostion = parentPostion;
+    }
+    
+    
+    public String getFirstmethod() {
+        return firstmethod;
+    }
+
+    public void setFirstmethod(String firstmethod) {
+        this.firstmethod = firstmethod;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Date getDateModify() {
+        return dateModify;
+    }
+
+    public void setDateModify(Date dateModify) {
+        this.dateModify = dateModify;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+    
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
     public Integer getId() {

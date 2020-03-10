@@ -37,7 +37,10 @@ public LanguageMap getbycode(String Code,String langcode){
 						}
 				else{
 				   // alternative processing....
-					throw new NoDataException("no Language Map Code found in "+ this.getClass().getName());
+					
+					return null;
+					
+				//	throw new NoDataException("no Language Map Code found in "+ this.getClass().getName());
 				}
 		} catch (TransientDataAccessException  se) {
 			throw new NullPointerException(textConvertionServ.search("E104", langcode));

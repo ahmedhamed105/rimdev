@@ -3,6 +3,8 @@ package com.rimdev.user.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -49,6 +53,13 @@ public class DataStatus implements Serializable {
     private String dstatus;
     @Column(name = "DDesc", length = 500)
     private String dDesc;
+    @Column(name = "date_modify", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateModify;
+    @Basic(optional = false)
+    @Column(name = "date_create", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "datastatusID")
     private Collection<Telephones> telephonesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "datastatusID")
@@ -109,6 +120,28 @@ public class DataStatus implements Serializable {
     public void setEmailCollection(Collection<Email> emailCollection) {
         this.emailCollection = emailCollection;
     }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Date getDateModify() {
+        return dateModify;
+    }
+
+    public void setDateModify(Date dateModify) {
+        this.dateModify = dateModify;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+    
+    
 
     @Override
     public int hashCode() {

@@ -56,7 +56,7 @@ public class LanguagesServ {
 						}
 				else{
 				   // alternative processing....
-					throw new NoDataException("no language Code found in "+ this.getClass().getName());
+					return null;
 				}
 		} catch (TransientDataAccessException  se) {
 			throw new NullPointerException(textConvertionServ.search("E104", langcode));

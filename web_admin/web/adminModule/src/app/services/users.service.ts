@@ -21,12 +21,14 @@ export class UsersService {
 
     insertbyurl(object,url):Observable<[]>{
       var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+    console.log(urlall)
+    console.log(object)
       return this._http.post<any>(urlall,object);    
       }
 
 
       getbyvalue(url,value):Observable<[]>{
-        var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+        var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language+"/";
         urlall=urlall+value;
         return  this._http.get<[]>(urlall);  
         }

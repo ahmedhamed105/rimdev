@@ -43,6 +43,10 @@ public class TextConvertionServ {
 		System.out.println(code + " "+langcode);
 		Languages lan= languagesServ.getbycode(langcode,langcode);
 		LanguageMap lanmap= languageMapServ.getbycode(code,langcode);
+		if(lanmap == null || lan == null) {
+			return code;
+			
+		}
 		
 		 return getbylangmap(lan.getId(), lanmap.getId(),langcode).getReturnLang();
 		

@@ -15,14 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rimdev.user.Services.FileStorageService;
 import com.rimdev.user.Services.UserServ;
 import com.rimdev.user.Utils.ObjectUtils;
-import com.rimdev.user.entities.Device;
-import com.rimdev.user.entities.Email;
-import com.rimdev.user.entities.Pages;
 import com.rimdev.user.entities.User;
-import com.rimdev.user.ouputobject.response_all;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/User") // 

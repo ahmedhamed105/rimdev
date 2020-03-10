@@ -147,7 +147,7 @@ public List<Telephones> getbyuser(int userid,String langcode) {
 	
 	if(cu == null || cu.size() <= 0) {
 		
-		userServ.checkuser(userid);	
+		userServ.checkuser(userid, langcode);	
 		throw new NoDataException(textConvertionServ.search("E107", langcode));
 
 	}
@@ -162,7 +162,7 @@ public List<Telephones> getbyuser(int userid,String langcode) {
 public void save(Telephones input,String langcode) {
 
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId());
+		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
 		input.setUserID(usero);
 		
 		Date date = new Date();
@@ -197,7 +197,7 @@ public void save(Telephones input,String langcode) {
 public void update(Telephones input,String langcode) {
 	
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId());
+		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
 		input.setUserID(usero);
 	}
 	
@@ -225,7 +225,7 @@ public void update(Telephones input,String langcode) {
 public void delete(Telephones input,String langcode) {	
 
 	try {
-		userServ.checkuser(input.getUserID().getId());	
+		userServ.checkuser(input.getUserID().getId(), langcode);	
 		telephonesRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));

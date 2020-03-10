@@ -255,6 +255,14 @@ if(element.comp.ctype === 'label'){
 
 }
 
+if(parent.parent.firstmethod === undefined){
+
+}else{
+  console.log("go");
+  this.rowData =  this._usersservice.getbyurl(parent.parent.firstmethod)
+
+}
+
 });
 
 
@@ -263,6 +271,10 @@ if(element.comp.ctype === 'label'){
   });
 
    // console.log(this.columnDefs)
+
+
+
+
   }
 
 
@@ -349,9 +361,18 @@ this.rowData= this._usersservice.insertbyurl(node,serv);
   
 
 onSubmit(form,serv){
-  console.log(form.value);
-  this.rowData=  this._usersservice.insertbyurl(form.value,serv);
-  form.reset();
+  console.log(this.rowData);
+  if(this.rowData === undefined){
+    this._usersservice.insertbyurl(form.value,serv).subscribe(data => {
+      form.reset();
+
+    });
+  }else{
+    this.rowData=   this._usersservice.insertbyurl(form.value,serv);
+    form.reset();
+  }
+ 
+ 
 }
 
 
