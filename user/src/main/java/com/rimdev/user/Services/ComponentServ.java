@@ -33,9 +33,11 @@ public class ComponentServ {
 	@Autowired
 	ComponentButtonServ componentButtonServ;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
 	
-	public List<Component_object> getbyparent(int parentid){
+	public List<Component_object> getbyparent(int parentid,String langcode){
 		List<Component_object> coms = new ArrayList<Component_object>();
 		try {
 			
@@ -45,7 +47,7 @@ public class ComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new NoDataException("E109");
+				throw new NoDataException(textConvertionServ.search("E109", langcode));
 				
 			}
 			
@@ -54,20 +56,24 @@ public class ComponentServ {
 				ComponentSelect select = new ComponentSelect();
 				ComponentInput input=new ComponentInput();
 				ComponentButton button=new ComponentButton();
+				
+				
+				component.setCcode(textConvertionServ.search(component.getCcode(), langcode));
+				
 				try {
-					 select =componentSelectServ.getbycomponent(component.getId()).get(0);
+					 select =componentSelectServ.getbycomponent(component.getId(), langcode).get(0);
 
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
 				try {
-					 input =componentInputServ.getbycomponent(component.getId()).get(0);
+					 input =componentInputServ.getbycomponent(component.getId(), langcode).get(0);
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
 				
 				try {
-					button =componentButtonServ.getbycomponent(component.getId()).get(0);
+					button =componentButtonServ.getbycomponent(component.getId(), langcode).get(0);
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -83,18 +89,18 @@ public class ComponentServ {
 		//    throw new NoDataException("no data found in users");
 
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
 		if(coms == null || coms.size() <= 0) {
 			
-			throw new NoDataException("E109");
+			throw new NoDataException(textConvertionServ.search("E109", langcode));
 			
 		}
 		

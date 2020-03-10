@@ -27,8 +27,11 @@ public class ParentMenuServ {
 	@Autowired
 	MenuDisplayServ menuDisplayServ;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
-	public List<menu_object> getallmenus() {
+	
+	public List<menu_object> getallmenus(String langcode) {
 		
 		List<menu_object> menu=new ArrayList<menu_object>();
 		
@@ -36,14 +39,15 @@ public class ParentMenuServ {
 
 		if(com == null || com.size() <= 0) {
 			
-			throw new NoDataException("E109");
+			throw new NoDataException(textConvertionServ.search("E109", langcode));
 			
 		}
 		
 		for (ParentMenu pmenu : com) {
 			menu_object mm= new menu_object();
-			
-		 List<MenuDisplay> a=	menuDisplayServ.getbycomponent(pmenu.getId());
+		
+	     pmenu.setPmenu(textConvertionServ.search(pmenu.getPmenu(), langcode));	
+		 List<MenuDisplay> a=	menuDisplayServ.getbycomponent(pmenu.getId(),langcode);
 		 mm.setChild(a);
 		 mm.setParent(pmenu);
 		 menu.add(mm);
@@ -57,17 +61,21 @@ public class ParentMenuServ {
 	
 	
 	
-public menuparsub getmenus(String type,int menuid) {
+public menuparsub getmenus(String type,int menuid,String langcode) {
 	
 	menuparsub a= new menuparsub();
 
 		if(type.equals("P")) {
 			ParentMenu pa = parentMenuRepo.findById(menuid).get();
+			pa.setPmenu(textConvertionServ.search(pa.getPmenu(), langcode));	
 			a.setParent(pa);
 		}
 		if(type.equals("C")) {
 			MenuDisplay pa = menuDisplayRepo.findById(menuid).get();
+			pa.getParentmenuID().setPmenu(textConvertionServ.search(pa.getParentmenuID().getPmenu(), langcode));	
 			a.setParent(pa.getParentmenuID());
+			pa.setMenuname(textConvertionServ.search(pa.getMenuname(), langcode));	
+
 			a.setChild(pa);		
 		}
 		

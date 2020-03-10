@@ -9,6 +9,7 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.ParentComponentRepo;
@@ -31,9 +32,12 @@ public class ParentComponentServ {
    
    @Autowired
    ParentMenuServ parentMenuServ;
+   
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
 
-	public List<parent_comp> getbypage(int pageid){
+	public List<parent_comp> getbypage(int pageid,String langcode){
 		List<parent_comp> coms = new ArrayList<parent_comp>();
 		try {
 			
@@ -43,15 +47,18 @@ public class ParentComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new NoDataException("E109");
+				throw new NoDataException(textConvertionServ.search("E109", langcode));
 				
 			}
 			
 			for (ParentComponent component : com) {
 				
+				
+				component.setPcodeTittle(textConvertionServ.search(component.getPcodeTittle(), langcode));
+				
 				parent_comp a = new parent_comp();
 				try {
-					List<Component_object>	 select =componentServ.getbyparent(component.getId());
+					List<Component_object>	 select =componentServ.getbyparent(component.getId(), langcode);
 					if(select.size() > 0 ) {
 						a.setParent(component);
 						a.setChild(select);
@@ -85,18 +92,18 @@ public class ParentComponentServ {
 		//    throw new NoDataException("no data found in users");
 
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
 		if(coms == null || coms.size() <= 0) {
 			
-			throw new NoDataException("E109");
+			throw new NoDataException(textConvertionServ.search("E109", langcode));
 			
 		}
 		

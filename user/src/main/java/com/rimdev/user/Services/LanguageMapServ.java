@@ -1,6 +1,6 @@
 package com.rimdev.user.Services;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
@@ -9,27 +9,36 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.user.Repo.ComponentButtonRepo;
-import com.rimdev.user.entities.ComponentButton;
+import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Repo.LanguageMapRepo;
+import com.rimdev.user.entities.LanguageMap;
 
 @Service
-public class ComponentButtonServ {
+public class LanguageMapServ {
 	
 	
-
-	@Autowired
-	ComponentButtonRepo componentButtonRepo;
+	@Autowired 
+	private LanguageMapRepo languageMapRepo;
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
 	
-	
-	public List<ComponentButton> getbycomponent(int compid,String langcode){
-		List<ComponentButton> com;
+public LanguageMap getbycode(String Code,String langcode){
 		
 		try {
-			com = (List<ComponentButton>) componentButtonRepo.getbycomponent(compid);
-
+			Optional<LanguageMap> flowid =languageMapRepo.getbycode(Code);
+			
+			
+			 
+			 if (flowid.isPresent()){
+				 LanguageMap  ouput = flowid.get();
+			
+				  return ouput;
+						}
+				else{
+				   // alternative processing....
+					throw new NoDataException("no Language Map Code found in "+ this.getClass().getName());
+				}
 		} catch (TransientDataAccessException  se) {
 			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
@@ -41,7 +50,9 @@ public class ComponentButtonServ {
 	    }
 		
 		
-		return com;
+	
+		
 	}
+
 
 }

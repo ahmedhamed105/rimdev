@@ -13,13 +13,13 @@ export class MenulistService {
 
   
   getmenu(){
-    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.menuurl;
+    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.menuurl+"/"+GlobalConstants.language;
     return  this._http.get<Imenu[]>(urlall);
 
   }
 
   getlang(){
-    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portlang+GlobalConstants.langurl;
+    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.langurl+"/"+GlobalConstants.language;
     return  this._http.get<Ilanguage[]>(urlall);
 
   }

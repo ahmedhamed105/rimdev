@@ -20,15 +20,15 @@ public class MenuController {
 	ParentMenuServ parentMenuServ;
 	
 	
-	  @RequestMapping(value = "/all", method = RequestMethod.GET)
-	  public  ResponseEntity<List<menu_object>> getUsersbyuser(){ 
-		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(), HttpStatus.OK);
+	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<menu_object>> getUsersbyuser(@PathVariable("langcode") String langcode){ 
+		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode), HttpStatus.OK);
 	  }
 	  
 	  
-	  @RequestMapping(value = "/get/{type}/{menuid}", method = RequestMethod.GET)
-	  public  ResponseEntity<menuparsub> getid(@PathVariable("type") String type,@PathVariable("menuid") int menuid){ 
-		  return new ResponseEntity<menuparsub>(parentMenuServ.getmenus(type,menuid), HttpStatus.OK);
+	  @RequestMapping(value = "/get/{langcode}/{type}/{menuid}", method = RequestMethod.GET)
+	  public  ResponseEntity<menuparsub> getid(@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("menuid") int menuid){ 
+		  return new ResponseEntity<menuparsub>(parentMenuServ.getmenus(type,menuid,langcode), HttpStatus.OK);
 	  }
 
 }

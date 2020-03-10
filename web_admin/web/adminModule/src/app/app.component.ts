@@ -26,36 +26,7 @@ export class AppComponent implements OnInit {
 
     this._MenulistService.getmenu()
 .subscribe(data => {
-  
- 
-
-  data.forEach((parent,indexp) => {
-
-
-this.errorDialogService.converttext(parent.parent.pmenu)
-.subscribe(data => {
-  parent.parent.pmenu = data.returnLang;   
-});
-
-var a=  parent.child.sort((a, b) => {
-  return a.id -b.id;
-});
-
-
-
-a.forEach((element,index) => {
-
-  this.errorDialogService.converttext(element.menuname)
-  .subscribe(data => {
-    element.menuname = data.returnLang;   
-  });
-
-});
-
-this.menus.push(parent);
-});
-
-
+  this.menus =data;
   });
 
   }

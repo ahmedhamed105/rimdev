@@ -26,9 +26,9 @@ public class ComponentController {
 	ParentComponentServ parentComponentServ;
 	
 	
-	  @RequestMapping(value = "/page/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<parent_comp>> getUsersbyuser(@PathVariable("id") int pageid){ 
-		  return new ResponseEntity<List<parent_comp>>(parentComponentServ.getbypage(pageid), HttpStatus.OK);
+	  @RequestMapping(value = "/page/{langcode}/{id}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<parent_comp>> getUsersbyuser(@PathVariable("langcode") String langcode,@PathVariable("id") int pageid){ 
+		  return new ResponseEntity<List<parent_comp>>(parentComponentServ.getbypage(pageid,langcode), HttpStatus.OK);
 	  }
 	  
 

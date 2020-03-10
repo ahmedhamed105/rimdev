@@ -17,21 +17,17 @@ export class ComponentService {
 
   getbypage(pageid: number):Observable<Icomponent[]>{
 
-    var url="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+"/Component/page/";
+    var url="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Componentpage+GlobalConstants.language+"/";
     url=url+pageid;
-
     return  this._http.get<Icomponent[]>(url);
-  
     }
 
 
     getmenu(type : String,menuid: String):Observable<Idirectory>{
 
-      var url="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+"/menu/get/";
+      var url="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";
 
       url=url+type+"/"+menuid;
-
-      console.log(url)
   
       return  this._http.get<Idirectory>(url);
     

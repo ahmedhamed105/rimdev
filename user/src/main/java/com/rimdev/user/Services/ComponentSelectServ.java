@@ -20,21 +20,24 @@ public class ComponentSelectServ {
 	@Autowired
 	ComponentSelectRepo componentSelectRepo;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
-	public List<ComponentSelect> getbycomponent(int compid){
+	
+	public List<ComponentSelect> getbycomponent(int compid,String langcode){
 		List<ComponentSelect> com;
 		
 		try {
 			com = (List<ComponentSelect>) componentSelectRepo.getbycomponent(compid);
 
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
 		

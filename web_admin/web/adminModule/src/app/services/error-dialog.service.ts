@@ -49,60 +49,16 @@ export class ErrorDialogService {
         langcode: GlobalConstants.language
      };
 
-     let regexplang = 
-new RegExp('^[a-zA-Z]{1}[0-9]{0,10}$');
-     if(regexplang.test(error.error)){
-      this._LanguagegoService.getlang(data).subscribe(data => {
-
-        data1 = {
-            reason: data.returnLang ,
-            status: error.code
-        };
-
-        if(!GlobalConstants.iserror){
-          this.openDialog(data1);
-           }else{
-             this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
-           }
-      
-       });
-     }else{
-
+  
       if(!GlobalConstants.iserror){
         this.openDialog(data1);
          }else{
            this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
          }
-     }
-
-
-  
-
-     
-     
-      
-      }
-
-
-      converttext(text){
-
-        
-
-        if(!GlobalConstants.iserror){
-
-          var  data : Ilangsearch = {
-            code: text ,
-            langcode: GlobalConstants.language
-         };
-
-
-         console.log(data);
-         
-        return this._LanguagegoService.getlang(data);
 
      
       
       }
-    }
+
 
 }

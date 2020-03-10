@@ -64,17 +64,6 @@ export class PagesComponent implements OnInit {
 
     this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
 
-      this.errorDialogService.converttext(res.parent.pmenu)
-      .subscribe(data => {
-
-        res.parent.pmenu = data.returnLang;   
-      });
-
-      this.errorDialogService.converttext(res.child.menuname)
-      .subscribe(data => {
-        res.child.menuname = data.returnLang;   
-      });
-
 
     this.page=res;
 
@@ -104,12 +93,6 @@ export class PagesComponent implements OnInit {
         this.insertform[indexp] = this.fb.group({
         });
 
-
-        this.errorDialogService.converttext(parent.parent.pcodeTittle)
-        .subscribe(data => {
-  
-          parent.parent.pcodeTittle = data.returnLang;   
-        });
 
 
         this.components.push(parent);
@@ -168,11 +151,7 @@ if(element.comp.ctype == 'select'){
 
 
 
-        this.errorDialogService.converttext(element.comp.ccode)
-        .subscribe(data => {
 
-          element.comp.ccode = data.returnLang;   
-        });
    
        
 });
@@ -212,20 +191,6 @@ if(element.comp.ctype === 'label'){
   };
   this.columnDefs[index+1]= b;
 
-  this.errorDialogService.converttext(element.comp.ccode)
-  .subscribe(data => {    
-    var col = this.gridOptions.columnApi.getColumn(this.columnDefs[index+1].field);
-
-    // obtain the column definition from the column
-    var colDef = col.getColDef();
-
-    // update the header name
-    colDef.headerName = data.returnLang;
-
-    // the column is now updated. to reflect the header change, get the grid refresh the header
-    this.gridOptions.api.refreshHeader();
-    
-  });
 
  
 
@@ -249,21 +214,7 @@ if(element.comp.ctype === 'label'){
   };
   this.columnDefs[index+1]= b;
 
-  this.errorDialogService.converttext(element.comp.ccode)
-  .subscribe(data => {    
-    var col = this.gridOptions.columnApi.getColumn(this.columnDefs[index+1].field);
-
-    // obtain the column definition from the column
-    var colDef = col.getColDef();
-
-    // update the header name
-    colDef.headerName = data.returnLang;
-
-    // the column is now updated. to reflect the header change, get the grid refresh the header
-    this.gridOptions.api.refreshHeader();
-    
-  });
-
+  
  
 
 }else if(element.comp.ctype === 'select'){
@@ -289,34 +240,8 @@ if(element.comp.ctype === 'label'){
   this.columnDefs[index+1]= b;
 
 
-  this.errorDialogService.converttext(element.comp.ccode)
-  .subscribe(data => {    
-//console.log(element.comp.groupname === null? element.comp.name:element.comp.groupname.toString());
-
-    var col = this.gridOptions.columnApi.getColumn(this.columnDefs[index+1].field);
-
-    // obtain the column definition from the column
-    var colDef = col.getColDef();
-
-    // update the header name
-    colDef.headerName = data.returnLang;
-
-    // the column is now updated. to reflect the header change, get the grid refresh the header
-    this.gridOptions.api.refreshHeader();
-    
-  });
-
- 
 
 }else{
-
-  this.errorDialogService.converttext(element.comp.ccode)
-  .subscribe(data => {    
-    // update the header name
-    element.comp.ccode = data.returnLang;
-
-    
-  });
 
 }
 

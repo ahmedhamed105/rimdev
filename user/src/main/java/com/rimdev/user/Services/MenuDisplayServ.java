@@ -8,6 +8,8 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.rimdev.user.Repo.MenuDisplayRepo;
 import com.rimdev.user.entities.MenuDisplay;
 
@@ -17,22 +19,32 @@ public class MenuDisplayServ {
 	@Autowired
 	MenuDisplayRepo menuDisplayRepo;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
+	
 	
 
-	public List<MenuDisplay> getbycomponent(int parentid){
+	public List<MenuDisplay> getbycomponent(int parentid,String langcode){
 		List<MenuDisplay> com;
 		
 		try {
 			com = (List<MenuDisplay>) menuDisplayRepo.getbyparent(parentid);
+			
+			for (MenuDisplay menuDisplay : com) {
+
+			menuDisplay.setMenuname(textConvertionServ.search(menuDisplay.getMenuname(), langcode));	
+
+			}
+			
 
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("E104");
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
 		
