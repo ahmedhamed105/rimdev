@@ -14,6 +14,7 @@ import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.c
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
 import { PagesComponent } from './pages/pages.component';
+import { ExampleRouteResolver } from './ExampleRouteResolver';
 
 
 
@@ -28,12 +29,8 @@ const routes: Routes = [
       component: DasboardComponent,
   },
   {
-    path: 'usermail/:type/:id',
-    component: UsermailComponent,
-},
-{
-  path: 'usertele/:type/:id',
-  component: UserteleComponent,
+    path: 'page/:type/:id',
+    component: PagesComponent,
 },
   {
     path: 'user/:type/:id',
@@ -58,10 +55,6 @@ const routes: Routes = [
 {
   path: 'error',
   component: ErrorpageComponent,
-},
-{
-  path: 'pages/:type/:id',
-  component: PagesComponent,
 },
 {
   path: '**',

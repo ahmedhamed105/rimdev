@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
@@ -8,7 +8,7 @@ import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, NavigationEnd } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
 import { Idirectory } from '../objects/idirectory';
 
@@ -28,7 +28,7 @@ export class PagesComponent implements OnInit {
   public type ;
 
 
-  constructor(private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -55,11 +55,16 @@ export class PagesComponent implements OnInit {
  
   
 
-
-
-
   ngOnInit(){
+
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+
+
+
     var menuid =this.route.snapshot.paramMap.get("id").toString();
+
     this.type =this.route.snapshot.paramMap.get("type");
 
     this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
