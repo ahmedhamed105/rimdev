@@ -94,11 +94,12 @@ export class LocationServiceService {
       });
 
 
-    await   this.getip().then(data => {
-        this.device.deviceip=data['ip'];
-      });
+ //   await   this.getip().then(data => {
+ //       this.device.deviceip=data['ip'];
+  //    });
 
-
+  this.device.deviceip = '192.168.1.1';
+  
       await this.getnavigation()
       .then(position => {
         this.device.devicelong=position.coords.longitude;

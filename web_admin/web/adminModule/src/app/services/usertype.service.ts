@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UsertypeService {
-  _urlgetall='http://localhost:8081/Usertype/all';
-  _urlpost='http://localhost:8081/Usertype/saveorupdate';
+  _urlgetall='http://localhost:8081/Usertype/all/EN';
+  _urlpost='http://localhost:8081/Usertype/saveorupdate/EN';
   
   constructor(private _http:HttpClient) { }
 

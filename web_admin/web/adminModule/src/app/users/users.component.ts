@@ -1,22 +1,17 @@
 import {  Component, EventEmitter, OnInit, Output, ViewChild  } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
 import { UsertypeService } from '../services/usertype.service';
 import { formatDate } from '@angular/common';
-import { HttpEventType } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { FileUploaderService, FileQueueObject } from '../services/file-uploader.service';
+import {  FileQueueObject } from '../services/file-uploader.service';
 import { fileidimages } from '../services/FileIDImages-serv.service';
 import { filepassimages } from '../services/file-pass.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { FileupdatepassportService } from '../services/fileupdatepassport.service';
 import { FileupdateidService } from '../services/fileupdateid.service';
-import { FileValidate } from '../Validation/FileValidate';
-import { map, defaultIfEmpty, finalize } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
-declare var $: any;
 
 @Component({
   selector: 'app-users',
@@ -41,7 +36,7 @@ export class UsersComponent implements OnInit {
   insertform :FormGroup;
   updateform :FormGroup;
   public device ;
-  public page_number;
+  public page_number = 5;
   public selectuser;
   public type = '1';
   public userid= '2';
@@ -69,7 +64,7 @@ export class UsersComponent implements OnInit {
    count:number=0;
   count1:number=0;
   ngOnInit() {
-    this.page_number =this.route.snapshot.paramMap.get("id");
+   // this.page_number =this.route.snapshot.paramMap.get("id");
 
 
     this.locationService.all_info(this.page_number).then(res => {

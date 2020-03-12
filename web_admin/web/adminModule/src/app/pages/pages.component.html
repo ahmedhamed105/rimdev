@@ -96,25 +96,117 @@
 
 
 <ng-template #withgroup>
-  <div class="form-group" formGroupName="{{component.comp.groupname}}">
+  <div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'Date'">
     <label>{{component.comp.ccode}}</label>
+     <div class="input-group">
+    <div class="input-group-addon">
+      <i class="fa fa-calendar"></i>
+    </div>
     <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
     <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
      <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
      <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>
 </div>
+</div>
+
+<div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
+  <label>{{component.comp.ccode}}</label>
+  <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+</div>
+
+
 </ng-template>
 
 <ng-template #withoutgroup>
-  <div class="form-group">
+  <div class="form-group"  *ngIf="component.input.inputtypeID.itype == 'Date'">
     <label>{{component.comp.ccode}}</label>
+     <div class="input-group">
+    <div class="input-group-addon">
+      <i class="fa fa-calendar"></i>
+    </div>
     <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
     <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
      <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
      <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
-   </div>  
+   </div>
 </div>
+</div>
+
+<div class="form-group"   *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
+  <label>{{component.comp.ccode}}</label>
+  <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+</div>
+
+<div class="form-group" *ngIf="component.input.inputtypeID.itype == 'File'">
+  <h3>Passport files {{component.comp.name}}</h3>
+  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event)" />
+  <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
+    <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
+    <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
+   </div>
+</div>
+
+<div class="form-group"  *ngIf="component.input.inputtypeID.itype == 'File'">
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">{{component.comp.ccode}}</h3>
+    </div>
+  <div class="box-body no-padding">
+<table class="table table-condensed">
+
+<tr>
+<th>Name</th>
+<th>Size</th>
+<th>Progress</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+<tr *ngFor="let item of queue | async">
+<td>{{ item.filename }}</td>
+<td>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+
+<td >
+<div class="progress progress-xs">
+<div class="progress-bar progress-bar-success" [style.width.%]="item.progress"></div>
+</div>
+</td>
+<td >
+<span *ngIf="item.isPending()" class="label label-warning">Pending</span>
+<span *ngIf="item.isSuccess()" class="label label-success">Approved</span>
+<span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
+<span *ngIf="item.isError()" class="label label-danger">Denied</span>
+<span *ngIf="item.isduplicate()" class="label label-danger">Duplicate</span>
+</td>	
+<td>
+<a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
+  <i class="fa fa-times-circle"></i>
+</a>
+<a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
+  <i class="fa fa-trash"></i>
+</a>
+<a tooltip="download from queue" (click)="item.download()" *ngIf="item.isSuccess()">
+  <i class="fa fa-save"></i>
+</a>
+<a tooltip="Remove from queue" (click)="item.delete()" *ngIf="item.isSuccess()">
+  <i class="fa fa-trash"></i>
+</a>
+</td>	
+</tr>
+</table>
+</div>
+  </div>
+
+</div>
+
 </ng-template>
 
 </div>

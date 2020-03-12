@@ -14,7 +14,6 @@ import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.c
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
 import { PagesComponent } from './pages/pages.component';
-import { ExampleRouteResolver } from './ExampleRouteResolver';
 
 
 
@@ -33,19 +32,19 @@ const routes: Routes = [
     component: PagesComponent,
 },
   {
-    path: 'user/:type/:id',
+    path: 'user',
     component: UsersComponent,
 },
   {
-    path: 'currency/:type/:id',
+    path: 'currency',
     component: CurrencyComponent,
 },
 {
-  path: 'flowtype/:type/:id',
+  path: 'flowtype',
   component: FlowtypeComponent,
 },
 {
-  path: 'devices/:type/:id',
+  path: 'devices',
   component: DevicesComponent,
 },
 {

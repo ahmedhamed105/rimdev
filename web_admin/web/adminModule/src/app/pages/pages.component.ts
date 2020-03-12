@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
@@ -11,6 +11,12 @@ import { ComponentService } from '../services/component.service';
 import { ActivatedRoute, ParamMap, Router, NavigationEnd } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
 import { Idirectory } from '../objects/idirectory';
+import { Observable } from 'rxjs';
+import { FileQueueObject } from '../services/file-uploader.service';
+import { fileidimages } from '../services/FileIDImages-serv.service';
+import { GlobalConstants } from '../GlobalConstants';
+
+declare var $: any;
 
 @Component({
   selector: 'app-pages',
@@ -19,6 +25,9 @@ import { Idirectory } from '../objects/idirectory';
 })
 export class PagesComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
+  @Output() onCompleteItem = new EventEmitter();
+  queue: Observable<FileQueueObject[]>;
+
 
   public objects = [[]];
   public components = [];
@@ -28,7 +37,7 @@ export class PagesComponent implements OnInit {
   public type ;
 
 
-  constructor(private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private idimg: fileidimages,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -53,13 +62,17 @@ export class PagesComponent implements OnInit {
   cellRenderer: ""
 }];
  
-  
+ 
+
 
   ngOnInit(){
 
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
+
+
+
 
 
 
@@ -278,9 +291,41 @@ if(parent.parent.firstmethod === undefined){
    // console.log(this.columnDefs)
 
 
+   this.queue = this.idimg.queue;
+   this.idimg.onCompleteItem = this.completeItem;
 
 
   }
+
+
+
+   
+completeItem = (item: FileQueueObject, response: any) => {
+  this.onCompleteItem.emit({ item, response });
+ }
+
+
+ addfiles($event) {
+  this.type = '1';
+
+  console.log($event)
+
+  const fileBrowser = $event.target;
+  
+
+  if (fileBrowser.files[0].size > GlobalConstants.max_size) {
+    alert('size is alrger than ');
+     return false;
+ }
+
+ if (!GlobalConstants.allowed_types.includes(fileBrowser.files[0].type)) {
+   alert('Only Images are allowed ( JPG | PNG )');
+     return false;
+ }
+
+ 
+  this.idimg.addToQueue(fileBrowser.files,this.type,'1');
+}
 
 
 createItem(child,group,req,pat,dpattern,formindex) {

@@ -9,8 +9,8 @@ import { GlobalConstants } from '../GlobalConstants';
 })
 export class UsersService {
 
-  _urlgetall='http://localhost:8081/User/all';
-  _urlpost='http://localhost:8081/User/saveorupdate';
+  _urlgetall='http://localhost:8081/User/all/EN';
+  _urlpost='http://localhost:8081/User/saveorupdate/EN';
   
   constructor(private _http:HttpClient) { }
 
