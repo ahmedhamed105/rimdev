@@ -263,13 +263,13 @@ public class FileStorageService {
 	    
 	    
 	    
-	    public UploadFileResponse deleteFile(String fileName, int type,int userid) {
+	    public UploadFileResponse deleteFile(int fileid,String langcode) {
 	    //	System.out.println("load");
 	    	
 	    	FilesUpload filedel=new FilesUpload();
 	    	try {
 	    		
-	    		Optional<FilesUpload> filed= filesUploadRepo.findbyfilename(fileName);
+	    		Optional<FilesUpload> filed= filesUploadRepo.findById(fileid);
 	    		 
 	    		 if (filed.isPresent()){
 	    			 filedel=filed.get();
@@ -277,15 +277,17 @@ public class FileStorageService {
 	    			else{
 	    			   // alternative processing....
 	    				
-			    		UploadFileResponse a= new UploadFileResponse("", "","",0,2,"file not found");	
-			    		return a;
+			   throw new NoDataException("file not found");
 	    			}
-	    	} catch (Exception e) {
-	    		// TODO: handle exception
-	    		
-	    		UploadFileResponse a= new UploadFileResponse("", "","",0,2,"file not found");	
-	    		return a;
-	    	}
+	    	}catch (TransientDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    } catch (RecoverableDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }catch (ScriptException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }catch (NonTransientDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }
 	    	
 	    	UserFile userf=new UserFile();
 	    	try {

@@ -107,14 +107,9 @@ public class FilesController {
 
     
     
-    @PostMapping("/deleteFile/{fileName:.+}")
-    public ResponseEntity<UploadFileResponse> deleteFile(@PathVariable String fileName, HttpServletRequest request,@RequestParam("type") int type,@RequestParam("userid") int userid) {
-      UploadFileResponse a=deleteFile(fileName,type,userid);
-		 
-		 if (a.getError() > 0) {
-		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.OK);
+    @PostMapping("/deleteFile/{langcode}")
+    public ResponseEntity<UploadFileResponse> deleteFile(HttpServletRequest request,@RequestParam("fileid") int fileid) {
+		return new ResponseEntity<UploadFileResponse>(deleteFile(fileid), HttpStatus.OK);
    
 
  	

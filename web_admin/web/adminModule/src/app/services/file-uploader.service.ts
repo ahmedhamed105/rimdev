@@ -23,6 +23,7 @@ export enum FileQueueStatus {
     public request: Subscription = null;
     public response: HttpResponse<any> | HttpErrorResponse = null;
     public filename;
+    public fileid;
     public type: any;
     public index: any;
     public pageid:any;
@@ -66,7 +67,7 @@ export class FileUploaderService {
 
   
   public urladd: string = 'http://localhost:8081/file/uploadFile/EN';
-  public urlremove: string = 'http://localhost:8081/file/deleteFile/';
+  public urlremove: string = 'http://localhost:8081/file/deleteFile';
 
   public urldownload: string = 'http://localhost:8081/file/downloadFile/';
 
@@ -223,15 +224,13 @@ console.log(index)
   private _deleteFromQueuepost(queueObj: FileQueueObject) {
 
     var form = new FormData();
-    form.append('type', queueObj.type);
+    form.append('fileid', queueObj.fileid);
   //  form.append('userid', queueObj.userid);
 
-    var urldelete=this.urlremove;
-
-    urldelete=urldelete+queueObj.filename;
+ 
 
     // upload file and report progress
-    var req = new HttpRequest('POST', urldelete, form, {
+    var req = new HttpRequest('POST', this.urlremove, form, {
       reportProgress: true,
     });
 
@@ -330,7 +329,8 @@ console.log(index)
     queueObj.progress = 100;
     queueObj.status = FileQueueStatus.Success;
     queueObj.response = response;
-    queueObj.filename = response.body.fileName;
+    queueObj.filename = response.body.filesName;
+    queueObj.fileid= response.body.id;
     this._queue[queueObj.index].next(this._files[queueObj.index]);
     this.onCompleteItem(queueObj, response.body);
   }
