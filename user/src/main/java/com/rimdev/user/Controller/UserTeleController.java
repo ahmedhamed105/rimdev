@@ -34,7 +34,7 @@ public class UserTeleController {
 	
 	
 	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<select_object>> getprimary(){
+	  public  ResponseEntity<List<select_object>> getprimary(@PathVariable("langcode") String langcode){
 		  List<select_object> sel =new ArrayList<select_object>();
 		  select_object a =new select_object();
 		  a.setKey("YES");

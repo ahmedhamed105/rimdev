@@ -12,8 +12,7 @@ import { ActivatedRoute, ParamMap, Router, NavigationEnd } from '@angular/router
 import { Icolumdef } from '../objects/Icolumdef';
 import { Idirectory } from '../objects/idirectory';
 import { Observable } from 'rxjs';
-import { FileQueueObject } from '../services/file-uploader.service';
-import { fileidimages } from '../services/FileIDImages-serv.service';
+import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
 
 declare var $: any;
@@ -26,18 +25,17 @@ declare var $: any;
 export class PagesComponent implements OnInit {
   @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
   @Output() onCompleteItem = new EventEmitter();
-  queue: Observable<FileQueueObject[]>;
+  queue: Observable<FileQueueObject[]> []=[];
 
 
   public objects = [[]];
   public components = [];
   public arraystatic = [];
-  public error_message;
   public page : Idirectory;
   public type ;
 
 
-  constructor(private idimg: fileidimages,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -131,8 +129,22 @@ export class PagesComponent implements OnInit {
 
 
         if(element.comp.ctype == 'button'){
+
+
         }else{
+
+
+
           this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,indexp);
+        
+          if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'file'){
+
+           this.queue[index] = this.fileupload.queue(index);
+           this.fileupload.onCompleteItem = this.completeItem;
+
+          }
+        
+        
         }
         
 
@@ -291,8 +303,7 @@ if(parent.parent.firstmethod === undefined){
    // console.log(this.columnDefs)
 
 
-   this.queue = this.idimg.queue;
-   this.idimg.onCompleteItem = this.completeItem;
+
 
 
   }
@@ -305,10 +316,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
 
- addfiles($event) {
-  this.type = '1';
-
-  console.log($event)
+ addfiles($event,name,index,pageid,parentid,compid) {
 
   const fileBrowser = $event.target;
   
@@ -324,7 +332,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
  
-  this.idimg.addToQueue(fileBrowser.files,this.type,'1');
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid);
 }
 
 
@@ -412,8 +420,21 @@ this.rowData= this._usersservice.insertbyurl(node,serv);
 
 onSubmit(form,serv){
   console.log(this.rowData);
+
+  this.fileupload.uploadAllinsert();
+ // this.fileupload.clearQueue();
+  /*
+
   if(this.rowData === undefined){
+    this.fileupload.uploadAllinsert();
+
+    
+
+
+
+
     this._usersservice.insertbyurl(form.value,serv).subscribe(data => {
+
       form.reset();
 
     });
@@ -421,7 +442,7 @@ onSubmit(form,serv){
     this.rowData=   this._usersservice.insertbyurl(form.value,serv);
     form.reset();
   }
- 
+ */
  
 }
 

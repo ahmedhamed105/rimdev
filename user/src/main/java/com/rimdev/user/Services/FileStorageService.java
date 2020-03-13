@@ -15,26 +15,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
+import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rimdev.user.Config.FileStorageProperties;
-import com.rimdev.user.Excep.FileStorageException;
-import com.rimdev.user.Excep.MyFileNotFoundException;
+import com.rimdev.user.Exception.DuplicationException;
+import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.FileappTypeRepo;
 import com.rimdev.user.Repo.FilesUploadRepo;
 import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
-import com.rimdev.user.entities.FileappType;
 import com.rimdev.user.entities.FilesUpload;
-import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
 import com.rimdev.user.ouputobject.UploadFileResponse;
 
@@ -55,11 +56,15 @@ public class FileStorageService {
 	@Autowired
 	FileappTypeRepo fileappTypeRepo;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
+	
 	
 	 private  Path fileStorageLocation;
 	 
-	 int stype;
-	 int suserid;
+	 int scomponentid;
+	 int spageid;
+	 int sparentid;
 	 String sfilename;
 	 BigDecimal comtime;
 
@@ -71,13 +76,13 @@ public class FileStorageService {
 	        try {
 	            Files.createDirectories(this.fileStorageLocation);
 	        } catch (Exception ex) {
-	            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+	            throw new NoDataException("Could not create the directory where the uploaded files will be stored.", ex);
 	        }
 	    }
 	    
 	    Path create_maindirectory() {
 	    	
-	    	 Path targetLocation1 = this.fileStorageLocation.resolve(suserid+"\\"+stype+"\\");
+	    	 Path targetLocation1 = this.fileStorageLocation.resolve(spageid+"\\"+sparentid+"\\"+scomponentid+"\\");
 
 	  	   // 	System.out.println(String.valueOf(targetLocation1.toAbsolutePath()));
 	  	    	
@@ -112,7 +117,7 @@ public class FileStorageService {
 	    
 	    Path create_tempdirectory() {
 	    	
-	    	Path targetLocationtemp = this.fileStorageLocation.resolve("temp\\"+suserid+"\\"+stype+"\\");
+	    	Path targetLocationtemp = this.fileStorageLocation.resolve("temp\\"+spageid+"\\"+sparentid+"\\"+scomponentid+"\\");
 	        File directorytemp = targetLocationtemp.toFile();
 	
 		    	try {
@@ -121,9 +126,10 @@ public class FileStorageService {
 			    		 
 			    		 boolean bool = directorytemp.mkdirs();
 			    	      if(bool){
-			    	   //      System.out.println("Directory created successfully");
+			    	        System.out.println("Directory created successfully");
 			    	    	
 			    	      }else{
+			    	    	  System.out.println("Directory Not created successfully");
 			    	         // UploadFileResponse b= new UploadFileResponse("", "","", 0,3,"Directory Not created");
 					        //    return b;
 				        		 return null;   	     
@@ -173,54 +179,11 @@ public class FileStorageService {
 	    	
 	    }
 
-	    public UploadFileResponse storeFile(MultipartFile file,int type,int userid) {
-	    	 User  userouput =new User();
-	    	 FileappType  typeouput =new FileappType();
-	    
-	    	try {
-	    		Optional<User> userreq =userRepo.findById(userid);
-	    	
-	    		 
-	    		 if (userreq.isPresent()){
-	    			 userouput = userreq.get();
-	    			   
-	    			}
-	    			else{
-	    			   // alternative processing....
-	    				
-			    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"User not found");	
-			    		return a;
-	    			}
-	    	} catch (Exception e) {
-	    		// TODO: handle exception
-	    		
-	    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"User  not found");	
-	    		return a;
-	    	}
-	    	
-	    	 
-	    	try {
-	    		
-	    		Optional<FileappType> typereq =fileappTypeRepo.findById(type);
-	    		 
-	    		 if (typereq.isPresent()){
-	    			   typeouput=typereq.get();
-	    			}
-	    			else{
-	    			   // alternative processing....
-	    				
-			    		UploadFileResponse a= new UploadFileResponse("", "","",0,4,"type not found");	
-			    		return a;
-	    			}
-	    	} catch (Exception e) {
-	    		// TODO: handle exception
-	    		
-	    		UploadFileResponse a= new UploadFileResponse("", "","",0,4,"type not found");	
-	    		return a;
-	    	}
-	    	
-	    	stype=type;
-	    	suserid=userid;
+	    public FilesUpload storeFile(MultipartFile file,int pageid,int parentid,int componentid,String langcode) {
+
+	   	  scomponentid=componentid;
+		  spageid=pageid;
+		  sparentid=parentid;
 	    	try {
 	    		Path main =	create_maindirectory() ;
 		    	Path temp =	create_tempdirectory() ;
@@ -228,17 +191,26 @@ public class FileStorageService {
 			    	
 		    	Path filetemp =save_file(file, temp);
 		    	
-		    	boolean ind=fileEquals(filetemp.toFile(),main.toFile());
+		   // 	  System.out.println(filetemp);
+		    	
+		    	boolean ind=true;
+		    	try {
+		    		 ind=fileEquals(filetemp.toFile(),main.toFile());
+		    		  filetemp.toFile().delete();
+				} catch (NullPointerException e) {
+					// TODO: handle exception
+					ind=false;
+				}
+		    	
 		    	
 		    	if(ind) {
-		    		filetemp.toFile().delete();
-		    		UploadFileResponse a= new UploadFileResponse("", "","",0,2,"file duplicate");	
-		    		return a;
+		    		//System.out.println("duplicate");
+		    		throw new DuplicationException(textConvertionServ.search("E105", langcode));
 		    	}
 
-		  //  System.out.println(filetemp);
+		//  System.out.println(filetemp);
 		    	
-		    	filetemp.toFile().delete();
+		  
 		    	
 		    Path maintemp =	save_file(file, main);
 
@@ -254,25 +226,17 @@ public class FileStorageService {
 	       fileu.setFilesType(file.getContentType());
 	       fileu.setFilecomruntime(comtime);
 	       filesUploadRepo.save(fileu);
-	       
-	       UserFile userf=new UserFile();
-	       userf.setFilesuploadID(fileu);
-	       userf.setUserID(userouput);
-	       userf.setFileApptypeID(typeouput);
-	       userFileRepo.save(userf);
-	       
-	       
-	        UploadFileResponse a= new UploadFileResponse(sfilename, fileDownloadUri,
-			                file.getContentType(), file.getSize(),0,"Sucess");
-		            
-		            
-		            return a;
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-		 		UploadFileResponse a= new UploadFileResponse("", "","",0,30,"error while saving");	
-	    		return a;
-			}
+
+		            return fileu;
+			}catch (TransientDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    } catch (RecoverableDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }catch (ScriptException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }catch (NonTransientDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }
 	    
 	    
 	    }
@@ -289,11 +253,11 @@ public class FileStorageService {
 	                return resource;
 	            } else {
 	            
-	                throw new MyFileNotFoundException("File not found " + fileName);
+	                throw new NoDataException("File not found " + fileName);
 	            }
 	        } catch (MalformedURLException ex) {
 	        	ex.printStackTrace();
-	            throw new MyFileNotFoundException("File not found " + fileName, ex);
+	            throw new NoDataException("File not found " + fileName, ex);
 	        }
 	    }
 	    

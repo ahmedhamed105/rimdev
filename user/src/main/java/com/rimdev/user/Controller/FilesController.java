@@ -20,12 +20,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Services.FileStorageService;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.ouputobject.UploadFileResponse;
 import com.rimdev.user.ouputobject.filesearching;
+import com.rimdev.user.ouputobject.parent_comp;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/file") // 
@@ -45,11 +48,7 @@ public class FilesController {
 	    }
 	    
 	    
-	    public UploadFileResponse uploadFile(MultipartFile file,int type,int userid) {
-			  UploadFileResponse a = fileStorageService.storeFile(file,type,userid);
-				return a;
-	    }
-	    
+
 	    
 		
 		  @RequestMapping(value = "/all/{Userid}/{Filetype}", method = RequestMethod.GET)
@@ -61,29 +60,25 @@ public class FilesController {
 		  
 	
 	
-	  @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public ResponseEntity<UploadFileResponse> uploadsingleFile(@RequestParam("file") MultipartFile file,@RequestParam("type") int type,@RequestParam("userid") int userid) {
-		 System.out.println(type+" "+userid);
-		  
-		  UploadFileResponse a=uploadFile(file,type,userid);
+	  @RequestMapping(value = "/uploadFile/{langcode}", method = RequestMethod.POST)
+    public ResponseEntity<FilesUpload> uploadsingleFile(@PathVariable("langcode") String langcode,@RequestParam("file") MultipartFile file,@RequestParam("pageid") int pageid,@RequestParam("parentid") int parentid,@RequestParam("componentid") int componentid) {
+		 System.out.println(pageid+" "+parentid+" "+componentid);
+
+		return new ResponseEntity<FilesUpload>(fileStorageService.storeFile(file,pageid,parentid,componentid,langcode), HttpStatus.OK);
 		 
-		 if (a.getError() > 0) {
-		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.CONFLICT);
-		}
-		return new ResponseEntity<UploadFileResponse>(a, HttpStatus.OK);
-
+		
     }
 
-    @PostMapping("/uploadMultipleFiles")
-    public ResponseEntity<List<UploadFileResponse>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@RequestParam("type") int type,@RequestParam("userid") int userid) {
+  //  @PostMapping("/uploadMultipleFiles")
+ //   public ResponseEntity<List<UploadFileResponse>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@RequestParam("type") int type,@RequestParam("userid") int userid) {
        
-    	List<UploadFileResponse>  a = Arrays.asList(files)
-        .stream()
-        .map(file -> uploadFile(file,type,userid))
-        .collect(Collectors.toList());
+ //   	List<UploadFileResponse>  a = Arrays.asList(files)
+ //       .stream()
+ //       .map(file -> uploadFile(file,type,userid))
+ //       .collect(Collectors.toList());
     	
-    	return new ResponseEntity<List<UploadFileResponse>>(a, HttpStatus.OK);
-    }
+//    	return new ResponseEntity<List<UploadFileResponse>>(a, HttpStatus.OK);
+ //   }
     
     
     @RequestMapping(value = "/downloadFile/{Userid}/{Filetype}/{fileName:.+}", method = RequestMethod.GET)

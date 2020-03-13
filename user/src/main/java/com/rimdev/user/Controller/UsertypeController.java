@@ -34,8 +34,8 @@ public class UsertypeController {
 
 	  
 
-@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<UserType>> saveorupdate(@RequestBody List<UserType> UserTypes) {
+@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<UserType>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody List<UserType> UserTypes) {
   // This returns a JSON or XML with the users
 	
 	for (UserType input : UserTypes) {
@@ -86,7 +86,7 @@ try {
 	}
 	
 	
-	return new ResponseEntity<List<UserType>>(userTypeServ.getall(), HttpStatus.OK);
+	return new ResponseEntity<List<UserType>>(userTypeServ.getall(langcode), HttpStatus.OK);
 
 }
 
