@@ -134,7 +134,8 @@ public User Save(User input,String langcode) {
 	
 	try {	
 		Date date = new Date();
-		String tokean=Generate.token(10);
+		Generate gen=new Generate();
+		String tokean=gen.token(10);
 		input.setUseridnumber(tokean);
 		input.setUsercreate(date);
 		input.setUsermodify(date);

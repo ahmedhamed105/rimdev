@@ -67,6 +67,10 @@ public class FilesUpload implements Serializable {
     @Column(name = "filecomruntime", precision = 20, scale = 6)
     private BigDecimal filecomruntime;
 
+    @JoinColumn(name = "file_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private FileStatus filestatusID;
+
 
     public FilesUpload() {
     }
@@ -131,6 +135,16 @@ public class FilesUpload implements Serializable {
 
     public void setUserFileCollection(Collection<UserFile> userFileCollection) {
         this.userFileCollection = userFileCollection;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public FileStatus getFilestatusID() {
+        return filestatusID;
+    }
+
+    public void setFilestatusID(FileStatus filestatusID) {
+        this.filestatusID = filestatusID;
     }
     
     public BigDecimal getFilecomruntime() {

@@ -30,11 +30,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.rimdev.user.Config.FileStorageProperties;
 import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Repo.FileStatusRepo;
 import com.rimdev.user.Repo.FileappTypeRepo;
 import com.rimdev.user.Repo.FilesUploadRepo;
 import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
+import com.rimdev.user.entities.FileStatus;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.UserFile;
 import com.rimdev.user.ouputobject.UploadFileResponse;
@@ -47,6 +49,9 @@ public class FileStorageService {
 	
 	@Autowired
 	UserRepo userRepo;
+	
+	@Autowired
+	FileStatusRepo fileStatusRepo;
 	
 	
 	@Autowired
@@ -126,10 +131,10 @@ public class FileStorageService {
 			    		 
 			    		 boolean bool = directorytemp.mkdirs();
 			    	      if(bool){
-			    	        System.out.println("Directory created successfully");
+			    	    //    System.out.println("Directory created successfully");
 			    	    	
 			    	      }else{
-			    	    	  System.out.println("Directory Not created successfully");
+			    	    //	  System.out.println("Directory Not created successfully");
 			    	         // UploadFileResponse b= new UploadFileResponse("", "","", 0,3,"Directory Not created");
 					        //    return b;
 				        		 return null;   	     
@@ -153,8 +158,10 @@ public class FileStorageService {
 	    Path  save_file(MultipartFile file,Path temp){
 	    	
 	    	 String [] extension= file.getOriginalFilename().split("\\.");
+	    	 
+	    	 Generate gen=new Generate();
 	    	  
-	    	  String filname=Generate.token(30)+"."+extension[extension.length-1];
+	    	  String filname=gen.token(30)+"."+extension[extension.length-1];
 	    
 	        // Normalize file name
 	        String fileName = StringUtils.cleanPath(filname);
@@ -213,11 +220,34 @@ public class FileStorageService {
 		  
 		    	
 		    Path maintemp =	save_file(file, main);
+		    
+		    sfilename=maintemp.getFileName().getFileName().toString();
 
 	       String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 			                .path("file/downloadFile/")
 			                .path(sfilename)
 			                .toUriString();
+	       FileStatus  filst;
+	       try {
+	    		
+	    		Optional<FileStatus> typereq =fileStatusRepo.findById(1);
+	    		 
+	    		 if (typereq.isPresent()){
+	    			 filst=typereq.get();
+	    			}
+	    			else{
+	    			   // alternative processing....
+	    				
+	      throw new NoDataException("Error no file status");
+
+	    			}
+	    	} catch (Exception e) {
+	    		// TODO: handle exception
+	  	      throw new NoDataException("Error ",e);
+	
+	    		
+	    	}
+	       
 	       
 	       FilesUpload fileu=new FilesUpload();
 	       fileu.setFilesName(sfilename);
@@ -225,6 +255,7 @@ public class FileStorageService {
 	       fileu.setFilesSize(new BigDecimal(file.getSize()/1000));
 	       fileu.setFilesType(file.getContentType());
 	       fileu.setFilecomruntime(comtime);
+	       fileu.setFilestatusID(filst);
 	       filesUploadRepo.save(fileu);
 
 		            return fileu;
@@ -263,7 +294,7 @@ public class FileStorageService {
 	    
 	    
 	    
-	    public UploadFileResponse deleteFile(int fileid,String langcode) {
+	    public void deleteFile(int fileid,String langcode) {
 	    //	System.out.println("load");
 	    	
 	    	FilesUpload filedel=new FilesUpload();
@@ -289,53 +320,37 @@ public class FileStorageService {
 				throw new NullPointerException(textConvertionServ.search("E104", langcode));
 		    }
 	    	
-	    	UserFile userf=new UserFile();
-	    	try {
-	    		
-	    		Optional<UserFile> filed= userFileRepo.findbyusertypefile(userid,type,filedel.getId());
-	    		 
-	    		 if (filed.isPresent()){
-	    			 userf=filed.get();
-	    			}
-	    			else{
-	    			   // alternative processing....
-	    				
-			    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"file not found");	
-			    		return a;
-	    			}
-	    	} catch (Exception e) {
-	    		// TODO: handle exception
-	    		
-	    		UploadFileResponse a= new UploadFileResponse("", "","",0,3,"file not found");	
-	    		return a;
-	    	}
 	    	
+	    	 FileStatus  filst;
+		       try {
+		    		
+		    		Optional<FileStatus> typereq =fileStatusRepo.findById(2);
+		    		 
+		    		 if (typereq.isPresent()){
+		    			 filst=typereq.get();
+		    			}
+		    			else{
+		    			   // alternative processing....
+		    				
+		      throw new NoDataException("Error no file status");
+
+		    			}
+		    	} catch (Exception e) {
+		    		// TODO: handle exception
+		  	      throw new NoDataException("Error ",e);
+		
+		    		
+		    	}
+	    
+	    	filedel.setFilestatusID(filst);
 	    	try {
-	    		userFileRepo.delete(userf);
-	    		filesUploadRepo.delete(filedel);
+	    		
+	    		filesUploadRepo.save(filedel);
 			} catch (Exception e) {
 				// TODO: handle exception
-				UploadFileResponse a= new UploadFileResponse("", "","",0,4,"file not found");	
-	    		return a;
+			    throw new NoDataException("Error ",e);
 			}
-	    	
-	      try {
-	 	     Path targetLocation1 = this.fileStorageLocation.resolve(userid+"\\"+type+"\\");
-
-	            Path filePath = targetLocation1.resolve(fileName).normalize();
-	            if(!filePath.toFile().delete()) {
-	            	UploadFileResponse a= new UploadFileResponse("", "","",0,1,"error while deleting");	
-	        		return a;		
-	            }
-	            UploadFileResponse a= new UploadFileResponse("", "","",0,0,"Deleted");	
-	    		return a;
-		} catch (Exception e) {
-			// TODO: handle exception
-			UploadFileResponse a= new UploadFileResponse("", "","",0,1,"error while deleting");	
-    		return a;
-		}
-	
-	            
+      
 	       
 	    }
 	    

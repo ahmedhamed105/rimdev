@@ -42,7 +42,8 @@ public response_all Save(Device input) {
 	response_all res=new response_all();	
 	try {	
 		Date date = new Date();
-		String tokean=Generate.token(30);
+		Generate gen=new Generate();
+		String tokean=gen.token(30);
 		input.setDevicetokean(tokean);
         // convert date to calendar
         Calendar c = Calendar.getInstance();

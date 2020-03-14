@@ -5,10 +5,10 @@ import java.security.SecureRandom;
 public class Generate {
 	
 
-	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	static SecureRandom rnd = new SecureRandom();
+	 final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	
-	public static String token(int length){
+	public  String token(int length){
+		SecureRandom rnd = new SecureRandom();
 		   StringBuilder sb = new StringBuilder( length );
 		   for( int i = 0; i < length; i++ ) 
 		      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );

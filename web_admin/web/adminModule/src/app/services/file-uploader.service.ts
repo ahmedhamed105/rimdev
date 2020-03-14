@@ -67,7 +67,7 @@ export class FileUploaderService {
 
   
   public urladd: string = 'http://localhost:8081/file/uploadFile/EN';
-  public urlremove: string = 'http://localhost:8081/file/deleteFile';
+  public urlremove: string = 'http://localhost:8081/file/deleteFile/EN';
 
   public urldownload: string = 'http://localhost:8081/file/downloadFile/';
 
@@ -241,7 +241,7 @@ console.log(index)
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
           this._uploadComplete(queueObj, event);
-          _.remove(this._files, queueObj);
+          _.remove(this._files[queueObj.index], queueObj);
         }
       },
       (err: HttpErrorResponse) => {

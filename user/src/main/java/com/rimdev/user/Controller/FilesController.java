@@ -42,12 +42,6 @@ public class FilesController {
 	    private FileStorageService fileStorageService;
 	    
 	    
-	    public UploadFileResponse deleteFile(String fileName,int type,int userid) {
-	    	 UploadFileResponse a =  fileStorageService.deleteFile(fileName,type,userid);
-				return a;
-	    }
-	    
-	    
 
 	    
 		
@@ -108,11 +102,17 @@ public class FilesController {
     
     
     @PostMapping("/deleteFile/{langcode}")
-    public ResponseEntity<UploadFileResponse> deleteFile(HttpServletRequest request,@RequestParam("fileid") int fileid) {
-		return new ResponseEntity<UploadFileResponse>(deleteFile(fileid), HttpStatus.OK);
-   
-
- 	
+    public ResponseEntity<FilesUpload> deleteFile(HttpServletRequest request,@RequestParam("fileid") int fileid,@PathVariable("langcode") String langcode) {
+    	FilesUpload result = new FilesUpload();
+    	
+    	try {
+			fileStorageService.deleteFile(fileid,langcode); 
+		} catch (Exception e) {
+			// TODO: handle exception
+			
+		}
+    	
+    	return new ResponseEntity<FilesUpload>(result, HttpStatus.OK);
 
     }
 }
