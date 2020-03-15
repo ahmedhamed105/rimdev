@@ -1,6 +1,5 @@
 package com.rimdev.user.Services;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
-import com.rimdev.user.entities.Device;
+import com.rimdev.user.entities.Component;
+import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
-import com.rimdev.user.entities.UserType;
-import com.rimdev.user.ouputobject.response_all;
+import com.rimdev.user.ouputobject.threevalues;
 
 @Service
 public class UserServ {
@@ -30,6 +30,19 @@ public class UserServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	@Autowired
+	FileStorageService fileStorageService;
+	
+	
+	@Autowired
+	ComponentServ componentServ;
+	
+	
+
+	
+	@Autowired
+	UserFileServ userFileServ;
 	
 	
 public List<User> getall(String langcode) {
@@ -141,6 +154,7 @@ public User Save(User input,String langcode) {
 		input.setUsermodify(date);
 		User ouput =userRepo.save(input);	
 		return ouput;
+
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
@@ -172,6 +186,23 @@ public User update(User input,String langcode) {
     }		
 		
 	}
+
+
+public FilesUpload savefile(threevalues input,String langcode) {
+	User user=getuser(Integer.parseInt(input.getValue1()), langcode);
+	FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
+	Component com=componentServ.getComponentbyid(Integer.parseInt(input.getValue3()), langcode);
+	
+	try {
+		
+		userFileServ.Save(user, file,com, langcode);
+		
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
+	
+	return file;
+}
 
 
 

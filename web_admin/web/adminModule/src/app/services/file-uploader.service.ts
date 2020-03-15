@@ -5,6 +5,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { Ifiledownload } from '../objects/Ifiledownload';
 import { saveAs } from 'file-saver';
+import { UsersService } from '../services/users.service';
 
 
 export enum FileQueueStatus {
@@ -29,6 +30,10 @@ export enum FileQueueStatus {
     public pageid:any;
     public parentid:any;
     public componentid:any;
+    public insertserv:any;
+    public updateserv:any;
+    public insertparmeter:any;
+    public deleteparmeter:any;
 
   
     constructor(file: any,type: any,index: any,pageid:number,parentid:number,componentid:number) {
@@ -78,7 +83,7 @@ export class FileUploaderService {
 
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private _usersservice:UsersService) {
     
   }
 
@@ -108,9 +113,9 @@ export class FileUploaderService {
   }
 
   // public functions
-  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number) {
+  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter) {
     // add file to the queue
-    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid));
+    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter));
   }
 
   public clearQueue() {
@@ -119,7 +124,7 @@ export class FileUploaderService {
 
       _.each(queueObj1, (queueObj: FileQueueObject) => {
 
-        console.log(queueObj.index)
+      //  console.log(queueObj.index)
         
           this._files[queueObj.index] = [];
           this._queue[queueObj.index].next(this._files[queueObj.index]);
@@ -130,33 +135,24 @@ export class FileUploaderService {
 
   }
 
-  public uploadAllinsert() {
+  public uploadAllinsert(object) {
     // upload all except already successfull or in progress
+    var i = 0 ;
     _.each(this._files, (queueObj1: FileQueueObject[]) => {
 
       _.each(queueObj1, (queueObj: FileQueueObject) => {
 
-        if (queueObj.isUploadable()) {
+        if (queueObj.isUploadable()) { 
           //  queueObj.userid = userid;
-            this._upload(queueObj);
+            this._upload(queueObj,object);
+            i++;
           }
         
             });
           });
-
-
-
   }
 
 
-  public uploadAll() {
-    // upload all except already successfull or in progress
-    _.each(this._files, (queueObj: FileQueueObject) => {
-      if (queueObj.isUploadable()) {
-        this._upload(queueObj);
-      }
-    });
-  }
 
   private _downloadfile(queueObj: FileQueueObject){
 
@@ -203,15 +199,17 @@ console.log(url);
   }
 
   // private functions
-  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number) {
+  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insertserv,inspara) {
 
 console.log(index)
 
     var queueObj = new FileQueueObject(file,type,index,pageid,parentid,componentid);
     queueObj.filename = file.name;
     queueObj.index = index;
+    queueObj.insertserv = insertserv;
+    queueObj.insertparmeter = inspara;
     // set the individual object events
-    queueObj.upload = () => this._upload(queueObj);
+    queueObj.upload = () => this._upload(queueObj,null);
     queueObj.delete = () => this._deleteFromQueuepost(queueObj);
     queueObj.cancel = () => this._cancel(queueObj);
     queueObj.removefromquery = () => this._removeFromQueue(queueObj);
@@ -240,7 +238,7 @@ console.log(index)
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event);
+          this._uploadComplete(queueObj, event,1,null);
           _.remove(this._files[queueObj.index], queueObj);
         }
       },
@@ -270,8 +268,11 @@ console.log(index)
 
   }
 
-  private _upload(queueObj: FileQueueObject) {
+  private _upload(queueObj: FileQueueObject,object) {
 
+    console.log(queueObj.insertserv,queueObj.insertparmeter,queueObj.componentid);
+
+    console.log(object[queueObj.insertparmeter]);
 
     // create form data for file
     var form = new FormData();
@@ -291,7 +292,7 @@ console.log(index)
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event);
+          this._uploadComplete(queueObj, event,0,object[queueObj.insertparmeter],queueObj.componentid);
         }
       },
       (err: HttpErrorResponse) => {
@@ -324,15 +325,26 @@ console.log(index)
     this._queue[queueObj.index].next(this._files[queueObj.index]);
   }
 
-  private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>) {
+  private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>,para,object,compid) {
     // update the FileQueueObject as completed
-    queueObj.progress = 100;
-    queueObj.status = FileQueueStatus.Success;
-    queueObj.response = response;
-    queueObj.filename = response.body.filesName;
-    queueObj.fileid= response.body.id;
-    this._queue[queueObj.index].next(this._files[queueObj.index]);
-    this.onCompleteItem(queueObj, response.body);
+if(para === 0){
+  console.log("insert");
+  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid).subscribe(data => {
+console.log(data);
+queueObj.progress = 100;
+queueObj.status = FileQueueStatus.Success;
+queueObj.response = response;
+queueObj.filename = response.body.filesName;
+queueObj.fileid= response.body.id;
+this._queue[queueObj.index].next(this._files[queueObj.index]);
+this.onCompleteItem(queueObj, response.body);
+
+  });
+}
+  
+
+
+ 
   }
 
   private _uploadFailed(queueObj: FileQueueObject, response: HttpErrorResponse) {

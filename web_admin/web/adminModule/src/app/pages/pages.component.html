@@ -148,7 +148,7 @@
 
 <div class="form-group" *ngIf="component.input.inputtypeID.itype == 'file'">
   <h3>Passport files {{component.comp.name}}</h3>
-  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,i,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id)" />
+  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,i,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter)" />
   <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>

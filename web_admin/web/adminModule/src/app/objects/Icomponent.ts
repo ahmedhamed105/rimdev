@@ -41,7 +41,11 @@
             inputtypeID: {
                 id: number,
                 itype: string
-            }
+            },
+            insertServ: string,
+            deleteServ: string,
+            insertParameter: string,
+            deleteParameter: string
         },
         button: {
             id: number,

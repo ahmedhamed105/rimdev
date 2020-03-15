@@ -31,7 +31,6 @@ import com.rimdev.user.Config.FileStorageProperties;
 import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.FileStatusRepo;
-import com.rimdev.user.Repo.FileappTypeRepo;
 import com.rimdev.user.Repo.FilesUploadRepo;
 import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Repo.UserRepo;
@@ -39,7 +38,6 @@ import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.FileStatus;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.UserFile;
-import com.rimdev.user.ouputobject.UploadFileResponse;
 
 @Service
 public class FileStorageService {
@@ -58,8 +56,6 @@ public class FileStorageService {
 	FilesUploadRepo filesUploadRepo;
 	
 	
-	@Autowired
-	FileappTypeRepo fileappTypeRepo;
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
@@ -206,6 +202,7 @@ public class FileStorageService {
 		    		  filetemp.toFile().delete();
 				} catch (NullPointerException e) {
 					// TODO: handle exception
+					e.printStackTrace();
 					ind=false;
 				}
 		    	
@@ -218,15 +215,17 @@ public class FileStorageService {
 		//  System.out.println(filetemp);
 		    	
 		  
-		    	
-		    Path maintemp =	save_file(file, main);
-		    
-		    sfilename=maintemp.getFileName().getFileName().toString();
+		    	try {
+		    	    Path maintemp =	save_file(file, main);
+				    
+				    sfilename=maintemp.getFileName().getFileName().toString();
 
-	       String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-			                .path("file/downloadFile/")
-			                .path(sfilename)
-			                .toUriString();
+			       String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+					                .path("file/downloadFile/")
+					                .path(sfilename)
+					                .toUriString();
+				
+		
 	       FileStatus  filst;
 	       try {
 	    		
@@ -268,7 +267,10 @@ public class FileStorageService {
 		    }catch (NonTransientDataAccessException  se) {
 				throw new NullPointerException(textConvertionServ.search("E104", langcode));
 		    }
-	    
+	    	} catch (Exception e) {
+				// TODO: handle exception
+			    throw new NoDataException("Error while saving");
+			}
 	    
 	    }
 
@@ -297,28 +299,7 @@ public class FileStorageService {
 	    public void deleteFile(int fileid,String langcode) {
 	    //	System.out.println("load");
 	    	
-	    	FilesUpload filedel=new FilesUpload();
-	    	try {
-	    		
-	    		Optional<FilesUpload> filed= filesUploadRepo.findById(fileid);
-	    		 
-	    		 if (filed.isPresent()){
-	    			 filedel=filed.get();
-	    			}
-	    			else{
-	    			   // alternative processing....
-	    				
-			   throw new NoDataException("file not found");
-	    			}
-	    	}catch (TransientDataAccessException  se) {
-				throw new NullPointerException(textConvertionServ.search("E104", langcode));
-		    } catch (RecoverableDataAccessException  se) {
-				throw new NullPointerException(textConvertionServ.search("E104", langcode));
-		    }catch (ScriptException  se) {
-				throw new NullPointerException(textConvertionServ.search("E104", langcode));
-		    }catch (NonTransientDataAccessException  se) {
-				throw new NullPointerException(textConvertionServ.search("E104", langcode));
-		    }
+	    	FilesUpload filedel=getfilebyid(fileid,langcode);
 	    	
 	    	
 	    	 FileStatus  filst;
@@ -474,6 +455,37 @@ public class FileStorageService {
 	    	return files;
 	    	
 	    	
+		}
+	    
+	    
+	    
+	    public FilesUpload getfilebyid(int fileid,String langcode) {
+			// TODO Auto-generated method stub
+	    	
+	    	
+	    	FilesUpload filedel=new FilesUpload();
+	    	try {
+	    		
+	    		Optional<FilesUpload> filed= filesUploadRepo.findById(fileid);
+	    		 
+	    		 if (filed.isPresent()){
+	    			 filedel=filed.get();
+	    			}
+	    			else{
+	    			   // alternative processing....
+	    				
+			   throw new NoDataException("file not found");
+	    			}
+	    	}catch (TransientDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    } catch (RecoverableDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }catch (ScriptException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }catch (NonTransientDataAccessException  se) {
+				throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		    }
+			return filedel;
 		}
 	    
 	    

@@ -46,10 +46,9 @@ public class UserFile implements Serializable {
     @JoinColumn(name = "files_upload_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private FilesUpload filesuploadID;
-    
-    @JoinColumn(name = "file_App_type_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
-    private FileappType fileApptypeID;
+    private Component componentID;
 
     public UserFile() {
     }
@@ -84,12 +83,12 @@ public class UserFile implements Serializable {
     
     
 
-    public FileappType getFileApptypeID() {
-        return fileApptypeID;
+    public Component getComponentID() {
+        return componentID;
     }
 
-    public void setFileApptypeID(FileappType fileApptypeID) {
-        this.fileApptypeID = fileApptypeID;
+    public void setComponentID(Component componentID) {
+        this.componentID = componentID;
     }
     
 

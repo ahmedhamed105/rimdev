@@ -11,9 +11,10 @@ import { ComponentService } from '../services/component.service';
 import { ActivatedRoute, ParamMap, Router, NavigationEnd } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
 import { Idirectory } from '../objects/idirectory';
-import { Observable } from 'rxjs';
+import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
+import * as _ from 'lodash';
 
 declare var $: any;
 
@@ -33,7 +34,7 @@ export class PagesComponent implements OnInit {
   public arraystatic = [];
   public page : Idirectory;
   public type ;
-
+  public isfile;
 
   constructor(private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
@@ -71,7 +72,7 @@ export class PagesComponent implements OnInit {
 
 
 
-
+    this.isfile =false;
 
 
     var menuid =this.route.snapshot.paramMap.get("id").toString();
@@ -138,6 +139,8 @@ export class PagesComponent implements OnInit {
           this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,indexp);
         
           if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'file'){
+             
+             this.isfile = true;
 
            this.queue[index] = this.fileupload.queue(index);
            this.fileupload.onCompleteItem = this.completeItem;
@@ -316,7 +319,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
 
- addfiles($event,name,index,pageid,parentid,compid) {
+ addfiles($event,name,index,pageid,parentid,compid,insert,parameter) {
 
   const fileBrowser = $event.target;
   
@@ -332,7 +335,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid);
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter);
 }
 
 
@@ -419,30 +422,29 @@ this.rowData= this._usersservice.insertbyurl(node,serv);
   
 
 onSubmit(form,serv){
-  console.log(this.rowData);
-
-  this.fileupload.uploadAllinsert();
- // this.fileupload.clearQueue();
-  /*
-
-  if(this.rowData === undefined){
-    this.fileupload.uploadAllinsert();
-
-    
 
 
 
+     this._usersservice.insertbyurl(form.value,serv).subscribe(data => {
 
-    this._usersservice.insertbyurl(form.value,serv).subscribe(data => {
+    console.log(data)
+
+      if(this.rowData === undefined){
+      }else{
+        this.rowData= of(data) ;
+      }
+      if(this.isfile){
+        this.fileupload.uploadAllinsert(data)
+        this.fileupload.clearQueue();
+
+      } 
 
       form.reset();
 
     });
-  }else{
-    this.rowData=   this._usersservice.insertbyurl(form.value,serv);
-    form.reset();
-  }
- */
+    
+
+ 
  
 }
 

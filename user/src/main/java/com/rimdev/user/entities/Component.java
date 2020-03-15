@@ -95,6 +95,9 @@ public class Component implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentButton> componentButtonCollection;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
+    private Collection<UserFile> userFileCollection;
+    
     @JoinColumn(name = "parent_component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private ParentComponent parentcomponentID;
@@ -113,6 +116,17 @@ public class Component implements Serializable {
         this.ccode = ccode;
         this.crequired = crequired;
         this.cpattern = cpattern;
+    }
+    
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<UserFile> getUserFileCollection() {
+        return userFileCollection;
+    }
+
+    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
+        this.userFileCollection = userFileCollection;
     }
     
     

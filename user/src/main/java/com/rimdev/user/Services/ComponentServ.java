@@ -2,6 +2,7 @@ package com.rimdev.user.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
@@ -16,6 +17,7 @@ import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
+import com.rimdev.user.entities.User;
 import com.rimdev.user.ouputobject.Component_object;
 
 @Service
@@ -107,6 +109,33 @@ public class ComponentServ {
 			return coms;
 		
 		
+	}
+	
+	
+	
+	public Component getComponentbyid(int id,String langcode) {
+		
+		try {
+			Optional<Component> flowid =componentRepo.findById(id);
+			 
+			 if (flowid.isPresent()){
+				 Component  ouput = flowid.get();
+			
+				  return ouput;
+						}
+				else{
+				   // alternative processing....
+					throw new NoDataException(textConvertionServ.search("E108", langcode));
+				}
+		} catch (TransientDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    } catch (RecoverableDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }catch (ScriptException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }catch (NonTransientDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }
 	}
 
 }

@@ -62,6 +62,14 @@ public class ComponentInput implements Serializable {
     @Column(name = "date_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
+    @Column(name = "insert_serv", length = 450)
+    private String insertServ;
+    @Column(name = "delete_serv", length = 450)
+    private String deleteServ;
+    @Column(name = "insert_parameter", length = 450)
+    private String insertParameter;
+    @Column(name = "delete_parameter", length = 450)
+    private String deleteParameter;
 
     public ComponentInput() {
     }
@@ -73,6 +81,39 @@ public class ComponentInput implements Serializable {
     public ComponentInput(Integer id, String inputActions) {
         this.id = id;
         this.inputActions = inputActions;
+    }
+    
+    
+    public String getInsertServ() {
+        return insertServ;
+    }
+
+    public void setInsertServ(String insertServ) {
+        this.insertServ = insertServ;
+    }
+
+    public String getDeleteServ() {
+        return deleteServ;
+    }
+
+    public void setDeleteServ(String deleteServ) {
+        this.deleteServ = deleteServ;
+    }
+
+    public String getInsertParameter() {
+        return insertParameter;
+    }
+
+    public void setInsertParameter(String insertParameter) {
+        this.insertParameter = insertParameter;
+    }
+
+    public String getDeleteParameter() {
+        return deleteParameter;
+    }
+
+    public void setDeleteParameter(String deleteParameter) {
+        this.deleteParameter = deleteParameter;
     }
 
     @XmlTransient
