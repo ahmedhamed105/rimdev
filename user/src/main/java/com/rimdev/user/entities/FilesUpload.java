@@ -70,6 +70,9 @@ public class FilesUpload implements Serializable {
     @JoinColumn(name = "file_status_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private FileStatus filestatusID;
+    
+    @Column(name = "file_path", length = 450)
+    private String filePath;
 
 
     public FilesUpload() {
@@ -87,6 +90,14 @@ public class FilesUpload implements Serializable {
         this.filesType = filesType;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+    
     public Integer getId() {
         return id;
     }

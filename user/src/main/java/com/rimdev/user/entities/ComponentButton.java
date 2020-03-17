@@ -68,6 +68,10 @@ public class ComponentButton implements Serializable {
     @Column(name = "date_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
+    @Column(name = "method_paramter", length = 450)
+    private String methodParamter;
+    @Column(name = "disable", nullable = false)
+    private int disable;
 
     public ComponentButton() {
     }
@@ -80,6 +84,24 @@ public class ComponentButton implements Serializable {
         this.id = id;
         this.buttonClass = buttonClass;
         this.buttonMethod = buttonMethod;
+    }
+    
+    
+    public int getDisable() {
+        return disable;
+    }
+
+    public void setDisable(int disable) {
+        this.disable = disable;
+    }
+    
+    
+    public String getMethodParamter() {
+        return methodParamter;
+    }
+
+    public void setMethodParamter(String methodParamter) {
+        this.methodParamter = methodParamter;
     }
     
     @XmlTransient

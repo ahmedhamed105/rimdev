@@ -142,7 +142,7 @@ export class PagesComponent implements OnInit {
              
              this.isfile = true;
 
-           this.queue[index] = this.fileupload.queue(index);
+           this.queue[element.comp.id] = this.fileupload.queue(element.comp.id);
            this.fileupload.onCompleteItem = this.completeItem;
 
           }
@@ -305,7 +305,7 @@ if(parent.parent.firstmethod === undefined){
 
    // console.log(this.columnDefs)
 
-
+   this.fileupload.clearQueue();
 
 
 
@@ -396,7 +396,7 @@ if(group != null){
   }
 
 
-  tableaction(serv){
+  tableaction(serv,para){
 
     console.log(this.gridOptions)
     const selectedNodes = this.gridOptions.api.getSelectedNodes();
@@ -411,9 +411,36 @@ if(group != null){
     const selectedDataStringPresentation = selectedData.map( node =>
        {
      console.log(node)
-    //    console.log(node.emailPrimary)
+ 
 
 this.rowData= this._usersservice.insertbyurl(node,serv);
+
+      });
+
+  }
+
+
+  displayupdate(serv,para){
+ //console.log(this.gridOptions)
+    const selectedNodes = this.gridOptions.api.getSelectedNodes();
+
+    if(selectedNodes.length === 0 ){
+
+     this.errorDialogService.display_error(1,"E103");
+
+    }
+
+    const selectedData = selectedNodes.map( node => node.data );
+    const selectedDataStringPresentation = selectedData.map( node =>
+       {
+        console.log(node)
+        if(this.isfile){
+        this.fileupload.clearQueue();
+        this.fileupload.addfilesuser(serv,node[para],node[para]);
+        }
+          this.insertform[0].patchValue(node);
+   
+
 
       });
 
@@ -434,7 +461,7 @@ onSubmit(form,serv){
         this.rowData= of(data) ;
       }
       if(this.isfile){
-        this.fileupload.uploadAllinsert(data)
+        this.fileupload.uploadAllinsert(data[data.length-1])
         this.fileupload.clearQueue();
 
       } 
@@ -446,6 +473,11 @@ onSubmit(form,serv){
 
  
  
+}
+
+
+resetform(form,serv){
+  form.reset();
 }
 
 

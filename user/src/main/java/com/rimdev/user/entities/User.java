@@ -101,7 +101,10 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<PasswordHistory> passwordHistoryCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<UserFile> userFileCollection;
+    private Collection<UserFile> userFileCollection;    
+    @JoinColumn(name = "User_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private UserStatus userstatusID;
 
     public User() {
     }
@@ -112,6 +115,13 @@ public class User implements Serializable {
 
 
 
+    public UserStatus getUserstatusID() {
+        return userstatusID;
+    }
+
+    public void setUserstatusID(UserStatus userstatusID) {
+        this.userstatusID = userstatusID;
+    }
 
 	public Integer getId() {
         return id;

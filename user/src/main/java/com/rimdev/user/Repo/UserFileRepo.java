@@ -10,11 +10,12 @@ import com.rimdev.user.entities.UserFile;
 
 @Repository
 public interface UserFileRepo  extends CrudRepository<UserFile, Integer>{
-	@Query(value ="SELECT * FROM rim_user.user_file  where User_ID = ?1 and file_App_type_ID = ?2" , nativeQuery = true)
-	Iterable<UserFile> findbyusertype(int userid,int filetype);
+	@Query(value ="SELECT * FROM rim_user.user_file  where User_ID = ?1" , nativeQuery = true)
+	Iterable<UserFile> findbyuser(int userid);
 	
 	
-	@Query(value ="SELECT * FROM rim_user.user_file  where User_ID = ?1 and file_App_type_ID = ?2 and  files_upload_ID= ?3 " , nativeQuery = true)
-	Optional<UserFile> findbyusertypefile(int userid,int filetype,int fileid);
+	@Query(value ="SELECT * FROM rim_user.user_file  where files_upload_ID = ?1 AND User_ID = ?2 AND Component_ID = ?3" , nativeQuery = true)
+	Optional<UserFile> findbyall(int files_upload_ID,int User_ID,int Component_ID);
+
 }
 

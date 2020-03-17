@@ -13,7 +13,7 @@ export class MenulistService {
 
   
   getmenu(){
-    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.menuurl+"/"+GlobalConstants.language;
+    var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.menuurl+"/"+GlobalConstants.language;
     return  this._http.get<Imenu[]>(urlall);
 
   }

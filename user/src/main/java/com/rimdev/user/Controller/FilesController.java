@@ -44,14 +44,6 @@ public class FilesController {
 	    
 
 	    
-		
-		  @RequestMapping(value = "/all/{Userid}/{Filetype}", method = RequestMethod.GET)
-		  public  ResponseEntity<List<FilesUpload>> getAllfiles(@PathVariable("Userid") int Userid,@PathVariable("Filetype") int Filetype){
-		
-			  
-			  return new ResponseEntity<List<FilesUpload>>(fileStorageService.getfile(Userid,Filetype), HttpStatus.OK);
-		  }
-		  
 	
 	
 	  @RequestMapping(value = "/uploadFile/{langcode}", method = RequestMethod.POST)
@@ -63,22 +55,12 @@ public class FilesController {
 		
     }
 
-  //  @PostMapping("/uploadMultipleFiles")
- //   public ResponseEntity<List<UploadFileResponse>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@RequestParam("type") int type,@RequestParam("userid") int userid) {
-       
- //   	List<UploadFileResponse>  a = Arrays.asList(files)
- //       .stream()
- //       .map(file -> uploadFile(file,type,userid))
- //       .collect(Collectors.toList());
-    	
-//    	return new ResponseEntity<List<UploadFileResponse>>(a, HttpStatus.OK);
- //   }
     
     
-    @RequestMapping(value = "/downloadFile/{Userid}/{Filetype}/{fileName:.+}", method = RequestMethod.GET)
-    public ResponseEntity<Resource> downloadFile(HttpServletRequest request,@PathVariable("Userid") int Userid,@PathVariable("Filetype") int Filetype,@PathVariable("fileName") String fileName) {
+    @RequestMapping(value = "/downloadFile/{langcode}/{fileid}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadFile(HttpServletRequest request,@PathVariable("langcode") String langcode,@PathVariable("fileid") int fileid) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName,Filetype,Userid);
+        Resource resource = fileStorageService.loadFileAsResource(fileid,langcode);
 
         // Try to determine file's content type
         String contentType = null;

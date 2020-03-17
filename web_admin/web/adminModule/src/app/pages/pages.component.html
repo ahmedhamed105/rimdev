@@ -147,8 +147,8 @@
 </div>
 
 <div class="form-group" *ngIf="component.input.inputtypeID.itype == 'file'">
-  <h3>Passport files {{component.comp.name}}</h3>
-  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,i,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter)" />
+  <h3>{{component.comp.name}}</h3>
+  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter)" />
   <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
@@ -170,7 +170,7 @@
 <th>Status</th>
 <th>Action</th>
 </tr>
-<tr *ngFor="let item of queue[i] | async">
+<tr *ngFor="let item of queue[component.comp.id] | async">
 <td>{{ item.filename }}</td>
 <td>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
 
@@ -180,7 +180,7 @@
 </div>
 </td>
 <td >
-<span *ngIf="item.isPending()" class="label label-warning">Pending</span>
+<span *ngIf="item.isPending()" class="label label-warning">Pending </span>
 <span *ngIf="item.isSuccess()" class="label label-success">Approved</span>
 <span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
 <span *ngIf="item.isError()" class="label label-danger">Denied</span>
@@ -190,13 +190,16 @@
 <a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
   <i class="fa fa-times-circle"></i>
 </a>
+<a tooltip="upload" (click)="item.upload(insertform[j].get(component.input.insertParameter).value)" *ngIf="item.isPending() && insertform[j].get(component.input.insertParameter).value != '' && insertform[j].get(component.input.insertParameter).value != null ">
+  <i class="fa fa-upload"></i>
+</a>
 <a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
   <i class="fa fa-trash"></i>
 </a>
-<a tooltip="download from queue" (click)="item.download()" *ngIf="item.isSuccess()">
+<a tooltip="download from queue" (click)="item.download()" *ngIf="item.isSuccess() && insertform[j].get(component.input.insertParameter).value != '' && insertform[j].get(component.input.insertParameter).value != null ">
   <i class="fa fa-save"></i>
 </a>
-<a tooltip="Remove from queue" (click)="item.delete()" *ngIf="item.isSuccess()">
+<a tooltip="Remove from queue" (click)="item.delete(component.input.deleteServ)" *ngIf="item.isSuccess() && insertform[j].get(component.input.insertParameter).value != '' && insertform[j].get(component.input.insertParameter).value != null ">
   <i class="fa fa-trash"></i>
 </a>
 </td>	
@@ -214,8 +217,12 @@
 
 <div class="box-footer" *ngIf="component.comp.ctype == 'button'">
 
-    <button  [disabled]="!insertform[j].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[j],component.button.buttonService)" >{{component.comp.ccode}}</button>             
-</div>
+    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[j].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[j],component.button.buttonService)" >{{component.comp.ccode}}</button>             
+
+    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 0"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[j],component.button.buttonService)" >{{component.comp.ccode}}</button>             
+
+  </div>
+
 
             </div>
             <!-- /.box-body -->
@@ -238,7 +245,7 @@
         <!-- /.box-header -->
         <div class="box-body">
           <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
-          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService)" >{{component.comp.ccode}}</button> 
+          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter)" >{{component.comp.ccode}}</button> 
 
           </ng-container>
       

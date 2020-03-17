@@ -6,6 +6,8 @@ import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { Ifiledownload } from '../objects/Ifiledownload';
 import { saveAs } from 'file-saver';
 import { UsersService } from '../services/users.service';
+import { Data } from '@angular/router';
+import { GlobalConstants } from '../GlobalConstants';
 
 
 export enum FileQueueStatus {
@@ -31,9 +33,8 @@ export enum FileQueueStatus {
     public parentid:any;
     public componentid:any;
     public insertserv:any;
-    public updateserv:any;
     public insertparmeter:any;
-    public deleteparmeter:any;
+    public object:any;
 
   
     constructor(file: any,type: any,index: any,pageid:number,parentid:number,componentid:number) {
@@ -47,9 +48,9 @@ export enum FileQueueStatus {
 
   
     // actions
-    public upload = () => { /* set in service */ };
+    public upload = (object) => { /* set in service */ };
     public cancel = () => { /* set in service */ };
-    public delete = () => { /* set in service */ };
+    public delete = (deleteserv) => { /* set in service */ };
     public removefromquery = () => { /* set in service */ };
     public download = () => { /* set in service */ };
   
@@ -68,15 +69,6 @@ export enum FileQueueStatus {
 })
 export class FileUploaderService {
 
-
-
-  
-  public urladd: string = 'http://localhost:8081/file/uploadFile/EN';
-  public urlremove: string = 'http://localhost:8081/file/deleteFile/EN';
-
-  public urldownload: string = 'http://localhost:8081/file/downloadFile/';
-
-  public urlgetfiles: string = 'http://localhost:8081/file/all/';
 
   private _queue: BehaviorSubject<FileQueueObject[]> []=[];
   private _files: FileQueueObject[][]=[];
@@ -156,42 +148,60 @@ export class FileUploaderService {
 
   private _downloadfile(queueObj: FileQueueObject){
 
-    //this.download(queueObj.userid, queueObj.type,queueObj.filename).subscribe(data => saveAs(data, queueObj.filename));
+    this.download(queueObj.fileid).subscribe(data => saveAs(data, queueObj.filename));
   }
   
 
-  public download(userid, filetype,filename) {
-var url=this.urldownload+userid+'/'+filetype+'/'+filename;
+  public download(fileid) {
+
+    var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.urldownload+"/"+GlobalConstants.language;
+    var url=urlall+"/"+fileid;
 console.log(url);
     return this.http.get(url, 
       {responseType: 'blob'});
   }
 
 
-  public addfilesuser(userid:string,type:string,index,pageid:number,parentid:number,componentid:number){
+  public addfilesuser(url,userid,delteobject): any{
 
-    var url=this.urlgetfiles+userid+'/'+type;
-      this.http.get<Ifiledownload[]>(url).subscribe(
+   this._usersservice.getbyvalue(url,userid).subscribe(
         
         data => {
+          
           data.forEach(singlefile => {
 
-            var file= {name : singlefile.filesName,size : singlefile.filesSize*1024}
-            var queueObj = new FileQueueObject(file,type,index,pageid,parentid,componentid);
-           
-            queueObj.delete = () => this._deleteFromQueuepost(queueObj);
+            var file= {name : singlefile['filesuploadID']['filesName'],size : singlefile['filesuploadID']['filesSize']*1024}
+         
+
+        console.log(singlefile['filesuploadID']['filesName'])
+        console.log(singlefile['componentID']['id'])
+
+        //    var queueObj = new FileQueueObject(file,'type','index','pageid','parentid','componentid');
+        var queueObj = new FileQueueObject(file,'type',singlefile['componentID']['id'],0,0,singlefile['componentID']['id']);
+            queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv);
             queueObj.download = () => this._downloadfile(queueObj);
         
             queueObj.progress = 100;
             queueObj.status = FileQueueStatus.Success;
-            queueObj.filename = singlefile.filesName;
+            queueObj.filename = singlefile['filesuploadID']['filesName'];
+            queueObj.fileid = singlefile['filesuploadID']['id'];
+            queueObj.componentid = singlefile['componentID']['id'];
+            queueObj.object = delteobject;
                // push to the queue
-               this._files[index].push(queueObj);
-               this._queue[index].next(this._files[index]); 
+               if(this._files[singlefile['componentID']['id']] === undefined){
+                this._files[singlefile['componentID']['id']] = [];
+               }
+               if(this._queue[singlefile['componentID']['id']] === undefined){
+
+                this._queue[singlefile['componentID']['id']] = <BehaviorSubject<FileQueueObject[]>>new BehaviorSubject(this._files[singlefile['componentID']['id']]);
+               }
+           
+               this._files[singlefile['componentID']['id']].push(queueObj);
+               this._queue[singlefile['componentID']['id']].next(this._files[singlefile['componentID']['id']]); 
   
             });
-         
-
+           console.log(this.queue(36))
+            return  this.queue(36);
         });
 
       
@@ -209,8 +219,8 @@ console.log(index)
     queueObj.insertserv = insertserv;
     queueObj.insertparmeter = inspara;
     // set the individual object events
-    queueObj.upload = () => this._upload(queueObj,null);
-    queueObj.delete = () => this._deleteFromQueuepost(queueObj);
+    queueObj.upload = (object) => this._upload(queueObj,object);
+    queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv);
     queueObj.cancel = () => this._cancel(queueObj);
     queueObj.removefromquery = () => this._removeFromQueue(queueObj);
     queueObj.download = () => this._downloadfile(queueObj);
@@ -219,16 +229,18 @@ console.log(index)
     this._queue[index].next(this._files[index]);
   }
 
-  private _deleteFromQueuepost(queueObj: FileQueueObject) {
+  private _deleteFromQueuepost(queueObj: FileQueueObject,deleteserv) {
 
     var form = new FormData();
     form.append('fileid', queueObj.fileid);
-  //  form.append('userid', queueObj.userid);
+    form.append('object', queueObj.object);
+    form.append('component', queueObj.componentid);
 
- 
+  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+deleteserv+"/"+GlobalConstants.language;
+
 
     // upload file and report progress
-    var req = new HttpRequest('POST', this.urlremove, form, {
+    var req = new HttpRequest('POST', urlall, form, {
       reportProgress: true,
     });
 
@@ -238,7 +250,7 @@ console.log(index)
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event,1,null);
+          this._uploadComplete(queueObj, event,1,null,null);
           _.remove(this._files[queueObj.index], queueObj);
         }
       },
@@ -255,12 +267,7 @@ console.log(index)
 
   
   }
-  private downloadfile(queueObj: FileQueueObject) {
 
-    console.log('ahmed');
-  return  this.download(2,1,'lKNFM10bdpgita2mcwrr4OHf2ddIzN.jpeg').subscribe(data => saveAs(data, 'lKNFM10bdpgita2mcwrr4OHf2ddIzN.jpeg'));;
-
-}
 
   private _removeFromQueue(queueObj: FileQueueObject) {
 
@@ -270,9 +277,10 @@ console.log(index)
 
   private _upload(queueObj: FileQueueObject,object) {
 
+    console.log(object);
+
     console.log(queueObj.insertserv,queueObj.insertparmeter,queueObj.componentid);
 
-    console.log(object[queueObj.insertparmeter]);
 
     // create form data for file
     var form = new FormData();
@@ -282,7 +290,9 @@ console.log(index)
     form.append('componentid', queueObj.componentid);
   //  form.append('userid', queueObj.userid);
     // upload file and report progress
-    var req = new HttpRequest('POST', this.urladd, form, {
+    var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.urladd+"/"+GlobalConstants.language;
+
+    var req = new HttpRequest('POST', urlall, form, {
       reportProgress: true,
     });
 
@@ -292,7 +302,7 @@ console.log(index)
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event,0,object[queueObj.insertparmeter],queueObj.componentid);
+          this._uploadComplete(queueObj, event,0,object,queueObj.componentid);
         }
       },
       (err: HttpErrorResponse) => {
@@ -341,7 +351,6 @@ this.onCompleteItem(queueObj, response.body);
 
   });
 }
-  
 
 
  

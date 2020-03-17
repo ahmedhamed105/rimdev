@@ -15,24 +15,24 @@ export class UsersService {
   constructor(private _http:HttpClient) { }
 
   getbyurl(url):Observable<[]>{
-    var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+    var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
     return  this._http.get<[]>(urlall);  
     }
 
     insertbyurl(object,url):Observable<[]>{
-      var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+      var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
       return this._http.post<any>(urlall,object);    
       }
 
 
       getbyvalue(url,value):Observable<[]>{
-        var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language+"/";
+        var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language+"/";
         urlall=urlall+value;
         return  this._http.get<[]>(urlall);  
         }
 
         postbythreevalue(url,value1,value2,value3):Observable<[]>{
-          var urlall="http://"+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+          var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
           var file = {
             value1 : value1,
             value2 : value2,

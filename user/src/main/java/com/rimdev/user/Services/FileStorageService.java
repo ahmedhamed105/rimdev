@@ -99,7 +99,7 @@ public class FileStorageService {
 	  		    	      if(bool){
 	  		    	   //      System.out.println("Directory created successfully");
 	  		    	      }else{
-	  				            return null;
+	  				         //   return null;
 	  			        		    	     
 	  		    	      }
 
@@ -133,7 +133,7 @@ public class FileStorageService {
 			    	    //	  System.out.println("Directory Not created successfully");
 			    	         // UploadFileResponse b= new UploadFileResponse("", "","", 0,3,"Directory Not created");
 					        //    return b;
-				        		 return null;   	     
+				        		// return null;   	     
 			    	      }
 
 			    	             
@@ -187,7 +187,7 @@ public class FileStorageService {
 	   	  scomponentid=componentid;
 		  spageid=pageid;
 		  sparentid=parentid;
-	    	try {
+	    	
 	    		Path main =	create_maindirectory() ;
 		    	Path temp =	create_tempdirectory() ;
 			    	
@@ -247,6 +247,10 @@ public class FileStorageService {
 	    		
 	    	}
 	       
+	       System.out.println(maintemp.getParent().toString());
+	       System.out.println(maintemp.toString());
+	  
+	  
 	       
 	       FilesUpload fileu=new FilesUpload();
 	       fileu.setFilesName(sfilename);
@@ -255,6 +259,7 @@ public class FileStorageService {
 	       fileu.setFilesType(file.getContentType());
 	       fileu.setFilecomruntime(comtime);
 	       fileu.setFilestatusID(filst);
+	       fileu.setFilePath(maintemp.getParent().toString());
 	       filesUploadRepo.save(fileu);
 
 		            return fileu;
@@ -267,30 +272,27 @@ public class FileStorageService {
 		    }catch (NonTransientDataAccessException  se) {
 				throw new NullPointerException(textConvertionServ.search("E104", langcode));
 		    }
-	    	} catch (Exception e) {
-				// TODO: handle exception
-			    throw new NoDataException("Error while saving");
-			}
+	    	
 	    
 	    }
 
-	    public Resource loadFileAsResource(String fileName, int type,int userid) {
+	    public Resource loadFileAsResource(int fileid,String langcode) {
 	    //	System.out.println("load");
-	    	
+	    	FilesUpload filedel=getfilebyid(fileid,langcode);
 	        try {
-		     Path targetLocation1 = this.fileStorageLocation.resolve(userid+"\\"+type+"\\");
+		     Path targetLocation1 = this.fileStorageLocation.resolve(filedel.getFilePath());
 
-	            Path filePath = targetLocation1.resolve(fileName).normalize();
+	            Path filePath = targetLocation1.resolve(filedel.getFilesName()).normalize();
 	            Resource resource = new UrlResource(filePath.toUri());
 	            if(resource.exists()) {
 	                return resource;
 	            } else {
 	            
-	                throw new NoDataException("File not found " + fileName);
+	                throw new NoDataException("File not found " + fileid);
 	            }
 	        } catch (MalformedURLException ex) {
 	        	ex.printStackTrace();
-	            throw new NoDataException("File not found " + fileName, ex);
+	            throw new NoDataException("File not found " + fileid, ex);
 	        }
 	    }
 	    
@@ -438,24 +440,7 @@ public class FileStorageService {
 	    
 	    
 	    
-	    public List<FilesUpload> getfile(int userid,int filetype) {
-			// TODO Auto-generated method stub
-	    	
-	    	
-	    	System.out.println(userid+" "+filetype);
-	    	
-	    	List<FilesUpload> files=new ArrayList<FilesUpload>();
-	    	
-	    	List<UserFile> userfiles=(List<UserFile>) userFileRepo.findbyusertype(userid, filetype);
-	    	
-	    	for (UserFile userFile : userfiles) {
-	    		files.add(userFile.getFilesuploadID());
-			}
-	    	
-	    	return files;
-	    	
-	    	
-		}
+
 	    
 	    
 	    

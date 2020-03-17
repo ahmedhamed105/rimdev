@@ -1,4 +1,5 @@
 export class GlobalConstants {
+    public static protocol: string = 'http://';
     public static ip: string = "localhost";
     public static portaccounting: string = "8080";
     public static portuser: string = "8081";
@@ -13,6 +14,8 @@ export class GlobalConstants {
     public static  allowed_types = ['image/png', 'image/jpeg'];
     public static  max_height : number = 15200;
     public static  max_width  : number = 25600;
+    public static urladd: string = '/file/uploadFile';
+  public static urldownload: string = '/file/downloadFile';
     
 
 }
