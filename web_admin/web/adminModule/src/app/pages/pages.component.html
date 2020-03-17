@@ -28,9 +28,9 @@
           </div>
           <!-- /.box-header -->
           <!-- form start -->
-          <form [formGroup]="insertform[j]" >
-            <pre>{{j | json}}</pre>
-            <pre>{{insertform[j].value | json}}</pre>
+          <form [formGroup]="insertform[parent.parent.id]" >
+            <pre>{{parent.parent.id | json}}</pre>
+            <pre>{{insertform[parent.parent.id].value | json}}</pre>
  <div class="box-body" *ngFor="let component of parent.child; let i = index; let parentlen = count">
  
   
@@ -46,13 +46,13 @@
            </ng-container>
 
         <ng-template #dymaicarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],component.comp.groupname,component.comp.name,component.select.changemethod)">
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod)">
         <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </select> 
       </ng-template>
 
       <ng-template #staticarray>
-        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],component.comp.groupname,component.comp.name,component.select.changemethod)">
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod)">
         <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
       </select> 
       </ng-template>
@@ -69,13 +69,13 @@
           </ng-container>
   
           <ng-template #dymaicarray>
-            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],null,component.comp.name,component.select.changemethod)">
+            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod)">
           <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </select>  
         </ng-template>
   
         <ng-template #staticarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[j],null,component.comp.name,component.select.changemethod)">
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod)">
           <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
         </select>  
         </ng-template>
@@ -102,20 +102,20 @@
     <div class="input-group-addon">
       <i class="fa fa-calendar"></i>
     </div>
-    <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-    <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
-     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+    <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>
 </div>
 </div>
 
 <div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
   <label>{{component.comp.ccode}}</label>
-  <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-  <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
-   <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-   <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
  </div>
 </div>
 
@@ -129,29 +129,29 @@
     <div class="input-group-addon">
       <i class="fa fa-calendar"></i>
     </div>
-    <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-    <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
-     <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-     <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+    <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>
 </div>
 </div>
 
 <div class="form-group"   *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
   <label>{{component.comp.ccode}}</label>
-  <input  [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-  <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
-   <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-   <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
  </div>
 </div>
 
 <div class="form-group" *ngIf="component.input.inputtypeID.itype == 'file'">
   <h3>{{component.comp.name}}</h3>
-  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter)" />
-  <div *ngIf="insertform[j].get(component.comp.name).invalid && insertform[j].get(component.comp.name).touched" class="invalid-feedback">
-    <small *ngIf="insertform[j].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
-    <small *ngIf="insertform[j].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
+  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter)" />
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
+    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
    </div>
 </div>
 
@@ -190,16 +190,16 @@
 <a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
   <i class="fa fa-times-circle"></i>
 </a>
-<a tooltip="upload" (click)="item.upload(insertform[j].get(component.input.insertParameter).value)" *ngIf="item.isPending() && insertform[j].get(component.input.insertParameter).value != '' && insertform[j].get(component.input.insertParameter).value != null ">
+<a tooltip="upload" (click)="item.upload(insertform[parent.parent.id].get(component.input.insertParameter).value)" *ngIf="item.isPending() && insertform[parent.parent.id].get(component.input.insertParameter).value != '' && insertform[parent.parent.id].get(component.input.insertParameter).value != null ">
   <i class="fa fa-upload"></i>
 </a>
 <a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
   <i class="fa fa-trash"></i>
 </a>
-<a tooltip="download from queue" (click)="item.download()" *ngIf="item.isSuccess() && insertform[j].get(component.input.insertParameter).value != '' && insertform[j].get(component.input.insertParameter).value != null ">
+<a tooltip="download from queue" (click)="item.download()" *ngIf="item.isSuccess() && insertform[parent.parent.id].get(component.input.insertParameter).value != '' && insertform[parent.parent.id].get(component.input.insertParameter).value != null ">
   <i class="fa fa-save"></i>
 </a>
-<a tooltip="Remove from queue" (click)="item.delete(component.input.deleteServ)" *ngIf="item.isSuccess() && insertform[j].get(component.input.insertParameter).value != '' && insertform[j].get(component.input.insertParameter).value != null ">
+<a tooltip="Remove from queue" (click)="item.delete(component.input.deleteServ)" *ngIf="item.isSuccess() && insertform[parent.parent.id].get(component.input.insertParameter).value != '' && insertform[parent.parent.id].get(component.input.insertParameter).value != null ">
   <i class="fa fa-trash"></i>
 </a>
 </td>	
@@ -217,9 +217,9 @@
 
 <div class="box-footer" *ngIf="component.comp.ctype == 'button'">
 
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[j].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[j],component.button.buttonService)" >{{component.comp.ccode}}</button>             
+    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent)" >{{component.comp.ccode}}</button>             
 
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 0"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[j],component.button.buttonService)" >{{component.comp.ccode}}</button>             
+    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 0"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent)" >{{component.comp.ccode}}</button>             
 
   </div>
 
@@ -245,7 +245,7 @@
         <!-- /.box-header -->
         <div class="box-body">
           <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
-          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter,parent.parent.id)" >{{component.comp.ccode}}</button> 
+          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter,parent.parent.id,parent.parent.relatedType,parent.parent.relatedParent)" >{{component.comp.ccode}}</button> 
 
           </ng-container>
       

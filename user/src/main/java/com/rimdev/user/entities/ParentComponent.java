@@ -77,6 +77,10 @@ public class ParentComponent implements Serializable {
     @Column(name = "date_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
+    @Column(name = "related_parent")
+    private Integer relatedParent;
+    @Column(name = "related_type", length = 45)
+    private String relatedType;
 
     public ParentComponent() {
     }
@@ -90,6 +94,24 @@ public class ParentComponent implements Serializable {
         this.pcodeTittle = pcodeTittle;
         this.parentPostion = parentPostion;
     }
+    
+    
+    public String getRelatedType() {
+        return relatedType;
+    }
+
+    public void setRelatedType(String relatedType) {
+        this.relatedType = relatedType;
+    }
+    
+    public Integer getRelatedParent() {
+        return relatedParent;
+    }
+
+    public void setRelatedParent(Integer relatedParent) {
+        this.relatedParent = relatedParent;
+    }
+    
     
     
     public String getFirstmethod() {

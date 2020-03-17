@@ -44,7 +44,7 @@ export class PagesComponent implements OnInit {
  columnDefs: Icolumdef[] []=[];
  public column:Icolumdef[] = [];
  
- 
+ public file =[] ;
 
 
   ngOnInit(){
@@ -56,7 +56,7 @@ export class PagesComponent implements OnInit {
 
 
     this.isfile =false;
-
+    this.file= [];
 
     var menuid =this.route.snapshot.paramMap.get("id").toString();
 
@@ -89,7 +89,7 @@ export class PagesComponent implements OnInit {
 
         this.insertform.push(new FormGroup({}));
 
-        this.insertform[indexp] = this.fb.group({
+        this.insertform[parent.parent.id] = this.fb.group({
         });
 
 
@@ -118,11 +118,13 @@ export class PagesComponent implements OnInit {
 
 
 
-          this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,indexp);
+          this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,parent.parent.id);
         
           if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'file'){
              
              this.isfile = true;
+
+             this.file.push(element.comp.name);
 
            this.queue[element.comp.id] = this.fileupload.queue(element.comp.id);
            this.fileupload.onCompleteItem = this.completeItem;
@@ -385,7 +387,7 @@ if(group != null){
   }
 
 
-  Makeaction(array,form,group,comp,serv){  
+  Makeaction(array,form,group,comp,serv,related,relcom){  
     var id ; 
     if(group != null){
       id = form.get(group).get(comp).value; 
@@ -398,13 +400,16 @@ if(group != null){
   
     var selectobject = array.filter(x => x[comp] == id)[0];
 //get table no action
-   this.rowData[0] =this._usersservice.getbyvalue(serv,selectobject.id);
+if(related === 'table'){
+  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id);
+}
+  
 
     
   }
 
 
-  tableaction(serv,para,index){
+  tableaction(serv,para,index,related,relcom){
 
     console.log(this.gridOptions[index])
     const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
@@ -419,16 +424,16 @@ if(group != null){
     const selectedDataStringPresentation = selectedData.map( node =>
        {
      console.log(node)
- 
 
-this.rowData[index] = this._usersservice.insertbyurl(node,serv);
+    this.rowData[index] = this._usersservice.insertbyurl(node,serv);
+    
 
       });
 
   }
 
 
-  displayupdate(serv,para,index){
+  displayupdate(serv,para,index,related,relcom){
  //console.log(this.gridOptions)
     const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
 
@@ -441,13 +446,24 @@ this.rowData[index] = this._usersservice.insertbyurl(node,serv);
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
+        if(related === 'form'){
         console.log(node)
         if(this.isfile){
         this.fileupload.clearQueue();
         this.fileupload.addfilesuser(serv,node[para],node[para]);
+        this.file.forEach(element => {
+          this.insertform[relcom].get(element).setValidators([]);
+          this.insertform[relcom].get(element).updateValueAndValidity();
+        });
+
         }
-          this.insertform[0].patchValue(node);
-   
+
+          this.insertform[relcom].patchValue(node);
+
+       
+
+
+      }
 
 
       });
@@ -456,7 +472,7 @@ this.rowData[index] = this._usersservice.insertbyurl(node,serv);
 
   
 
-onSubmit(form,serv){
+onSubmit(form,serv,related,relcom){
 
 
 
@@ -467,7 +483,9 @@ onSubmit(form,serv){
       if(this.rowData === undefined){
       }else{
         // get table number 
-        this.rowData[0]= of(data) ;
+        if(related === 'table'){
+        this.rowData[relcom]= of(data) ;
+        }
       }
       if(this.isfile){
         this.fileupload.uploadAllinsert(data[data.length-1])
@@ -485,7 +503,11 @@ onSubmit(form,serv){
 }
 
 
-resetform(form,serv){
+resetform(form,serv,related,relcom){
+  if(this.isfile){
+    this.fileupload.clearQueue();
+
+  } 
   form.reset();
 }
 
