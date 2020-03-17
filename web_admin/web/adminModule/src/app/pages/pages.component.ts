@@ -70,6 +70,8 @@ export class PagesComponent implements OnInit {
 
     this.page=res;
 
+    console.log(this.page)
+
 
 
 
@@ -324,9 +326,11 @@ if(parent.parent.firstmethod === undefined){
     
   });
 
-    console.log(this.gridOptions)
-
-   this.fileupload.clearQueue();
+ 
+if(this.isfile){
+  this.fileupload.clearQueue();
+}
+ 
 
 
 

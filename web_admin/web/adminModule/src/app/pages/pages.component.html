@@ -1,16 +1,16 @@
    <!-- Content Header (Page header) -->
-   <section class="content-header">
+   <section class="content-header"  *ngIf="page != undefined">
     <h1>
       {{page.parent.pmenu}} 
-      <small *ngIf="type =='C'"> {{page.child.menuname}}</small>
+      <small *ngIf="type === 'C' && page != undefined"> {{page.child.menuname}}</small>
     </h1>
-    <ol class="breadcrumb"  *ngIf="type =='C'">
+    <ol class="breadcrumb"  *ngIf="type === 'C' && page != undefined">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href="{{page.parent.parentLink}}">{{page.parent.pmenu}}</a></li>
       <li class="active">{{page.child.menuname}}</li>
     </ol>
 
-    <ol class="breadcrumb"  *ngIf="type =='P'">
+    <ol class="breadcrumb"  *ngIf="type =='P' && page != undefined">
       <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a class="active" >{{page.parent.pmenu}}</a></li>
     </ol>
@@ -46,13 +46,13 @@
            </ng-container>
 
         <ng-template #dymaicarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod)">
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
         <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </select> 
       </ng-template>
 
       <ng-template #staticarray>
-        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod)">
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
         <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
       </select> 
       </ng-template>
@@ -69,13 +69,13 @@
           </ng-container>
   
           <ng-template #dymaicarray>
-            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod)">
+            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
           <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </select>  
         </ng-template>
   
         <ng-template #staticarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod)">
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
           <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
         </select>  
         </ng-template>
