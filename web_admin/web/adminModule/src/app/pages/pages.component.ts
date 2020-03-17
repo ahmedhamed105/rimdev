@@ -38,25 +38,11 @@ export class PagesComponent implements OnInit {
   insertform :FormGroup []=[];
   tmpform :FormGroup;
   public device ;
-  gridOptions:GridOptions;
-  rowData: any;
+  gridOptions:GridOptions []=[];
+  rowData: any []=[];
 
- columnDefs: Icolumdef []=[{
-  headerName : "select row",
-  field : null,
-  Serv: "",
-  selectDisplay:"",
-  selectValue:"",
-  fieldgroup:0,
-  groupname:"",
-  formnum:0,
-  sortable: true, 
-  filter: true, 
-  editable: false,      
-  resizable: true,
-  checkboxSelection: true,
-  cellRenderer: ""
-}];
+ columnDefs: Icolumdef[] []=[];
+ public column:Icolumdef[] = [];
  
  
 
@@ -84,8 +70,7 @@ export class PagesComponent implements OnInit {
 
 
 
-    this.gridOptions = <GridOptions>{};
-    this.gridOptions.frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
+   
 
     this.locationService.all_info(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).then(res => {
       this.device =this.locationService.status;
@@ -190,14 +175,38 @@ if(element.comp.ctype == 'select'){
 }else if(parent.child != null && parent.parent.parentType === 'table'){
 
 
+  this.gridOptions[parent.parent.id]= <GridOptions>{};
+  this.gridOptions[parent.parent.id].frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
 
   var a=  parent.child.sort((a, b) => {
     return a.comp.seqNum -b.comp.seqNum;
   });
 
+
+
+  var b : Icolumdef = {
+    headerName : "select row",
+    field : null,
+    Serv: "",
+    selectDisplay:"",
+    selectValue:"",
+    fieldgroup:0,
+    groupname:"",
+    formnum:0,
+    sortable: true, 
+    filter: true, 
+    editable: false,      
+    resizable: true,
+    checkboxSelection: true,
+    cellRenderer: ""
+  };
+  this.column.push(b);
+ // this.columnDefs[parent.parent.id][0] = b;
   
 
 a.forEach((element,index) => {
+
+
 
   var parentin=indexp*a.length;
 
@@ -219,8 +228,8 @@ if(element.comp.ctype === 'label'){
     checkboxSelection: false,
     cellRenderer: ""
   };
-  this.columnDefs[index+1]= b;
-
+ // this.columnDefs[parent.parent.id][index+1]= b;
+ this.column.push(b);
 
  
 
@@ -242,8 +251,8 @@ if(element.comp.ctype === 'label'){
     checkboxSelection: false,
     cellRenderer : ""
   };
-  this.columnDefs[index+1]= b;
-
+ // this.columnDefs[parent.parent.id][index+1]= b;
+ this.column.push(b);
   
  
 
@@ -267,8 +276,8 @@ if(element.comp.ctype === 'label'){
     checkboxSelection: false,
     cellRenderer: "cellRenderer"
   };
-  this.columnDefs[index+1]= b;
-
+ // this.columnDefs[parent.parent.id][index+1]= b;
+ this.column.push(b);
 
 
 }else{
@@ -282,6 +291,8 @@ if(element.comp.ctype === 'label'){
  
 });
 
+this.columnDefs[parent.parent.id]=this.column;
+
 
 }
 
@@ -289,7 +300,7 @@ if(parent.parent.firstmethod === undefined){
 
 }else{
   console.log("go");
-  this.rowData =  this._usersservice.getbyurl(parent.parent.firstmethod)
+  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod)
 
 }
 
@@ -300,7 +311,7 @@ if(parent.parent.firstmethod === undefined){
     
   });
 
-   // console.log(this.columnDefs)
+    console.log(this.gridOptions)
 
    this.fileupload.clearQueue();
 
@@ -386,17 +397,17 @@ if(group != null){
     }
   
     var selectobject = array.filter(x => x[comp] == id)[0];
-
-   this.rowData =this._usersservice.getbyvalue(serv,selectobject.id);
+//get table no action
+   this.rowData[0] =this._usersservice.getbyvalue(serv,selectobject.id);
 
     
   }
 
 
-  tableaction(serv,para){
+  tableaction(serv,para,index){
 
-    console.log(this.gridOptions)
-    const selectedNodes = this.gridOptions.api.getSelectedNodes();
+    console.log(this.gridOptions[index])
+    const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
 
@@ -410,16 +421,16 @@ if(group != null){
      console.log(node)
  
 
-this.rowData= this._usersservice.insertbyurl(node,serv);
+this.rowData[index] = this._usersservice.insertbyurl(node,serv);
 
       });
 
   }
 
 
-  displayupdate(serv,para){
+  displayupdate(serv,para,index){
  //console.log(this.gridOptions)
-    const selectedNodes = this.gridOptions.api.getSelectedNodes();
+    const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
 
@@ -455,7 +466,8 @@ onSubmit(form,serv){
 
       if(this.rowData === undefined){
       }else{
-        this.rowData= of(data) ;
+        // get table number 
+        this.rowData[0]= of(data) ;
       }
       if(this.isfile){
         this.fileupload.uploadAllinsert(data[data.length-1])

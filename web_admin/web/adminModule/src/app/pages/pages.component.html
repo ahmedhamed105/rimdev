@@ -245,7 +245,7 @@
         <!-- /.box-header -->
         <div class="box-body">
           <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
-          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter)" >{{component.comp.ccode}}</button> 
+          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter,parent.parent.id)" >{{component.comp.ccode}}</button> 
 
           </ng-container>
       
@@ -253,10 +253,10 @@
           <ag-grid-angular
               style="width:100%;height:500px"
               class="ag-theme-balham"
-              [rowData]="rowData | async"
-              [columnDefs]="columnDefs"
+              [rowData]="rowData[parent.parent.id] | async"
+              [columnDefs]="columnDefs[parent.parent.id]"
               rowSelection="single"
-              [gridOptions]="gridOptions" 
+              [gridOptions]="gridOptions[parent.parent.id]" 
               [enableColResize]="true"
               >
           </ag-grid-angular>
