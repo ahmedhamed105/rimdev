@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AgRendererComponent } from 'ag-grid-angular';
-import { TelesService } from '../services/teles.service';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { UsersService } from '../services/users.service';
 

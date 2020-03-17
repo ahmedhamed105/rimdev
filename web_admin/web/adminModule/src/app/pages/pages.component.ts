@@ -2,13 +2,11 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { Validators, FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
-import { EmailsService } from '../services/emails.service';
-import { AgGridAngular } from 'ag-grid-angular';
 import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
-import { ActivatedRoute, ParamMap, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
 import { Idirectory } from '../objects/idirectory';
 import { Observable,of  } from 'rxjs';
@@ -24,7 +22,6 @@ declare var $: any;
   styleUrls: ['./pages.component.css']
 })
 export class PagesComponent implements OnInit {
-  @ViewChild('agGrid',{static: true}) agGrid: AgGridAngular;
   @Output() onCompleteItem = new EventEmitter();
   queue: Observable<FileQueueObject[]> []=[];
 
@@ -36,7 +33,7 @@ export class PagesComponent implements OnInit {
   public type ;
   public isfile;
 
-  constructor(private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private _EmailsService:EmailsService,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;

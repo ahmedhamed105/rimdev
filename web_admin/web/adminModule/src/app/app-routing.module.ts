@@ -7,9 +7,6 @@ import { CurrencyComponent } from './currency/currency.component';
 import { FlowtypeComponent } from './flowtype/flowtype.component';
 import { BlockedComponent } from './blocked/blocked.component';
 import { DevicesComponent } from './devices/devices.component';
-import { UsersComponent } from './users/users.component';
-import { UsermailComponent } from './usermail/usermail.component';
-import { UserteleComponent } from './usertele/usertele.component';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
@@ -30,10 +27,6 @@ const routes: Routes = [
   {
     path: 'page/:type/:id',
     component: PagesComponent,
-},
-  {
-    path: 'user',
-    component: UsersComponent,
 },
   {
     path: 'currency',
@@ -66,4 +59,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[PagesComponent,ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,UserteleComponent,UsermailComponent,UsersComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
+export const routingComponents=[PagesComponent,ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,DevicesComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,FlowtypeComponent,PageNotFoundComponent]
