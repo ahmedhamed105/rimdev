@@ -13,6 +13,7 @@ import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
 import * as _ from 'lodash';
+import { formatDate } from '@angular/common';
 
 declare var $: any;
 
@@ -45,6 +46,7 @@ export class PagesComponent implements OnInit {
  public column:Icolumdef[] = [];
  
  public file =[] ;
+ public dates =[] ;
 
 
   ngOnInit(){
@@ -57,6 +59,7 @@ export class PagesComponent implements OnInit {
 
     this.isfile =false;
     this.file= [];
+    this.dates =[] ;
 
     var menuid =this.route.snapshot.paramMap.get("id").toString();
 
@@ -129,7 +132,15 @@ export class PagesComponent implements OnInit {
            this.queue[element.comp.id] = this.fileupload.queue(element.comp.id);
            this.fileupload.onCompleteItem = this.completeItem;
 
-          }
+          }else if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'date'){
+             
+            this.dates.push(element.comp.name);
+
+     
+
+         }
+
+          
         
         
         }
@@ -458,6 +469,10 @@ if(related === 'table'){
 
         }
 
+        this.dates.forEach(element => {
+          node[element]= formatDate(node[element], GlobalConstants.format, GlobalConstants.locale)
+        });
+       
           this.insertform[relcom].patchValue(node);
 
        

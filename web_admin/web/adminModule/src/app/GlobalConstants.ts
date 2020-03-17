@@ -15,7 +15,9 @@ export class GlobalConstants {
     public static  max_height : number = 15200;
     public static  max_width  : number = 25600;
     public static urladd: string = '/file/uploadFile';
-  public static urldownload: string = '/file/downloadFile';
+    public static urldownload: string = '/file/downloadFile';
+    public static format: string = 'yyyy-MM-dd';
+    public static locale: string = 'en-US';
     
 
 }
