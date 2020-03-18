@@ -20,4 +20,5 @@ export class GlobalConstants {
     public static locale: string = 'en-US';
     public static Devicetype: string = '/DeviceType/all';
     public static Deviceos: string = '/DeviceOS/all';
+    public static Deviceinsert: string = '/Device/DevicePage';
 }

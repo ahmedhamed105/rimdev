@@ -23,6 +23,7 @@ import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.Pages;
+import com.rimdev.user.entities.User;
 import com.rimdev.user.ouputobject.pagesdevice;
 import com.rimdev.user.ouputobject.response_all;
 
@@ -35,21 +36,13 @@ public class DeviceController {
 	@Autowired
 	DeviceServ deviceServ;
 	
-	@Autowired
-	DeviceOsServ deviceOsServ;
-	
-	@Autowired
-	DeviceTypeServ deviceTypeServ;
-	
-	@Autowired
-	DeviceStatusServ deviceStatusServ;
 	
 	
 	@Autowired
 	PagesServ pagesServ;
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Device>> getAllUsers(@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Device>> getAll(@PathVariable("langcode") String langcode){
 		return new ResponseEntity<List<Device>>(deviceServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
@@ -62,151 +55,88 @@ public class DeviceController {
 	  
 
 
-@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<response_all> saveorupdate(@RequestBody Device input) {
+@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Device>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
-	response_all saveobject;
-	
-	if(input.getDeviceOSID()==null || input.getDeviceOSID().getId()==null) {
-		System.out.println("here 1");
-		input.setDeviceOSID(deviceOsServ.getbyname("Unknown"));
-		
-	}
-	if(input.getDevicetypeID()==null || input.getDevicetypeID().getId()==null) {
-		System.out.println("here 2");
-		input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));
-		
-	}
-	
 
+	
+	Device out=null;
 	try {
-		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()).get(0);
 		
-		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()).size());
+	
+		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
+		
+		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()));
 
 
 		//System.out.println(dev.getDevicename());
-		if(dev != null ) {
-			
+		if(dev != null ) {		
 			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
-			  saveobject=deviceServ.Save(dev);
-			  if(dev.getDevicestatusID().getId() == 2) {
-				  saveobject.setStatus(1);
-				  saveobject.setMessage("block device");
-				  saveobject.setTokean(null);
-				  saveobject.setExpiretime(null);
-				  
-			  }
+			  out=deviceServ.update(dev,langcode);
 	
 
 			} else {
-				input.setDevicestatusID(deviceStatusServ.getbyid(1));
-				saveobject=deviceServ.Save(input);
+				out=deviceServ.Save(input,langcode);
 			}
 		
 	} catch (Exception e) {
 		// TODO: handle exception
-		input.setDevicestatusID(deviceStatusServ.getbyid(1));
-		saveobject=deviceServ.Save(input);
+		
+		out=deviceServ.Save(input,langcode);
 		
 
 	}
 	
 	
-	if(input.getPage() != null) {	
-		try {
-			Pages p= pagesServ.getbyid(input.getPage());
-			pagesServ.savedevpag(saveobject.getDevice(), p);
-		} catch (Exception e) {
-			// TODO: handle exception
-			saveobject.getDevice().setDevicestatusID(deviceStatusServ.getbyid(2));
-			saveobject=deviceServ.Save(saveobject.getDevice());
-			saveobject.setStatus(2);
-		}
 
-	}
 	
-	return new ResponseEntity<response_all>(saveobject, HttpStatus.OK);
+	return getAll(langcode);
 
 	
 }
 
 
-
-
-@RequestMapping(value = "/block", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<response_all> block(@RequestBody Device input) {
+@RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<Device> DevicePage(@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
-	response_all saveobject = new response_all();
+
 	
-
-
+	Device out=null;
 	try {
-		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()).get(0);
+		
+	
+		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
+		
+		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()));
+
 
 		//System.out.println(dev.getDevicename());
-		if(dev != null ) {
-			  dev.setDevicestatusID(deviceStatusServ.getbyid(2));
+		if(dev != null ) {		
 			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
-			  saveobject=deviceServ.Save(dev);
+			  out=deviceServ.update(dev,langcode);
+	
 
-			}else {
-				
-				saveobject.setStatus(1);
-			} 
+			} else {
+				out=deviceServ.Save(input,langcode);
+			}
 		
 	} catch (Exception e) {
 		// TODO: handle exception
-	
-		saveobject.setStatus(1);
-
-	}
-	
-	
-
-	return new ResponseEntity<response_all>(saveobject, HttpStatus.OK);
-
-	
-}
-	
-
-
-
-
-@RequestMapping(value = "/unblock", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<response_all> unblock(@RequestBody Device input) {
-  // This returns a JSON or XML with the users
-	response_all saveobject = new response_all();
-	
-
-
-	try {
-		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()).get(0);
-
-		//System.out.println(dev.getDevicename());
-		if(dev != null ) {
-			  dev.setDevicestatusID(deviceStatusServ.getbyid(1));
-			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
-			  saveobject=deviceServ.Save(dev);
-
-			}else {
-				
-				saveobject.setStatus(1);
-			} 
 		
-	} catch (Exception e) {
-		// TODO: handle exception
-	
-		saveobject.setStatus(1);
+		out=deviceServ.Save(input,langcode);
+		
 
 	}
 	
 	
 
-	return new ResponseEntity<response_all>(saveobject, HttpStatus.OK);
+	return new ResponseEntity<Device>(out, HttpStatus.OK);
+
 
 	
 }
+
+
 	
 
 }

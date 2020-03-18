@@ -22,11 +22,10 @@ export class LocationServiceService {
   
 
 
-  _urlpost='http://localhost:8081/Device/saveorupdate';
 
   public deviceos = [];
   public devicetype = [];
-  public status :devicetoken;
+  public mydevice;
 
    async all_info(page : number) 
   {
@@ -105,8 +104,8 @@ export class LocationServiceService {
 
 
       await this.insert().then(res => {
-        this.status =res;
-        if(this.status.status !== 0){
+     this.mydevice =res;
+        if(res['devicestatusID']['id'] === 2){
           this.router.navigate(['/blocked']);
         }
       });
@@ -118,9 +117,9 @@ export class LocationServiceService {
 
 
 async  insert() : Promise<devicetoken>{
-
-  // console.log('finish3');
-  return await   this._http.post<devicetoken>(this._urlpost,this.device).toPromise();
+  
+  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Deviceinsert+"/"+GlobalConstants.language;
+  return await   this._http.post<devicetoken>(urlall,this.device).toPromise();
   
 }
 

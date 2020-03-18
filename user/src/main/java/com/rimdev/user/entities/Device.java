@@ -285,8 +285,6 @@ public class Device implements Serializable {
     
     
     
-	@XmlTransient
-    @JsonIgnore
     public DeviceStatus getDevicestatusID() {
 		return devicestatusID;
 	}

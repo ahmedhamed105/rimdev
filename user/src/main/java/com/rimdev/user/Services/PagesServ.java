@@ -234,13 +234,24 @@ public List<pagesdevice> getpagesbydevice(int id,String langcode) {
 	}
 
 
-public void savedevpag(Device dev,Pages pa) {
-	Date visittime = new Date();
-	DevicePage a=new DevicePage();
-	a.setDeviceId(dev);
-	a.setPagesID(pa);
-	a.setVisittime(visittime);
-	devicePageRepo.save(a);
+public void savedevpag(Device dev,Pages pa,String langcode) {
+	try {
+		Date visittime = new Date();
+		DevicePage a=new DevicePage();
+		a.setDeviceId(dev);
+		a.setPagesID(pa);
+		a.setVisittime(visittime);
+		devicePageRepo.save(a);
+	} catch (TransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}
+
 	
 }
 
@@ -258,11 +269,11 @@ public Pages getbyid(int id) {
 					}
 			else{
 			   // alternative processing....
-				return null;
+				throw new NoDataException("no pages");
 			}
 	} catch (Exception e) {
 		// TODO: handle exception
-		return null;
+		throw new NoDataException("no pages");
 	}
 	
 	
