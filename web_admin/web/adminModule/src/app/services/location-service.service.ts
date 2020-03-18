@@ -7,6 +7,7 @@ import { Idevicetype } from '../objects/Idevicetype';
 import { Router } from '@angular/router';
 import { devicetoken } from '../objects/devicetoken';
 import { GlobalConstants } from '../GlobalConstants';
+import { CookiesService } from '../services/cookies.service';
 
 
 
@@ -17,7 +18,7 @@ export class LocationServiceService {
 
   public device =  <IDevice>{};
 
-  constructor(private router: Router,private deviceService: DeviceDetectorService,private _http:HttpClient) { }
+  constructor(private cookieService: CookiesService,private router: Router,private deviceService: DeviceDetectorService,private _http:HttpClient) { }
 
   
 
@@ -90,17 +91,33 @@ export class LocationServiceService {
       });
 
 
- //   await   this.getip().then(data => {
- //       this.device.deviceip=data['ip'];
-  //    });
+   await   this.getip().then(data => {
+       this.device.deviceip=data['ip'];
+      }).catch((error) => {
+        this.device.deviceip = 'localhost'
+       });
 
-  this.device.deviceip = '192.168.1.1';
+   // console.log("IP "+this.device.deviceip)
+
+        if(this.cookieService.getCookie('pccode').length === 0){
+          GlobalConstants.PCCODE= Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+          this.cookieService.setCookie( 'pccode', GlobalConstants.PCCODE,900,'' ); // To Set Cookie
+
+        }
+
+  this.device.devicecode = this.cookieService.getCookie('pccode');
   
-      await this.getnavigation()
-      .then(position => {
-        this.device.devicelong=position.coords.longitude;
-        this.device.devicelatitude= position.coords.latitude;
-      });
+    await this.getnavigation()
+    .then(position => {
+      this.device.devicelong=position.coords.longitude;
+      this.device.devicelatitude= position.coords.latitude;
+    }).catch((error) => {
+      this.device.devicelong=0;
+      this.device.devicelatitude= 0;
+     });
+   
+
+  //     console.log('navg '+this.device.devicelong);
 
 
       await this.insert().then(res => {
@@ -155,7 +172,12 @@ async  getip() : Promise<string>{
 async  getnavigation():Promise<any>{
 
   return await new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject);
+    navigator.geolocation.getCurrentPosition(resolve, ({code, message}) =>
+    reject(Object.assign(new Error(message), {name: "PositionError", code})), {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+  });
   });
   
 }

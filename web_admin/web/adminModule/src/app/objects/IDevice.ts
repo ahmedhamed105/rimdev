@@ -3,6 +3,7 @@ export interface IDevice {
     devicename: String,
     deviceinfo: String,
     deviceip : String,
+    devicecode : String,
     devicemac : String,
     deviceosversion : String,
     deviceosunknow : String,

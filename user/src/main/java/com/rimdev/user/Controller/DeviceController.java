@@ -100,14 +100,18 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate(@PathVariable("la
 public @ResponseBody ResponseEntity<Device> DevicePage(@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
 
+	System.out.println("inserted page "+input.getDevicecode());
 	
 	Device out=null;
 	try {
 		
 	
-		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
+		Device dev=deviceServ.checkdevicetwo(input.getDevicecode());
+		if(dev == null) {
+	     dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
+		}
 		
-		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()));
+		
 
 
 		//System.out.println(dev.getDevicename());

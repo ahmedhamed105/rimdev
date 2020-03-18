@@ -21,4 +21,5 @@ export class GlobalConstants {
     public static Devicetype: string = '/DeviceType/all';
     public static Deviceos: string = '/DeviceOS/all';
     public static Deviceinsert: string = '/Device/DevicePage';
+    public static PCCODE: string = '0';
 }

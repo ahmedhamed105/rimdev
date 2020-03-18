@@ -68,6 +68,8 @@ public class Device implements Serializable {
     private String deviceinfo;
     @Column(name = "Device_ip", length = 45)
     private String deviceip;
+    @Column(name = "Device_code", nullable = false, length = 450)
+    private String devicecode;
     @Column(name = "Device_mac", length = 45)
     private String devicemac;
     @Column(name = "Device_os_version", length = 45)
@@ -136,6 +138,14 @@ public class Device implements Serializable {
         this.tokeantime = tokeantime;
         this.devicemodify = devicemodify;
         this.devicecreate = devicecreate;
+    }
+    
+    public String getDevicecode() {
+        return devicecode;
+    }
+
+    public void setDevicecode(String devicecode) {
+        this.devicecode = devicecode;
     }
 
     public Integer getId() {

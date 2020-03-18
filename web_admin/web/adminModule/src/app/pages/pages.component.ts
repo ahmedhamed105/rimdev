@@ -79,7 +79,7 @@ export class PagesComponent implements OnInit {
 
     this.locationService.all_info(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).then(res => {
       this.device =this.locationService.mydevice;
-      console.log(this.device.tokean);
+      console.log(this.device.devicetokean);
     });
 
 

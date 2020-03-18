@@ -3,6 +3,7 @@ package com.rimdev.user.Services;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
@@ -59,7 +60,25 @@ public List<Device> getall(String langcode) {
 }
 		
 	}
-
+public Device checkdevicetwo(String Device_code) {
+	try {
+		Optional<Device> flowid =deviceRepo.findbydevicecode(Device_code);
+		 
+		 if (flowid.isPresent()){
+			 Device  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return null;
+	}
+	
+}
 
 public Device checkdevice(String ip,DeviceOs os,DeviceType type,String browser) {
 	try {

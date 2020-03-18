@@ -18,7 +18,7 @@ import { GlobalConstants } from '../GlobalConstants';
   providedIn: 'root'
 })
    export class HttpErrorInterceptor implements HttpInterceptor {
-
+      InterceptorSkipHeader = 'X-Skip-Interceptor';
 
     constructor(private router: Router,public errorDialogService: ErrorDialogService) { }
 
@@ -40,38 +40,46 @@ import { GlobalConstants } from '../GlobalConstants';
               }
             },
             error => {
+              if(error.url=== 'https://jsonip.com')
+              {
               
-              status = 'failed'; 
-          //    console.log(error); 
-            
-            if (error.error === undefined) {
-              // server-side error
-              errorMessage = error.message;
-              
-            } else {
-              
-          // client-side error
-            errorMessage = error.error.message;
-            }
-
-            if(error.status === 400){
-              GlobalConstants.iserror =false;
-       // window.alert(errorMessage);
-
-
-            }else{
-             // console.log("ahmed hamed");
-            //  console.log(error);
-              GlobalConstants.iserror =true; 
-            } 
-
-            let error_ob={
-              code : error.status,
-              error :errorMessage
-            }
-
-            this.errorDialogService.display_error(0,error_ob);
+              }else{
+ 
+                status = 'failed'; 
+                //    console.log(error); 
+                  
+                  if (error.error === undefined) {
+                    // server-side error
+                    errorMessage = error.message;
+                    
+                  } else {
+                    
+                // client-side error
+                  errorMessage = error.error.message;
+                  }
       
+                  if(error.status === 400){
+                    GlobalConstants.iserror =false;
+             // window.alert(errorMessage);
+      
+      
+                  }else{
+                   // console.log("ahmed hamed");
+                  //  console.log(error);
+                    GlobalConstants.iserror =true; 
+                  } 
+      
+                  let error_ob={
+                    code : error.status,
+                    error :errorMessage
+                  }
+      
+                  this.errorDialogService.display_error(0,error_ob);
+            
+
+              }
+              
+             
          
           }
           ),
