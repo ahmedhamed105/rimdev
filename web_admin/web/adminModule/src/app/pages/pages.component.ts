@@ -92,17 +92,21 @@ export class PagesComponent implements OnInit {
 
       res.forEach((parent,indexp) => {
 
-        this.insertform.push(new FormGroup({}));
-
-        this.insertform[parent.parent.id] = this.fb.group({
-        });
-
+        this.column = [];
 
 
         this.components.push(parent);
 
 
         if(parent.child != null && parent.parent.parentType === 'form'){
+
+          this.insertform.push(new FormGroup({}));
+
+          this.insertform[parent.parent.id] = this.fb.group({
+          });
+  
+  
+  
 
         
         var a=  parent.child.sort((a, b) => {
@@ -207,6 +211,7 @@ if(element.comp.ctype == 'select'){
     selectValue:"",
     fieldgroup:0,
     groupname:"",
+    fielddisable: false,
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -235,6 +240,7 @@ if(element.comp.ctype === 'label'){
     selectValue:"",
     fieldgroup:0,
     groupname:"",
+    fielddisable: element.comp.disable === 1 ? true:false,
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -258,6 +264,7 @@ if(element.comp.ctype === 'label'){
     selectValue:"",
     fieldgroup:0,
     groupname:"",
+    fielddisable: element.comp.disable === 1 ? true:false,
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -283,10 +290,11 @@ if(element.comp.ctype === 'label'){
     selectValue:element.select.selectValue,
     fieldgroup: element.comp.groupname === undefined? 0 : 1,
     groupname : element.comp.groupname === undefined?null:element.comp.groupname,
+    fielddisable: element.comp.disable === 1 ? true:false,
     formnum:index,
     sortable: true, 
     filter: true, 
-    editable: true,      
+    editable: false,      
     resizable: true,
     checkboxSelection: false,
     cellRenderer: "cellRenderer"
@@ -478,10 +486,8 @@ if(related === 'table'){
         });
        
           this.insertform[relcom].patchValue(node);
-
-       
-
-
+      }else if(related === 'table'){
+        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para]);
       }
 
 

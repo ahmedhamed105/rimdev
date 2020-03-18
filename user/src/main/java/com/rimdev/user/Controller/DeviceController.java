@@ -48,16 +48,15 @@ public class DeviceController {
 	@Autowired
 	PagesServ pagesServ;
 	
-	  @RequestMapping(value = "/all", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Device>> getAllUsers(){
-		return new ResponseEntity<List<Device>>(deviceServ.getall(), HttpStatus.OK);
+	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<Device>> getAllUsers(@PathVariable("langcode") String langcode){
+		return new ResponseEntity<List<Device>>(deviceServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
-	  @RequestMapping(value = "/page/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<pagesdevice>> getpages(@PathVariable @NotNull int id){	  
-		 List<pagesdevice> all=  pagesServ.getpagesbydevice(id);
-		return new ResponseEntity<List<pagesdevice>>(all, HttpStatus.OK);
+	  @RequestMapping(value = "/page/{langcode}/{deviceid}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<pagesdevice>> getpages(@PathVariable("langcode") String langcode,@PathVariable("deviceid")  int deviceid){	  
+		return new ResponseEntity<List<pagesdevice>>(pagesServ.getpagesbydevice(deviceid,langcode), HttpStatus.OK);
 	  }
 	  
 	  

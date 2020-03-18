@@ -6,6 +6,7 @@ import { IdeviceOS } from '../objects/IdeviceOS';
 import { Idevicetype } from '../objects/Idevicetype';
 import { Router } from '@angular/router';
 import { devicetoken } from '../objects/devicetoken';
+import { GlobalConstants } from '../GlobalConstants';
 
 
 
@@ -20,8 +21,7 @@ export class LocationServiceService {
 
   
 
-  _urlgetallos='http://localhost:8081/DeviceOS/all';
-  _urlgetalltype='  http://localhost:8081/DeviceType/all';
+
   _urlpost='http://localhost:8081/Device/saveorupdate';
 
   public deviceos = [];
@@ -30,9 +30,6 @@ export class LocationServiceService {
 
    async all_info(page : number) 
   {
-
-    
-    
       const deviceInfo = this.deviceService.getDeviceInfo();
       const isMobilea = this.deviceService.isMobile();
       const isTableta = this.deviceService.isTablet();
@@ -130,15 +127,20 @@ async  insert() : Promise<devicetoken>{
 
 async  getos() : Promise<IdeviceOS[]>{
 
+
   // console.log('finish3');
-  return await   this._http.get<IdeviceOS[]>(this._urlgetallos).toPromise();
+  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Deviceos+"/"+GlobalConstants.language;
+
+  return await   this._http.get<IdeviceOS[]>(urlall).toPromise();
   
 }
 
 async  gettype() : Promise<Idevicetype[]>{
 
  // console.log('finish5');
-  return await   this._http.get<Idevicetype[]>(this._urlgetalltype).toPromise();
+ var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Devicetype+"/"+GlobalConstants.language;
+
+  return await   this._http.get<Idevicetype[]>(urlall).toPromise();
   
 }
 

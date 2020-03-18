@@ -6,6 +6,7 @@ export interface Icolumdef {
   selectValue:string,
   fieldgroup:number,
   groupname:string,
+  fielddisable: boolean,
   formnum:number,
   sortable: boolean, 
   filter: boolean, 

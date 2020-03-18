@@ -88,6 +88,9 @@ public class Component implements Serializable {
     @Column(name = "date_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
+    @Column(name = "disable", nullable = false)
+    private int disable;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
@@ -118,6 +121,13 @@ public class Component implements Serializable {
         this.cpattern = cpattern;
     }
     
+    public int getDisable() {
+        return disable;
+    }
+
+    public void setDisable(int disable) {
+        this.disable = disable;
+    }
     
     @XmlTransient
     @JsonIgnore

@@ -197,9 +197,29 @@ public void delete(Pages input,String langcode) {
 	
 
 	
-public List<pagesdevice> getpagesbydevice(int id) {
+public List<pagesdevice> getpagesbydevice(int id,String langcode) {
+	List<DevicePage> p=new ArrayList<DevicePage>();
+	try {
+		 p= (List<DevicePage>)devicePageRepo.findbydeviceid(id);
+	} catch (TransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}
 	
-	List<DevicePage> p= (List<DevicePage>)devicePageRepo.findbydeviceid(id);
+	
+	if(p.size() <= 0)
+	{
+		throw new NoDataException("no pages");
+		
+	}
+	
+	
+	
 	List<pagesdevice> c= new ArrayList<pagesdevice>();
 	for(DevicePage dev:p) {
 		pagesdevice pa=new pagesdevice();

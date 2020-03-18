@@ -23,7 +23,8 @@
             ctype : string,
             crequired: number,
             cpattern: number,
-            patterndesgin : string
+            patterndesgin : string,
+            disable: number
         },
         select : {
             id: number,

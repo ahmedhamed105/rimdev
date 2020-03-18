@@ -59,11 +59,11 @@ export class UsertypedropdownComponent implements AgRendererComponent {
  
 if(this.params.colDef.fieldgroup === 0){
 
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl(this.params.data[this.params.colDef.field], [Validators.required]));
+  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: this.params.data[this.params.colDef.field], disabled: this.params.colDef.fielddisable}, [Validators.required]));
 
 }else{
 
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl(this.params.data[this.params.colDef.field][this.params.colDef.selectValue], [Validators.required]));
+  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: this.params.data[this.params.colDef.field][this.params.colDef.selectValue], disabled: this.params.colDef.fielddisable}, [Validators.required]));
 
 }
 
