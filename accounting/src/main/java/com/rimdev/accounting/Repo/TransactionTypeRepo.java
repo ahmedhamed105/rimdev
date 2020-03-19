@@ -15,11 +15,7 @@ public interface TransactionTypeRepo extends CrudRepository<TransactionType, Int
 
 	@Query(value ="select * from rim_accounting.transaction_type   where id = ?1 and TRXtype_status = 'Active' " , nativeQuery = true)
 	Optional<TransactionType> findbyidstatus(Integer id);
-	
-	@Query(value ="select * from rim_accounting.transaction_type   where TRXtype_status = ?1" , nativeQuery = true)
-	Iterable<TransactionType> findAllstatus(String status);
-	
-	
+
 	@Query(value ="select * from rim_accounting.transaction_type   where payment_not = ?1" , nativeQuery = true)
 	Iterable<TransactionType> findAllpaymnet(int pay);
 	

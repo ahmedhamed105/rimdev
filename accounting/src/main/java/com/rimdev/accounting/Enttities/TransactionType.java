@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,7 +42,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "TransactionType.findById", query = "SELECT t FROM TransactionType t WHERE t.id = :id")
     , @NamedQuery(name = "TransactionType.findByTRXtype", query = "SELECT t FROM TransactionType t WHERE t.tRXtype = :tRXtype")
     , @NamedQuery(name = "TransactionType.findByTRXdescrption", query = "SELECT t FROM TransactionType t WHERE t.tRXdescrption = :tRXdescrption")
-    , @NamedQuery(name = "TransactionType.findByTRXtypestatus", query = "SELECT t FROM TransactionType t WHERE t.tRXtypestatus = :tRXtypestatus")})
+    })
 public class TransactionType implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,8 +56,6 @@ public class TransactionType implements Serializable {
     private String tRXtype;
     @Column(name = "TRX_descrption", length = 45)
     private String tRXdescrption;
-    @Column(name = "TRXtype_status", length = 45)
-    private String tRXtypestatus;
     @Column(name = "payment_not")
     private int paymentNot;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactiontypeID")
@@ -70,10 +70,21 @@ public class TransactionType implements Serializable {
     @Column(name = "effective_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date effectiveDate;
+    @JoinColumn(name = "All_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private AllStatus allstatusID;
     
     private String error;
 
     public TransactionType() {
+    }
+    
+    public AllStatus getAllstatusID() {
+        return allstatusID;
+    }
+
+    public void setAllstatusID(AllStatus allstatusID) {
+        this.allstatusID = allstatusID;
     }
 
     public TransactionType(Integer id) {
@@ -137,13 +148,7 @@ public class TransactionType implements Serializable {
         this.tRXdescrption = tRXdescrption;
     }
 
-    public String getTRXtypestatus() {
-        return tRXtypestatus;
-    }
 
-    public void setTRXtypestatus(String tRXtypestatus) {
-        this.tRXtypestatus = tRXtypestatus;
-    }
     
 
     public int getPaymentNot() {

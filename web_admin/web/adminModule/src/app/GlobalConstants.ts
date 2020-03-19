@@ -1,8 +1,7 @@
 export class GlobalConstants {
     public static protocol: string = 'http://';
     public static ip: string = "localhost";
-    public static portaccounting: string = "8080";
-    public static portuser: string = "8081";
+    public static port: string = "8081";
     public static language: string = "En";
     public static iserror: Boolean = false;
     public static menuurl: string = "/menu/all";

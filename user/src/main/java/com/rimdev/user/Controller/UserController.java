@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Services.UserServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.FilesUpload;
-import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
 import com.rimdev.user.ouputobject.threevalues;
@@ -67,7 +64,7 @@ public @ResponseBody ResponseEntity<List<User>> saveorupdate(@PathVariable("lang
 //System.out.println(input.getFirstName());
 	User user=null;
 	try {
-		 user= userServ.getuser(input.getId(),langcode);
+		 user= userServ.getuserwithout(input.getId(),langcode);
 	//	 System.out.println("enter 2");
 
 		if(user == null ) {

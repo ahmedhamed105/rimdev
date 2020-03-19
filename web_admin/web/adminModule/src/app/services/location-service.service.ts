@@ -135,7 +135,7 @@ export class LocationServiceService {
 
 async  insert() : Promise<devicetoken>{
   
-  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Deviceinsert+"/"+GlobalConstants.language;
+  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceinsert+"/"+GlobalConstants.language;
   return await   this._http.post<devicetoken>(urlall,this.device).toPromise();
   
 }
@@ -145,7 +145,7 @@ async  getos() : Promise<IdeviceOS[]>{
 
 
   // console.log('finish3');
-  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Deviceos+"/"+GlobalConstants.language;
+  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceos+"/"+GlobalConstants.language;
 
   return await   this._http.get<IdeviceOS[]>(urlall).toPromise();
   
@@ -154,7 +154,7 @@ async  getos() : Promise<IdeviceOS[]>{
 async  gettype() : Promise<Idevicetype[]>{
 
  // console.log('finish5');
- var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Devicetype+"/"+GlobalConstants.language;
+ var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Devicetype+"/"+GlobalConstants.language;
 
   return await   this._http.get<Idevicetype[]>(urlall).toPromise();
   

@@ -10,10 +10,16 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
+import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.accounting.Enttities.Account;
 import com.rimdev.accounting.Enttities.Currency;
+import com.rimdev.accounting.Enttities.FlowType;
+import com.rimdev.accounting.Exception.NoDataException;
 import com.rimdev.accounting.Repo.CurrencyRepo;
 import com.rimdev.accounting.Utils.ObjectUtils;
 
@@ -22,51 +28,60 @@ public class CurrencyServ {
 	
 	@Autowired 
 	private CurrencyRepo currencyRepo;
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
-	
-	public List<Currency> getall() {
-		
+	public List<Currency> getall(String langcode) {
+		try {
 		return (List<Currency>) currencyRepo.findAll();
-		
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}
 	}
 	
-	public Currency check_currency(String currency) {
+	public Currency getcurrency(int id,String langcode) {
 		
 		try {
+			Optional<Currency> flowid =currencyRepo.findById(id);
+			 
+			 if (flowid.isPresent()){
+				 Currency  ouput = flowid.get();
 			
-			List<Currency> cu=(List<Currency>) currencyRepo.findAllstatus("Active");
-			
-			Currency paymnet=null;
-			for (int i = 0; i < cu.size(); i++) {
-				
-				if(cu.get(i).getCurrencyISO().equals(currency)) {
-					paymnet = cu.get(i);
-					break;			
+				  return ouput;
+						}
+				else{
+				   // alternative processing....
+					return null;
 				}
-				
-			}
-			if(paymnet == null) {
-				return new Currency(-1,"Currency not found");
-			}else {
-			return paymnet;
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			return new Currency(-1,e.getMessage());
-		}
-	
+		} catch (TransientDataAccessException  se) {
+			se.printStackTrace();
+			throw new NoDataException(textConvertionServ.search("E104", langcode));
+	    } catch (RecoverableDataAccessException  se) {
+	    	se.printStackTrace();
+			throw new NoDataException(textConvertionServ.search("E104", langcode));
+	    }catch (ScriptException  se) {
+	    	se.printStackTrace();
+			throw new NoDataException(textConvertionServ.search("E104", langcode));
+	    }catch (NonTransientDataAccessException  se) {
+	    	se.printStackTrace();
+			throw new NoDataException(textConvertionServ.search("E104", langcode));
+	    }
 	}
 	
-	public List<Currency> getallstatus(String status) {
-		
-		return (List<Currency>) currencyRepo.findAllstatus( status);
-		
-	}
+
 	
 	
-	
-public Currency Save(Currency input) {
+public Currency Save(Currency input,String langcode) {
 	
 	try {	
 		Date date = new Date();
@@ -74,54 +89,48 @@ public Currency Save(Currency input) {
 		input.setEffectiveDate(date);
 		Currency ouput =currencyRepo.save(input);	
 		return ouput;
-	} catch (Exception e) {
-		// TODO: handle exception
-		
-		return new Currency(-1,e.getMessage());
-	}			
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}		
 		
 	}
 
 
-public Currency update(Currency input,Integer id)  {
-	Currency ouput = null;
-	
-	try {
-		Optional<Currency> curid =currencyRepo.findById(id);
-		 
-		 if (curid.isPresent()){
-			  ouput = curid.get();
-			// System.out.println(ouput.getCurrencyISO());
-			  BeanUtils.copyProperties(input, ouput, ObjectUtils.getNullPropertyNames(input));
-			//  System.out.println(ouput.getCurrencyISO());
-			   // processing with foo ...
-			}
-			else{
-			   // alternative processing....
-				return new Currency(-1,"not found");
-			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return new Currency(-1,e.getMessage());
-	}
-	
-	if(ouput == null) {
-		return new Currency(-1,"ouput is null");
-	}else {
+public Currency update(Currency input,String langcode)  {
 	
 	try {	
 		Date date = new Date();
-		ouput.setEffectiveDate(date);
-		Currency ouput1 =currencyRepo.save(ouput);	
+		input.setEffectiveDate(date);
+		Currency ouput1 =currencyRepo.save(input);	
 		return ouput1;
-	} catch (Exception e) {
-		// TODO: handle exception
-		
-		return new Currency(-1,e.getMessage());
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
 	}	
+	
+	
 	}
 	
-}
+
 
 
 

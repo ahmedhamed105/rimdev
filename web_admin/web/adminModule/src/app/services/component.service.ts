@@ -17,7 +17,7 @@ export class ComponentService {
 
   getbypage(pageid: number):Observable<Icomponent[]>{
 
-    var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.Componentpage+GlobalConstants.language+"/";
+    var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Componentpage+GlobalConstants.language+"/";
     url=url+pageid;
     return  this._http.get<Icomponent[]>(url);
     }
@@ -25,7 +25,7 @@ export class ComponentService {
 
     getmenu(type : String,menuid: String):Observable<Idirectory>{
 
-      var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";
+      var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";
 
       url=url+type+"/"+menuid;
   

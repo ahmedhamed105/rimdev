@@ -81,6 +81,13 @@ public class ParentComponent implements Serializable {
     private Integer relatedParent;
     @Column(name = "related_type", length = 45)
     private String relatedType;
+    @Column(name = "Com_IP", nullable = false, length = 450)
+    private String comIP;
+    @Basic(optional = false)
+    @Column(name = "Com_port", nullable = false, length = 45)
+    private String comport;
+    
+    
 
     public ParentComponent() {
     }
@@ -93,6 +100,22 @@ public class ParentComponent implements Serializable {
         this.id = id;
         this.pcodeTittle = pcodeTittle;
         this.parentPostion = parentPostion;
+    }
+    
+    public String getComIP() {
+        return comIP;
+    }
+
+    public void setComIP(String comIP) {
+        this.comIP = comIP;
+    }
+
+    public String getComport() {
+        return comport;
+    }
+
+    public void setComport(String comport) {
+        this.comport = comport;
     }
     
     

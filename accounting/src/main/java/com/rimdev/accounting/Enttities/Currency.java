@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -42,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "Currency.findByCurrencyname", query = "SELECT c FROM Currency c WHERE c.currencyname = :currencyname")
     , @NamedQuery(name = "Currency.findByCurrencydescription", query = "SELECT c FROM Currency c WHERE c.currencydescription = :currencydescription")
     , @NamedQuery(name = "Currency.findByCurrencyISO", query = "SELECT c FROM Currency c WHERE c.currencyISO = :currencyISO")
-    , @NamedQuery(name = "Currency.findByCurrencystatus", query = "SELECT c FROM Currency c WHERE c.currencystatus = :currencystatus")})
+    })
 public class Currency implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,9 +61,6 @@ public class Currency implements Serializable {
     @Basic(optional = false)
     @Column(name = "Currency_ISO", nullable = false, length = 45)
     private String currencyISO;
-    @Basic(optional = false)
-    @Column(name = "Currency_status", nullable = false, length = 45)
-    private String currencystatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
     private Collection<AccountProcess> accountProcessCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "currencyID")
@@ -75,6 +74,10 @@ public class Currency implements Serializable {
     @Column(name = "effective_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date effectiveDate;
+    @JoinColumn(name = "All_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private AllStatus allstatusID;
+    
     private String error;
 
     public Currency() {
@@ -84,6 +87,15 @@ public class Currency implements Serializable {
         this.id = id;
         this.error = error;
     }
+    
+    public AllStatus getAllstatusID() {
+        return allstatusID;
+    }
+
+    public void setAllstatusID(AllStatus allstatusID) {
+        this.allstatusID = allstatusID;
+    }
+    
     @XmlTransient
     @JsonIgnore
     public Date getCreateDate() {
@@ -145,13 +157,7 @@ public class Currency implements Serializable {
     	 this.currencyISO = currencyISO;
     }
 
-    public String getCurrencystatus() {
-        return currencystatus;
-    }
-
-    public void setCurrencystatus(String currencystatus) {
-        this.currencystatus = currencystatus;
-    }
+ 
     
     @XmlTransient
     @JsonIgnore
@@ -206,7 +212,7 @@ public class Currency implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Currency[ id=" + id + " ]" +currencystatus;
+        return "entity.Currency[ id=" + id + " ]" +allstatusID.getSdata();
     }
     
 }

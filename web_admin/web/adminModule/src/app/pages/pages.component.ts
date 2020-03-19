@@ -158,7 +158,7 @@ if(element.comp.ctype == 'select'){
         if(element.select.arrayObject === 1){
           if(element.select.webService != undefined){
 
-            this._usersservice.getbyurl(element.select.webService)
+            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport)
             .subscribe(data => {this.objects[index+parentin] = data;
            //  console.log(index+indexp);
           //  console.log(element.select.webService)
@@ -212,6 +212,8 @@ if(element.comp.ctype == 'select'){
     fieldgroup:0,
     groupname:"",
     fielddisable: false,
+    ip:"",
+    port:"",
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -241,6 +243,8 @@ if(element.comp.ctype === 'label'){
     fieldgroup:0,
     groupname:"",
     fielddisable: element.comp.disable === 1 ? true:false,
+    ip:parent.parent.comIP,
+    port:parent.parent.comport,
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -265,6 +269,8 @@ if(element.comp.ctype === 'label'){
     fieldgroup:0,
     groupname:"",
     fielddisable: element.comp.disable === 1 ? true:false,
+    ip:parent.parent.comIP,
+    port:parent.parent.comport,
     formnum:0,
     sortable: true, 
     filter: true, 
@@ -291,6 +297,8 @@ if(element.comp.ctype === 'label'){
     fieldgroup: element.comp.groupname === undefined? 0 : 1,
     groupname : element.comp.groupname === undefined?null:element.comp.groupname,
     fielddisable: element.comp.disable === 1 ? true:false,
+    ip:parent.parent.comIP,
+    port:parent.parent.comport,
     formnum:index,
     sortable: true, 
     filter: true, 
@@ -323,7 +331,7 @@ if(parent.parent.firstmethod === undefined){
 
 }else{
   console.log("go");
-  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod)
+  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport)
 
 }
 
@@ -352,7 +360,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
 
- addfiles($event,name,index,pageid,parentid,compid,insert,parameter) {
+ addfiles($event,name,index,pageid,parentid,compid,insert,parameter,ip,port) {
 
   const fileBrowser = $event.target;
   
@@ -368,7 +376,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter);
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port);
 }
 
 
@@ -410,7 +418,7 @@ if(group != null){
   }
 
 
-  Makeaction(array,form,group,comp,serv,related,relcom){  
+  Makeaction(array,form,group,comp,serv,related,relcom,ip,port){  
     var id ; 
     if(group != null){
       id = form.get(group).get(comp).value; 
@@ -424,7 +432,7 @@ if(group != null){
     var selectobject = array.filter(x => x[comp] == id)[0];
 //get table no action
 if(related === 'table'){
-  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id);
+  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port);
 }
   
 
@@ -432,7 +440,7 @@ if(related === 'table'){
   }
 
 
-  tableaction(serv,para,index,related,relcom){
+  tableaction(serv,para,index,related,relcom,ip,port){
 
     console.log(this.gridOptions[index])
     const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
@@ -448,7 +456,7 @@ if(related === 'table'){
        {
      console.log(node)
 
-    this.rowData[index] = this._usersservice.insertbyurl(node,serv);
+    this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port);
     
 
       });
@@ -456,7 +464,7 @@ if(related === 'table'){
   }
 
 
-  displayupdate(serv,para,index,related,relcom){
+  displayupdate(serv,para,index,related,relcom,ip,port){
  //console.log(this.gridOptions)
     const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
 
@@ -473,7 +481,7 @@ if(related === 'table'){
         console.log(node)
         if(this.isfile){
         this.fileupload.clearQueue();
-        this.fileupload.addfilesuser(serv,node[para],node[para]);
+        this.fileupload.addfilesuser(serv,node[para],node[para],ip,port);
         this.file.forEach(element => {
           this.insertform[relcom].get(element).setValidators([]);
           this.insertform[relcom].get(element).updateValueAndValidity();
@@ -487,7 +495,7 @@ if(related === 'table'){
        
           this.insertform[relcom].patchValue(node);
       }else if(related === 'table'){
-        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para]);
+        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para],ip,port);
       }
 
 
@@ -497,11 +505,11 @@ if(related === 'table'){
 
   
 
-onSubmit(form,serv,related,relcom){
+onSubmit(form,serv,related,relcom,ip,port){
 
 
 
-     this._usersservice.insertbyurl(form.value,serv).subscribe(data => {
+     this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
 
     console.log(data)
 
@@ -513,7 +521,7 @@ onSubmit(form,serv,related,relcom){
         }
       }
       if(this.isfile){
-        this.fileupload.uploadAllinsert(data[data.length-1])
+        this.fileupload.uploadAllinsert(data[data.length-1],ip,port)
         this.fileupload.clearQueue();
 
       } 

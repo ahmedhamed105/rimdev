@@ -46,13 +46,13 @@
            </ng-container>
 
         <ng-template #dymaicarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
         <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </select> 
       </ng-template>
 
       <ng-template #staticarray>
-        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
+        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
         <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
       </select> 
       </ng-template>
@@ -69,13 +69,13 @@
           </ng-container>
   
           <ng-template #dymaicarray>
-            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
+            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
           <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </select>  
         </ng-template>
   
         <ng-template #staticarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent)">
+          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
           <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
         </select>  
         </ng-template>
@@ -148,7 +148,7 @@
 
 <div class="form-group" *ngIf="component.input.inputtypeID.itype == 'file'">
   <h3>{{component.comp.name}}</h3>
-  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter)" />
+  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
@@ -217,9 +217,9 @@
 
 <div class="box-footer" *ngIf="component.comp.ctype == 'button'">
 
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent)" >{{component.comp.ccode}}</button>             
+    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button>             
 
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 0"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent)" >{{component.comp.ccode}}</button>             
+    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 0"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button>             
 
   </div>
 
@@ -245,7 +245,7 @@
         <!-- /.box-header -->
         <div class="box-body">
           <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
-          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter,parent.parent.id,parent.parent.relatedType,parent.parent.relatedParent)" >{{component.comp.ccode}}</button> 
+          <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter,parent.parent.id,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button> 
 
           </ng-container>
       

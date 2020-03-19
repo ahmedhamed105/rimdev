@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -41,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "FlowType.findById", query = "SELECT f FROM FlowType f WHERE f.id = :id")
     , @NamedQuery(name = "FlowType.findByFlowtype", query = "SELECT f FROM FlowType f WHERE f.flowtype = :flowtype")
     , @NamedQuery(name = "FlowType.findByFlowdescription", query = "SELECT f FROM FlowType f WHERE f.flowdescription = :flowdescription")
-    , @NamedQuery(name = "FlowType.findByFlowstatus", query = "SELECT f FROM FlowType f WHERE f.flowstatus = :flowstatus")})
+    })
 public class FlowType implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,14 +57,10 @@ public class FlowType implements Serializable {
     private String flowtype;
     @Column(length = 45)
     private String flowdescription;
-    @Basic(optional = false)
-    @Column(name = "Flow_status", nullable = false, length = 45)
-    private String flowstatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowtypeID")
     private Collection<AccountProcess> accountProcessCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowtypeID")
-    private Collection<HoldProcess> holdProcessCollection;
-    
+    private Collection<HoldProcess> holdProcessCollection;  
     @Column(name = "create_Date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
@@ -70,6 +68,10 @@ public class FlowType implements Serializable {
     @Column(name = "effective_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date effectiveDate;
+    
+    @JoinColumn(name = "All_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private AllStatus allstatusID;
     
     private String error;
 
@@ -84,6 +86,16 @@ public class FlowType implements Serializable {
         this.id = id;
         this.error = error;
     }
+    
+    public AllStatus getAllstatusID() {
+        return allstatusID;
+    }
+
+    public void setAllstatusID(AllStatus allstatusID) {
+        this.allstatusID = allstatusID;
+    }
+    
+    
     @XmlTransient
     @JsonIgnore
     public Date getCreateDate() {
@@ -135,14 +147,6 @@ public class FlowType implements Serializable {
 
     public void setFlowdescription(String flowdescription) {
         this.flowdescription = flowdescription;
-    }
-
-    public String getFlowstatus() {
-        return flowstatus;
-    }
-
-    public void setFlowstatus(String flowstatus) {
-        this.flowstatus = flowstatus;
     }
 
     @XmlTransient

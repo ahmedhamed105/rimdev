@@ -28,7 +28,7 @@ public List<TransactionType> getall() {
 	
 public List<TransactionType> getallstatus(String status) {
 		
-		return (List<TransactionType>) transactionTypeRepo.findAllstatus( status);
+		return null;//(List<TransactionType>) transactionTypeRepo.findAllstatus( status);
 		
 }
 
@@ -38,7 +38,7 @@ public TransactionType checkpaymnet_not(int trx_type) {
 	
 	try {
 		
-		List<TransactionType> cu=(List<TransactionType>) transactionTypeRepo.findAllstatus("Active");
+		List<TransactionType> cu=null;//(List<TransactionType>) transactionTypeRepo.findAllstatus("Active");
 		
 		TransactionType paymnet=null;
 		for (int i = 0; i < cu.size(); i++) {

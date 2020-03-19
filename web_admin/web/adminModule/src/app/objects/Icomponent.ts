@@ -8,7 +8,11 @@
             parentPostion: number,
             parentType: string,
             parentName: string,
-            firstmethod:string
+            firstmethod:string,
+            relatedParent: number,
+            relatedType: string,
+            comIP: string,
+            comport: string
         },
       child : [{
         comp :{

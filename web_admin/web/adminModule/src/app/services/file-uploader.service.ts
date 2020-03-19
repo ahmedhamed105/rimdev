@@ -105,9 +105,9 @@ export class FileUploaderService {
   }
 
   // public functions
-  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter) {
+  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port) {
     // add file to the queue
-    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter));
+    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter,ip,port));
   }
 
   public clearQueue() {
@@ -127,7 +127,7 @@ export class FileUploaderService {
 
   }
 
-  public uploadAllinsert(object) {
+  public uploadAllinsert(object,ip,port) {
     // upload all except already successfull or in progress
     var i = 0 ;
     _.each(this._files, (queueObj1: FileQueueObject[]) => {
@@ -136,7 +136,7 @@ export class FileUploaderService {
 
         if (queueObj.isUploadable()) { 
           //  queueObj.userid = userid;
-            this._upload(queueObj,object);
+            this._upload(queueObj,object,ip,port);
             i++;
           }
         
@@ -146,15 +146,15 @@ export class FileUploaderService {
 
 
 
-  private _downloadfile(queueObj: FileQueueObject){
+  private _downloadfile(queueObj: FileQueueObject,ip,port){
 
-    this.download(queueObj.fileid).subscribe(data => saveAs(data, queueObj.filename));
+    this.download(queueObj.fileid,ip,port).subscribe(data => saveAs(data, queueObj.filename));
   }
   
 
-  public download(fileid) {
+  public download(fileid,ip,port) {
 
-    var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.urldownload+"/"+GlobalConstants.language;
+    var urlall=GlobalConstants.protocol+ip+":"+port+GlobalConstants.urldownload+"/"+GlobalConstants.language;
     var url=urlall+"/"+fileid;
 console.log(url);
     return this.http.get(url, 
@@ -162,9 +162,9 @@ console.log(url);
   }
 
 
-  public addfilesuser(url,userid,delteobject): any{
+  public addfilesuser(url,userid,delteobject,ip,port): any{
 
-   this._usersservice.getbyvalue(url,userid).subscribe(
+   this._usersservice.getbyvalue(url,userid,ip,port).subscribe(
         
         data => {
           
@@ -178,8 +178,8 @@ console.log(url);
 
         //    var queueObj = new FileQueueObject(file,'type','index','pageid','parentid','componentid');
         var queueObj = new FileQueueObject(file,'type',singlefile['componentID']['id'],0,0,singlefile['componentID']['id']);
-            queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv);
-            queueObj.download = () => this._downloadfile(queueObj);
+            queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv,ip,port);
+            queueObj.download = () => this._downloadfile(queueObj,ip,port);
         
             queueObj.progress = 100;
             queueObj.status = FileQueueStatus.Success;
@@ -209,7 +209,7 @@ console.log(url);
   }
 
   // private functions
-  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insertserv,inspara) {
+  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insertserv,inspara,ip,port) {
 
 console.log(index)
 
@@ -219,24 +219,24 @@ console.log(index)
     queueObj.insertserv = insertserv;
     queueObj.insertparmeter = inspara;
     // set the individual object events
-    queueObj.upload = (object) => this._upload(queueObj,object);
-    queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv);
+    queueObj.upload = (object) => this._upload(queueObj,object,ip,port);
+    queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv,ip,port);
     queueObj.cancel = () => this._cancel(queueObj);
     queueObj.removefromquery = () => this._removeFromQueue(queueObj);
-    queueObj.download = () => this._downloadfile(queueObj);
+    queueObj.download = () => this._downloadfile(queueObj,ip,port);
     // push to the queue
     this._files[index].push(queueObj);
     this._queue[index].next(this._files[index]);
   }
 
-  private _deleteFromQueuepost(queueObj: FileQueueObject,deleteserv) {
+  private _deleteFromQueuepost(queueObj: FileQueueObject,deleteserv,ip,port) {
 
     var form = new FormData();
     form.append('fileid', queueObj.fileid);
     form.append('object', queueObj.object);
     form.append('component', queueObj.componentid);
 
-  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+deleteserv+"/"+GlobalConstants.language;
+  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+deleteserv+"/"+GlobalConstants.language;
 
 
     // upload file and report progress
@@ -250,7 +250,7 @@ console.log(index)
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event,1,null,null);
+          this._uploadComplete(queueObj, event,1,null,null,ip,port);
           _.remove(this._files[queueObj.index], queueObj);
         }
       },
@@ -275,7 +275,7 @@ console.log(index)
 
   }
 
-  private _upload(queueObj: FileQueueObject,object) {
+  private _upload(queueObj: FileQueueObject,object,ip,port) {
 
     console.log(object);
 
@@ -290,7 +290,7 @@ console.log(index)
     form.append('componentid', queueObj.componentid);
   //  form.append('userid', queueObj.userid);
     // upload file and report progress
-    var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.urladd+"/"+GlobalConstants.language;
+    var urlall=GlobalConstants.protocol+ip+":"+port+GlobalConstants.urladd+"/"+GlobalConstants.language;
 
     var req = new HttpRequest('POST', urlall, form, {
       reportProgress: true,
@@ -302,7 +302,7 @@ console.log(index)
         if (event.type === HttpEventType.UploadProgress) {
           this._uploadProgress(queueObj, event);
         } else if (event instanceof HttpResponse) {
-          this._uploadComplete(queueObj, event,0,object,queueObj.componentid);
+          this._uploadComplete(queueObj, event,0,object,queueObj.componentid,ip,port);
         }
       },
       (err: HttpErrorResponse) => {
@@ -335,11 +335,11 @@ console.log(index)
     this._queue[queueObj.index].next(this._files[queueObj.index]);
   }
 
-  private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>,para,object,compid) {
+  private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>,para,object,compid,ip,port) {
     // update the FileQueueObject as completed
 if(para === 0){
   console.log("insert");
-  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid).subscribe(data => {
+  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid,ip,port).subscribe(data => {
 console.log(data);
 queueObj.progress = 100;
 queueObj.status = FileQueueStatus.Success;

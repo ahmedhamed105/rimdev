@@ -117,6 +117,32 @@ public User getuser(int id,String langcode) {
 }
 
 
+
+public User getuserwithout(int id,String langcode) {
+	
+	try {
+		Optional<User> flowid =userRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 User  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	} catch (TransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }
+}
+
 public void check_user(String firstname,String middlename,String lastname,String langcode) {
 	
 	try {

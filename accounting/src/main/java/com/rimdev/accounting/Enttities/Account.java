@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
-import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @author ahmed.elemam
  */
 @Entity
-@Table(catalog = "rim_accounting", schema = "")
+@Table(name = "account", catalog = "rim_accounting", schema = "")
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 @DynamicUpdate
 @XmlRootElement
@@ -48,7 +48,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "Account.findByLastmodification", query = "SELECT a FROM Account a WHERE a.lastmodification = :lastmodification")
     , @NamedQuery(name = "Account.findByCreatedate", query = "SELECT a FROM Account a WHERE a.createdate = :createdate")
     , @NamedQuery(name = "Account.findByCustomernumber", query = "SELECT a FROM Account a WHERE a.customernumber = :customernumber")
-    , @NamedQuery(name = "Account.findByAcctstatus", query = "SELECT a FROM Account a WHERE a.acctstatus = :acctstatus")})
+    })
 public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,9 +80,6 @@ public class Account implements Serializable {
     @Basic(optional = false)
     @Column(name = "Customer_number", nullable = false, length = 45)
     private String customernumber;
-    @Basic(optional = false)
-    @Column(name = "Acct_status", nullable = false, length = 45)
-    private String acctstatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "accountID")
     private Collection<AccountProcess> accountProcessCollection;
     @JoinColumn(name = "Currency_ID", referencedColumnName = "ID", nullable = false)
@@ -93,10 +90,24 @@ public class Account implements Serializable {
     @Column(name = "effective_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date effectiveDate;
+    @JoinColumn(name = "All_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private AllStatus allstatusID;
+    
     
     private String error;
 
     public Account() {
+    }
+    
+    
+    
+    public AllStatus getAllstatusID() {
+        return allstatusID;
+    }
+
+    public void setAllstatusID(AllStatus allstatusID) {
+        this.allstatusID = allstatusID;
     }
     
     @XmlTransient
@@ -190,13 +201,7 @@ public class Account implements Serializable {
         this.customernumber = customernumber;
     }
 
-    public String getAcctstatus() {
-        return acctstatus;
-    }
-
-    public void setAcctstatus(String acctstatus) {
-        this.acctstatus = acctstatus;
-    }
+ 
     
     @XmlTransient
     @JsonIgnore

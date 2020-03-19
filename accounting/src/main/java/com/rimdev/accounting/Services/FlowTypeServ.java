@@ -4,13 +4,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
+import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.accounting.Enttities.FlowType;
+import com.rimdev.accounting.Exception.NoDataException;
 import com.rimdev.accounting.Repo.FlowTypeRepo;
-import com.rimdev.accounting.Utils.ObjectUtils;
 
 @Service
 public class FlowTypeServ {
@@ -18,21 +21,65 @@ public class FlowTypeServ {
 	@Autowired 
 	private FlowTypeRepo flowTypeRepo;
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
-public List<FlowType> getall() {
-		
+	
+public List<FlowType> getall(String langcode) {
+		try {
 		return (List<FlowType>) flowTypeRepo.findAll();
+} catch (TransientDataAccessException  se) {
+	se.printStackTrace();
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+} catch (RecoverableDataAccessException  se) {
+	se.printStackTrace();
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+}catch (ScriptException  se) {
+	se.printStackTrace();
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+}catch (NonTransientDataAccessException  se) {
+	se.printStackTrace();
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+}
 		
 	}
 
-public List<FlowType> getallstatus(String status) {
+
+
+
+
+public FlowType getflow(int id,String langcode) {
 	
-	return (List<FlowType>) flowTypeRepo.findAllstatus( status);
-	
+	try {
+		Optional<FlowType> flowid =flowTypeRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 FlowType  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }
 }
+
+
 	
-	
-public FlowType Save(FlowType input) {
+public FlowType Save(FlowType input,String langcode){
 	
 	try {	
 		
@@ -41,52 +88,45 @@ public FlowType Save(FlowType input) {
 		input.setEffectiveDate(date);
 		FlowType ouput =flowTypeRepo.save(input);	
 		return ouput;
-	} catch (Exception e) {
-		// TODO: handle exception
-		
-		return new FlowType(-1,e.getMessage());
-	}			
-		
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }
 	}
 
 
-public FlowType update(FlowType input,Integer id)  {
-	FlowType ouput = null;
+public FlowType update(FlowType input,String langcode)  {
 	
-	try {
-		Optional<FlowType> flowid =flowTypeRepo.findById(id);
-		 
-		 if (flowid.isPresent()){
-			  ouput = flowid.get();
-			// System.out.println(ouput.getCurrencyISO());
-			  BeanUtils.copyProperties(input, ouput, ObjectUtils.getNullPropertyNames(input));
-			//  System.out.println(ouput.getCurrencyISO());
-			   // processing with foo ...
-			}
-			else{
-			   // alternative processing....
-				return new FlowType(-1,"Flow type may be not Active");
-			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return new FlowType(-1,e.getMessage());
-	}
-	
-	if(ouput == null) {
-		return new FlowType(-1,"ouput is null");
-	}else {
 	
 	try {	
 		Date date = new Date();
-		ouput.setEffectiveDate(date);
-		FlowType ouput1 =flowTypeRepo.save(ouput);	
+		input.setEffectiveDate(date);
+		FlowType ouput1 =flowTypeRepo.save(input);	
 		return ouput1;
-	} catch (Exception e) {
-		// TODO: handle exception
-		
-		return new FlowType(-1,e.getMessage());
-	}	
-	}
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }
+	
+	
 	
 }
 

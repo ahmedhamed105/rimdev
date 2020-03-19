@@ -14,25 +14,25 @@ export class UsersService {
   
   constructor(private _http:HttpClient) { }
 
-  getbyurl(url):Observable<[]>{
-    var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+  getbyurl(url,ip,port):Observable<[]>{
+    var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
     return  this._http.get<[]>(urlall);  
     }
 
-    insertbyurl(object,url):Observable<[]>{
-      var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+    insertbyurl(object,url,ip,port):Observable<[]>{
+      var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
       return this._http.post<any>(urlall,object);    
       }
 
 
-      getbyvalue(url,value):Observable<[]>{
-        var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language+"/";
+      getbyvalue(url,value,ip,port):Observable<[]>{
+        var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language+"/";
         urlall=urlall+value;
         return  this._http.get<[]>(urlall);  
         }
 
-        postbythreevalue(url,value1,value2,value3):Observable<[]>{
-          var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+url+"/"+GlobalConstants.language;
+        postbythreevalue(url,value1,value2,value3,ip,port):Observable<[]>{
+          var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
           var file = {
             value1 : value1,
             value2 : value2,
@@ -40,23 +40,6 @@ export class UsersService {
           }
           return  this._http.post<[]>(urlall,file);  
           }
-
-
-
-
-
-    getall():Observable<[]>{
-      return  this._http.get<[]>(this._urlgetall);  
-      }
-
-    insert(user : Iuser){
-      console.log(user);
-      return this._http.post<any>(this._urlpost,user);    
-      }
-
-
-
-
  
 
 }

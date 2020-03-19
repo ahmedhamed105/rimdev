@@ -15,14 +15,14 @@ export class LanguagegoService {
   constructor(private _http:HttpClient) { }
 
     getlang(search){
-      var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.searchlang+"/"+GlobalConstants.language+"/"+search;
+      var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.searchlang+"/"+GlobalConstants.language+"/"+search;
 
       return  this._http.get<{}>(urlall);
       }
 
 
       getalllang(){
-        var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.portuser+GlobalConstants.langurl+"/"+GlobalConstants.language;
+        var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.langurl+"/"+GlobalConstants.language;
         return  this._http.get<Ilanguage[]>(urlall);
     
       }
