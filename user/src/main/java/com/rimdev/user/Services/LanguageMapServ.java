@@ -1,5 +1,6 @@
 package com.rimdev.user.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.LanguageMapRepo;
 import com.rimdev.user.entities.LanguageMap;
+import com.rimdev.user.entities.Languages;
 
 @Service
 public class LanguageMapServ {
@@ -22,6 +24,23 @@ public class LanguageMapServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	
+	public List<LanguageMap> getalllang(String langcode) {
+		try {
+		return (List<LanguageMap>) languageMapRepo.findAll();
+				
+		} catch (TransientDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    } catch (RecoverableDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }catch (ScriptException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }catch (NonTransientDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }
+		
+	}
 	
 public LanguageMap getbycode(String Code,String langcode){
 		

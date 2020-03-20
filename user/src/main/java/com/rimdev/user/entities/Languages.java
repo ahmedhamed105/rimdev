@@ -3,6 +3,8 @@ package com.rimdev.user.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -46,6 +50,14 @@ public class Languages implements Serializable {
     private String languagecode;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "languagesID")
     private Collection<TextConvertion> textConvertionCollection;
+    @Basic(optional = false)
+    @Column(name = "date_modify", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateModify;
+    @Basic(optional = false)
+    @Column(name = "date_create", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreate;
 
     public Languages() {
     }
@@ -76,6 +88,26 @@ public class Languages implements Serializable {
 
     public void setLanguagecode(String languagecode) {
         this.languagecode = languagecode;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Date getDateModify() {
+        return dateModify;
+    }
+
+    public void setDateModify(Date dateModify) {
+        this.dateModify = dateModify;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
     @XmlTransient

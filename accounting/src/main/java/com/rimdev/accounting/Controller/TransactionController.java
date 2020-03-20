@@ -97,7 +97,7 @@ public class TransactionController {
 						}else {
 							
 							//check currency 
-							Currency cur=currencyServ.check_currency(input.getCurrency());
+							Currency cur=null;//currencyServ.check_currency(input.getCurrency());
 							if(cur.getId() == -1) {
 								
 								ErrorCodes Err=	errorCodesServ.geterrordesc(3);
@@ -251,7 +251,7 @@ public class TransactionController {
 						}else {
 							
 							//check currency 
-							Currency cur=currencyServ.check_currency(input.getCurrency());
+							Currency cur=null;//currencyServ.check_currency(input.getCurrency());
 							if(cur.getId() == -1) {
 								
 								ErrorCodes Err=	errorCodesServ.geterrordesc(3);

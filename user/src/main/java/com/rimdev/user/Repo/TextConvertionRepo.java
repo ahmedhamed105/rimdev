@@ -15,5 +15,9 @@ public interface TextConvertionRepo extends CrudRepository<TextConvertion, Integ
 	
 	@Query(value ="SELECT * FROM rim_language.text_convertion where Languages_ID = ?1 AND language_map_ID = ?2" , nativeQuery = true)
 	Optional<TextConvertion> getbylangandmap(int Languages_ID,int language_map_ID);
+	
+	
+	@Query(value ="SELECT * FROM rim_language.text_convertion where language_map_ID = ?1" , nativeQuery = true)
+	Iterable<TextConvertion> getbymapid(int language_map_ID);
 
 }
