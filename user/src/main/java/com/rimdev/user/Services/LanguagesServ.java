@@ -72,7 +72,35 @@ public class LanguagesServ {
 	}
 	
 	
+
+public Languages getlangtext(int id,String langcode) {
 	
+	try {
+		Optional<Languages> flowid =languagesRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 Languages  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				throw new NoDataException("language not found");
+			}
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+    	se.printStackTrace();
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }
+}	
 
 
 public Languages getlang(int id,String langcode) {
