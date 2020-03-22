@@ -18,7 +18,14 @@ export class AppComponent implements OnInit {
   constructor(private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private errorDialogService: ErrorDialogService){}
 
   ngOnInit() {
-    GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
+    if(this.cookieService.getCookie('language') === ""){
+
+      this.language("EN");
+    }else{
+      GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
+
+
+    }
 
     this._LanguagegoService.getalllang().subscribe(data => {
  this.langs=data;

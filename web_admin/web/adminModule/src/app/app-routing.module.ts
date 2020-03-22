@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { DasboardComponent } from './dasboard/dasboard.component';
-import { CurrencyComponent } from './currency/currency.component';
 import { BlockedComponent } from './blocked/blocked.component';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
@@ -15,7 +14,7 @@ import { PagesComponent } from './pages/pages.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo : '/dashboard/P/1',
+    redirectTo : 'dashboard/P/1',
     pathMatch: 'full'
 },
   {
@@ -25,10 +24,6 @@ const routes: Routes = [
   {
     path: 'page/:type/:id',
     component: PagesComponent,
-},
-  {
-    path: 'currency',
-    component: CurrencyComponent,
 },
 {
   path: 'blocked',
@@ -49,4 +44,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[PagesComponent,ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,BlockedComponent,AppComponent,DasboardComponent,CurrencyComponent,PageNotFoundComponent]
+export const routingComponents=[PagesComponent,ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,BlockedComponent,AppComponent,DasboardComponent,PageNotFoundComponent]

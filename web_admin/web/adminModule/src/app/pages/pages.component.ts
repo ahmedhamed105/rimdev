@@ -67,15 +67,9 @@ export class PagesComponent implements OnInit {
 
     this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
 
-
     this.page=res;
 
     console.log(this.page)
-
-
-
-
-   
 
     this.locationService.all_info(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).then(res => {
       this.device =this.locationService.mydevice;

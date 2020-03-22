@@ -42,6 +42,7 @@
               "src/assets/plugins/input-mask/jquery.inputmask.extensions.js",
               "src/assets/bower_components/fastclick/lib/fastclick.js",
               "src/assets/js/adminlte.min.js",
+              "src/assets/js/adminlte.js",
               "src/assets/js/demo.js",
               "src/assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js",
               "src/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js",

@@ -28,6 +28,8 @@ export class ComponentService {
       var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";
 
       url=url+type+"/"+menuid;
+
+      console.log(GlobalConstants.language)
   
       return  this._http.get<Idirectory>(url);
     
