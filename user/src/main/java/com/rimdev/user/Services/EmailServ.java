@@ -156,6 +156,43 @@ public List<Email> getbyuser(int userid,String langcode) {
 
 
 
+public String getbyuserchar(int userid,String langcode) {
+	
+String out = "";
+		List<Email> cu;
+		try {
+			
+			cu=(List<Email>) emailRepo.findbyuser(userid);
+
+		} catch (TransientDataAccessException  se) {
+			throw new NullPointerException("TransientDataAccessException");
+	    } catch (RecoverableDataAccessException  se) {
+			throw new NullPointerException("RecoverableDataAccessException");
+	    }catch (ScriptException  se) {
+			throw new NullPointerException("ScriptException");
+	    }catch (NonTransientDataAccessException  se) {
+			throw new NullPointerException("NonTransientDataAccessException");
+	    }
+		
+		if(cu == null || cu.size() <= 0) {
+	   return "no emails";
+
+		}else {
+			
+			for (Email email : cu) {
+				out = out+","+email.getEmailuser();
+			}
+			
+			
+			return out.substring(1);
+		}
+		
+
+		
+	
+}
+
+
 
 public void save(Email input,String langcode) {
 	

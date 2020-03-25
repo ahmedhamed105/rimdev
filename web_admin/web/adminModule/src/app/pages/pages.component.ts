@@ -14,6 +14,8 @@ import { FileQueueObject, FileUploaderService } from '../services/file-uploader.
 import { GlobalConstants } from '../GlobalConstants';
 import * as _ from 'lodash';
 import { formatDate } from '@angular/common';
+import { PasswordtableComponent } from '../passwordtable/passwordtable.component';
+import { EncryptionService } from '../services/encryption.service';
 
 declare var $: any;
 
@@ -34,7 +36,7 @@ export class PagesComponent implements OnInit {
   public type ;
   public isfile;
 
-  constructor(private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -47,7 +49,7 @@ export class PagesComponent implements OnInit {
  
  public file =[] ;
  public dates =[] ;
-
+ public passwords =[] ;
 
   ngOnInit(){
 
@@ -138,7 +140,13 @@ export class PagesComponent implements OnInit {
 
      
 
-         }
+         }else if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'password'){
+             
+          this.passwords.push(element.comp.name);
+
+   
+
+       }
 
           
         
@@ -189,7 +197,7 @@ if(element.comp.ctype == 'select'){
 
 
   this.gridOptions[parent.parent.id]= <GridOptions>{};
-  this.gridOptions[parent.parent.id].frameworkComponents = { "cellRenderer" : UsertypedropdownComponent  };
+  this.gridOptions[parent.parent.id].frameworkComponents = { "selRenderer" : UsertypedropdownComponent,"passRenderer" : PasswordtableComponent };
 
   var a=  parent.child.sort((a, b) => {
     return a.comp.seqNum -b.comp.seqNum;
@@ -278,6 +286,32 @@ if(element.comp.ctype === 'label'){
   
  
 
+}else if(element.comp.ctype === 'password'){
+
+  var b : Icolumdef= {
+    headerName : element.comp.ccode,
+    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
+    Serv: element.select.webService,
+    selectDisplay:element.select.selectDisplay,
+    selectValue:element.select.selectValue,
+    fieldgroup: element.comp.groupname === undefined? 0 : 1,
+    groupname : element.comp.groupname === undefined?null:element.comp.groupname,
+    fielddisable: element.comp.disable === 1 ? true:false,
+    ip:parent.parent.comIP,
+    port:parent.parent.comport,
+    formnum:index,
+    sortable: true, 
+    filter: true, 
+    editable: false,      
+    resizable: true,
+    checkboxSelection: false,
+    cellRenderer : "passRenderer"
+  };
+ // this.columnDefs[parent.parent.id][index+1]= b;
+ this.column.push(b);
+  
+ 
+
 }else if(element.comp.ctype === 'select'){
 
   console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
@@ -299,7 +333,7 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer: "cellRenderer"
+    cellRenderer: "selRenderer"
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -497,12 +531,29 @@ if(related === 'table'){
 
   }
 
+
   
 
 onSubmit(form,serv,related,relcom,ip,port){
 
+  
+
+ if( this.passwords.length > 0){
+
+ 
 
 
+
+
+  this.passwords.forEach(element => {
+
+
+    form.get(element).setValue(this._EncryptionService.encypttext(form.get(element).value.trim()));
+  });
+
+
+  console.log(form.value)
+}
      this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
 
     console.log(data)
@@ -519,6 +570,8 @@ onSubmit(form,serv,related,relcom,ip,port){
         this.fileupload.clearQueue();
 
       } 
+
+     
 
       form.reset();
 
@@ -542,3 +595,7 @@ resetform(form,serv,related,relcom){
 
 
 }
+
+
+
+

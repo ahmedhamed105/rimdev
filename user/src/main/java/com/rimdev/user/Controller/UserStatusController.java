@@ -26,5 +26,8 @@ public class UserStatusController {
 	  public  ResponseEntity<List<UserStatus>> getAllUsers(@PathVariable("langcode") String langcode){
 		return new ResponseEntity<List<UserStatus>>(userStatusServ.getall(langcode), HttpStatus.OK);
 	  }
+	  
+	  
+
 
 }

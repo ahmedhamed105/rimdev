@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.TelephonesRepo;
+import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 
@@ -156,6 +157,41 @@ public List<Telephones> getbyuser(int userid,String langcode) {
 	return cu;
 }
 
+
+
+
+
+public String getbyuserchar(int userid,String langcode) {
+	String out = "";
+	List<Telephones> cu;
+	try {
+		
+		cu=(List<Telephones>) telephonesRepo.findbyuser(userid);
+
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
+	
+	if(cu == null || cu.size() <= 0) {
+		   return "no telephone";
+
+			}else {
+				
+				for (Telephones email : cu) {
+					out = out+","+email.getPhoneNo();
+				}
+				
+				
+				return out.substring(1);
+			}
+	
+}
 
 
 

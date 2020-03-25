@@ -22,12 +22,16 @@
       <!-- left column -->
       <div class="col-md-12" *ngIf="parent.parent.parentType == 'form'">
         <!-- general form elements -->
-        <div class="box box-primary">
+        <div class="box box-primary" >
           <div class="box-header with-border">
             <h3 class="box-title">{{parent.parent.pcodeTittle}}</h3>
+           
             <div class="box-tools pull-right">
-              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+           
+              <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
               </button>
+          
               <div class="btn-group">
                 <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-wrench"></i></button>
@@ -41,6 +45,8 @@
               </div>
               <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
             </div>
+
+          
           </div>
           <!-- /.box-header -->
           <!-- form start -->
@@ -126,6 +132,15 @@
 </div>
 </div>
 
+<div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'password'">
+  <label>{{component.comp.ccode}}</label>
+  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+</div>
+
 <div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
   <label>{{component.comp.ccode}}</label>
   <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
@@ -151,6 +166,15 @@
      <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>
 </div>
+</div>
+
+<div class="form-group"   *ngIf="component.input.inputtypeID.itype == 'password'">
+  <label>{{component.comp.ccode}}</label>
+  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
 </div>
 
 <div class="form-group"   *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">

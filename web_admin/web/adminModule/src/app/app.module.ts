@@ -14,13 +14,15 @@ import {FileUploadModule} from 'ng2-file-upload';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { PasswordtableComponent } from './passwordtable/passwordtable.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 
 @NgModule({
   declarations: [
-    routingComponents
+    routingComponents,
+    PasswordtableComponent
     
   ],
   imports: [
@@ -30,7 +32,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     ReactiveFormsModule,
     DeviceDetectorModule.forRoot(),
     AgGridModule.withComponents([
-      UsertypedropdownComponent
+      UsertypedropdownComponent,
+      PasswordtableComponent
     ]),
     NgxMaskModule.forRoot(options),
     FileUploadModule,

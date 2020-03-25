@@ -55,7 +55,7 @@ public class UserLogin implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
-    @Column(name = "User_tokean", length = 45)
+    @Column(name = "User_tokean", length = 450)
     private String usertokean;
     @Column(name = "Expire_date")
     @Temporal(TemporalType.TIMESTAMP)
@@ -64,10 +64,10 @@ public class UserLogin implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdate;
     @Basic(optional = false)
-    @Column(name = "Username", nullable = false, length = 45)
+    @Column(name = "Username", nullable = false, length = 450)
     private String username;
     @Basic(optional = false)
-    @Column(name = "password_ency", nullable = false, length = 45)
+    @Column(name = "password_ency", nullable = false, length = 450)
     private String passwordEncy;
     @Basic(optional = false)
     @Column(name = "login_modfiy", nullable = false)
@@ -80,6 +80,10 @@ public class UserLogin implements Serializable {
     @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private User userID;
+    @Column(name = "Notes", length = 450)
+    private String notes;
+    @Column(name = "Login_key", nullable = false, length = 450)
+    private String loginkey;
 
     public UserLogin() {
     }
@@ -88,6 +92,7 @@ public class UserLogin implements Serializable {
         this.id = id;
     }
 
+    
     public UserLogin(Integer id, String username, String passwordEncy, Date loginModfiy, Date loginCreate) {
         this.id = id;
         this.username = username;
@@ -95,8 +100,26 @@ public class UserLogin implements Serializable {
         this.loginModfiy = loginModfiy;
         this.loginCreate = loginCreate;
     }
+   
+    @XmlTransient
+    @JsonIgnore
+	public String getLoginkey() {
+		return loginkey;
+	}
 
-    public Integer getId() {
+	public void setLoginkey(String loginkey) {
+		this.loginkey = loginkey;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -136,6 +159,7 @@ public class UserLogin implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
 
     public String getPasswordEncy() {
         return passwordEncy;

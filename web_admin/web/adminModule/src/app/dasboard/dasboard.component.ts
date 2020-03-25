@@ -20,9 +20,6 @@ export class DasboardComponent implements OnInit {
   ngOnInit() {
 
     
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
 
     var menuid =this.route.snapshot.paramMap.get("id").toString();
 
@@ -43,5 +40,8 @@ export class DasboardComponent implements OnInit {
 
     
   }
+
+
+ 
 
 }

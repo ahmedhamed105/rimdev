@@ -4,10 +4,11 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { DasboardComponent } from './dasboard/dasboard.component';
 import { BlockedComponent } from './blocked/blocked.component';
-import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
 import { PagesComponent } from './pages/pages.component';
+import { PasswordtableComponent } from './passwordtable/passwordtable.component';
+import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 
 
 
@@ -44,4 +45,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[PagesComponent,ErrorpageComponent,ErrorDialogComponent,UsertypedropdownComponent,BlockedComponent,AppComponent,DasboardComponent,PageNotFoundComponent]
+export const routingComponents=[UsertypedropdownComponent,PasswordtableComponent,PagesComponent,ErrorpageComponent,ErrorDialogComponent,BlockedComponent,AppComponent,DasboardComponent,PageNotFoundComponent]
