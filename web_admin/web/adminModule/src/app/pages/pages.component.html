@@ -175,6 +175,10 @@
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
  </div>
+ <app-password-strength
+          [passwordToCheck]="insertform[parent.parent.id].get(component.comp.name).value"
+          (passwordStrength)="passwordValid($event)"
+          ></app-password-strength>
 </div>
 
 <div class="form-group"   *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">

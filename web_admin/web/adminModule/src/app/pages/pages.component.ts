@@ -50,6 +50,7 @@ export class PagesComponent implements OnInit {
  public file =[] ;
  public dates =[] ;
  public passwords =[] ;
+ passwordIsValid = false;
 
   ngOnInit(){
 
@@ -592,7 +593,9 @@ resetform(form,serv,related,relcom){
 }
 
 
-
+passwordValid(event) {
+  this.passwordIsValid = event;
+}
 
 }
 

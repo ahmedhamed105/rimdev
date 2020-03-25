@@ -15,6 +15,7 @@ import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.c
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { PasswordtableComponent } from './passwordtable/passwordtable.component';
+import { PasswordStrengthComponent } from './password-strength/password-strength.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -22,7 +23,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 @NgModule({
   declarations: [
     routingComponents,
-    PasswordtableComponent
+    PasswordtableComponent,
+    PasswordStrengthComponent
     
   ],
   imports: [
