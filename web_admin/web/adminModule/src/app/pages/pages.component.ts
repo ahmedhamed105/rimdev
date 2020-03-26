@@ -16,6 +16,9 @@ import * as _ from 'lodash';
 import { formatDate } from '@angular/common';
 import { PasswordtableComponent } from '../passwordtable/passwordtable.component';
 import { EncryptionService } from '../services/encryption.service';
+import { MenulistService } from '../services/menulist.service';
+import { CookiesService } from '../services/cookies.service';
+import { LanguagegoService } from '../services/languagego.service';
 
 declare var $: any;
 
@@ -36,7 +39,7 @@ export class PagesComponent implements OnInit {
   public type ;
   public isfile;
 
-  constructor(private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -52,11 +55,34 @@ export class PagesComponent implements OnInit {
  public passwords =[] ;
  passwordIsValid = false;
 
+ public menus =[];
+ public langs =[];
+
   ngOnInit(){
 
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
+
+    if(this.cookieService.getCookie('language') === ""){
+
+      this.language("EN");
+    }else{
+      GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
+
+
+    }
+
+    this._LanguagegoService.getalllang().subscribe(data => {
+ this.langs=data;
+      
+    });
+
+    this._MenulistService.getmenu()
+.subscribe(data => {
+  this.menus =data;
+  });
+
 
 
 
@@ -595,6 +621,14 @@ resetform(form,serv,related,relcom){
 
 passwordValid(event) {
   this.passwordIsValid = event;
+}
+
+
+language(code){
+  GlobalConstants.language= code;
+  this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
+  location.reload();
+
 }
 
 }

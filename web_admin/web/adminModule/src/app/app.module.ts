@@ -16,6 +16,8 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { PasswordtableComponent } from './passwordtable/passwordtable.component';
 import { PasswordStrengthComponent } from './password-strength/password-strength.component';
+import { LoginpageComponent } from './loginpage/loginpage.component';
+import { IcheckDirective } from './icheck.directive';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
@@ -23,8 +25,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 @NgModule({
   declarations: [
     routingComponents,
-    PasswordtableComponent,
-    PasswordStrengthComponent
+    IcheckDirective
+
     
   ],
   imports: [

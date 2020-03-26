@@ -9,15 +9,21 @@ import { ErrorpageComponent } from './errorpage/errorpage.component';
 import { PagesComponent } from './pages/pages.component';
 import { PasswordtableComponent } from './passwordtable/passwordtable.component';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
+import { LoginpageComponent } from './loginpage/loginpage.component';
+import { PasswordStrengthComponent } from './password-strength/password-strength.component';
 
 
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo : 'dashboard/P/1',
+    redirectTo : 'login',
     pathMatch: 'full'
 },
+  {
+      path: 'login',
+      component: LoginpageComponent,
+  },
   {
       path: 'dashboard/:type/:id',
       component: DasboardComponent,
@@ -45,4 +51,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents=[UsertypedropdownComponent,PasswordtableComponent,PagesComponent,ErrorpageComponent,ErrorDialogComponent,BlockedComponent,AppComponent,DasboardComponent,PageNotFoundComponent]
+export const routingComponents=[LoginpageComponent,PasswordtableComponent,PasswordStrengthComponent,UsertypedropdownComponent,PasswordtableComponent,PagesComponent,ErrorpageComponent,ErrorDialogComponent,BlockedComponent,AppComponent,DasboardComponent,PageNotFoundComponent]

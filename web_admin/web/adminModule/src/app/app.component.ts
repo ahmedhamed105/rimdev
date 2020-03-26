@@ -12,40 +12,16 @@ import { LanguagegoService } from './services/languagego.service';
 })
 export class AppComponent implements OnInit {
   title = 'adminModule';
-  public menus =[];
-  public langs =[];
 
-  constructor(private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private errorDialogService: ErrorDialogService){}
+
+  constructor(){}
 
   ngOnInit() {
-    if(this.cookieService.getCookie('language') === ""){
-
-      this.language("EN");
-    }else{
-      GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
-
-
-    }
-
-    this._LanguagegoService.getalllang().subscribe(data => {
- this.langs=data;
-      
-    });
-
-    this._MenulistService.getmenu()
-.subscribe(data => {
-  this.menus =data;
-  });
-
+  
   }
 
 
-  language(code){
-    GlobalConstants.language= code;
-    this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
-    location.reload();
 
-  }
 
 
 
