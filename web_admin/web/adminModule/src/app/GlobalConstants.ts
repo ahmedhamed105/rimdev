@@ -20,5 +20,11 @@ export class GlobalConstants {
     public static Devicetype: string = '/DeviceType/all';
     public static Deviceos: string = '/DeviceOS/all';
     public static Deviceinsert: string = '/Device/DevicePage';
+    public static usertokean: string = '/login/check';
     public static PCCODE: string = '0';
+
+    public static USERTOKEANkey: string = '';
+    public static USERNAME: string = '';
+
+
 }

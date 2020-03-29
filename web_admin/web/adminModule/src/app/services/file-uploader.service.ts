@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { HttpEventType } from '@angular/common/http';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-import { Ifiledownload } from '../objects/Ifiledownload';
 import { saveAs } from 'file-saver';
 import { UsersService } from '../services/users.service';
 import { Data } from '@angular/router';

@@ -497,6 +497,19 @@
  </div>
 </div>
 
+<div class="form-group"  formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'password'">
+  <label>{{component.comp.ccode}}</label>
+  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+ <app-password-strength
+          [passwordToCheck]="insertform[parent.parent.id].get(component.comp.name).value"
+          (passwordStrength)="passwordValid($event)"
+          ></app-password-strength>
+</div>
+
 <div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
   <label>{{component.comp.ccode}}</label>
   <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
@@ -504,6 +517,71 @@
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
  </div>
+</div>
+
+
+<div class="form-group" formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'file'">
+  <h3>{{component.comp.name}}</h3>
+  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
+    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
+   </div>
+</div>
+
+<div class="form-group"  formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'file'">
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">{{component.comp.ccode}}</h3>
+    </div>
+  <div class="box-body no-padding">
+<table class="table table-condensed">
+
+<tr>
+<th>Name</th>
+<th>Size</th>
+<th>Progress</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+<tr *ngFor="let item of queue[component.comp.id] | async">
+<td>{{ item.filename }}</td>
+<td>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+
+<td >
+<div class="progress progress-xs">
+<div class="progress-bar progress-bar-success" [style.width.%]="item.progress"></div>
+</div>
+</td>
+<td >
+<span *ngIf="item.isPending()" class="label label-warning">Pending </span>
+<span *ngIf="item.isSuccess()" class="label label-success">Approved</span>
+<span *ngIf="item.inProgress()" class="label label-primary"> Progress</span>
+<span *ngIf="item.isError()" class="label label-danger">Denied</span>
+<span *ngIf="item.isduplicate()" class="label label-danger">Duplicate</span>
+</td>	
+<td>
+<a tooltip="Cancel upload" (click)="item.cancel()" *ngIf="item.inProgress()">
+  <i class="fa fa-times-circle"></i>
+</a>
+<a tooltip="upload" (click)="item.upload(insertform[parent.parent.id].get(component.input.insertParameter).value)" *ngIf="item.isPending() && insertform[parent.parent.id].get(component.input.insertParameter).value != '' && insertform[parent.parent.id].get(component.input.insertParameter).value != null ">
+  <i class="fa fa-upload"></i>
+</a>
+<a tooltip="Remove from queue" (click)="item.removefromquery()" *ngIf="item.isPending()">
+  <i class="fa fa-trash"></i>
+</a>
+<a tooltip="download from queue" (click)="item.download()" *ngIf="item.isSuccess() && insertform[parent.parent.id].get(component.input.insertParameter).value != '' && insertform[parent.parent.id].get(component.input.insertParameter).value != null ">
+  <i class="fa fa-save"></i>
+</a>
+<a tooltip="Remove from queue" (click)="item.delete(component.input.deleteServ)" *ngIf="item.isSuccess() && insertform[parent.parent.id].get(component.input.insertParameter).value != '' && insertform[parent.parent.id].get(component.input.insertParameter).value != null ">
+  <i class="fa fa-trash"></i>
+</a>
+</td>	
+</tr>
+</table>
+</div>
+  </div>
+
 </div>
 
 

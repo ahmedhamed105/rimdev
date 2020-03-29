@@ -86,6 +86,10 @@ public class ParentComponent implements Serializable {
     @Basic(optional = false)
     @Column(name = "Com_port", nullable = false, length = 45)
     private String comport;
+    @Column(name = "routing_ind", nullable = false)
+    private int routingInd;
+    @Column(name = "routing_loc", length = 450)
+    private String routingLoc;
     
     
 
@@ -102,7 +106,25 @@ public class ParentComponent implements Serializable {
         this.parentPostion = parentPostion;
     }
     
-    public String getComIP() {
+
+    
+    public int getRoutingInd() {
+		return routingInd;
+	}
+
+	public void setRoutingInd(int routingInd) {
+		this.routingInd = routingInd;
+	}
+
+	public String getRoutingLoc() {
+		return routingLoc;
+	}
+
+	public void setRoutingLoc(String routingLoc) {
+		this.routingLoc = routingLoc;
+	}
+
+	public String getComIP() {
         return comIP;
     }
 

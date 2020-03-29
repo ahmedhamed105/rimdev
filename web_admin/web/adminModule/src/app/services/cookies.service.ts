@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { GlobalConstants } from '../GlobalConstants';
+import {LocalStorageService, SessionStorageService} from 'ngx-webstorage';
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +9,15 @@ export class CookiesService {
 
   isConsented = false;
 
-    constructor() {}
+    constructor(private storage:LocalStorageService) {}
 
     /**
      * delete cookie
      * @param name
      */
     public deleteCookie(name) {
-        this.setCookie(name, '', -1);
+      this.storage.clear(name);
+      //  this.setCookie(name, '', -1);
     }
 
     /**
@@ -23,18 +26,26 @@ export class CookiesService {
      * @returns {string}
      */
     public getCookie(name: string) {
-        const ca: Array<string> = document.cookie.split(';');
-        const caLen: number = ca.length;
-        const cookieName = `${name}=`;
-        let c: string;
+   //     const ca: Array<string> = document.cookie.split(';');
+   //     const caLen: number = ca.length;
+   //     const cookieName = `${name}=`;
+   //     let c: string;
 
-        for (let i  = 0; i < caLen; i += 1) {
-            c = ca[i].replace(/^\s+/g, '');
-            if (c.indexOf(cookieName) === 0) {
-                return c.substring(cookieName.length, c.length);
-            }
-        }
-        return '';
+   //     alert(document.cookie);
+    //    for (let i  = caLen -1  ; i > 0; i -= 1) {
+         
+   //         c = ca[i].replace(/^\s+/g, '');
+    //        if (c.indexOf(cookieName) === 0) {
+   //             return c.substring(cookieName.length, c.length);
+   //         }
+    //    }
+   //     return '';
+var out = this.storage.retrieve(name);
+   if(out === null){
+
+return '';
+   }
+   return out
     }
 
     /**
@@ -45,11 +56,14 @@ export class CookiesService {
      * @param {string} path
      */
     public setCookie(name: string, value: string, expireDays: number, path: string = '') {
-        const d: Date = new Date();
-        d.setTime(d.getTime() + expireDays * 24 * 60 * 60 * 1000);
-        const expires = `expires=${d.toUTCString()}`;
-        const cpath = path ? `; path=${path}` : '';
-        document.cookie = `${name}=${value}; ${expires}${cpath}`;
+   //     const d: Date = new Date();
+   //     d.setTime(d.getTime() + expireDays * 24 * 60 * 60 * 1000);
+    //    const expires = `expires=${d.toUTCString()}`;
+   //     const cpath = '/'//path ? `; path=${path}` : '';
+  //      document.cookie = `${name}=${value}; ${expires}${cpath} `;
+
+  this.storage.store(name, value);
+     
     }
 
     /**
@@ -69,4 +83,29 @@ export class CookiesService {
             e.preventDefault();
         }
     }
+
+
+
+    language(code){
+        GlobalConstants.language= code;
+        this.deleteCookie('language');
+        this.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
+        location.reload();
+      
+      }
+
+      username(user){
+        GlobalConstants.USERNAME= user;
+        this.deleteCookie('username');
+        this.setCookie( 'username', GlobalConstants.USERNAME,10,'' ); // To Set Cookie
+      //  location.reload();
+      }
+
+      usertokean(user){
+        GlobalConstants.USERTOKEANkey= user;
+        this.deleteCookie('usertokean');
+        this.setCookie( 'usertokean', GlobalConstants.USERTOKEANkey,10,'' ); // To Set Cookie
+      //  location.reload();
+      }
+
 }

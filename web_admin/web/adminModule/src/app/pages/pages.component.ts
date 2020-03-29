@@ -20,7 +20,6 @@ import { MenulistService } from '../services/menulist.service';
 import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
 
-declare var $: any;
 
 @Component({
   selector: 'app-pages',
@@ -60,13 +59,42 @@ export class PagesComponent implements OnInit {
 
   ngOnInit(){
 
+    this.menus =[];
+    this.langs =[];
+
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
 
+
+    var username = this.cookieService.getCookie('username');
+    var usertokean = this.cookieService.getCookie('usertokean');
+        if(username === "" || usertokean === ""){
+          this.router.navigate(['/login']);
+        }else{
+          GlobalConstants.USERNAME = username; // To Get Cookie
+          GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
+        }
+        
+    
+    var tokean = {
+      username : GlobalConstants.USERNAME,
+      tokean : GlobalConstants.USERTOKEANkey
+    
+    }
+        this._usersservice.tokean_check(tokean).subscribe(tokean => {
+    
+          this.cookieService.username(tokean['username']);
+          this.cookieService.usertokean(tokean['tokean']);
+    
+    
+          console.log(GlobalConstants.USERNAME);
+          console.log(GlobalConstants.USERTOKEANkey);
+
+
     if(this.cookieService.getCookie('language') === ""){
 
-      this.language("EN");
+      this.cookieService.language("EN");
     }else{
       GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
 
@@ -403,7 +431,7 @@ if(this.isfile){
 }
  
 
-
+        });
 
   }
 
@@ -625,11 +653,8 @@ passwordValid(event) {
 
 
 language(code){
-  GlobalConstants.language= code;
-  this.cookieService.setCookie( 'language', GlobalConstants.language,10,'' ); // To Set Cookie
-  location.reload();
-
-}
+  this.cookieService.language(code);
+    }
 
 }
 

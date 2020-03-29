@@ -46,19 +46,12 @@ public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate(@PathVariable(
 
 	
 	System.out.println(info.getPasswordEncy());
-	String key = info.getPasswordEncy().substring(info.getPasswordEncy().length() - 16);
-	String pass = info.getPasswordEncy().substring(0,info.getPasswordEncy().length() - 16);
+	String key = userLoginServ.getkey(info.getPasswordEncy());
+	String pass = userLoginServ.getencpassword(info.getPasswordEncy());
 //	System.out.println(key);
 	info.setLoginkey(key);
 	info.setPasswordEncy(pass);
 //	System.out.println(pass);
-	
-	//decrypt password
-	
-	String decryptedPassword =  new String(Base64.getDecoder().decode(pass));
-     AES aesUtil = new AES(128, 1000);
-    String password = aesUtil.decrypt(decryptedPassword.split("::")[1], decryptedPassword.split("::")[0], key, decryptedPassword.split("::")[2]);
-    System.out.println(password);
 		
 	if(info.getId() !=null) {
 		

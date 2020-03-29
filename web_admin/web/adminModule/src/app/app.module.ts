@@ -15,18 +15,16 @@ import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.c
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { PasswordtableComponent } from './passwordtable/passwordtable.component';
-import { PasswordStrengthComponent } from './password-strength/password-strength.component';
-import { LoginpageComponent } from './loginpage/loginpage.component';
-import { IcheckDirective } from './icheck.directive';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {NgxWebstorageModule} from 'ngx-webstorage';
+
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 
 @NgModule({
   declarations: [
-    routingComponents,
-    IcheckDirective
-
+    routingComponents
     
   ],
   imports: [
@@ -34,6 +32,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgxWebstorageModule.forRoot(),
     DeviceDetectorModule.forRoot(),
     AgGridModule.withComponents([
       UsertypedropdownComponent,
@@ -42,7 +41,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
     NgxMaskModule.forRoot(options),
     FileUploadModule,
     MatDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatCheckboxModule
 
   ],
   providers: [{

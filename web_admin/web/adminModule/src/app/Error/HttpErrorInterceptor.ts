@@ -63,6 +63,9 @@ import { GlobalConstants } from '../GlobalConstants';
              // window.alert(errorMessage);
       
       
+                  }else if(error.status === 410){
+                    GlobalConstants.iserror =false;
+
                   }else{
                    // console.log("ahmed hamed");
                   //  console.log(error);

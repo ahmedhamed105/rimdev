@@ -36,6 +36,7 @@
               "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css"
             ],
             "scripts": [
+              "../node_modules/crypto-js/crypto-js.js",
               "src/assets/bower_components/jquery/dist/jquery.min.js",
               "src/assets/bower_components/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/plugins/input-mask/jquery.inputmask.js",

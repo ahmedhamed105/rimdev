@@ -55,17 +55,23 @@ export class ErrorDialogService {
       
        });
      }else{
+if(error.code === 410){
+  this.router.navigate(['/login']);
 
-      let data1 = {
-        reason: error.error ,
-        status: error.code
-    };
-      if(!GlobalConstants.iserror){
-        this.openDialog(data1);
-         }else{
-           this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
-         }
+}else{
+  let data1 = {
+    reason: error.error ,
+    status: error.code
+};
+  if(!GlobalConstants.iserror){
+    this.openDialog(data1);
+     }else{
+       this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
      }
+ }
+
+}
+    
 
      
       

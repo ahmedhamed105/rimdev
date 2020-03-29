@@ -98,14 +98,14 @@ export class LocationServiceService {
        });
 
    // console.log("IP "+this.device.deviceip)
-
-        if(this.cookieService.getCookie('pccode').length === 0){
+var pcode= this.cookieService.getCookie('pccode');
+        if(pcode.length === 0){
           GlobalConstants.PCCODE= Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
           this.cookieService.setCookie( 'pccode', GlobalConstants.PCCODE,900,'' ); // To Set Cookie
 
         }
 
-  this.device.devicecode = this.cookieService.getCookie('pccode');
+  this.device.devicecode = pcode;
   
     await this.getnavigation()
     .then(position => {

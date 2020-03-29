@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Iuser } from '../objects/Iuser';
 import { Observable } from 'rxjs';
 import { GlobalConstants } from '../GlobalConstants';
 
@@ -25,6 +24,7 @@ export class UsersService {
       }
 
 
+
       getbyvalue(url,value,ip,port):Observable<[]>{
         var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language+"/";
         urlall=urlall+value;
@@ -39,6 +39,11 @@ export class UsersService {
             value3 : value3
           }
           return  this._http.post<[]>(urlall,file);  
+          }
+
+
+           tokean_check(object):Observable<[]>{
+          return this.insertbyurl(object,GlobalConstants.usertokean,GlobalConstants.ip,GlobalConstants.port);
           }
  
 

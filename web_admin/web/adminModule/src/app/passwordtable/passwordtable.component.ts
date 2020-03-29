@@ -18,7 +18,7 @@ export class PasswordtableComponent implements AgRendererComponent{
   jform :FormGroup  []=[];
 
 
-  private params:any = {
+  public params:any = {
     value : "none"
   };
 
