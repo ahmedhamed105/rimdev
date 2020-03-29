@@ -8,7 +8,6 @@ import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
-import { Idirectory } from '../objects/idirectory';
 import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
@@ -19,6 +18,7 @@ import { EncryptionService } from '../services/encryption.service';
 import { MenulistService } from '../services/menulist.service';
 import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-loginpage',
@@ -52,6 +52,7 @@ export class LoginpageComponent implements OnInit {
  public file =[] ;
  public dates =[] ;
  public passwords =[] ;
+ public checkbox =[] ;
  passwordIsValid = false;
 
  public menus =[];
@@ -66,6 +67,8 @@ export class LoginpageComponent implements OnInit {
       return false;
     };
 
+
+    this.cookieService.checkboxrember('0');
 
     var lang = this.cookieService.getCookie('language') ;
 
@@ -469,93 +472,6 @@ if(group != null){
   }
 
 
-  Makeaction(array,form,group,comp,serv,related,relcom,ip,port){  
-    var id ; 
-    if(group != null){
-      id = form.get(group).get(comp).value; 
-    }
-
-    if(id == null || id == "" ){
-
-     this.errorDialogService.display_error(1,"E100");
-    }
-  
-    var selectobject = array.filter(x => x[comp] == id)[0];
-//get table no action
-if(related === 'table'){
-  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port);
-}
-  
-
-    
-  }
-
-
-  tableaction(serv,para,index,related,relcom,ip,port){
-
-    console.log(this.gridOptions[index])
-    const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
-
-    if(selectedNodes.length === 0 ){
-
-     this.errorDialogService.display_error(1,"E103");
-
-    }
-
-    const selectedData = selectedNodes.map( node => node.data );
-    const selectedDataStringPresentation = selectedData.map( node =>
-       {
-     console.log(node)
-
-    this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port);
-    
-
-      });
-
-  }
-
-
-  displayupdate(serv,para,index,related,relcom,ip,port){
- //console.log(this.gridOptions)
-    const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
-
-    if(selectedNodes.length === 0 ){
-
-     this.errorDialogService.display_error(1,"E103");
-
-    }
-
-    const selectedData = selectedNodes.map( node => node.data );
-    const selectedDataStringPresentation = selectedData.map( node =>
-       {
-        if(related === 'form'){
-        console.log(node)
-        if(this.isfile){
-        this.fileupload.clearQueue();
-        this.fileupload.addfilesuser(serv,node[para],node[para],ip,port);
-        this.file.forEach(element => {
-          this.insertform[relcom].get(element).setValidators([]);
-          this.insertform[relcom].get(element).updateValueAndValidity();
-        });
-
-        }
-
-        this.dates.forEach(element => {
-          node[element]= formatDate(node[element], GlobalConstants.format, GlobalConstants.locale)
-        });
-       
-          this.insertform[relcom].patchValue(node);
-      }else if(related === 'table'){
-        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para],ip,port);
-      }
-
-
-      });
-
-  }
-
-
-  
 
 onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
 
@@ -595,13 +511,13 @@ onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
 
       if(related === 'login'){
         if(data['username'] == undefined || data['tokean'] == undefined){
-          this.cookieService.username('0');
-          this.cookieService.usertokean('0');
+          this.cookieService.username('',0);
+          this.cookieService.usertokean('',0);
 
         }else{
-
-          this.cookieService.username(data['username']);
-          this.cookieService.usertokean(data['tokean']);
+         
+          this.cookieService.username(data['username'],GlobalConstants.rember);
+          this.cookieService.usertokean(data['tokean'],GlobalConstants.rember);
         }
   
        }
@@ -629,6 +545,17 @@ resetform(form,serv,related,relcom){
 
 passwordValid(event) {
   this.passwordIsValid = event;
+}
+
+
+checked(event:MatCheckboxChange){
+  console.log(event.checked);
+  if(event.checked === true){
+    this.cookieService.checkboxrember('1');
+  }else{
+    this.cookieService.checkboxrember('0');
+  }
+
 }
 
 

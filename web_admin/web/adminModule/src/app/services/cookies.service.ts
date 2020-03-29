@@ -94,17 +94,31 @@ return '';
       
       }
 
-      username(user){
+      
+      checkboxrember(rember){
+        GlobalConstants.rember= rember;
+          this.deleteCookie('rember');
+          this.setCookie( 'rember', GlobalConstants.rember,10,'' ); // To Set Cookie
+  
+      //  location.reload();
+      }
+      username(user,rember){
         GlobalConstants.USERNAME= user;
-        this.deleteCookie('username');
-        this.setCookie( 'username', GlobalConstants.USERNAME,10,'' ); // To Set Cookie
+        if(rember === '1' ){
+
+          this.deleteCookie('username');
+          this.setCookie( 'username', GlobalConstants.USERNAME,10,'' ); // To Set Cookie
+        }
+
       //  location.reload();
       }
 
-      usertokean(user){
+      usertokean(user,rember){
         GlobalConstants.USERTOKEANkey= user;
+        if(rember === '1' ){
         this.deleteCookie('usertokean');
         this.setCookie( 'usertokean', GlobalConstants.USERTOKEANkey,10,'' ); // To Set Cookie
+        }
       //  location.reload();
       }
 

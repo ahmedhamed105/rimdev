@@ -6,6 +6,7 @@ import * as CryptoJS from 'crypto-js';
 })
 export class EncryptionService {
 
+
   constructor() { }
   keySize;
   iterationCount;

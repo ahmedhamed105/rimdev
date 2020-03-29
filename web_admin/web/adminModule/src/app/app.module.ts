@@ -8,8 +8,6 @@ import { HttpClientModule , HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from './Error/HttpErrorInterceptor';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { AgGridModule } from 'ag-grid-angular';
-import { NgxMaskModule } from 'ngx-mask';
-import { IConfig } from 'ngx-mask';
 import {FileUploadModule} from 'ng2-file-upload';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
@@ -17,9 +15,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { PasswordtableComponent } from './passwordtable/passwordtable.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {NgxWebstorageModule} from 'ngx-webstorage';
-
-
-export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
 
 
 @NgModule({
@@ -38,7 +33,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = {};
       UsertypedropdownComponent,
       PasswordtableComponent
     ]),
-    NgxMaskModule.forRoot(options),
     FileUploadModule,
     MatDialogModule,
     BrowserAnimationsModule,

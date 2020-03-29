@@ -3,8 +3,6 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { LanguagegoService } from './languagego.service';
 import { GlobalConstants } from '../GlobalConstants';
-import { Ilangsearch } from '../objects/Ilangsearch';
-import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 

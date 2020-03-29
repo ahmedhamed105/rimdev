@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocationServiceService } from '../services/location-service.service';
 import {  Router, ActivatedRoute } from '@angular/router';
-import { Idirectory } from '../objects/idirectory';
 import { ComponentService } from '../services/component.service';
 import { EncryptionService } from '../services/encryption.service';
 import { MenulistService } from '../services/menulist.service';
@@ -18,7 +17,7 @@ import { UsersService } from '../services/users.service';
 export class DasboardComponent implements OnInit {
 
   public device ;
-  public page : Idirectory;
+  public page ;
   public type ;
 
   public menus =[];
@@ -30,30 +29,34 @@ export class DasboardComponent implements OnInit {
     this.menus =[];
     this.langs =[];
 
-
-var username = this.cookieService.getCookie('username');
-var usertokean = this.cookieService.getCookie('usertokean');
+    GlobalConstants.rember = this.cookieService.getCookie('rember');
+  if( GlobalConstants.rember === '1'){
+    var username = this.cookieService.getCookie('username');
+    var usertokean = this.cookieService.getCookie('usertokean');
     if(username === "" || usertokean === ""){
       this.router.navigate(['/login']);
     }else{
       GlobalConstants.USERNAME = username; // To Get Cookie
       GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
     }
-    
+  }
+
+  console.log(GlobalConstants.USERNAME);
+  console.log(GlobalConstants.USERTOKEANkey);
 
 var tokean = {
   username : GlobalConstants.USERNAME,
   tokean : GlobalConstants.USERTOKEANkey
 
 }
+
+
     this.UsersService.tokean_check(tokean).subscribe(tokean => {
+      
+      this.cookieService.username(tokean['username'],GlobalConstants.rember);
+      this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
 
-      this.cookieService.username(tokean['username']);
-      this.cookieService.usertokean(tokean['tokean']);
 
-
-      console.log(GlobalConstants.USERNAME);
-      console.log(GlobalConstants.USERTOKEANkey);
 
     var menuid =this.route.snapshot.paramMap.get("id").toString();
 
@@ -88,7 +91,7 @@ var lang=this.cookieService.getCookie('language');
   
       console.log(this.page)
   
-      this.locationService.all_info(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).then(res => {
+      this.locationService.all_info(this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id']).then(res => {
         this.device =this.locationService.mydevice;
         console.log(this.device.devicetokean);
       });
@@ -104,4 +107,11 @@ var lang=this.cookieService.getCookie('language');
 this.cookieService.language(code);
   }
 
+  signout(){
+    this.cookieService.username('',GlobalConstants.rember);
+    this.cookieService.usertokean('',GlobalConstants.rember);
+    this.router.navigate(['/login']);
+      }
+
+      
 }

@@ -285,8 +285,14 @@ public Loginobject loginpage(Loginobject input,String langcode) {
 	Loginobject out=new Loginobject();
 	
 	out.setUsername(input.getUsername());
+	UserLogin userlog;
+	try {
+		 userlog=getbyusername(input.getUsername(), langcode);
+	} catch (Exception e) {
+		// TODO: handle exception
+		throw new redirectlogin("please enter good username");
+	}
 	
-	UserLogin userlog=getbyusername(input.getUsername(), langcode);
 	
 	if(! userlog.getUsertokean().equals(input.getTokean())) {
 		throw new redirectlogin("please enter good tokean");

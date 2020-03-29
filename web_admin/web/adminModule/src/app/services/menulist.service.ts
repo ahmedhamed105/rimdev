@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GlobalConstants } from '../GlobalConstants';
-import { Imenu } from '../objects/imenu';
-import { Ilanguage } from '../objects/Ilanguage';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +12,7 @@ export class MenulistService {
   
   getmenu(){
     var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.menuurl+"/"+GlobalConstants.language;
-    return  this._http.get<Imenu[]>(urlall);
+    return  this._http.get<[]>(urlall);
 
   }
 

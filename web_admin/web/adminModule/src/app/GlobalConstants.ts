@@ -25,6 +25,6 @@ export class GlobalConstants {
 
     public static USERTOKEANkey: string = '';
     public static USERNAME: string = '';
-
+    public static rember: string = '0';
 
 }

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Icomponent } from '../objects/Icomponent';
 import { GlobalConstants } from '../GlobalConstants';
-import { Idirectory } from '../objects/idirectory';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,7 @@ export class ComponentService {
     }
 
 
-    getmenu(type : String,menuid: String):Observable<Idirectory>{
+    getmenu(type : String,menuid: String):Observable<any>{
 
       var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";
 
@@ -31,7 +30,7 @@ export class ComponentService {
 
       console.log(GlobalConstants.language)
   
-      return  this._http.get<Idirectory>(url);
+      return  this._http.get<any>(url);
     
       }
 }

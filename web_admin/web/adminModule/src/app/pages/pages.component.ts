@@ -8,7 +8,6 @@ import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
-import { Idirectory } from '../objects/idirectory';
 import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
@@ -34,7 +33,7 @@ export class PagesComponent implements OnInit {
   public objects = [[]];
   public components = [];
   public arraystatic = [];
-  public page : Idirectory;
+  public page ;
   public type ;
   public isfile;
 
@@ -66,16 +65,19 @@ export class PagesComponent implements OnInit {
       return false;
     };
 
-
+    GlobalConstants.rember = this.cookieService.getCookie('rember');
+      if(GlobalConstants.rember  === '1'){
     var username = this.cookieService.getCookie('username');
     var usertokean = this.cookieService.getCookie('usertokean');
-        if(username === "" || usertokean === ""){
-          this.router.navigate(['/login']);
-        }else{
-          GlobalConstants.USERNAME = username; // To Get Cookie
-          GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
-        }
-        
+    if(username === "" || usertokean === ""){
+      this.router.navigate(['/login']);
+    }else{
+      GlobalConstants.USERNAME = username; // To Get Cookie
+      GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
+    }
+      }
+      
+      
     
     var tokean = {
       username : GlobalConstants.USERNAME,
@@ -84,8 +86,8 @@ export class PagesComponent implements OnInit {
     }
         this._usersservice.tokean_check(tokean).subscribe(tokean => {
     
-          this.cookieService.username(tokean['username']);
-          this.cookieService.usertokean(tokean['tokean']);
+          this.cookieService.username(tokean['username'],GlobalConstants.rember);
+          this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
     
     
           console.log(GlobalConstants.USERNAME);
@@ -128,7 +130,7 @@ export class PagesComponent implements OnInit {
 
     console.log(this.page)
 
-    this.locationService.all_info(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).then(res => {
+    this.locationService.all_info(this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id']).then(res => {
       this.device =this.locationService.mydevice;
       console.log(this.device.devicetokean);
     });
@@ -136,7 +138,7 @@ export class PagesComponent implements OnInit {
 
    
     
-    this._ComponentService.getbypage(this.type === "P"?this.page.parent.pagesID.id:this.page.child.pagesID.id).subscribe(res =>{
+    this._ComponentService.getbypage(this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id']).subscribe(res =>{
 
       
       
@@ -655,6 +657,14 @@ passwordValid(event) {
 language(code){
   this.cookieService.language(code);
     }
+
+
+    signout(){
+      this.cookieService.username('',GlobalConstants.rember);
+      this.cookieService.usertokean('',GlobalConstants.rember);
+      this.router.navigate(['/login']);
+        }
+    
 
 }
 
