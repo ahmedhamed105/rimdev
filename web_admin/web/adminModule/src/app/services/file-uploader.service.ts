@@ -34,6 +34,8 @@ export enum FileQueueStatus {
     public insertserv:any;
     public insertparmeter:any;
     public object:any;
+    public Devicetokean:any;
+    public pagenumber:any;
 
   
     constructor(file: any,type: any,index: any,pageid:number,parentid:number,componentid:number) {
@@ -104,9 +106,9 @@ export class FileUploaderService {
   }
 
   // public functions
-  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port) {
+  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port,Devicetokean,pagenumber) {
     // add file to the queue
-    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter,ip,port));
+    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter,ip,port,Devicetokean,pagenumber));
   }
 
   public clearQueue() {
@@ -161,9 +163,9 @@ console.log(url);
   }
 
 
-  public addfilesuser(url,userid,delteobject,ip,port): any{
+  public addfilesuser(url,userid,delteobject,ip,port,Devicetokean,pageid): any{
 
-   this._usersservice.getbyvalue(url,userid,ip,port).subscribe(
+   this._usersservice.getbyvalue(url,userid,ip,port,Devicetokean,pageid).subscribe(
         
         data => {
           
@@ -186,6 +188,9 @@ console.log(url);
             queueObj.fileid = singlefile['filesuploadID']['id'];
             queueObj.componentid = singlefile['componentID']['id'];
             queueObj.object = delteobject;
+            queueObj.Devicetokean=Devicetokean;
+            queueObj.pagenumber=pageid;
+
                // push to the queue
                if(this._files[singlefile['componentID']['id']] === undefined){
                 this._files[singlefile['componentID']['id']] = [];
@@ -208,7 +213,7 @@ console.log(url);
   }
 
   // private functions
-  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insertserv,inspara,ip,port) {
+  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insertserv,inspara,ip,port,Devicetokean,pagenumber) {
 
 console.log(index)
 
@@ -217,6 +222,8 @@ console.log(index)
     queueObj.index = index;
     queueObj.insertserv = insertserv;
     queueObj.insertparmeter = inspara;
+    queueObj.Devicetokean=Devicetokean;
+    queueObj.pagenumber=pagenumber;
     // set the individual object events
     queueObj.upload = (object) => this._upload(queueObj,object,ip,port);
     queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv,ip,port);
@@ -236,12 +243,14 @@ console.log(index)
     form.append('component', queueObj.componentid);
 
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+deleteserv+"/"+GlobalConstants.language;
-
+ 
+  let headers = new HttpHeaders({
+    'Devicetokean':   queueObj.Devicetokean,
+    'pageid': queueObj.pagenumber });
+    let options = {  reportProgress: true,headers: headers };
 
     // upload file and report progress
-    var req = new HttpRequest('POST', urlall, form, {
-      reportProgress: true,
-    });
+    var req = new HttpRequest('POST', urlall, form, options);
 
     // upload file and report progress
     queueObj.request = this.http.request(req).subscribe(
@@ -290,10 +299,12 @@ console.log(index)
   //  form.append('userid', queueObj.userid);
     // upload file and report progress
     var urlall=GlobalConstants.protocol+ip+":"+port+GlobalConstants.urladd+"/"+GlobalConstants.language;
+    let headers = new HttpHeaders({
+      'Devicetokean':   queueObj.Devicetokean,
+      'pageid': queueObj.pagenumber });
+      let options = {  reportProgress: true,headers: headers };
 
-    var req = new HttpRequest('POST', urlall, form, {
-      reportProgress: true,
-    });
+    var req = new HttpRequest('POST', urlall, form, options);
 
     // upload file and report progress
     queueObj.request = this.http.request(req).subscribe(
@@ -338,7 +349,7 @@ console.log(index)
     // update the FileQueueObject as completed
 if(para === 0){
   console.log("insert");
-  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid,ip,port).subscribe(data => {
+  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid,ip,port,queueObj.Devicetokean,queueObj.pagenumber).subscribe(data => {
 console.log(data);
 queueObj.progress = 100;
 queueObj.status = FileQueueStatus.Success;

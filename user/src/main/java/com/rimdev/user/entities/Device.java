@@ -95,8 +95,6 @@ public class Device implements Serializable {
     @XmlTransient
     @JsonIgnore
     private Date devicecreate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<UserDevice> userDeviceCollection;
     @JoinColumn(name = "Device_OS_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private DeviceOs deviceOSID;
@@ -262,15 +260,7 @@ public class Device implements Serializable {
 		this.isTablet = isTablet;
 	}
 
-	@XmlTransient
-    @JsonIgnore
-    public Collection<UserDevice> getUserDeviceCollection() {
-        return userDeviceCollection;
-    }
 
-    public void setUserDeviceCollection(Collection<UserDevice> userDeviceCollection) {
-        this.userDeviceCollection = userDeviceCollection;
-    }
     
     
     public Integer getPage() {

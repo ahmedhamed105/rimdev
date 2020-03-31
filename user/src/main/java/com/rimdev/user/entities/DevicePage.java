@@ -52,8 +52,24 @@ public class DevicePage implements Serializable {
     @Column(name = "Visit_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date visittime;
+    
+    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private UserLogin userloginID;
+    
+    @Basic(optional = false)
+    @Column(name = "page_tokean", nullable = false, length = 450)
+    private String pageTokean;
 
     public DevicePage() {
+    }
+    
+    public UserLogin getUserloginID() {
+        return userloginID;
+    }
+
+    public void setUserloginID(UserLogin userloginID) {
+        this.userloginID = userloginID;
     }
 
     public DevicePage(Integer id) {
@@ -91,6 +107,16 @@ public class DevicePage implements Serializable {
 
 	public void setVisittime(Date visittime) {
 		this.visittime = visittime;
+	}
+	
+	
+
+	public String getPageTokean() {
+		return pageTokean;
+	}
+
+	public void setPageTokean(String pageTokean) {
+		this.pageTokean = pageTokean;
 	}
 
 	@Override

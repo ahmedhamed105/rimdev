@@ -19,6 +19,7 @@ import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.DeviceType;
 import com.rimdev.user.entities.Pages;
+import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.response_all;
 
 @Service
@@ -42,7 +43,6 @@ public class DeviceServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
-	
 	
 	
 	
@@ -112,8 +112,7 @@ public Device Save(Device input,String langcode) {
 		
 		Date date = new Date();
 		Generate gen=new Generate();
-		String tokean=gen.token(30);
-		input.setDevicetokean(tokean);
+		input.setDevicetokean(gen.token(30));
         // convert date to calendar
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -122,9 +121,7 @@ public Device Save(Device input,String langcode) {
 		input.setDevicecreate(date);
 		input.setDevicemodify(date);
 		Device ouput =deviceRepo.save(input);	
-
-		Pages p= pagesServ.getbyid(input.getPage());
-		pagesServ.savedevpag(ouput, p,langcode);
+		
 		
 		
 		
@@ -142,10 +139,11 @@ public Device Save(Device input,String langcode) {
 	}
 
 public Device update(Device input,String langcode) {
+	
+	
 	try {
 	Generate gen=new Generate();
-	String tokean=gen.token(30);
-	input.setDevicetokean(tokean);
+	input.setDevicetokean(gen.token(30));
     // convert date to calendar
 	Date date = new Date();
     Calendar c = Calendar.getInstance();
@@ -154,9 +152,7 @@ public Device update(Device input,String langcode) {
 	input.setTokeantime(c.getTime());
 	input.setDevicemodify(date);
 	Device ouput =deviceRepo.save(input);	
-	
-	Pages p= pagesServ.getbyid(input.getPage());
-	pagesServ.savedevpag(ouput, p,langcode);
+
 	
 	return ouput;
 } catch (TransientDataAccessException  se) {
@@ -170,6 +166,91 @@ public Device update(Device input,String langcode) {
 }	
 }
 
+
+
+
+
+
+public Device SaveDP(Device input,String username,String tokean,String langcode) {
+		
+	try {	
+		
+		if(input.getDeviceOSID()==null || input.getDeviceOSID().getId()==null) {
+			input.setDeviceOSID(deviceOsServ.getbyname("Unknown"));
+			
+		}
+		if(input.getDevicetypeID()==null || input.getDevicetypeID().getId()==null) {
+			input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));		
+		}
+		
+		
+		input.setDevicestatusID(deviceStatusServ.getbyid(1));
+		
+		
+		Date date = new Date();
+		Generate gen=new Generate();
+		input.setDevicetokean(gen.token(30));
+        // convert date to calendar
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+		input.setTokeantime(c.getTime());
+		input.setDevicecreate(date);
+		input.setDevicemodify(date);
+		Device ouput =deviceRepo.save(input);	
+		
+
+		
+		Pages p= pagesServ.getbyid(input.getPage());
+		String pagetokean=pagesServ.savedevpag(ouput, p,username, tokean,langcode);
+		
+		ouput.setDevicetokean(pagetokean);
+		
+		return ouput;
+	} catch (TransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }			
+		
+	}
+
+public Device updateDP(Device input,String username,String tokean,String langcode) {
+	
+	
+	try {
+	Generate gen=new Generate();
+	input.setDevicetokean(gen.token(30));
+    // convert date to calendar
+	Date date = new Date();
+    Calendar c = Calendar.getInstance();
+    c.setTime(date);
+    c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+	input.setTokeantime(c.getTime());
+	input.setDevicemodify(date);
+	Device ouput =deviceRepo.save(input);	
+
+	
+	Pages p= pagesServ.getbyid(input.getPage());
+	String pagetokean=pagesServ.savedevpag(ouput, p,username, tokean,langcode);
+	
+	ouput.setDevicetokean(pagetokean);
+	
+	return ouput;
+} catch (TransientDataAccessException  se) {
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+} catch (RecoverableDataAccessException  se) {
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+}catch (ScriptException  se) {
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+}catch (NonTransientDataAccessException  se) {
+	throw new NoDataException(textConvertionServ.search("E104", langcode));
+}	
+}
 
 
 }

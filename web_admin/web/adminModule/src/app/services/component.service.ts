@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Icomponent } from '../objects/Icomponent';
 import { GlobalConstants } from '../GlobalConstants';
@@ -14,23 +14,32 @@ export class ComponentService {
   constructor(private _http:HttpClient) { }
 
 
-  getbypage(pageid: number):Observable<Icomponent[]>{
+  getbypage(pageid: number,Devicetokean,pagenumber):Observable<Icomponent[]>{
 
     var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Componentpage+GlobalConstants.language+"/";
     url=url+pageid;
-    return  this._http.get<Icomponent[]>(url);
+    let headers = new HttpHeaders({
+      'Devicetokean':   Devicetokean,
+      'pageid': pagenumber });
+      let options = { headers: headers };
+    return  this._http.get<Icomponent[]>(url,options);
     }
 
 
-    getmenu(type : String,menuid: String):Observable<any>{
+    getmenu(type : String,menuid: String,username,usertokean):Observable<any>{
 
       var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";
 
       url=url+type+"/"+menuid;
 
       console.log(GlobalConstants.language)
+
+      let headers = new HttpHeaders({
+        'username':   username,
+        'usertokean': usertokean });
+        let options = { headers: headers };
   
-      return  this._http.get<any>(url);
+      return  this._http.get<any>(url,options);
     
       }
 }

@@ -38,7 +38,7 @@ export class ErrorDialogService {
  // console.log(this.isDialogOpen +'  '+GlobalConstants.iserror);
 
      if(type === 1){
-      this._LanguagegoService.getlang(error).subscribe(data => {
+      this._LanguagegoService.getlang(error,GlobalConstants.Devicetokean,GlobalConstants.pageid).subscribe(data => {
 
        let data1 = {
             reason: data['message'] === undefined?error.error:data['message'] ,

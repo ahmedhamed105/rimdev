@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,12 +59,10 @@ public class DeviceController {
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<List<Device>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
-
 	
 	Device out=null;
 	try {
-		
-	
+
 		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
 		
 		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()));
@@ -97,9 +96,9 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate(@PathVariable("la
 
 
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Device> DevicePage(@PathVariable("langcode") String langcode,@RequestBody Device input) {
+public @ResponseBody ResponseEntity<Device> DevicePage(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
-
+System.out.println(username + " "+usertokean);
 	System.out.println("inserted page "+input.getDevicecode());
 	
 	Device out=null;
@@ -113,21 +112,20 @@ public @ResponseBody ResponseEntity<Device> DevicePage(@PathVariable("langcode")
 		
 		
 
-
 		//System.out.println(dev.getDevicename());
 		if(dev != null ) {		
 			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
-			  out=deviceServ.update(dev,langcode);
+			  out=deviceServ.updateDP(dev,username, usertokean,langcode);
 	
 
 			} else {
-				out=deviceServ.Save(input,langcode);
+				out=deviceServ.SaveDP(input,username, usertokean,langcode);
 			}
 		
 	} catch (Exception e) {
 		// TODO: handle exception
 		
-		out=deviceServ.Save(input,langcode);
+		out=deviceServ.SaveDP(input,username, usertokean,langcode);
 		
 
 	}

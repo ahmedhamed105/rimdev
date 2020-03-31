@@ -19,7 +19,8 @@ export class DasboardComponent implements OnInit {
   public device ;
   public page ;
   public type ;
-
+  public pagenumber ;
+  public pagetokean ;
   public menus =[];
   public langs =[];
 
@@ -28,6 +29,11 @@ export class DasboardComponent implements OnInit {
   ngOnInit() {
     this.menus =[];
     this.langs =[];
+
+
+    var menuid =this.route.snapshot.paramMap.get("id").toString();
+
+    this.type =this.route.snapshot.paramMap.get("type");
 
     GlobalConstants.rember = this.cookieService.getCookie('rember');
   if( GlobalConstants.rember === '1'){
@@ -51,16 +57,29 @@ var tokean = {
 }
 
 
-    this.UsersService.tokean_check(tokean).subscribe(tokean => {
+    this.UsersService.tokean_check(tokean,'','').subscribe(tokean => {
       
       this.cookieService.username(tokean['username'],GlobalConstants.rember);
       this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
 
 
+      this._ComponentService.getmenu(this.type,menuid,GlobalConstants.USERNAME,GlobalConstants.USERTOKEANkey).subscribe(res =>{
 
-    var menuid =this.route.snapshot.paramMap.get("id").toString();
+        this.page=res;
+    
+        console.log(this.page)
+  
+        this.pagenumber = this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id'];
+    
+        GlobalConstants.pageid = this.pagenumber;
 
-    this.type =this.route.snapshot.paramMap.get("type");
+      this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,GlobalConstants.USERNAME).then(res => {
+        this.device =this.locationService.mydevice;
+        console.log(this.device.devicetokean);
+        this.pagetokean=this.device.devicetokean;
+
+        GlobalConstants.Devicetokean =this.pagetokean;
+
 
 var lang=this.cookieService.getCookie('language');
     if(lang === ""){
@@ -72,33 +91,20 @@ var lang=this.cookieService.getCookie('language');
 
     }
 
-    this._LanguagegoService.getalllang().subscribe(data => {
+    this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
  this.langs=data;
       
     });
 
-    this._MenulistService.getmenu()
+    this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
 .subscribe(data => {
   this.menus =data;
   });
 
 
-
-    
-    this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
-
-      this.page=res;
-  
-      console.log(this.page)
-  
-      this.locationService.all_info(this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id']).then(res => {
-        this.device =this.locationService.mydevice;
-        console.log(this.device.devicetokean);
-      });
-    });
-
-
+});
   });
+});
     
   }
 

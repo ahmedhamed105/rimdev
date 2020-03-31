@@ -27,4 +27,7 @@ export class GlobalConstants {
     public static USERNAME: string = '';
     public static rember: string = '0';
 
+    public static Devicetokean:   string='0';
+    public static pageid: string ='0';
+
 }

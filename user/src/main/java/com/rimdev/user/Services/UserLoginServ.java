@@ -186,6 +186,38 @@ public UserLogin getbyusername(String username,String langcode) {
 
 
 
+public UserLogin getbyusernametokean(String username,String tokean,String langcode) {
+	
+	try {
+		Optional<UserLogin> flowid =userLoginRepo.findbyusernametokean(username,tokean);
+		 
+		 if (flowid.isPresent()){
+			 UserLogin a= flowid.get();
+		
+			return a;
+
+					}
+			else{
+			   // alternative processing....
+				throw new NoDataException("please enter correct Data");
+
+				
+			}
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
+
+	
+}
+
+
+
 public UserLogin getbyid(int id,String langcode) {
 	
 	try {

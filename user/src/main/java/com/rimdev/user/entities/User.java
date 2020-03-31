@@ -88,8 +88,6 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<Adress> adressCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<UserDevice> userDeviceCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<UserLog> userLogCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<UserLogin> userLoginCollection;
@@ -227,15 +225,7 @@ public class User implements Serializable {
         this.adressCollection = adressCollection;
     }
 
-    @XmlTransient
-    @JsonIgnore
-    public Collection<UserDevice> getUserDeviceCollection() {
-        return userDeviceCollection;
-    }
 
-    public void setUserDeviceCollection(Collection<UserDevice> userDeviceCollection) {
-        this.userDeviceCollection = userDeviceCollection;
-    }
 
     @XmlTransient
     @JsonIgnore

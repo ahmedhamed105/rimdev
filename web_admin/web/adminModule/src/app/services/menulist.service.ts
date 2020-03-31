@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GlobalConstants } from '../GlobalConstants';
 
 @Injectable({
@@ -10,9 +10,14 @@ export class MenulistService {
   constructor(private _http:HttpClient) { }
 
   
-  getmenu(){
+  getmenu(Devicetokean,pageid){
     var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.menuurl+"/"+GlobalConstants.language;
-    return  this._http.get<[]>(urlall);
+    let headers = new HttpHeaders({
+      'Devicetokean':   Devicetokean,
+      'pageid': pageid });
+      let options = { headers: headers };
+  
+    return  this._http.get<[]>(urlall,options);
 
   }
 

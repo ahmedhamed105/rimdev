@@ -38,6 +38,9 @@ export class LoginpageComponent implements OnInit {
   public type ;
   public isfile;
 
+  public pagenumber = 12;
+  public pagetokean ;
+
   constructor(private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
@@ -81,15 +84,6 @@ export class LoginpageComponent implements OnInit {
 
     }
 
-    this._LanguagegoService.getalllang().subscribe(data => {
- this.langs=data;
-      
-    });
-
-    this._MenulistService.getmenu()
-.subscribe(data => {
-  this.menus =data;
-  });
 
 
 
@@ -99,19 +93,33 @@ export class LoginpageComponent implements OnInit {
     this.dates =[] ;
 
 
-    var pageid =12;
+  
+    GlobalConstants.pageid = this.pagenumber.toString();
 
 
-
-    this.locationService.all_info(pageid).then(res => {
+    this.locationService.all_info(this.pagenumber,'0','public').then(res => {
       this.device =this.locationService.mydevice;
-      console.log(this.device.devicetokean);
-    });
+       console.log(this.device.devicetokean);
 
+       this.pagetokean =this.device.devicetokean;
+
+       GlobalConstants.Devicetokean =this.pagetokean;
+
+
+       this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
+        this.langs=data;
+             
+           });
+       
+           this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
+       .subscribe(data => {
+         this.menus =data;
+         });
+       
 
    
     
-    this._ComponentService.getbypage(pageid).subscribe(res =>{
+    this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{
 
       res.forEach((parent,indexp) => {
 
@@ -187,7 +195,7 @@ if(element.comp.ctype == 'select'){
         if(element.select.arrayObject === 1){
           if(element.select.webService != undefined){
 
-            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport)
+            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport,this.pagetokean,this.pagenumber.toString())
             .subscribe(data => {this.objects[index+parentin] = data;
            //  console.log(index+indexp);
           //  console.log(element.select.webService)
@@ -249,7 +257,9 @@ if(element.comp.ctype == 'select'){
     editable: false,      
     resizable: true,
     checkboxSelection: true,
-    cellRenderer: ""
+    cellRenderer: "",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
   this.column.push(b);
  // this.columnDefs[parent.parent.id][0] = b;
@@ -280,7 +290,9 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer: ""
+    cellRenderer: "",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -306,7 +318,9 @@ if(element.comp.ctype === 'label'){
     editable: true,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer : ""
+    cellRenderer : "",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -332,7 +346,9 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer : "passRenderer"
+    cellRenderer : "passRenderer",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -360,7 +376,9 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer: "selRenderer"
+    cellRenderer: "selRenderer",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -386,7 +404,7 @@ if(parent.parent.firstmethod === undefined){
 
 }else{
   console.log("go");
-  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport)
+  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport,this.pagetokean,this.pagenumber.toString())
 
 }
 
@@ -395,7 +413,7 @@ if(parent.parent.firstmethod === undefined){
 
     });
     
-
+  });
  
 if(this.isfile){
   this.fileupload.clearQueue();
@@ -430,7 +448,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port);
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port,this.pagetokean,this.pagenumber.toString());
 }
 
 
@@ -488,7 +506,7 @@ onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
 
   console.log(form.value)
 }
-     this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
+     this._usersservice.insertbyurl(form.value,serv,ip,port,this.pagetokean,this.pagenumber.toString()).subscribe(data => {
 
     console.log(data)
 

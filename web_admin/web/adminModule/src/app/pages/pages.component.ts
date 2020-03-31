@@ -34,6 +34,8 @@ export class PagesComponent implements OnInit {
   public components = [];
   public arraystatic = [];
   public page ;
+  public pagenumber ;
+  public pagetokean ;
   public type ;
   public isfile;
 
@@ -84,7 +86,7 @@ export class PagesComponent implements OnInit {
       tokean : GlobalConstants.USERTOKEANkey
     
     }
-        this._usersservice.tokean_check(tokean).subscribe(tokean => {
+        this._usersservice.tokean_check(tokean,'','').subscribe(tokean => {
     
           this.cookieService.username(tokean['username'],GlobalConstants.rember);
           this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
@@ -103,15 +105,6 @@ export class PagesComponent implements OnInit {
 
     }
 
-    this._LanguagegoService.getalllang().subscribe(data => {
- this.langs=data;
-      
-    });
-
-    this._MenulistService.getmenu()
-.subscribe(data => {
-  this.menus =data;
-  });
 
 
 
@@ -124,21 +117,34 @@ export class PagesComponent implements OnInit {
 
     this.type =this.route.snapshot.paramMap.get("type");
 
-    this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
+    this._ComponentService.getmenu(this.type,menuid,GlobalConstants.USERNAME,GlobalConstants.USERTOKEANkey).subscribe(res =>{
 
     this.page=res;
 
     console.log(this.page)
 
-    this.locationService.all_info(this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id']).then(res => {
+    this.pagenumber=this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id'];
+    GlobalConstants.pageid = this.pagenumber;
+  
+    this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,GlobalConstants.USERNAME).then(res => {
       this.device =this.locationService.mydevice;
       console.log(this.device.devicetokean);
-    });
 
+      this.pagetokean =this.device.devicetokean;
 
-   
-    
-    this._ComponentService.getbypage(this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id']).subscribe(res =>{
+      GlobalConstants.Devicetokean =this.pagetokean;
+      
+    this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
+      this.langs=data;
+           
+         });
+     
+         this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
+     .subscribe(data => {
+       this.menus =data;
+       });
+  
+    this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{
 
       
       
@@ -217,7 +223,7 @@ if(element.comp.ctype == 'select'){
         if(element.select.arrayObject === 1){
           if(element.select.webService != undefined){
 
-            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport)
+            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport,this.pagetokean,this.pagenumber.toString())
             .subscribe(data => {this.objects[index+parentin] = data;
            //  console.log(index+indexp);
           //  console.log(element.select.webService)
@@ -279,7 +285,9 @@ if(element.comp.ctype == 'select'){
     editable: false,      
     resizable: true,
     checkboxSelection: true,
-    cellRenderer: ""
+    cellRenderer: "",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
   this.column.push(b);
  // this.columnDefs[parent.parent.id][0] = b;
@@ -310,7 +318,9 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer: ""
+    cellRenderer: "",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -336,7 +346,9 @@ if(element.comp.ctype === 'label'){
     editable: true,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer : ""
+    cellRenderer : "",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -362,7 +374,9 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer : "passRenderer"
+    cellRenderer : "passRenderer",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -390,7 +404,9 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer: "selRenderer"
+    cellRenderer: "selRenderer",
+    pagetokean : this.pagetokean,
+    pagenumber: this.pagenumber.toString()
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -416,7 +432,7 @@ if(parent.parent.firstmethod === undefined){
 
 }else{
   console.log("go");
-  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport)
+  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport,this.pagetokean,this.pagenumber.toString())
 
 }
 
@@ -427,6 +443,7 @@ if(parent.parent.firstmethod === undefined){
     
   });
 
+});
  
 if(this.isfile){
   this.fileupload.clearQueue();
@@ -461,7 +478,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port);
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port,this.pagetokean,this.pagenumber.toString());
 }
 
 
@@ -517,7 +534,7 @@ if(group != null){
     var selectobject = array.filter(x => x[comp] == id)[0];
 //get table no action
 if(related === 'table'){
-  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port);
+  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port,this.pagetokean,this.pagenumber.toString());
 }
   
 
@@ -541,7 +558,7 @@ if(related === 'table'){
        {
      console.log(node)
 
-    this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port);
+    this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port,this.pagetokean,this.pagenumber.toString());
     
 
       });
@@ -566,7 +583,7 @@ if(related === 'table'){
         console.log(node)
         if(this.isfile){
         this.fileupload.clearQueue();
-        this.fileupload.addfilesuser(serv,node[para],node[para],ip,port);
+        this.fileupload.addfilesuser(serv,node[para],node[para],ip,port,this.pagetokean,this.pagenumber.toString());
         this.file.forEach(element => {
           this.insertform[relcom].get(element).setValidators([]);
           this.insertform[relcom].get(element).updateValueAndValidity();
@@ -580,7 +597,7 @@ if(related === 'table'){
        
           this.insertform[relcom].patchValue(node);
       }else if(related === 'table'){
-        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para],ip,port);
+        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para],ip,port,this.pagetokean,this.pagenumber.toString());
       }
 
 
@@ -611,7 +628,7 @@ onSubmit(form,serv,related,relcom,ip,port){
 
   console.log(form.value)
 }
-     this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
+     this._usersservice.insertbyurl(form.value,serv,ip,port,this.pagetokean,this.pagenumber.toString()).subscribe(data => {
 
     console.log(data)
 

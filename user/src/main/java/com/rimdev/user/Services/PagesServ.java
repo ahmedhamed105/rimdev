@@ -16,9 +16,11 @@ import com.rimdev.user.Exception.DuplicationException;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.DevicePageRepo;
 import com.rimdev.user.Repo.PagesRepo;
+import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Pages;
+import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.pagesdevice;
 
 @Service
@@ -32,6 +34,9 @@ public class PagesServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	@Autowired
+	UserLoginServ userLoginServ;
 	
 	
 public List<Pages> getall(String langcode) {
@@ -234,14 +239,23 @@ public List<pagesdevice> getpagesbydevice(int id,String langcode) {
 	}
 
 
-public void savedevpag(Device dev,Pages pa,String langcode) {
+public String savedevpag(Device dev,Pages pa,String username,String tokean,String langcode) {
 	try {
+		UserLogin userlogin = null;
+
+	  userlogin =   userLoginServ.getbyusernametokean(username, tokean, langcode);	
+
+
 		Date visittime = new Date();
 		DevicePage a=new DevicePage();
 		a.setDeviceId(dev);
 		a.setPagesID(pa);
 		a.setVisittime(visittime);
+		a.setUserloginID(userlogin);
+		Generate gen=new Generate();
+		a.setPageTokean(gen.token(30));
 		devicePageRepo.save(a);
+		return a.getPageTokean();
 	} catch (TransientDataAccessException  se) {
 		throw new NoDataException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {

@@ -18,5 +18,8 @@ public interface UserLoginRepo extends CrudRepository<UserLogin, Integer>{
 	
 	@Query(value ="SELECT * FROM rim_user.user_login where Username =?1" , nativeQuery = true)
 	Optional<UserLogin> findbyusername(String username);
+	
+	@Query(value ="SELECT * FROM rim_user.user_login where Username =?1 AND User_tokean =?2" , nativeQuery = true)
+	Optional<UserLogin> findbyusernametokean(String username,String tokean);
 
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IDevice } from '../objects/IDevice';
 import { IdeviceOS } from '../objects/IdeviceOS';
 import { Idevicetype } from '../objects/Idevicetype';
@@ -28,7 +28,7 @@ export class LocationServiceService {
   public devicetype = [];
   public mydevice;
 
-   async all_info(page : number) 
+   async all_info(page ,usertokean,username) 
   {
       const deviceInfo = this.deviceService.getDeviceInfo();
       const isMobilea = this.deviceService.isMobile();
@@ -44,7 +44,7 @@ export class LocationServiceService {
 
 
     //  console.log('finish1');
-      await   this.getos().then(res => {
+      await   this.getos(usertokean,username).then(res => {
         
         this.deviceos=res;
     //     console.log('finish2');
@@ -62,7 +62,7 @@ export class LocationServiceService {
  
       });
 
-     await this.gettype().then(data => {
+     await this.gettype(usertokean,username).then(data => {
 
         this.devicetype = data;
 
@@ -98,14 +98,14 @@ export class LocationServiceService {
        });
 
    // console.log("IP "+this.device.deviceip)
-var pcode= this.cookieService.getCookie('pccode');
-        if(pcode.length === 0){
+    GlobalConstants.PCCODE= this.cookieService.getCookie('pccode');
+        if(GlobalConstants.PCCODE.length === 0){
           GlobalConstants.PCCODE= Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
           this.cookieService.setCookie( 'pccode', GlobalConstants.PCCODE,900,'' ); // To Set Cookie
 
         }
 
-  this.device.devicecode = pcode;
+  this.device.devicecode = GlobalConstants.PCCODE;
   
     await this.getnavigation()
     .then(position => {
@@ -120,7 +120,7 @@ var pcode= this.cookieService.getCookie('pccode');
   //     console.log('navg '+this.device.devicelong);
 
 
-      await this.insert().then(res => {
+      await this.insert(usertokean,username).then(res => {
      this.mydevice =res;
         if(res['devicestatusID']['id'] === 2){
           this.router.navigate(['/blocked']);
@@ -133,30 +133,40 @@ var pcode= this.cookieService.getCookie('pccode');
 
 
 
-async  insert() : Promise<devicetoken>{
+async  insert(usertokean,username) : Promise<devicetoken>{
   
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceinsert+"/"+GlobalConstants.language;
-  return await   this._http.post<devicetoken>(urlall,this.device).toPromise();
+  let headers = new HttpHeaders({
+    'username':   username,
+    'usertokean': usertokean });
+let options = { headers: headers };
+  return await   this._http.post<devicetoken>(urlall,this.device,options).toPromise();
   
 }
 
 
-async  getos() : Promise<IdeviceOS[]>{
+async  getos(usertokean,username) : Promise<IdeviceOS[]>{
 
 
   // console.log('finish3');
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceos+"/"+GlobalConstants.language;
-
-  return await   this._http.get<IdeviceOS[]>(urlall).toPromise();
+  let headers = new HttpHeaders({
+    'username':   username,
+    'usertokean': usertokean });
+let options = { headers: headers };
+  return await   this._http.get<IdeviceOS[]>(urlall,options).toPromise();
   
 }
 
-async  gettype() : Promise<Idevicetype[]>{
+async  gettype(usertokean,username) : Promise<Idevicetype[]>{
 
  // console.log('finish5');
  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Devicetype+"/"+GlobalConstants.language;
-
-  return await   this._http.get<Idevicetype[]>(urlall).toPromise();
+ let headers = new HttpHeaders({
+  'username':   username,
+  'usertokean': usertokean });
+let options = { headers: headers };
+  return await   this._http.get<Idevicetype[]>(urlall,options).toPromise();
   
 }
 
