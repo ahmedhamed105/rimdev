@@ -11,13 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.UserServ;
 import com.rimdev.user.Utils.ObjectUtils;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
@@ -31,17 +34,32 @@ public class UserController {
 	@Autowired
 	UserServ userServ;
 	
+	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
 
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<User>> getAllUsers(@PathVariable("langcode") String langcode){
-		return new ResponseEntity<List<User>>(userServ.getall(langcode), HttpStatus.OK);
+	  public  ResponseEntity<List<User>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+
+		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+  
+		  return new ResponseEntity<List<User>>(userServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
+	  
+	  public  ResponseEntity<List<User>> getAllUsers(String langcode){
+		  return new ResponseEntity<List<User>>(userServ.getall(langcode), HttpStatus.OK);
+	  }
+	  
 	  @RequestMapping(value = "/get/{langcode}/{id}", method = RequestMethod.GET)
-	  public ResponseEntity<User> getuser(@PathVariable("langcode") String langcode,@PathVariable @NotNull int id){
+	  public ResponseEntity<User> getuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable @NotNull int id){
+	
+		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+  
 		  User a = new User();
 		  try {
 			 a = userServ.getuser(id,langcode);
@@ -58,8 +76,11 @@ public class UserController {
 	 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<User>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody User input) {
-  // This returns a JSON or XML with the users
+public @ResponseBody ResponseEntity<List<User>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody User input) {
+	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+	
+	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
 //System.out.println(input.getFirstName());
 	User user=null;
@@ -96,8 +117,11 @@ public @ResponseBody ResponseEntity<List<User>> saveorupdate(@PathVariable("lang
 
 
 @RequestMapping(value = "/file/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<FilesUpload> savefile(@PathVariable("langcode") String langcode,@RequestBody threevalues input) {
-  // This returns a JSON or XML with the users
+public @ResponseBody ResponseEntity<FilesUpload> savefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody threevalues input) {
+ 
+	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
 //System.out.println(input.getFirstName());
 	System.out.println(input.getValue1() +" "+input.getValue2() +" "+input.getValue3());
@@ -112,8 +136,11 @@ public @ResponseBody ResponseEntity<FilesUpload> savefile(@PathVariable("langcod
 
 
 @RequestMapping(value = "/filebyuser/{langcode}/{userid}", method = RequestMethod.GET)
-public @ResponseBody ResponseEntity<List<UserFile>> savefile(@PathVariable("langcode") String langcode,@PathVariable("userid") String userid) {
-  // This returns a JSON or XML with the users
+public @ResponseBody ResponseEntity<List<UserFile>> savefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("userid") String userid) {
+ 
+	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
 //System.out.println(input.getFirstName());
 	System.out.println(userid);
@@ -127,8 +154,12 @@ public @ResponseBody ResponseEntity<List<UserFile>> savefile(@PathVariable("lang
 
 
 @RequestMapping(value = "/deletefile/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<FilesUpload> deletefile(@PathVariable("langcode") String langcode,@RequestParam("fileid") String fileid,@RequestParam("object") String object,@RequestParam("component") String componentid) {
-  // This returns a JSON or XML with the users
+public @ResponseBody ResponseEntity<FilesUpload> deletefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestParam("fileid") String fileid,@RequestParam("object") String object,@RequestParam("component") String componentid) {
+	
+	DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+	
+	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
 //System.out.println(input.getFirstName());
 	System.out.println(fileid+" "+ object+" "+componentid);

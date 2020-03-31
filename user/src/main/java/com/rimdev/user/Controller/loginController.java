@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.UserLoginServ;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.ouputobject.Loginobject;
 
 @Controller // This means that this class is a Controller
@@ -23,15 +25,17 @@ public class loginController {
 	@Autowired
 	UserLoginServ userLoginServ;
 	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
 	
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Loginobject> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") int  pageid,@PathVariable("langcode") String langcode,@RequestBody Loginobject info) {
-	System.out.println(info.getUsername());
-	System.out.println(info.getPassword());
-	System.out.println("hamed shalaby");
-	System.out.println(Devicetokean);
-	System.out.println(pageid);
+public @ResponseBody ResponseEntity<Loginobject> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Loginobject info) {
+
+	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+	
 	
 	Loginobject out = userLoginServ.login(info, langcode);
 
@@ -42,8 +46,9 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(@RequestHeader("De
 
 @RequestMapping(value = "/check/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<Loginobject> check_tokean(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Loginobject info) {
-	System.out.println(info.getTokean());
-	System.out.println(info.getUsername());
+	
+	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 	
 	Loginobject out = userLoginServ.loginpage(info, langcode);
 

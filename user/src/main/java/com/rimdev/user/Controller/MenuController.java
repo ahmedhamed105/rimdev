@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.ParentMenuServ;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.ouputobject.menu_object;
 import com.rimdev.user.ouputobject.menuparsub;
 
@@ -20,9 +23,15 @@ public class MenuController {
 	@Autowired
 	ParentMenuServ parentMenuServ;
 	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<menu_object>> getUsersbyuser(@PathVariable("langcode") String langcode){ 
+	  public  ResponseEntity<List<menu_object>> getUsersbyuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){ 
+	
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	
 		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode), HttpStatus.OK);
 	  }
 	  

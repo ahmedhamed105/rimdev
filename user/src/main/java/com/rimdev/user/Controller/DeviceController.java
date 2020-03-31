@@ -17,14 +17,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DeviceOsServ;
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
 import com.rimdev.user.Services.DeviceStatusServ;
 import com.rimdev.user.Services.DeviceTypeServ;
 import com.rimdev.user.Services.PagesServ;
+import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Pages;
 import com.rimdev.user.entities.User;
+import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.pagesdevice;
 import com.rimdev.user.ouputobject.response_all;
 
@@ -37,29 +41,45 @@ public class DeviceController {
 	@Autowired
 	DeviceServ deviceServ;
 	
-	
+	@Autowired
+	DevicePageServ devicePageServ;
 	
 	@Autowired
 	PagesServ pagesServ;
 	
+	@Autowired
+	UserLoginServ userLoginServ;
+	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Device>> getAll(@PathVariable("langcode") String langcode){
-		return new ResponseEntity<List<Device>>(deviceServ.getall(langcode), HttpStatus.OK);
+	  public  ResponseEntity<List<Device>> getAll( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+		  return new ResponseEntity<List<Device>>(deviceServ.getall(langcode), HttpStatus.OK);
+	  }
+	  
+	  
+	 
+	  public  ResponseEntity<List<Device>> getAll( String langcode){
+		  return new ResponseEntity<List<Device>>(deviceServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
 	  @RequestMapping(value = "/page/{langcode}/{deviceid}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<pagesdevice>> getpages(@PathVariable("langcode") String langcode,@PathVariable("deviceid")  int deviceid){	  
-		return new ResponseEntity<List<pagesdevice>>(pagesServ.getpagesbydevice(deviceid,langcode), HttpStatus.OK);
+	  public  ResponseEntity<List<pagesdevice>> getpages( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("deviceid")  int deviceid){	  
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+		  
+		  return new ResponseEntity<List<pagesdevice>>(pagesServ.getpagesbydevice(deviceid,langcode), HttpStatus.OK);
 	  }
 	  
 	  
 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Device>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody Device input) {
+public @ResponseBody ResponseEntity<List<Device>> saveorupdate( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
-	
+	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 	Device out=null;
 	try {
 
@@ -99,6 +119,9 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate(@PathVariable("la
 public @ResponseBody ResponseEntity<Device> DevicePage(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
 System.out.println(username + " "+usertokean);
+
+UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
+
 	System.out.println("inserted page "+input.getDevicecode());
 	
 	Device out=null;

@@ -10,16 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Services.AreaServ;
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.EmailServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Area;
 import com.rimdev.user.entities.Device;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.ouputobject.response_all;
@@ -32,9 +35,15 @@ public class EmailController {
 	@Autowired
 	EmailServ emailServ;
 	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
 	
 	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<select_object>> getprimary(@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<select_object>> getprimary(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+		
+		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+ 
 		  List<select_object> sel =new ArrayList<select_object>();
 		  select_object a =new select_object();
 		  a.setKey("YES");
@@ -48,24 +57,34 @@ public class EmailController {
 	  }
 
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getAllUsers(@PathVariable("langcode") String langcode){
-		return new ResponseEntity<List<Email>>(emailServ.getall(langcode), HttpStatus.OK);
+	  public  ResponseEntity<List<Email>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  
+		  return new ResponseEntity<List<Email>>(emailServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
 	  @RequestMapping(value = "/user/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getUsersbyuser(@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
+	  public  ResponseEntity<List<Email>> getUsersbyuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+		  
 		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid,langcode), HttpStatus.OK);
 	  }
 	  
 	  
+	  public  ResponseEntity<List<Email>> getUsersbyuser( String langcode, int userid){ 
 
+		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid,langcode), HttpStatus.OK);
+	  }
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody Email emails) {
+public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
   // This returns a JSON or XML with the users
 	
-	
+	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 	
 	if(emails.getId() !=null) {
 		
@@ -101,10 +120,11 @@ public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@PathVariable("lan
 
 
 @RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> delete(@PathVariable("langcode") String langcode,@RequestBody Email emails) {
+public @ResponseBody ResponseEntity<List<Email>> delete(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
   // This returns a JSON or XML with the users
 	
-	
+	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 	if(emails.getId() !=null  && emails.getUserID() != null && emails.getUserID().getId() != null) {
 		
 		

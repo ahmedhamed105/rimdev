@@ -8,13 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.LanguageMapServ;
 import com.rimdev.user.Services.TextConvertionServ;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.LanguageMap;
 import com.rimdev.user.ouputobject.lang_object;
 import com.rimdev.user.ouputobject.singleString;
@@ -31,9 +34,15 @@ public class TextConvertionController {
 	@Autowired
 	LanguageMapServ languageMapServ;
 	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
 	
 	  @RequestMapping(value = "/code/{langcode}/{txtcode}", method = RequestMethod.GET)
-	  public @ResponseBody ResponseEntity<singleString>  convertbycode(@PathVariable("langcode") String langcode,@PathVariable("txtcode") String txtcode){ 
+	  public @ResponseBody ResponseEntity<singleString>  convertbycode(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("txtcode") String txtcode){ 
+		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+		  
 		  //exception handled	
 		  singleString a =new singleString();
 		  a.setMessage(textConvertionServ.search(txtcode,langcode));
@@ -43,16 +52,27 @@ public class TextConvertionController {
 
 	  
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<lang_object>> getAllUsers(@PathVariable("langcode") String langcode){ 
+	  public  ResponseEntity<List<lang_object>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){ 
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+		  
 		  return new ResponseEntity<List<lang_object>>(textConvertionServ.getalllang(langcode), HttpStatus.OK);
 
 	  
 	  }
 	  
 	  
+	  public  ResponseEntity<List<lang_object>> getAllUsers(String langcode){ 
+		  return new ResponseEntity<List<lang_object>>(textConvertionServ.getalllang(langcode), HttpStatus.OK);  
+	  }
+	  
+	  
 	  @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<List<lang_object>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
-	    // This returns a JSON or XML with the users
+	  public @ResponseBody ResponseEntity<List<lang_object>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
+	
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+  
+		  // This returns a JSON or XML with the users
 		  LanguageMap langmap;
 		try {
 			langmap= languageMapServ.getbycode(input.getLangaugecode(),langcode);
@@ -86,8 +106,11 @@ public class TextConvertionController {
 	  
 	  
 	  @RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<List<lang_object>> delete(@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
-	    // This returns a JSON or XML with the users
+	  public @ResponseBody ResponseEntity<List<lang_object>> delete(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
+
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  
+		  // This returns a JSON or XML with the users
 		  LanguageMap langmap;
 		try {
 			langmap= languageMapServ.getbycode(input.getLangaugecode(),langcode);

@@ -10,14 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.TelephonesServ;
 import com.rimdev.user.Services.UserServ;
 import com.rimdev.user.Utils.ObjectUtils;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.ouputobject.select_object;
 
@@ -32,9 +35,15 @@ public class UserTeleController {
 	@Autowired
 	TelephonesServ telephonesServ;
 	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
 	
 	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<select_object>> getprimary(@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<select_object>> getprimary( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	
+		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 		  List<select_object> sel =new ArrayList<select_object>();
 		  select_object a =new select_object();
 		  a.setKey("YES");
@@ -49,7 +58,10 @@ public class UserTeleController {
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Telephones>> getAllUsers(@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Telephones>> getAllUsers( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
+		  
 		  //exception handled
 		return new ResponseEntity<List<Telephones>>(telephonesServ.getall(langcode), HttpStatus.OK);
 	  }
@@ -57,7 +69,9 @@ public class UserTeleController {
 
 	  
 	  @RequestMapping(value = "/user/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Telephones>> getUsersbyuser(@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
+	  public  ResponseEntity<List<Telephones>> getUsersbyuser( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
+		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 		  //exception handled
 	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid,langcode), HttpStatus.OK);
 
@@ -65,14 +79,18 @@ public class UserTeleController {
 	  }
 	  
 	  
-
+	  public  ResponseEntity<List<Telephones>> getUsersbyuser(String langcode,int userid){ 
+		  //exception handled
+	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid,langcode), HttpStatus.OK);		
+	  }
 	  
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@PathVariable("langcode") String langcode,@RequestBody Telephones teles) {
+public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Telephones teles) {
   // This returns a JSON or XML with the users
 
-	
+	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 	if(teles.getId() !=null) {
 				
 			Telephones found= telephonesServ.getbyid(teles.getId(),langcode);
@@ -102,9 +120,10 @@ public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate(@PathVariable
 
 
 @RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Telephones>> delete(@PathVariable("langcode") String langcode,@RequestBody Telephones teles) {
+public @ResponseBody ResponseEntity<List<Telephones>> delete( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Telephones teles) {
   // This returns a JSON or XML with the users
-	
+	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 	
 	if(teles.getId() !=null  && teles.getUserID() != null && teles.getUserID().getId() != null) {
 		
