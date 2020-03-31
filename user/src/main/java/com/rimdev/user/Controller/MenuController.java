@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.ParentMenuServ;
+import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.entities.DevicePage;
+import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.menu_object;
 import com.rimdev.user.ouputobject.menuparsub;
 
@@ -26,6 +28,9 @@ public class MenuController {
 	@Autowired
 	DevicePageServ devicePageServ;
 	
+	@Autowired
+	UserLoginServ userLoginServ;
+	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<menu_object>> getUsersbyuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){ 
@@ -38,6 +43,9 @@ public class MenuController {
 	  
 	  @RequestMapping(value = "/get/{langcode}/{type}/{menuid}", method = RequestMethod.GET)
 	  public  ResponseEntity<menuparsub> getid(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("menuid") int menuid){ 
+		  UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
+
+		  
 		  return new ResponseEntity<menuparsub>(parentMenuServ.getmenus(type,menuid,langcode), HttpStatus.OK);
 	  }
 
