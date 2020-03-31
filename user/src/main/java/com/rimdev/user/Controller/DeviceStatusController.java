@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceStatusServ;
 import com.rimdev.user.Services.UserLoginServ;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.DeviceStatus;
 import com.rimdev.user.entities.UserLogin;
 
@@ -23,14 +25,17 @@ public class DeviceStatusController {
 	DeviceStatusServ deviceStatusServ;
 	
 	@Autowired
-	UserLoginServ userLoginServ;
+	DevicePageServ devicePageServ;
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<DeviceStatus>> getAllUsers(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<DeviceStatus>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
 
-		  UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
  
 		  return new ResponseEntity<List<DeviceStatus>>(deviceStatusServ.getall(langcode), HttpStatus.OK);
 	  }
+	  
+	  
+
 
 }

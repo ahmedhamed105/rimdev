@@ -17,8 +17,8 @@ export class GlobalConstants {
     public static urldownload: string = '/file/downloadFile';
     public static format: string = 'yyyy-MM-dd';
     public static locale: string = 'en-US';
-    public static Devicetype: string = '/DeviceType/all';
-    public static Deviceos: string = '/DeviceOS/all';
+    public static Devicetype: string = '/DeviceType/dataall';
+    public static Deviceos: string = '/DeviceOS/dataall';
     public static Deviceinsert: string = '/Device/DevicePage';
     public static usertokean: string = '/login/check';
     public static PCCODE: string = '0';

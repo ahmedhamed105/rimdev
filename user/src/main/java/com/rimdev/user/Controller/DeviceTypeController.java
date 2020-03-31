@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.rimdev.user.Services.DeviceOsServ;
+import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceTypeServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.entities.DeviceOs;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.DeviceType;
 import com.rimdev.user.entities.UserLogin;
 
@@ -29,8 +31,20 @@ public class DeviceTypeController {
 	@Autowired
 	UserLoginServ userLoginServ;
 	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
+	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<DeviceType>> getAllUsers(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<DeviceType>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+		  
+		  return new ResponseEntity<List<DeviceType>>(deviceTypeServ.getall(langcode), HttpStatus.OK);
+	  }
+	  
+	  
+	  @RequestMapping(value = "/dataall/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<DeviceType>> getAll(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode){
 		  UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 		  
 		  return new ResponseEntity<List<DeviceType>>(deviceTypeServ.getall(langcode), HttpStatus.OK);

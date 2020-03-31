@@ -47,7 +47,7 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(@RequestHeader("De
 @RequestMapping(value = "/check/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<Loginobject> check_tokean(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Loginobject info) {
 	
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	//  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
 	
 	Loginobject out = userLoginServ.loginpage(info, langcode);
