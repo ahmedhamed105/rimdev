@@ -6,8 +6,10 @@
 package com.rimdev.user.entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -77,13 +80,22 @@ public class UserLogin implements Serializable {
     @Column(name = "login_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date loginCreate;
-    @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private User userID;
     @Column(name = "Notes", length = 450)
     private String notes;
     @Column(name = "Login_key", nullable = false, length = 450)
     private String loginkey;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<Telephones> telephonesCollection;
+    @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private User userID;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<Email> emailCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<PasswordHistory> passwordHistoryCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<DevicePage> devicePageCollection;
+    
 
     public UserLogin() {
     }
@@ -99,6 +111,48 @@ public class UserLogin implements Serializable {
         this.passwordEncy = passwordEncy;
         this.loginModfiy = loginModfiy;
         this.loginCreate = loginCreate;
+    }
+    
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Telephones> getTelephonesCollection() {
+        return telephonesCollection;
+    }
+
+    public void setTelephonesCollection(Collection<Telephones> telephonesCollection) {
+        this.telephonesCollection = telephonesCollection;
+    }
+
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Email> getEmailCollection() {
+        return emailCollection;
+    }
+
+    public void setEmailCollection(Collection<Email> emailCollection) {
+        this.emailCollection = emailCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<PasswordHistory> getPasswordHistoryCollection() {
+        return passwordHistoryCollection;
+    }
+
+    public void setPasswordHistoryCollection(Collection<PasswordHistory> passwordHistoryCollection) {
+        this.passwordHistoryCollection = passwordHistoryCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DevicePage> getDevicePageCollection() {
+        return devicePageCollection;
+    }
+
+    public void setDevicePageCollection(Collection<DevicePage> devicePageCollection) {
+        this.devicePageCollection = devicePageCollection;
     }
    
     @XmlTransient

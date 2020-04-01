@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
@@ -22,6 +23,7 @@ import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.AES;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Email;
+import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.Loginobject;
@@ -45,6 +47,59 @@ public class UserLoginServ {
 	
 	@Autowired
 	TelephonesServ telephonesServ;
+	
+	
+
+public UserLogin getuserlogin(int id,String langcode) {
+	
+	try {
+		Optional<UserLogin> flowid =userLoginRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 UserLogin  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				throw new NoDataException(textConvertionServ.search("E108", langcode));
+			}
+	} catch (TransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NoDataException(textConvertionServ.search("E104", langcode));
+    }
+}
+
+
+public void checkuserlogin(int id,String langcode) {
+	
+	try {
+		Optional<UserLogin> flowid =userLoginRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 UserLogin  ouput = flowid.get();
+					}
+			else{
+				   // alternative processing....
+							throw new NoDataException(textConvertionServ.search("E108", langcode));
+				}
+				} catch (TransientDataAccessException  se) {
+					throw new NoDataException(textConvertionServ.search("E104", langcode));
+			    } catch (RecoverableDataAccessException  se) {
+					throw new NoDataException(textConvertionServ.search("E104", langcode));
+			    }catch (ScriptException  se) {
+					throw new NoDataException(textConvertionServ.search("E104", langcode));
+			    }catch (NonTransientDataAccessException  se) {
+					throw new NoDataException(textConvertionServ.search("E104", langcode));
+			    }
+		
+}
+	
 	
 	
 public List<UserLogin> getalllogin(String langcode) {
@@ -199,7 +254,7 @@ public UserLogin getbyusernametokean(String username,String tokean,String langco
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("please enter correct Data");
+				throw new redirectlogin("please enter correct Data");
 
 				
 			}
@@ -317,14 +372,8 @@ public Loginobject loginpage(Loginobject input,String langcode) {
 	Loginobject out=new Loginobject();
 	
 	out.setUsername(input.getUsername());
-	UserLogin userlog;
-	try {
-		 userlog=getbyusername(input.getUsername(), langcode);
-	} catch (Exception e) {
-		// TODO: handle exception
-		throw new redirectlogin("please enter good username");
-	}
-	
+	UserLogin userlog=getusername(input.getUsername(), langcode,0);
+
 	
 	if(! userlog.getUsertokean().equals(input.getTokean())) {
 		throw new redirectlogin("please enter good tokean");
@@ -357,15 +406,67 @@ public Loginobject loginpage(Loginobject input,String langcode) {
 	return out;
 	
 }
+String emailRegex = "[a-zA-Z0-9.!#$%&amp;’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+"; 
 
+String teleRegex = "^[0-9]{1,12}$"; 
+
+
+public static boolean isValid(String text,String pattern) 
+{ 
+    Pattern pat = Pattern.compile(pattern); 
+    if (text == null) 
+        return false; 
+    return pat.matcher(text).matches(); 
+} 
+
+
+
+public UserLogin getusername(String username,String langcode,int login){
+try {
+
+	
+	UserLogin userlog = null;
+	if(isValid(username, emailRegex)) {
+	//	email ;
+		
+	Email em= emailServ.getbyemail(username, langcode);
+	
+	userlog=em.getUserloginID();
+		
+	}else if(isValid(username, teleRegex)) {
+		//tellphone
+		
+	Telephones tele=telephonesServ.getbytele(username, langcode);	
+	userlog=tele.getUserloginID();
+	}else {
+		
+		 userlog=getbyusername(username, langcode);
+	}
+	
+	
+	return userlog;
+	
+} catch (Exception e) {
+	if(login == 1)
+	// TODO: handle exception
+	throw new NoDataException("please enter good username");
+	else
+	throw new redirectlogin("please enter good username");
+}
+}
 
 
 public Loginobject login(Loginobject input,String langcode) {
+	
+	
 	Loginobject out=new Loginobject();
 	
-	out.setUsername(input.getUsername());
 	
-	UserLogin userlog=getbyusername(input.getUsername(), langcode);
+	
+
+	UserLogin userlog = getusername(input.getUsername(), langcode,1);
+	
+	out.setUsername(userlog.getUsername());
 	
     String password = dencryp(input.getPassword());
     

@@ -16,6 +16,7 @@ import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.EmailRepo;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.User;
+import com.rimdev.user.entities.UserLogin;
 
 @Service
 public class EmailServ {
@@ -28,6 +29,10 @@ public class EmailServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	
+	@Autowired
+	UserLoginServ userLoginServ;
 	
 	
 public List<Email> getall(String langcode) {
@@ -92,6 +97,36 @@ public void check_email(String email,String langcode) {
 }
 
 
+
+public Email getbyemail(String email,String langcode) {
+	
+	try {
+		Optional<Email> flowid =emailRepo.findbyemail(email);
+		 
+		 if (flowid.isPresent()){
+			 return	  flowid.get();
+		
+ 
+					}
+			else{
+			   // alternative processing....
+				throw new NoDataException(textConvertionServ.search("E109", langcode));
+				
+			}
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
+
+	
+}
+
+
 public Email getbyid(int id,String langcode) {
 	
 	try {
@@ -123,7 +158,7 @@ public Email getbyid(int id,String langcode) {
 
 
 
-public List<Email> getbyuser(int userid,String langcode) {
+public List<Email> getbyuserlogin(int userid,String langcode) {
 	
 
 		List<Email> cu;
@@ -156,7 +191,7 @@ public List<Email> getbyuser(int userid,String langcode) {
 
 
 
-public String getbyuserchar(int userid,String langcode) {
+public String getbyuserloginchar(int userid,String langcode) {
 	
 String out = "";
 		List<Email> cu;
@@ -197,9 +232,9 @@ String out = "";
 public void save(Email input,String langcode) {
 	
 	
-	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
-		input.setUserID(usero);
+	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
+		UserLogin  usero =  userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
+		input.setUserloginID(usero);
 		
 		Date date = new Date();
 		input.setEmailCreate(date);
@@ -233,9 +268,9 @@ public void save(Email input,String langcode) {
 
 public void update(Email input,String langcode) {
 	
-	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
-		input.setUserID(usero);
+	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
+		UserLogin  usero =  userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
+		input.setUserloginID(usero);
 	}
 	
 	Date date = new Date();
@@ -261,7 +296,7 @@ public void update(Email input,String langcode) {
 public void delete(Email input,String langcode) {	
 	
 	try {
-		userServ.checkuser(input.getUserID().getId(), langcode);	
+		userLoginServ.checkuserlogin(input.getUserloginID().getId(), langcode);	
 		emailRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));

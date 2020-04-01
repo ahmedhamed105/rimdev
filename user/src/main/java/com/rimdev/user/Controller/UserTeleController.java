@@ -73,7 +73,7 @@ public class UserTeleController {
 		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
 		  //exception handled
-	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid,langcode), HttpStatus.OK);
+	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuserlogin(userid,langcode), HttpStatus.OK);
 
 		
 	  }
@@ -81,7 +81,7 @@ public class UserTeleController {
 	  
 	  public  ResponseEntity<List<Telephones>> getUsersbyuser(String langcode,int userid){ 
 		  //exception handled
-	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuser(userid,langcode), HttpStatus.OK);		
+	    return new ResponseEntity<List<Telephones>>(telephonesServ.getbyuserlogin(userid,langcode), HttpStatus.OK);		
 	  }
 	  
 
@@ -110,7 +110,7 @@ public @ResponseBody ResponseEntity<List<Telephones>> saveorupdate( @RequestHead
 	}
 		
 	
-	  return getUsersbyuser(langcode,teles.getUserID().getId());
+	  return getUsersbyuser(langcode,teles.getUserloginID().getId());
 
 }
 
@@ -125,7 +125,7 @@ public @ResponseBody ResponseEntity<List<Telephones>> delete( @RequestHeader("De
 	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
 	
-	if(teles.getId() !=null  && teles.getUserID() != null && teles.getUserID().getId() != null) {
+	if(teles.getId() !=null  && teles.getUserloginID() != null && teles.getUserloginID().getId() != null) {
 		
 		
 			Telephones found= telephonesServ.getbyid(teles.getId(),langcode);	
@@ -142,7 +142,7 @@ public @ResponseBody ResponseEntity<List<Telephones>> delete( @RequestHeader("De
 
 	}
 		
-	  return getUsersbyuser(langcode,teles.getUserID().getId());
+	  return getUsersbyuser(langcode,teles.getUserloginID().getId());
 
 }
 

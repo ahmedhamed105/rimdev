@@ -70,13 +70,13 @@ public class EmailController {
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
 		  
-		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid,langcode), HttpStatus.OK);
+		  return new ResponseEntity<List<Email>>(emailServ.getbyuserlogin(userid,langcode), HttpStatus.OK);
 	  }
 	  
 	  
 	  public  ResponseEntity<List<Email>> getUsersbyuser( String langcode, int userid){ 
 
-		  return new ResponseEntity<List<Email>>(emailServ.getbyuser(userid,langcode), HttpStatus.OK);
+		  return new ResponseEntity<List<Email>>(emailServ.getbyuserlogin(userid,langcode), HttpStatus.OK);
 	  }
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
@@ -111,7 +111,7 @@ public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestHeader("De
 	
 	
 	
-		return getUsersbyuser(langcode,emails.getUserID().getId());
+		return getUsersbyuser(langcode,emails.getUserloginID().getId());
 }
 
 
@@ -125,7 +125,7 @@ public @ResponseBody ResponseEntity<List<Email>> delete(@RequestHeader("Deviceto
 	
 	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
-	if(emails.getId() !=null  && emails.getUserID() != null && emails.getUserID().getId() != null) {
+	if(emails.getId() !=null  && emails.getUserloginID() != null && emails.getUserloginID().getId() != null) {
 		
 		
 		Email found= emailServ.getbyid(emails.getId(),langcode);	
@@ -143,7 +143,7 @@ public @ResponseBody ResponseEntity<List<Email>> delete(@RequestHeader("Deviceto
 }
 	
 	
-	return getUsersbyuser(langcode,emails.getUserID().getId());
+	return getUsersbyuser(langcode,emails.getUserloginID().getId());
 }
 
 

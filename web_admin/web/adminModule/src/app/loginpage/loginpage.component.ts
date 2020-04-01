@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { Validators, FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
 import { GridOptions } from 'ag-grid-community';
@@ -12,7 +12,6 @@ import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
 import * as _ from 'lodash';
-import { formatDate } from '@angular/common';
 import { PasswordtableComponent } from '../passwordtable/passwordtable.component';
 import { EncryptionService } from '../services/encryption.service';
 import { MenulistService } from '../services/menulist.service';

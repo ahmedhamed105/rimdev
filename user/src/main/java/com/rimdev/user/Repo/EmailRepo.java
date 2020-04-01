@@ -15,7 +15,7 @@ public interface EmailRepo extends CrudRepository<Email, Integer>{
 	Optional<Email> findbyemail(String email);
 	
 	
-	@Query(value ="SELECT * FROM rim_user.email where User_ID =?1" , nativeQuery = true)
+	@Query(value ="SELECT * FROM rim_user.email where User_login_ID =?1" , nativeQuery = true)
 	Iterable<Email> findbyuser(int userid);
 
 }

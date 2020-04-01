@@ -20,6 +20,7 @@ import com.rimdev.user.Repo.TelephonesRepo;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
+import com.rimdev.user.entities.UserLogin;
 
 @Service
 public class TelephonesServ {
@@ -32,6 +33,10 @@ public class TelephonesServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	
+	@Autowired
+	UserLoginServ userLoginServ;
 	
 	
 public List<Telephones> getall(String langcode) {
@@ -98,6 +103,39 @@ public void check_tele(String tele,String langcode) {
 }
 
 
+
+
+public Telephones getbytele(String tele,String langcode) {
+	
+
+	try {
+		Optional<Telephones> flowid =telephonesRepo.findbytele(tele);
+		 
+		 if (flowid.isPresent()){
+			return flowid.get();
+		
+					}
+			else{
+			   // alternative processing....
+				throw new NoDataException(textConvertionServ.search("E107", langcode));
+
+
+			}
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
+	
+
+	
+}
+
+
 public Telephones getbyid(int id,String langcode) {
 	
 	try {
@@ -130,7 +168,7 @@ public Telephones getbyid(int id,String langcode) {
 
 
 
-public List<Telephones> getbyuser(int userid,String langcode) {
+public List<Telephones> getbyuserlogin(int userid,String langcode) {
 	List<Telephones> cu;
 	try {
 		
@@ -161,7 +199,7 @@ public List<Telephones> getbyuser(int userid,String langcode) {
 
 
 
-public String getbyuserchar(int userid,String langcode) {
+public String getbyuserloginchar(int userid,String langcode) {
 	String out = "";
 	List<Telephones> cu;
 	try {
@@ -197,9 +235,9 @@ public String getbyuserchar(int userid,String langcode) {
 
 public void save(Telephones input,String langcode) {
 
-	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
-		input.setUserID(usero);
+	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
+		UserLogin  usero = userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
+		input.setUserloginID(usero);
 		
 		Date date = new Date();
 		input.setTeleCreate(date);
@@ -232,9 +270,9 @@ public void save(Telephones input,String langcode) {
 
 public void update(Telephones input,String langcode) {
 	
-	if(input.getUserID() != null || input.getUserID().getId() != null) {
-		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
-		input.setUserID(usero);
+	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
+		UserLogin  usero = userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
+		input.setUserloginID(usero);
 	}
 	
 	Date date = new Date();
@@ -261,7 +299,7 @@ public void update(Telephones input,String langcode) {
 public void delete(Telephones input,String langcode) {	
 
 	try {
-		userServ.checkuser(input.getUserID().getId(), langcode);	
+		userLoginServ.checkuserlogin(input.getUserloginID().getId(), langcode);	
 		telephonesRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));

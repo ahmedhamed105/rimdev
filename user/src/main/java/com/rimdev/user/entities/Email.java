@@ -66,9 +66,9 @@ public class Email implements Serializable {
     @Column(name = "email_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date emailCreate;
-    @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
-    private User userID;
+    private UserLogin userloginID;
     
     
     @JoinColumn(name = "Data_status_ID", referencedColumnName = "ID", nullable = false)
@@ -136,12 +136,12 @@ public class Email implements Serializable {
         this.emailCreate = emailCreate;
     }
 
-    public User getUserID() {
-        return userID;
+    public UserLogin getUserloginID() {
+        return userloginID;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUserloginID(UserLogin userloginID) {
+        this.userloginID = userloginID;
     }
 
     @Override

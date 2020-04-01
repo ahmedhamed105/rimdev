@@ -84,8 +84,6 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date usercreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<Telephones> telephonesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<Adress> adressCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<UserLog> userLogCollection;
@@ -94,10 +92,6 @@ public class User implements Serializable {
     @JoinColumn(name = "User_type_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private UserType usertypeID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<Email> emailCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<PasswordHistory> passwordHistoryCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<UserFile> userFileCollection;    
     @JoinColumn(name = "User_status_ID", referencedColumnName = "ID", nullable = false)
@@ -205,15 +199,7 @@ public class User implements Serializable {
         this.usercreate = usercreate;
     }
 
-    @XmlTransient
-    @JsonIgnore
-    public Collection<Telephones> getTelephonesCollection() {
-        return telephonesCollection;
-    }
 
-    public void setTelephonesCollection(Collection<Telephones> telephonesCollection) {
-        this.telephonesCollection = telephonesCollection;
-    }
 
     @XmlTransient
    @JsonIgnore
@@ -253,26 +239,6 @@ public class User implements Serializable {
 
     public void setUsertypeID(UserType usertypeID) {
         this.usertypeID = usertypeID;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<Email> getEmailCollection() {
-        return emailCollection;
-    }
-
-    public void setEmailCollection(Collection<Email> emailCollection) {
-        this.emailCollection = emailCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<PasswordHistory> getPasswordHistoryCollection() {
-        return passwordHistoryCollection;
-    }
-
-    public void setPasswordHistoryCollection(Collection<PasswordHistory> passwordHistoryCollection) {
-        this.passwordHistoryCollection = passwordHistoryCollection;
     }
 
     @XmlTransient
