@@ -6,6 +6,7 @@
 package com.rimdev.user.entities;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
@@ -115,6 +116,10 @@ public class Device implements Serializable {
     private boolean isDesktopDevice;
     @Column(name = "Tablet", length = 45)
     private boolean isTablet;
+    @Column(name = "login_fail", nullable = false)
+    private int loginFail;
+    
+    
     @JoinColumn(name = "Device_status_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private DeviceStatus devicestatusID;
@@ -138,7 +143,17 @@ public class Device implements Serializable {
         this.devicecreate = devicecreate;
     }
     
-    public String getDevicecode() {
+    
+    
+    public int getLoginFail() {
+		return loginFail;
+	}
+
+	public void setLoginFail(int loginFail) {
+		this.loginFail = loginFail;
+	}
+
+	public String getDevicecode() {
         return devicecode;
     }
 
@@ -364,9 +379,19 @@ public class Device implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entity.Device[ id=" + id + " ]";
-    }
+	@Override
+	public String toString() {
+		return "Device [id=" + id + ", devicename=" + devicename + ", deviceinfo=" + deviceinfo + ", deviceip="
+				+ deviceip + ", devicecode=" + devicecode + ", devicemac=" + devicemac + ", deviceosversion="
+				+ deviceosversion + ", deviceosunknow=" + deviceosunknow + ", devicetokean=" + devicetokean
+				+ ", tokeantime=" + tokeantime + ", devicemodify=" + devicemodify + ", devicecreate=" + devicecreate
+				+ ", deviceOSID=" + deviceOSID + ", devicetypeID=" + devicetypeID + ", devicelong=" + devicelong
+				+ ", devicelatitude=" + devicelatitude + ", devicebrowser=" + devicebrowser + ", deviceBVersion="
+				+ deviceBVersion + ", isMobile=" + isMobile + ", isDesktopDevice=" + isDesktopDevice + ", isTablet="
+				+ isTablet + ", loginFail=" + loginFail + ", devicestatusID=" + devicestatusID + ", page=" + page
+				+ ", devicePageCollection=" + devicePageCollection + "]";
+	}
+
+   
     
 }

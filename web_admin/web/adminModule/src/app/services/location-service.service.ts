@@ -43,7 +43,7 @@ export class LocationServiceService {
       const userAgent=deviceInfo.userAgent;
 
 
-    //  console.log('finish1');
+    //  console.log(this.deviceService.getDeviceInfo());
       await   this.getos(usertokean,username).then(res => {
         
         this.deviceos=res;
@@ -91,11 +91,13 @@ export class LocationServiceService {
       });
 
 
-   await   this.getip().then(data => {
-       this.device.deviceip=data['ip'];
-      }).catch((error) => {
-        this.device.deviceip = 'localhost'
-       });
+ //  await   this.getip().then(data => {
+ //      this.device.deviceip=data['ip'];
+ //     }).catch((error) => {
+//        this.device.deviceip = ''
+ //      });
+
+ this.device.deviceip = ''
 
    // console.log("IP "+this.device.deviceip)
     GlobalConstants.PCCODE= this.cookieService.getCookie('pccode');

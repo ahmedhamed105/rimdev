@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Exception.redirectlogin;
 import com.rimdev.user.Repo.DeviceRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
@@ -43,6 +44,37 @@ public class DeviceServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	
+	public void addfailedlogin(Device dev){
+		Date date = new Date();
+		int a= dev.getLoginFail()+1;	
+		dev.setDevicemodify(date);
+		dev.setLoginFail(a);
+		Device ouput =deviceRepo.save(dev);
+		
+	}
+	
+	
+	public void sucesslogin(Device dev){
+		Date date = new Date();
+		dev.setDevicemodify(date);
+		dev.setLoginFail(0);
+		Device ouput =deviceRepo.save(dev);
+		
+	}
+	
+	
+	public void blockdevice(Device dev){
+		Date date = new Date();
+		dev.setDevicemodify(date);
+		dev.setDevicestatusID(deviceStatusServ.getbyid(2));
+		dev.setLoginFail(0);
+		Device ouput =deviceRepo.save(dev);
+		
+
+		
+	}
 	
 	
 	
@@ -120,6 +152,7 @@ public Device Save(Device input,String langcode) {
 		input.setTokeantime(c.getTime());
 		input.setDevicecreate(date);
 		input.setDevicemodify(date);
+		input.setLoginFail(0);
 		Device ouput =deviceRepo.save(input);	
 		
 		

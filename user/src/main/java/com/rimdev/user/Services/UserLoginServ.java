@@ -22,6 +22,7 @@ import com.rimdev.user.Repo.UserLoginRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.AES;
 import com.rimdev.user.Utils.Generate;
+import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
@@ -422,7 +423,6 @@ public static boolean isValid(String text,String pattern)
 
 
 public UserLogin getusername(String username,String langcode,int login){
-try {
 
 	
 	UserLogin userlog = null;
@@ -431,28 +431,152 @@ try {
 		
 	Email em= emailServ.getbyemail(username, langcode);
 	
-	userlog=em.getUserloginID();
+	if(em.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Active")) {
+
+	if(em.getDatastatusID().getDstatus().equals("Active")) {
+		
+		try {
+		userlog=em.getUserloginID();
+		} catch (Exception e) {
+			if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("please enter good username");
+			else
+			throw new redirectlogin("please enter good username");
+		}
+	}else if(em.getDatastatusID().getDstatus().equals("Blocked"))  {
+		
+		if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("your email blocked");
+			else
+			throw new redirectlogin("your email blocked");
+		
+	}else{
+		
+		if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("please check your email status");
+			else
+			throw new redirectlogin("please check your email status");
+		
+	}
+	
+	
+	
+}else if(em.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
+	
+	if(login == 1)
+		// TODO: handle exception
+		throw new NoDataException("user is blocked");
+		else
+		throw new redirectlogin("user is blocked");
+	
+}else{
+	
+	if(login == 1)
+		// TODO: handle exception
+		throw new NoDataException("please confirm to Active your User");
+		else
+		throw new redirectlogin("please confirm to Active your User");
+	
+}
+
 		
 	}else if(isValid(username, teleRegex)) {
 		//tellphone
 		
 	Telephones tele=telephonesServ.getbytele(username, langcode);	
-	userlog=tele.getUserloginID();
-	}else {
+	
+	
+	if(tele.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Active")) {
+
+	
+	if(tele.getDatastatusID().getDstatus().equals("Active")) {
+	try {
+		userlog=tele.getUserloginID();
+	} catch (Exception e) {
+		if(login == 1)
+		// TODO: handle exception
+		throw new NoDataException("please enter good username");
+		else
+		throw new redirectlogin("please enter good username");
+	}
+	
+	}else if(tele.getDatastatusID().getDstatus().equals("Blocked"))  {
 		
+		if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("your telephone blocked");
+			else
+			throw new redirectlogin("your telephone blocked");
+		
+	}else{
+		
+		if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("please check your telephone status");
+			else
+			throw new redirectlogin("please check your telephone status");
+		
+	}
+	
+	}else if(tele.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
+		
+		if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("user is blocked");
+			else
+			throw new redirectlogin("user is blocked");
+		
+	}else{
+		
+		if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("please confirm to Active your User");
+			else
+			throw new redirectlogin("please confirm to Active your User");
+		
+	}	
+	
+	}else {
+		try {
 		 userlog=getbyusername(username, langcode);
+		} catch (Exception e) {
+			if(login == 1)
+			// TODO: handle exception
+			throw new NoDataException("please enter good username");
+			else
+			throw new redirectlogin("please enter good username");
+		}
+		
+		if(userlog.getUserID().getUserstatusID().getUserstatus().equals("Active")) {
+
+		
+		}else if(userlog.getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
+			
+			if(login == 1)
+				// TODO: handle exception
+				throw new NoDataException("user is blocked");
+				else
+				throw new redirectlogin("user is blocked");
+			
+		}else{
+			
+			if(login == 1)
+				// TODO: handle exception
+				throw new NoDataException("please confirm to Active your User");
+				else
+				throw new redirectlogin("please confirm to Active your User");
+			
+		}
+		
 	}
 	
 	
 	return userlog;
 	
-} catch (Exception e) {
-	if(login == 1)
-	// TODO: handle exception
-	throw new NoDataException("please enter good username");
-	else
-	throw new redirectlogin("please enter good username");
-}
+
 }
 
 

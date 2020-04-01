@@ -54,7 +54,7 @@ export class ErrorDialogService {
        });
      }else{
 if(error.code === 410){
-  this.router.navigate(['/login']);
+  this.router.navigate(['/']);
 
 }else{
   let data1 = {

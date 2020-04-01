@@ -51,6 +51,13 @@
 			</exclusions>
 		</dependency>
 		
+		
+		<dependency>
+    <groupId>com.maxmind.geoip2</groupId>
+    <artifactId>geoip2</artifactId>
+    <version>2.13.1</version>
+</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 <dependency>
     <groupId>commons-codec</groupId>

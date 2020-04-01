@@ -2,6 +2,7 @@ package com.rimdev.user.Controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.BeanUtils;
@@ -91,6 +92,8 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate( @RequestHeader("
 		//System.out.println(dev.getDevicename());
 		if(dev != null ) {		
 			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
+	
+
 			  out=deviceServ.update(dev,langcode);
 	
 
@@ -116,9 +119,13 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate( @RequestHeader("
 
 
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Device> DevicePage(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) {
+public @ResponseBody ResponseEntity<Device> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
 System.out.println(username + " "+usertokean);
+System.out.println(request.toString());
+
+input.setDeviceip(request.getRemoteAddr());
+
 
 UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 
@@ -133,11 +140,14 @@ UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 	     dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
 		}
 		
-		
-
 		//System.out.println(dev.getDevicename());
-		if(dev != null ) {		
+		if(dev != null ) {	
+			
+			input.setLoginFail(dev.getLoginFail());
+				
 			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
+		
+			  
 			  out=deviceServ.updateDP(dev,username, usertokean,langcode);
 	
 
