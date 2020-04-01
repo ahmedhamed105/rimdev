@@ -1,9 +1,11 @@
 package com.rimdev.user.Controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rimdev.user.Services.DeviceOsServ;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.CityResponse;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
-import com.rimdev.user.Services.DeviceStatusServ;
-import com.rimdev.user.Services.DeviceTypeServ;
 import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
-import com.rimdev.user.entities.Pages;
-import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.ouputobject.GeoIP;
 import com.rimdev.user.ouputobject.pagesdevice;
-import com.rimdev.user.ouputobject.response_all;
 
 
 
@@ -118,6 +118,52 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate( @RequestHeader("
 }
 
 
+public GeoIP getip(String ip) 
+		throws IOException, GeoIp2Exception {
+	GeoIP a= new GeoIP();	
+	a.setIpAddress(ip);
+	
+File database  = new File(
+		getClass().getClassLoader().getResource("GeoLite2-City.mmdb").getFile()
+	);
+
+
+	DatabaseReader dbReader = new DatabaseReader.Builder(database).build();
+
+
+InetAddress ipAddress = InetAddress.getByName(ip);
+CityResponse response = dbReader.city(ipAddress);
+     
+String countryName = response.getCountry().getName();
+a.setCountry(countryName);
+String cityName = response.getCity().getName();
+a.setCity(cityName);
+String state = response.getLeastSpecificSubdivision().getName();
+a.setState(state);
+
+String latitude = 
+response.getLocation().getLatitude().toString();
+
+a.setLatitude(latitude);
+
+String longitude = 
+response.getLocation().getLongitude().toString();
+a.setLongitude(longitude);
+
+String timezone = 
+response.getLocation().getTimeZone().toString();
+a.setTimezone(timezone);
+
+
+String subneting = 
+response.getTraits().getNetwork().toString();
+a.setSubneting(subneting);
+
+		return a;
+	
+	}
+
+
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<Device> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
@@ -126,6 +172,15 @@ System.out.println(request.toString());
 
 input.setDeviceip(request.getRemoteAddr());
 
+try {
+	GeoIP geo=getip(request.getRemoteAddr());
+} catch (IOException e1) {
+	// TODO Auto-generated catch block
+	e1.printStackTrace();
+} catch (GeoIp2Exception e1) {
+	// TODO Auto-generated catch block
+	e1.printStackTrace();
+}
 
 UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 
