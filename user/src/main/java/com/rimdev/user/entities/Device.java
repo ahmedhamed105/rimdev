@@ -118,6 +118,8 @@ public class Device implements Serializable {
     private boolean isTablet;
     @Column(name = "login_fail", nullable = false)
     private int loginFail;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<Deviceip> deviceipCollection;
     
     
     @JoinColumn(name = "Device_status_ID", referencedColumnName = "ID", nullable = false)
@@ -284,6 +286,17 @@ public class Device implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+    
+    
+	@XmlTransient
+    @JsonIgnore
+    public Collection<Deviceip> getDeviceipCollection() {
+        return deviceipCollection;
+    }
+
+    public void setDeviceipCollection(Collection<Deviceip> deviceipCollection) {
+        this.deviceipCollection = deviceipCollection;
     }
 
     

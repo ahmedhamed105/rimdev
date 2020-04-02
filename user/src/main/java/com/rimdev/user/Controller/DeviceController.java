@@ -24,15 +24,15 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
+import com.rimdev.user.Services.DeviceipServ;
 import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
+import com.rimdev.user.entities.Deviceip;
 import com.rimdev.user.entities.UserLogin;
-import com.rimdev.user.ouputobject.GeoIP;
 import com.rimdev.user.ouputobject.pagesdevice;
-
 
 
 @Controller // This means that this class is a Controller
@@ -50,6 +50,9 @@ public class DeviceController {
 	
 	@Autowired
 	UserLoginServ userLoginServ;
+	
+	@Autowired
+	DeviceipServ deviceipServ;
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<Device>> getAll( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
@@ -118,46 +121,55 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate( @RequestHeader("
 }
 
 
-public GeoIP getip(String ip) 
-		throws IOException, GeoIp2Exception {
-	GeoIP a= new GeoIP();	
+public Deviceip getip(String ip) {
+	
+	Deviceip a= new Deviceip();	
 	a.setIpAddress(ip);
 	
-File database  = new File(
-		getClass().getClassLoader().getResource("GeoLite2-City.mmdb").getFile()
-	);
+	try {
+		File database  = new File(
+				getClass().getClassLoader().getResource("GeoLite2-City.mmdb").getFile()
+			);
 
 
-	DatabaseReader dbReader = new DatabaseReader.Builder(database).build();
+			DatabaseReader dbReader = new DatabaseReader.Builder(database).build();
 
 
-InetAddress ipAddress = InetAddress.getByName(ip);
-CityResponse response = dbReader.city(ipAddress);
-     
-String countryName = response.getCountry().getName();
-a.setCountry(countryName);
-String cityName = response.getCity().getName();
-a.setCity(cityName);
-String state = response.getLeastSpecificSubdivision().getName();
-a.setState(state);
+		InetAddress ipAddress = InetAddress.getByName(ip);
+		CityResponse response = dbReader.city(ipAddress);
+		     
+		String countryName = response.getCountry().getName();
+		a.setCountry(countryName);
+		String cityName = response.getCity().getName();
+		a.setCity(cityName);
+		String state = response.getLeastSpecificSubdivision().getName();
+		a.setState(state);
 
-String latitude = 
-response.getLocation().getLatitude().toString();
+		String latitude = 
+		response.getLocation().getLatitude().toString();
 
-a.setLatitude(latitude);
+		a.setLatitude(latitude);
 
-String longitude = 
-response.getLocation().getLongitude().toString();
-a.setLongitude(longitude);
+		String longitude = 
+		response.getLocation().getLongitude().toString();
+		a.setLongitude(longitude);
 
-String timezone = 
-response.getLocation().getTimeZone().toString();
-a.setTimezone(timezone);
+		String timezone = 
+		response.getLocation().getTimeZone().toString();
+		a.setTimezone(timezone);
 
 
-String subneting = 
-response.getTraits().getNetwork().toString();
-a.setSubneting(subneting);
+		String subneting = 
+		response.getTraits().getNetwork().toString();
+		a.setSubneting(subneting);
+
+		
+	} catch (Exception e) {
+		// TODO: handle exception
+		
+	
+	}
+	
 
 		return a;
 	
@@ -165,22 +177,17 @@ a.setSubneting(subneting);
 
 
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Device> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) {
+public @ResponseBody ResponseEntity<Device> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) 
+		throws IOException, GeoIp2Exception {
   // This returns a JSON or XML with the users
-System.out.println(username + " "+usertokean);
-System.out.println(request.toString());
+//System.out.println(username + " "+usertokean);
+//System.out.println(request.toString());
 
 input.setDeviceip(request.getRemoteAddr());
 
-try {
-	GeoIP geo=getip(request.getRemoteAddr());
-} catch (IOException e1) {
-	// TODO Auto-generated catch block
-	e1.printStackTrace();
-} catch (GeoIp2Exception e1) {
-	// TODO Auto-generated catch block
-	e1.printStackTrace();
-}
+Deviceip geo=getip(request.getRemoteAddr());
+
+
 
 UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 
@@ -218,8 +225,10 @@ UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 
 	}
 	
-	
 
+	geo.setDeviceId(out);
+	deviceipServ.savebyip(geo, langcode);
+	
 	return new ResponseEntity<Device>(out, HttpStatus.OK);
 
 

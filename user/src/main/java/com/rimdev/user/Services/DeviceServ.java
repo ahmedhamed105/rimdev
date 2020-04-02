@@ -19,6 +19,7 @@ import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.DeviceType;
+import com.rimdev.user.entities.Deviceip;
 import com.rimdev.user.entities.Pages;
 import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.response_all;
