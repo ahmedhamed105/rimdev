@@ -27,7 +27,7 @@ public class UserlogCotroller {
 	@Autowired
 	DevicePageServ devicePageServ;
 
-	  @RequestMapping(value = "/all", method = RequestMethod.GET)
+	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<UserLog>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 		  

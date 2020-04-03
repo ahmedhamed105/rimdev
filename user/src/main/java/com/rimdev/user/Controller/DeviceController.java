@@ -68,8 +68,8 @@ public class DeviceController {
 	  }
 	  
 	  
-	  @RequestMapping(value = "/page/{langcode}/{deviceid}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<pagesdevice>> getpages( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("deviceid")  int deviceid){	  
+	  @RequestMapping(value = "/page/{langcode}/{id}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<pagesdevice>> getpages( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id")  int deviceid){	  
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
 		  

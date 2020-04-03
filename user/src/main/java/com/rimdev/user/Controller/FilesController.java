@@ -63,8 +63,8 @@ public class FilesController {
 
     
     
-    @RequestMapping(value = "/downloadFile/{langcode}/{fileid}", method = RequestMethod.GET)
-    public ResponseEntity<Resource> downloadFile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,HttpServletRequest request,@PathVariable("langcode") String langcode,@PathVariable("fileid") int fileid) {
+    @RequestMapping(value = "/downloadFile/{langcode}/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadFile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,HttpServletRequest request,@PathVariable("langcode") String langcode,@PathVariable("id") int fileid) {
     
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 

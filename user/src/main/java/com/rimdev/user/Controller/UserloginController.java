@@ -1,6 +1,5 @@
 package com.rimdev.user.Controller;
 
-import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.UserLoginServ;
-import com.rimdev.user.Utils.AES;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.UserLogin;

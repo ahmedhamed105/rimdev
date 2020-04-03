@@ -41,8 +41,8 @@ public class MenuController {
 	  }
 	  
 	  
-	  @RequestMapping(value = "/get/{langcode}/{type}/{menuid}", method = RequestMethod.GET)
-	  public  ResponseEntity<menuparsub> getid(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("menuid") int menuid){ 
+	  @RequestMapping(value = "/get/{langcode}/{type}/{id}", method = RequestMethod.GET)
+	  public  ResponseEntity<menuparsub> getid(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("id") int menuid){ 
 		  UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 
 		  

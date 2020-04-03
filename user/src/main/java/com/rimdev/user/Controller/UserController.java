@@ -135,8 +135,8 @@ public @ResponseBody ResponseEntity<FilesUpload> savefile(@RequestHeader("Device
 
 
 
-@RequestMapping(value = "/filebyuser/{langcode}/{userid}", method = RequestMethod.GET)
-public @ResponseBody ResponseEntity<List<UserFile>> savefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("userid") String userid) {
+@RequestMapping(value = "/filebyuser/{langcode}/{id}", method = RequestMethod.GET)
+public @ResponseBody ResponseEntity<List<UserFile>> savefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id") String userid) {
  
 	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 

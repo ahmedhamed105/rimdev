@@ -96,6 +96,10 @@ public class UserLogin implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
     private Collection<DevicePage> devicePageCollection;
     
+    @JoinColumn(name = "Group_priviledge_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private GroupPriviledge grouppriviledgeID;
+    
 
     public UserLogin() {
     }
@@ -111,6 +115,14 @@ public class UserLogin implements Serializable {
         this.passwordEncy = passwordEncy;
         this.loginModfiy = loginModfiy;
         this.loginCreate = loginCreate;
+    }
+    
+    public GroupPriviledge getGrouppriviledgeID() {
+        return grouppriviledgeID;
+    }
+
+    public void setGrouppriviledgeID(GroupPriviledge grouppriviledgeID) {
+        this.grouppriviledgeID = grouppriviledgeID;
     }
     
     
