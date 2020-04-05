@@ -505,6 +505,8 @@ onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
 
   console.log(form.value)
 }
+
+
      this._usersservice.insertbyurl(form.value,serv,ip,port,this.pagetokean,this.pagenumber.toString()).subscribe(data => {
 
     console.log(data)
@@ -543,6 +545,10 @@ onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
         this.router.navigate([routingLoc]);
        }
 
+    },
+    error=>{
+
+      form.reset();
     });
     
 

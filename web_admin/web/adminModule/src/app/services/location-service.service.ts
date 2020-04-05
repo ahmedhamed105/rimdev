@@ -3,6 +3,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IDevice } from '../objects/IDevice';
 import { IdeviceOS } from '../objects/IdeviceOS';
+import { Ilogintype } from '../objects/Ilogintype';
 import { Idevicetype } from '../objects/Idevicetype';
 import { Router } from '@angular/router';
 import { devicetoken } from '../objects/devicetoken';
@@ -26,6 +27,7 @@ export class LocationServiceService {
 
   public deviceos = [];
   public devicetype = [];
+  public logintype = [];
   public mydevice;
 
    async all_info(page ,usertokean,username) 
@@ -75,6 +77,10 @@ export class LocationServiceService {
       }
 
 
+
+    
+
+
       this.device.devicebrowser=browser;
       this.device.deviceBVersion=browser_version;
       this.device.deviceinfo=browser+browser_version;
@@ -86,11 +92,30 @@ export class LocationServiceService {
       this.device.desktopDevice=isDesktopDevicea;
       this.device.page=page;
 
+    });
+
+    
 
 
-      });
+      await this.getlogintype(usertokean,username).then(data => {
 
+        this.logintype = data;
 
+      for(var i = 0; i < this.logintype.length; i++) {
+      //  console.log(this.devicetype[i].devtype);
+
+      if (this.logintype[i].ltype == 'unknown') {
+        this.device.logintypeID=this.logintype[i];
+      }
+          if (this.logintype[i].ltype == 'Admin') {
+            this.device.logintypeID=this.logintype[i];
+              break;
+          }
+      }
+
+    
+
+    });
  //  await   this.getip().then(data => {
  //      this.device.deviceip=data['ip'];
  //     }).catch((error) => {
@@ -171,6 +196,18 @@ let options = { headers: headers };
   return await   this._http.get<Idevicetype[]>(urlall,options).toPromise();
   
 }
+
+
+async  getlogintype(usertokean,username) : Promise<Ilogintype[]>{
+  // console.log('finish5');
+  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.logintype+"/"+GlobalConstants.language;
+  let headers = new HttpHeaders({
+   'username':   username,
+   'usertokean': usertokean });
+ let options = { headers: headers };
+   return await   this._http.get<Ilogintype[]>(urlall,options).toPromise();
+   
+ }
 
 
 async  getip() : Promise<string>{

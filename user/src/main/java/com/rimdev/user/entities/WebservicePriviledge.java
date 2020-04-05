@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
  * @author ahmed.elemam
@@ -55,6 +57,17 @@ public class WebservicePriviledge implements Serializable {
     @Basic(optional = false)
     @Column(name = "Admin_Device", nullable = false)
     private int adminDevice;
+    @Basic(optional = false)
+    @Column(name = "Isdesktop", nullable = false)
+    private int isdesktop;
+    @Basic(optional = false)
+    @Column(name = "Ismobile", nullable = false)
+    private int ismobile;
+    @Basic(optional = false)
+    @Column(name = "Istablet", nullable = false)
+    private int istablet;
+    
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "webservicepriviledgeID")
     private Collection<GroupWeb> groupWebCollection;
 
@@ -72,6 +85,30 @@ public class WebservicePriviledge implements Serializable {
         this.webDevice = webDevice;
         this.mobileDevice = mobileDevice;
         this.adminDevice = adminDevice;
+    }
+    
+    public int getIsdesktop() {
+        return isdesktop;
+    }
+
+    public void setIsdesktop(int isdesktop) {
+        this.isdesktop = isdesktop;
+    }
+
+    public int getIsmobile() {
+        return ismobile;
+    }
+
+    public void setIsmobile(int ismobile) {
+        this.ismobile = ismobile;
+    }
+
+    public int getIstablet() {
+        return istablet;
+    }
+
+    public void setIstablet(int istablet) {
+        this.istablet = istablet;
     }
 
     public Integer getId() {
@@ -123,6 +160,7 @@ public class WebservicePriviledge implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<GroupWeb> getGroupWebCollection() {
         return groupWebCollection;
     }

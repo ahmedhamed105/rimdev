@@ -18,6 +18,10 @@ export interface IDevice {
         id: number,
         devtype: String
     },
+    logintypeID : {
+        id: number,
+        ltype: String
+    },
     devicebrowser: String,
     deviceBVersion : String,
     mobile: boolean,

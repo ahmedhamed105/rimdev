@@ -53,9 +53,11 @@ export class ErrorDialogService {
       
        });
      }else{
-if(error.code === 410){
-  this.router.navigate(['/']);
 
+
+      console.log(this.router.url)
+if(error.code === 410 && this.router.url !== '/login'){
+  this.router.navigate(['/']);
 }else{
   let data1 = {
     reason: error.error ,

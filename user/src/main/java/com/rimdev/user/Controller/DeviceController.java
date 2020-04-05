@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,14 +27,20 @@ import com.maxmind.geoip2.model.CityResponse;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
 import com.rimdev.user.Services.DeviceipServ;
+import com.rimdev.user.Services.GroupWebServ;
 import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Services.UserLoginServ;
+import com.rimdev.user.Services.WebservicepriviledgeServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Deviceip;
+import com.rimdev.user.entities.GroupPriviledge;
+import com.rimdev.user.entities.GroupWeb;
 import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.pagesdevice;
+
+import javassist.NotFoundException;
 
 
 @Controller // This means that this class is a Controller
@@ -54,11 +62,19 @@ public class DeviceController {
 	@Autowired
 	DeviceipServ deviceipServ;
 	
+	@Autowired
+	GroupWebServ groupWebServ;
+	
+
+	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<Device>> getAll( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
-		  return new ResponseEntity<List<Device>>(deviceServ.getall(langcode), HttpStatus.OK);
+		  
+		    return ResponseEntity.ok()
+		    	      .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
+		    	      .body(deviceServ.getall(langcode));
 	  }
 	  
 	  
@@ -80,9 +96,10 @@ public class DeviceController {
 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Device>> saveorupdate( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Device input) {
+public @ResponseBody ResponseEntity<List<Device>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
 	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	 
 
 	Device out=null;
 	try {
@@ -176,6 +193,8 @@ public Deviceip getip(String ip) {
 	}
 
 
+
+
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<Device> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) 
 		throws IOException, GeoIp2Exception {
@@ -190,6 +209,7 @@ Deviceip geo=getip(request.getRemoteAddr());
 
 
 UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
+
 
 	System.out.println("inserted page "+input.getDevicecode());
 	

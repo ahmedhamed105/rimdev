@@ -33,8 +33,11 @@ public class AreaController {
 
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<Area>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+		
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-
+		  
+		  
+		  
 		  
 		  return new ResponseEntity<List<Area>>(areaServ.getall(), HttpStatus.OK);
 	  }

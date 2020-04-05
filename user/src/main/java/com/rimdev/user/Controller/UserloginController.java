@@ -1,6 +1,9 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DevicePageServ;
+import com.rimdev.user.Services.GroupWebServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.DevicePage;
@@ -30,6 +34,9 @@ public class UserloginController {
 	
 	@Autowired
 	DevicePageServ devicePageServ;
+	
+	@Autowired
+	GroupWebServ groupWebServ;
 
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<UserLogin>> getAllUsers( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
@@ -57,10 +64,16 @@ public class UserloginController {
 	  
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody UserLogin info) {
+public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody UserLogin info) {
   // This returns a JSON or XML with the users
 
 	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  paramter.add("langcode");
+	  values.add(langcode);
+	  
+	  groupWebServ.checkpriviledge(request, a,paramter,values);
 
 	System.out.println(info.getPasswordEncy());
 	String key = userLoginServ.getkey(info.getPasswordEncy());

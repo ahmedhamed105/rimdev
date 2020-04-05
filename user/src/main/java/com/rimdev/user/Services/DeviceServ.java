@@ -43,6 +43,11 @@ public class DeviceServ {
 	DeviceStatusServ deviceStatusServ;
 	
 	
+	
+	@Autowired
+	LoginTypeServ loginTypeServ;
+	
+	
 	@Autowired
 	TextConvertionServ textConvertionServ;
 	
@@ -217,6 +222,13 @@ public Device SaveDP(Device input,String username,String tokean,String langcode)
 			input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));		
 		}
 		
+		if(input.getLogintypeID()==null || input.getLogintypeID().getId()==null) {
+		
+			input.setLogintypeID(loginTypeServ.getbyid(2));
+	
+		}
+		
+		input.setLogintypeID(loginTypeServ.getbyid(input.getLogintypeID().getId()));
 		
 		input.setDevicestatusID(deviceStatusServ.getbyid(1));
 		

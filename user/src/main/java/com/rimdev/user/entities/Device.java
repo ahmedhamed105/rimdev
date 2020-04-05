@@ -129,6 +129,10 @@ public class Device implements Serializable {
     private Integer page;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
     private Collection<DevicePage> devicePageCollection;
+    
+    @JoinColumn(name = "login_type_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private LoginType logintypeID;
 
     public Device() {
     }
@@ -145,7 +149,7 @@ public class Device implements Serializable {
         this.devicecreate = devicecreate;
     }
     
-    
+  
     
     public int getLoginFail() {
 		return loginFail;
@@ -286,6 +290,16 @@ public class Device implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+    
+    
+    
+    public LoginType getLogintypeID() {
+        return logintypeID;
+    }
+
+    public void setLogintypeID(LoginType logintypeID) {
+        this.logintypeID = logintypeID;
     }
     
     

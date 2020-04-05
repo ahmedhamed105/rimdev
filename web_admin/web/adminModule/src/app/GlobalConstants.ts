@@ -18,6 +18,7 @@ export class GlobalConstants {
     public static format: string = 'yyyy-MM-dd';
     public static locale: string = 'en-US';
     public static Devicetype: string = '/DeviceType/dataall';
+    public static logintype: string = '/Logintype/dataall';
     public static Deviceos: string = '/DeviceOS/dataall';
     public static Deviceinsert: string = '/Device/DevicePage';
     public static usertokean: string = '/login/check';
