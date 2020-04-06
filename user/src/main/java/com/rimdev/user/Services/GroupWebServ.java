@@ -69,21 +69,23 @@ public class GroupWebServ {
 				String URL = webservicepriviledgeServ.makeUrl(request,paramter,values);
 				System.out.println("ahmed hamed"+ URL);
 				
+	
+				
 				boolean validsd=webservicepriviledgeServ.findwebservices(page,URL, webservices);
 				System.out.println(validsd);
 				
 				if(!validsd) {
 					
-					 throw new redirectlogin("no Priviledge to enter");	
+					 throw new redirectlogin("no Priviledge to enter "+URL);	
 				}
 				 
 			  }else {
-				  throw new redirectlogin("no Priviledge to enter");
+				  throw new redirectlogin("no Priviledge to enter ahmed");
 			  }
 			
 		} catch (Exception e) {
 			// TODO: handle exception
-			
+			e.printStackTrace();
 			throw e;
 		}
 		

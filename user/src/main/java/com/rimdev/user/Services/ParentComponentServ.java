@@ -17,6 +17,7 @@ import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.ParentComponent;
 import com.rimdev.user.ouputobject.Component_object;
 import com.rimdev.user.ouputobject.parent_comp;
@@ -36,8 +37,12 @@ public class ParentComponentServ {
 	@Autowired
 	TextConvertionServ textConvertionServ;
 	
+	
+	@Autowired
+	GroupParentServ groupParentServ;
+	
 
-	public List<parent_comp> getbypage(int pageid,String langcode){
+	public List<parent_comp> getbypage(int pageid,String langcode,DevicePage devpage){
 		List<parent_comp> coms = new ArrayList<parent_comp>();
 		try {
 			
@@ -100,11 +105,15 @@ public class ParentComponentServ {
 			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
+		coms = groupParentServ.check_priviledge(coms,devpage,langcode);
+		
 		if(coms == null || coms.size() <= 0) {
 			
 			throw new NoDataException(textConvertionServ.search("E109", langcode));
 			
 		}
+		
+		
 		
 			return coms;
 		

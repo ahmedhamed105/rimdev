@@ -16,6 +16,9 @@ export class UsersService {
   getbyurl(url,ip,port,Devicetokean,pageid):Observable<[]>{
     var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
     let headers = new HttpHeaders({
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
       'Devicetokean':   Devicetokean,
       'pageid': pageid });
       let options = { headers: headers };
@@ -25,6 +28,9 @@ export class UsersService {
     insertbyurl(object,url,ip,port,Devicetokean,pageid):Observable<[]>{
       var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
       let headers = new HttpHeaders({
+        'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
         'Devicetokean':   Devicetokean,
         'pageid': pageid });
         let options = { headers: headers };
@@ -38,6 +44,9 @@ export class UsersService {
         var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language+"/";
         urlall=urlall+value;
         let headers = new HttpHeaders({
+          'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
           'Devicetokean':   Devicetokean,
           'pageid': pageid });
           let options = { headers: headers };
@@ -52,6 +61,9 @@ export class UsersService {
             value3 : value3
           }
           let headers = new HttpHeaders({
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
             'Devicetokean':   Devicetokean,
             'pageid': pageid });
             let options = { headers: headers };

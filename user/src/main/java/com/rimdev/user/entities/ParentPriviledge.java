@@ -1,7 +1,6 @@
 package com.rimdev.user.entities;
 
 
-
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -20,6 +19,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
  * @author ahmed.elemam
@@ -33,7 +34,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "ParentPriviledge.findByPublic1", query = "SELECT p FROM ParentPriviledge p WHERE p.public1 = :public1")
     , @NamedQuery(name = "ParentPriviledge.findByWebDevice", query = "SELECT p FROM ParentPriviledge p WHERE p.webDevice = :webDevice")
     , @NamedQuery(name = "ParentPriviledge.findByMobileDevice", query = "SELECT p FROM ParentPriviledge p WHERE p.mobileDevice = :mobileDevice")
-    , @NamedQuery(name = "ParentPriviledge.findByAdminDevice", query = "SELECT p FROM ParentPriviledge p WHERE p.adminDevice = :adminDevice")})
+    , @NamedQuery(name = "ParentPriviledge.findByAdminDevice", query = "SELECT p FROM ParentPriviledge p WHERE p.adminDevice = :adminDevice")
+    , @NamedQuery(name = "ParentPriviledge.findByIsdesktop", query = "SELECT p FROM ParentPriviledge p WHERE p.isdesktop = :isdesktop")
+    , @NamedQuery(name = "ParentPriviledge.findByIsmobile", query = "SELECT p FROM ParentPriviledge p WHERE p.ismobile = :ismobile")
+    , @NamedQuery(name = "ParentPriviledge.findByIstablet", query = "SELECT p FROM ParentPriviledge p WHERE p.istablet = :istablet")})
 public class ParentPriviledge implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +58,15 @@ public class ParentPriviledge implements Serializable {
     @Basic(optional = false)
     @Column(name = "Admin_Device", nullable = false)
     private int adminDevice;
+    @Basic(optional = false)
+    @Column(name = "Isdesktop", nullable = false)
+    private int isdesktop;
+    @Basic(optional = false)
+    @Column(name = "Ismobile", nullable = false)
+    private int ismobile;
+    @Basic(optional = false)
+    @Column(name = "Istablet", nullable = false)
+    private int istablet;
     @JoinColumn(name = "parent_component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private ParentComponent parentcomponentID;
@@ -67,12 +80,15 @@ public class ParentPriviledge implements Serializable {
         this.id = id;
     }
 
-    public ParentPriviledge(Integer id, int public1, int webDevice, int mobileDevice, int adminDevice) {
+    public ParentPriviledge(Integer id, int public1, int webDevice, int mobileDevice, int adminDevice, int isdesktop, int ismobile, int istablet) {
         this.id = id;
         this.public1 = public1;
         this.webDevice = webDevice;
         this.mobileDevice = mobileDevice;
         this.adminDevice = adminDevice;
+        this.isdesktop = isdesktop;
+        this.ismobile = ismobile;
+        this.istablet = istablet;
     }
 
     public Integer getId() {
@@ -115,6 +131,30 @@ public class ParentPriviledge implements Serializable {
         this.adminDevice = adminDevice;
     }
 
+    public int getIsdesktop() {
+        return isdesktop;
+    }
+
+    public void setIsdesktop(int isdesktop) {
+        this.isdesktop = isdesktop;
+    }
+
+    public int getIsmobile() {
+        return ismobile;
+    }
+
+    public void setIsmobile(int ismobile) {
+        this.ismobile = ismobile;
+    }
+
+    public int getIstablet() {
+        return istablet;
+    }
+
+    public void setIstablet(int istablet) {
+        this.istablet = istablet;
+    }
+
     public ParentComponent getParentcomponentID() {
         return parentcomponentID;
     }
@@ -124,6 +164,7 @@ public class ParentPriviledge implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<GroupParent> getGroupParentCollection() {
         return groupParentCollection;
     }

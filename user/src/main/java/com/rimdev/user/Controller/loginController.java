@@ -64,6 +64,10 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
 	  
 	  groupWebServ.checkpriviledge(request, a,paramter,values);
 	  
+	  
+	  
+	  
+	  
 	  if(a.getDeviceId().getLoginFail() >= 3 ) {
 			deviceServ.blockdevice(a.getDeviceId());
 			

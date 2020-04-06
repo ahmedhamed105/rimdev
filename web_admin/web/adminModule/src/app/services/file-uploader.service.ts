@@ -245,6 +245,9 @@ console.log(index)
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+deleteserv+"/"+GlobalConstants.language;
  
   let headers = new HttpHeaders({
+    'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
     'Devicetokean':   queueObj.Devicetokean,
     'pageid': queueObj.pagenumber });
     let options = {  reportProgress: true,headers: headers };
@@ -300,6 +303,9 @@ console.log(index)
     // upload file and report progress
     var urlall=GlobalConstants.protocol+ip+":"+port+GlobalConstants.urladd+"/"+GlobalConstants.language;
     let headers = new HttpHeaders({
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
       'Devicetokean':   queueObj.Devicetokean,
       'pageid': queueObj.pagenumber });
       let options = {  reportProgress: true,headers: headers };

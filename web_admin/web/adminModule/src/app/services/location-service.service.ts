@@ -164,6 +164,9 @@ async  insert(usertokean,username) : Promise<devicetoken>{
   
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceinsert+"/"+GlobalConstants.language;
   let headers = new HttpHeaders({
+    'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
     'username':   username,
     'usertokean': usertokean });
 let options = { headers: headers };
@@ -178,6 +181,9 @@ async  getos(usertokean,username) : Promise<IdeviceOS[]>{
   // console.log('finish3');
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceos+"/"+GlobalConstants.language;
   let headers = new HttpHeaders({
+    'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
     'username':   username,
     'usertokean': usertokean });
 let options = { headers: headers };
@@ -190,6 +196,9 @@ async  gettype(usertokean,username) : Promise<Idevicetype[]>{
  // console.log('finish5');
  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Devicetype+"/"+GlobalConstants.language;
  let headers = new HttpHeaders({
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache',
+  'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
   'username':   username,
   'usertokean': usertokean });
 let options = { headers: headers };
@@ -202,6 +211,9 @@ async  getlogintype(usertokean,username) : Promise<Ilogintype[]>{
   // console.log('finish5');
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.logintype+"/"+GlobalConstants.language;
   let headers = new HttpHeaders({
+    'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
    'username':   username,
    'usertokean': usertokean });
  let options = { headers: headers };

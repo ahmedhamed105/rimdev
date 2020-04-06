@@ -19,6 +19,9 @@ export class ComponentService {
     var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Componentpage+GlobalConstants.language+"/";
     url=url+pageid;
     let headers = new HttpHeaders({
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
       'Devicetokean':   Devicetokean,
       'pageid': pagenumber });
       let options = { headers: headers };
@@ -35,6 +38,9 @@ export class ComponentService {
       console.log(GlobalConstants.language)
 
       let headers = new HttpHeaders({
+        'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
         'username':   username,
         'usertokean': usertokean });
         let options = { headers: headers };
