@@ -19,7 +19,10 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -28,6 +31,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "parent_priviledge", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "ParentPriviledge.findAll", query = "SELECT p FROM ParentPriviledge p")
     , @NamedQuery(name = "ParentPriviledge.findById", query = "SELECT p FROM ParentPriviledge p WHERE p.id = :id")

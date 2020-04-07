@@ -17,7 +17,10 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -26,6 +29,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "webservice_priviledge", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "WebservicePriviledge.findAll", query = "SELECT w FROM WebservicePriviledge w")
     , @NamedQuery(name = "WebservicePriviledge.findById", query = "SELECT w FROM WebservicePriviledge w WHERE w.id = :id")

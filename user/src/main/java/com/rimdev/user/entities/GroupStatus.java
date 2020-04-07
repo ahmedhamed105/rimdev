@@ -17,6 +17,11 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  *
  * @author ahmed.elemam
@@ -24,6 +29,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "group_status", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "GroupStatus.findAll", query = "SELECT g FROM GroupStatus g")
     , @NamedQuery(name = "GroupStatus.findById", query = "SELECT g FROM GroupStatus g WHERE g.id = :id")
@@ -71,6 +78,7 @@ public class GroupStatus implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<GroupPriviledge> getGroupPriviledgeCollection() {
         return groupPriviledgeCollection;
     }

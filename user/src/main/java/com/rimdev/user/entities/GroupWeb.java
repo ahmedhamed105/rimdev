@@ -15,6 +15,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  *
  * @author ahmed.elemam
@@ -22,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "group_web", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "GroupWeb.findAll", query = "SELECT g FROM GroupWeb g")
     , @NamedQuery(name = "GroupWeb.findById", query = "SELECT g FROM GroupWeb g WHERE g.id = :id")})
