@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.rimdev.user.Exception.redirectlogin;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
+import com.rimdev.user.Services.GroupPagesServ;
 import com.rimdev.user.Services.GroupWebServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.entities.DevicePage;
@@ -45,6 +46,9 @@ public class loginController {
 	@Autowired
 	GroupWebServ groupWebServ;
 	
+	@Autowired
+	GroupPagesServ GroupPagesServ;
+	
 	
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
@@ -63,6 +67,10 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
 	  values.add(langcode);
 	  
 	  groupWebServ.checkpriviledge(request, a,paramter,values);
+	  
+	   GroupPagesServ.check_page(a, langcode);
+			
+		  
 	  
 	  
 	  
@@ -101,8 +109,6 @@ public @ResponseBody ResponseEntity<Loginobject> check_tokean(HttpServletRequest
 	
 	//  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
-
-	  
 	Loginobject out = userLoginServ.loginpage(info, langcode);
 
 	return  new ResponseEntity<Loginobject>(out, HttpStatus.OK);

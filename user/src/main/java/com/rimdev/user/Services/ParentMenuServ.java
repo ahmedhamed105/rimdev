@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.MenuDisplayRepo;
 import com.rimdev.user.Repo.ParentMenuRepo;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.MenuDisplay;
 import com.rimdev.user.entities.ParentComponent;
 import com.rimdev.user.entities.ParentMenu;
@@ -31,7 +32,11 @@ public class ParentMenuServ {
 	TextConvertionServ textConvertionServ;
 	
 	
-	public List<menu_object> getallmenus(String langcode) {
+	@Autowired
+	GroupPagesServ GroupPagesServ;
+	
+	
+	public List<menu_object> getallmenus(String langcode, DevicePage devpage) {
 		
 		List<menu_object> menu=new ArrayList<menu_object>();
 		
@@ -44,11 +49,26 @@ public class ParentMenuServ {
 		}
 		
 		for (ParentMenu pmenu : com) {
+	     boolean valid = GroupPagesServ.check_menu(pmenu.getPagesID(), devpage, langcode);
+			if(!valid) {
+				pmenu.getPagesID().setId(0);
+			}
+			
 			menu_object mm= new menu_object();
 		
 	     pmenu.setPmenu(textConvertionServ.search(pmenu.getPmenu(), langcode));	
-		 List<MenuDisplay> a=	menuDisplayServ.getbycomponent(pmenu.getId(),langcode);
-		 mm.setChild(a);
+		 List<MenuDisplay> menus=	menuDisplayServ.getbycomponent(pmenu.getId(),langcode);
+		 List<MenuDisplay> menusout= new ArrayList<MenuDisplay>();
+		 for (MenuDisplay childs : menus) {
+			 boolean valid1 = GroupPagesServ.check_menu(childs.getPagesID(), devpage, langcode);
+				if(!valid1) {
+					childs.getPagesID().setId(0);
+				}
+				
+				menusout.add(childs);
+		}
+		 
+		 mm.setChild(menusout);
 		 mm.setParent(pmenu);
 		 menu.add(mm);
 			

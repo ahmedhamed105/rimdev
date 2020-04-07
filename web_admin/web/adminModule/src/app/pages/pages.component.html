@@ -305,8 +305,9 @@
           </ng-container>
 
           <ng-template #withnosub>
+            <ng-container *ngIf="parent.parent.pagesID.id === 0 ? false:true">
             <li>
-              <a [routerLink]="[parent.parent.parentLink,'P',parent.parent.id]" routerLinkActive="active" >
+              <a  [routerLink]="[parent.parent.parentLink,'P',parent.parent.id]" routerLinkActive="active" >
                 <i class="fa {{parent.parent.faIcon}}"></i> <span>{{parent.parent.pmenu}}</span>
                 <span class="pull-right-container">
                   <span class="label label-primary pull-right">4</span>
@@ -314,21 +315,27 @@
               </a>
             </li>
 
+              
+          </ng-container>
           </ng-template>
 
           <ng-template #withsub>
-            <li class="treeview active">
-              <a href="{{parent.parent.parentLink}}">
+            <li class="treeview active" >
+              <ng-container *ngIf="parent.parent.pagesID.id === 0 && parent.child === undefined  ? false:true">
+              <a  href="{{parent.parent.pagesID.id === 0 ?'/':parent.parent.parentLink}}">
                 <i class="fa {{parent.parent.faIcon}}"></i> <span>{{parent.parent.pmenu}}</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
-              <ul class="treeview-menu">
+              </ng-container>
+              <ul class="treeview-menu" >
                 <li class="active" *ngFor="let child of parent.child; let i = index">
-                  <a [routerLink]="[child.menulink,'C', child.id]" routerLinkActive="active">
+                  <ng-container *ngIf="child.pagesID.id === 0 ? false:true">
+                  <a  [routerLink]="[child.menulink,'C', child.id]" routerLinkActive="false">
                     <i class="fa {{child.faIcon}}"></i>
                      {{child.menuname}}</a>
+                     </ng-container>
                 </li>
               
               </ul>

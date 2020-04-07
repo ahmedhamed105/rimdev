@@ -32,12 +32,16 @@ public class MenuController {
 	UserLoginServ userLoginServ;
 	
 	
+	
+	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<menu_object>> getUsersbyuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){ 
 	
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 	
-		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode), HttpStatus.OK);
+		  
+		  
+		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode,a), HttpStatus.OK);
 	  }
 	  
 	  

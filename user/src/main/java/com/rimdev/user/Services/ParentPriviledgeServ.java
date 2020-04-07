@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Repo.ParentPriviledgeRepo;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.GroupParent;
-import com.rimdev.user.entities.GroupWeb;
 import com.rimdev.user.ouputobject.parent_comp;
 
 @Service
