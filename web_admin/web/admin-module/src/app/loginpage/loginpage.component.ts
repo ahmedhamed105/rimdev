@@ -18,6 +18,7 @@ import { MenulistService } from '../services/menulist.service';
 import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MenushareService } from '../share_data/menushare.service';
 
 @Component({
   selector: 'app-loginpage',
@@ -40,7 +41,7 @@ export class LoginpageComponent implements OnInit {
   public pagenumber = 12;
   public pagetokean ;
 
-  constructor(private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -57,13 +58,12 @@ export class LoginpageComponent implements OnInit {
  public checkbox =[] ;
  passwordIsValid = false;
 
- public menus =[];
- public langs =[];
+
 
   ngOnInit(){
 
-    this.menus =[];
-    this.langs =[];
+    this._MenushareService.updatelang(undefined); 
+    this._MenushareService.updatemenu(undefined);
 
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -105,18 +105,6 @@ export class LoginpageComponent implements OnInit {
        GlobalConstants.Devicetokean =this.pagetokean;
 
 
-       this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
-        this.langs=data;
-             
-           });
-       
-           this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
-       .subscribe(data => {
-         this.menus =data;
-         });
-       
-
-   
     
     this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{
 

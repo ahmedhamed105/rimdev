@@ -15,11 +15,15 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { PasswordtableComponent } from './passwordtable/passwordtable.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {NgxWebstorageModule} from 'ngx-webstorage';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
   declarations: [
-    routingComponents
+    routingComponents,
+    HeaderComponent,
+    FooterComponent
     
   ],
   imports: [

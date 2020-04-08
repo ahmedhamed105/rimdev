@@ -65,6 +65,7 @@ public class ParentMenu implements Serializable {
     private String parentLink;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentmenuID")
     private Collection<MenuDisplay> menuDisplayCollection;
+    
     @JoinColumn(name = "Pages_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Pages pagesID;

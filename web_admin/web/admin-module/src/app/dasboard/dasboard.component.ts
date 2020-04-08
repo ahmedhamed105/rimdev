@@ -8,7 +8,7 @@ import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
 import { GlobalConstants } from '../GlobalConstants';
 import { UsersService } from '../services/users.service';
-
+import { MenushareService } from '../share_data/menushare.service';
 @Component({
   selector: 'app-dasboard',
   templateUrl: './dasboard.component.html',
@@ -21,14 +21,13 @@ export class DasboardComponent implements OnInit {
   public type ;
   public pagenumber ;
   public pagetokean ;
-  public menus =[];
-  public langs =[];
+ 
 
-  constructor(private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private router:Router,private route: ActivatedRoute,private locationService: LocationServiceService) { }
+  constructor(private _MenushareService:MenushareService,private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private router:Router,private route: ActivatedRoute,private locationService: LocationServiceService) { }
 
   ngOnInit() {
-    this.menus =[];
-    this.langs =[];
+
+
 
 
     var menuid =this.route.snapshot.paramMap.get("id").toString();
@@ -92,13 +91,16 @@ var lang=this.cookieService.getCookie('language');
     }
 
     this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
- this.langs=data;
-      
+ //this.langs=data;
+ this._MenushareService.updatelang(data);
     });
 
     this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
 .subscribe(data => {
-  this.menus =data;
+  //this.menus =data;
+  this._MenushareService.updatemenu(data);
+
+
   });
 
 

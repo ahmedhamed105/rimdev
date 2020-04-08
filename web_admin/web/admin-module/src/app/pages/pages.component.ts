@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { Validators, FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
 import { GridOptions } from 'ag-grid-community';
@@ -11,13 +11,13 @@ import { Icolumdef } from '../objects/Icolumdef';
 import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
-import * as _ from 'lodash';
 import { formatDate } from '@angular/common';
 import { PasswordtableComponent } from '../passwordtable/passwordtable.component';
 import { EncryptionService } from '../services/encryption.service';
 import { MenulistService } from '../services/menulist.service';
 import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
+import { MenushareService } from '../share_data/menushare.service';
 
 
 @Component({
@@ -39,7 +39,7 @@ export class PagesComponent implements OnInit {
   public type ;
   public isfile;
 
-  constructor(private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -55,13 +55,11 @@ export class PagesComponent implements OnInit {
  public passwords =[] ;
  passwordIsValid = false;
 
- public menus =[];
- public langs =[];
+ 
 
   ngOnInit(){
 
-    this.menus =[];
-    this.langs =[];
+   
 
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -135,13 +133,14 @@ export class PagesComponent implements OnInit {
       GlobalConstants.Devicetokean =this.pagetokean;
       
     this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
-      this.langs=data;
-           
+     // this.langs=data;
+     this._MenushareService.updatelang(data);     
          });
      
          this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
      .subscribe(data => {
-       this.menus =data;
+     //  this.menus =data;
+       this._MenushareService.updatemenu(data);
        });
   
     this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{

@@ -49,25 +49,35 @@ public class ParentMenuServ {
 		}
 		
 		for (ParentMenu pmenu : com) {
-	     boolean valid = GroupPagesServ.check_menu(pmenu.getPagesID(), devpage, langcode);
-			if(!valid) {
-				pmenu.getPagesID().setId(0);
-			}
 			
 			menu_object mm= new menu_object();
+	
+	      boolean valid = GroupPagesServ.check_menu(pmenu.getPagesID(), devpage, langcode);
+			
+	
 		
 	     pmenu.setPmenu(textConvertionServ.search(pmenu.getPmenu(), langcode));	
 		 List<MenuDisplay> menus=	menuDisplayServ.getbycomponent(pmenu.getId(),langcode);
 		 List<MenuDisplay> menusout= new ArrayList<MenuDisplay>();
+		 int count=0;
+		 
 		 for (MenuDisplay childs : menus) {
 			 boolean valid1 = GroupPagesServ.check_menu(childs.getPagesID(), devpage, langcode);
 				if(!valid1) {
-					childs.getPagesID().setId(0);
+					count ++;
+					childs.setPagesID(null);
 				}
 				
 				menusout.add(childs);
 		}
 		 
+		 if( (menus.size() == count) && !valid) {
+			 System.out.println("zero");
+			 pmenu.setPagesID(null);
+		 
+		 }
+
+ 
 		 mm.setChild(menusout);
 		 mm.setParent(pmenu);
 		 menu.add(mm);
