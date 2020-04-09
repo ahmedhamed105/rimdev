@@ -23,23 +23,23 @@ export class DasboardComponent implements OnInit {
   public pagetokean ;
  
 
-  constructor(private _MenushareService:MenushareService,private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private router:Router,private route: ActivatedRoute,private locationService: LocationServiceService) { }
+  constructor(private _MenushareService:MenushareService,private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private locationService: LocationServiceService) { }
 
   ngOnInit() {
 
 
 
 
-    var menuid =this.route.snapshot.paramMap.get("id").toString();
+    var menuid ='1';
 
-    this.type =this.route.snapshot.paramMap.get("type");
+    this.type ='P';
 
     GlobalConstants.rember = this.cookieService.getCookie('rember');
   if( GlobalConstants.rember === '1'){
     var username = this.cookieService.getCookie('username');
     var usertokean = this.cookieService.getCookie('usertokean');
     if(username === "" || usertokean === ""){
-      this.router.navigate(['/login']);
+      window.location.replace("/login");
     }else{
       GlobalConstants.USERNAME = username; // To Get Cookie
       GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
@@ -118,7 +118,7 @@ this.cookieService.language(code);
   signout(){
     this.cookieService.username('',GlobalConstants.rember);
     this.cookieService.usertokean('',GlobalConstants.rember);
-    this.router.navigate(['/login']);
+    window.location.replace("/login");
       }
 
       

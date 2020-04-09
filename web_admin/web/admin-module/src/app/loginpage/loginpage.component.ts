@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
@@ -6,7 +6,6 @@ import { GridOptions } from 'ag-grid-community';
 import { UsertypedropdownComponent } from '../usertypedropdown/usertypedropdown.component';
 import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
 import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
@@ -25,7 +24,7 @@ import { MenushareService } from '../share_data/menushare.service';
   templateUrl: './loginpage.component.html',
   styleUrls: ['./loginpage.component.css']
 })
-export class LoginpageComponent implements OnInit {
+export class LoginpageComponent implements OnInit,AfterViewInit {
 
 
   @Output() onCompleteItem = new EventEmitter();
@@ -41,7 +40,7 @@ export class LoginpageComponent implements OnInit {
   public pagenumber = 12;
   public pagetokean ;
 
-  constructor(private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -59,15 +58,18 @@ export class LoginpageComponent implements OnInit {
  passwordIsValid = false;
 
 
+ ngAfterViewInit(){
 
+  this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-image', "url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')");
+}
   ngOnInit(){
+
+
+
 
     this._MenushareService.updatelang(undefined); 
     this._MenushareService.updatemenu(undefined);
 
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
 
 
     this.cookieService.checkboxrember('0');
@@ -516,6 +518,8 @@ onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
 
       form.reset();
 
+      this.cookieService.checkboxrember('1');
+
       if(related === 'login'){
         if(data['username'] == undefined || data['tokean'] == undefined){
           this.cookieService.username('',0);
@@ -530,7 +534,7 @@ onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
        }
 
        if(routingInd === 1){
-        this.router.navigate([routingLoc]);
+        window.location.replace(routingLoc);
        }
 
     },
@@ -561,12 +565,18 @@ passwordValid(event) {
 
 checked(event:MatCheckboxChange){
   console.log(event.checked);
-  if(event.checked === true){
+ // if(event.checked === true){
     this.cookieService.checkboxrember('1');
-  }else{
-    this.cookieService.checkboxrember('0');
-  }
+ // }else{
+ //   this.cookieService.checkboxrember('0');
+//  }
 
+}
+
+
+getUrl()
+{
+  return "url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')";
 }
 
 

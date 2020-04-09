@@ -19,7 +19,7 @@ export class LocationServiceService {
 
   public device =  <IDevice>{};
 
-  constructor(private cookieService: CookiesService,private router: Router,private deviceService: DeviceDetectorService,private _http:HttpClient) { }
+  constructor(private cookieService: CookiesService,private deviceService: DeviceDetectorService,private _http:HttpClient) { }
 
   
 
@@ -150,7 +150,7 @@ export class LocationServiceService {
       await this.insert(usertokean,username).then(res => {
      this.mydevice =res;
         if(res['devicestatusID']['id'] === 2){
-          this.router.navigate(['/blocked']);
+          window.location.replace('/blocked');
         }
       });
    

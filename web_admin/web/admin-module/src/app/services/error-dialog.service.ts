@@ -13,7 +13,7 @@ export class ErrorDialogService {
 
   public isDialogOpen: Boolean = false;
 
-    constructor(private router: Router,public dialog: MatDialog,public _LanguagegoService:LanguagegoService) { }
+    constructor(public dialog: MatDialog,public _LanguagegoService:LanguagegoService) { }
     openDialog(data): any {
         if (this.isDialogOpen) {
             return false;
@@ -35,7 +35,7 @@ export class ErrorDialogService {
 
     display_error(type,error){
 
- // console.log(this.isDialogOpen +'  '+GlobalConstants.iserror);
+ console.log(error);
 
      if(type === 1){
       this._LanguagegoService.getlang(error,GlobalConstants.Devicetokean,GlobalConstants.pageid).subscribe(data => {
@@ -48,16 +48,14 @@ export class ErrorDialogService {
         if(!GlobalConstants.iserror){
           this.openDialog(data1);
            }else{
-             this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
-           }
+            window.location.replace('/error?status='+ data1.status+'&reason ='+data1.reason);           }
       
        });
      }else{
 
-
-      console.log(this.router.url)
-if(error.code === 410 && this.router.url !== '/login'){
-  this.router.navigate(['/']);
+  var URL= window.location.pathname 
+if(error.code === 410 &&  URL !== '/login'){
+  window.location.replace("/login'");
 }else{
   let data1 = {
     reason: error.error ,
@@ -66,7 +64,7 @@ if(error.code === 410 && this.router.url !== '/login'){
   if(!GlobalConstants.iserror){
     this.openDialog(data1);
      }else{
-       this.router.navigate(['/error'],{ queryParams: { status: data1.status,reason :data1.reason } });
+      window.location.replace('/error?status='+ data1.status+'&reason ='+data1.reason);
      }
  }
 

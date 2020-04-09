@@ -16,16 +16,18 @@ export class ErrorpageComponent implements OnInit {
 
   ngOnInit() {
     console.log("as")
-
+    this.errorsatatus =  this.getQueryParams('status',window.location.href)|| 'None';
+    this.errormessage =  this.getQueryParams('reason',window.location.href)|| 'None';
    
-    this.route
-      .queryParamMap
-      .subscribe(params => {
-        console.log(params)
-        this.errorsatatus = params.get('status') || 'None';
-        this.errormessage = params.get('reason') || 'None';
-      });
-
     }
+
+     getQueryParams( params, url ) {
+  
+      let href = url;
+      //this expression is to get the query strings
+      let reg = new RegExp( '[?&]' + params + '=([^&#]*)', 'i' );
+      let queryString = reg.exec(href);
+      return queryString ? queryString[1] : null;
+    };
 
 }

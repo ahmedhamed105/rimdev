@@ -70,7 +70,7 @@ export class PagesComponent implements OnInit {
     var username = this.cookieService.getCookie('username');
     var usertokean = this.cookieService.getCookie('usertokean');
     if(username === "" || usertokean === ""){
-      this.router.navigate(['/login']);
+       window.location.replace("/login");
     }else{
       GlobalConstants.USERNAME = username; // To Get Cookie
       GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
@@ -678,7 +678,7 @@ language(code){
     signout(){
       this.cookieService.username('',GlobalConstants.rember);
       this.cookieService.usertokean('',GlobalConstants.rember);
-      this.router.navigate(['/login']);
+       window.location.replace("/login");
         }
     
 

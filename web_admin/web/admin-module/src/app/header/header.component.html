@@ -269,7 +269,7 @@
     </nav>
   </header>
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar" [style.display]="display === 1 ? 'inherit' : 'none'">
+  <aside class="main-sidebar"  [style.display]="display === 1 ? 'inherit' : 'none'">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- Sidebar user panel -->
@@ -306,7 +306,7 @@
           <ng-template #withnosub>
             <ng-container *ngIf="parent.parent.pagesID === undefined ? false:true">
             <li>
-              <a  [routerLink]="[parent.parent.parentLink,'P',parent.parent.id]" routerLinkActive="active" >
+              <a  [attr.href]="parent.parent.parentLink" >
                 <i class="fa {{parent.parent.faIcon}}"></i> <span>{{parent.parent.pmenu}}</span>
                 <span class="pull-right-container">
                   <span class="label label-primary pull-right">4</span>
@@ -330,7 +330,7 @@
               <ul class="treeview-menu" >
                 <li class="active" *ngFor="let child of parent.child; let i = index">
                   <ng-container *ngIf="child.pagesID === undefined ? false:true">
-                  <a  [routerLink]="[child.menulink,'C', child.id]" routerLinkActive="false">
+                  <a [attr.href]="child.menulink+'/C/'+ child.id">
                     <i class="fa {{child.faIcon}}"></i>
                      {{child.menuname}}</a>
                      </ng-container>
