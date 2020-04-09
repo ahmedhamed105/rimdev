@@ -9,7 +9,7 @@
 
 
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark" [style.visibility]="display === 1 ? 'visible' : 'hidden'">
+  <aside class="control-sidebar control-sidebar-dark" [style.display]="display === 1 ? 'inherit' : 'none'">
     <!-- Create the tabs -->
     <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
       <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
@@ -200,4 +200,5 @@
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
+  <div class="control-sidebar-bg" [style.display]="display === 1 ? 'inherit' : 'none'"></div>
   
