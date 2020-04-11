@@ -67,20 +67,27 @@
         </ng-container>
 
     <ng-template #withgroup>
-      <div class="form-group" formGroupName="{{component.comp.groupname}}">
-        <label>{{component.comp.ccode}}</label>
+      <div class="input-group mb-3" formGroupName="{{component.comp.groupname}}">
           <ng-container *ngTemplateOutlet="component.select.arrayObject === 1? dymaicarray: staticarray">
            </ng-container>
 
         <ng-template #dymaicarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
-        <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+          </div> 
+          <select data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+            <option disabled selected value>{{component.comp.ccode}}</option>
+            <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </select> 
       </ng-template>
 
       <ng-template #staticarray>
-        <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
-        <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div> 
+        <select  data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+          <option disabled selected value>{{component.comp.ccode}}</option>
+          <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
       </select> 
       </ng-template>
  
@@ -89,21 +96,28 @@
     </ng-template>
 
     <ng-template #withoutgroup>
-      <div class="form-group">
-        <label>{{component.comp.ccode}}</label>
-        
+      <div class="input-group mb-3">
+     
           <ng-container *ngTemplateOutlet="component.select.arrayObject === 1? dymaicarray: staticarray">
           </ng-container>
   
           <ng-template #dymaicarray>
-            <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
-          <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-user"></i></span>
+            </div> 
+            <select  data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+              <option disabled selected value>{{component.comp.ccode}}</option>
+              <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </select>  
         </ng-template>
   
         <ng-template #staticarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
-          <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+          </div> 
+          <select  data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+            <option disabled selected value>{{component.comp.ccode}}</option>
+            <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
         </select>  
         </ng-template>
 
@@ -123,45 +137,52 @@
 
 
 <ng-template #withgroup>
-  <div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'Date'">
-    <label>{{component.comp.ccode}}</label>
-     <div class="input-group">
-    <div class="input-group-addon">
-      <i class="fa fa-calendar"></i>
+  <div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'Date'">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
     </div>
-    <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+    <input   type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}"   class="form-control"  >
     <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
      <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
      <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>
 </div>
+
+
+<div class="input-group mb-3"  formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'password'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-key"></i></span>
+  </div> 
+  <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+ 
 </div>
 
-<div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'password'">
-  <label>{{component.comp.ccode}}</label>
-  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+<app-password-strength *ngIf="component.input.inputtypeID.itype == 'password'"
+[passwordToCheck]="insertform[parent.parent.id].get(component.comp.name).value"
+(passwordStrength)="passwordValid($event)"
+></app-password-strength>
+
+<div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'text'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-edit"></i></span>
+  </div> 
+  <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
  </div>
 </div>
 
-<div class="form-group"  formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'password'">
-  <label>{{component.comp.ccode}}</label>
-  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
-   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
- </div>
- <app-password-strength
-          [passwordToCheck]="insertform[parent.parent.id].get(component.comp.name).value"
-          (passwordStrength)="passwordValid($event)"
-          ></app-password-strength>
-</div>
 
-<div class="form-group" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
-  <label>{{component.comp.ccode}}</label>
-  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+<div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'email'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+  </div> 
+  <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
@@ -169,12 +190,18 @@
 </div>
 
 
-<div class="form-group" formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'file'">
-  <h3>{{component.comp.name}}</h3>
+<div class="input-group mb-3" formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'file'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="far fa-file"></i></span>
+  </div> 
+  <div class="custom-file">
   <input class="custom-file-input" type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
+   </div>
+
+   <label class="custom-file-label" > <label>{{component.comp.ccode}}</label></label>
    </div>
 </div>
 
@@ -237,45 +264,63 @@
 </ng-template>
 
 <ng-template #withoutgroup>
-  <div class="form-group"  *ngIf="component.input.inputtypeID.itype == 'date'">
-    <label>{{component.comp.ccode}}</label>
-     <div class="input-group">
-    <div class="input-group-addon">
-      <i class="fa fa-calendar"></i>
-    </div>
-    <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div class="input-group mb-3"  *ngIf="component.input.inputtypeID.itype == 'date'">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+    </div> 
+    <input   type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}"   class="form-control"  >
     <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
      <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
      <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
    </div>
 </div>
-</div>
 
-<div class="form-group"   *ngIf="component.input.inputtypeID.itype == 'password'">
-  <label>{{component.comp.ccode}}</label>
-  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+
+<div class="input-group mb-3"   *ngIf="component.input.inputtypeID.itype == 'password'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-key"></i></span>
+
+  </div> 
+  <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
  </div>
- <app-password-strength
-          [passwordToCheck]="insertform[parent.parent.id].get(component.comp.name).value"
-          (passwordStrength)="passwordValid($event)"
-          ></app-password-strength>
+
 </div>
 
-<div class="form-group"   *ngIf="component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email'">
-  <label>{{component.comp.ccode}}</label>
-  <input  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+<app-password-strength *ngIf="component.input.inputtypeID.itype == 'password'"
+[passwordToCheck]="insertform[parent.parent.id].get(component.comp.name).value"
+(passwordStrength)="passwordValid($event)"
+></app-password-strength>
+
+<div class="input-group mb-3"   *ngIf="component.input.inputtypeID.itype == 'text'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-edit"></i></span>
+  </div> 
+  <input placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
  </div>
 </div>
 
-<div class="form-group" *ngIf="component.input.inputtypeID.itype == 'file'">
 
-   <div class="input-group">
+<div class="input-group mb-3"   *ngIf="component.input.inputtypeID.itype == 'email'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+  </div> 
+  <input placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+</div>
+
+   <div class="input-group mb-3" *ngIf="component.input.inputtypeID.itype == 'file'">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="far fa-file"></i></span>
+    </div> 
     <div class="custom-file">
       <input class="custom-file-input" type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
       <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -286,7 +331,6 @@
     </div>
   </div>
 
-</div>
 
 <div class="form-group"  *ngIf="component.input.inputtypeID.itype == 'file'">
   <div class="box">

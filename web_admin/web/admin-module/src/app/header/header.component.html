@@ -156,7 +156,7 @@
        
         <li class="nav-item has-treeview menu-open">
           <a href="{{parent.parent.pagesID === undefined ?'/':parent.parent.parentLink}}" class="nav-link active">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <i class="nav-icon {{parent.parent.faIcon}}"></i>
             <p>
               {{parent.parent.pmenu}}
               <i class="right fas fa-angle-left"></i>
@@ -166,7 +166,7 @@
             <li class="nav-item" *ngFor="let child of parent.child; let i = index">
               <ng-container *ngIf="child.pagesID === undefined ? false:true">
               <a [attr.href]="child.menulink+'?type=C&menuid='+ child.id" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="{{child.faIcon}} nav-icon"></i>
                 <p>{{child.menuname}}</p>
               </a>
             </ng-container>
@@ -180,7 +180,7 @@
           <ng-container *ngIf="parent.parent.pagesID === undefined ? false:true">
         <li class="nav-item">
           <a [attr.href]="parent.parent.parentLink" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
+            <i class="nav-icon {{parent.parent.faIcon}}"></i>
             <p>
               {{parent.parent.pmenu}}
               <span class="right badge badge-danger">New</span>
