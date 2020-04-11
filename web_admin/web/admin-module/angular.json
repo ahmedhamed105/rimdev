@@ -37,7 +37,8 @@
               "src/assets/plugins/chart.js/Chart.min.js",
               "src/assets/js/adminlte.js",
               "src/assets/js/demo.js",
-              "src/assets/js/pages/dashboard3.js"
+              "src/assets/js/pages/dashboard3.js",
+              "src/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"
             ]
           },
           "configurations": {

@@ -111,9 +111,18 @@ export class PagesComponent implements OnInit {
     this.file= [];
     this.dates =[] ;
 
-    var menuid =this.route.snapshot.paramMap.get("id").toString();
+    var menuid =   this.locationService.getQueryParams('menuid',window.location.href); ;//this.route.snapshot.paramMap.get("id").toString();
 
-    this.type =this.route.snapshot.paramMap.get("type");
+    this.type = this.locationService.getQueryParams('type',window.location.href) ;  //this.route.snapshot.paramMap.get("type");
+
+    if(menuid === undefined || this.type === undefined ){
+      
+      this.cookieService.username('',GlobalConstants.rember);
+      this.cookieService.usertokean('',GlobalConstants.rember);
+       window.location.replace("/login");
+
+    }
+
 
     this._ComponentService.getmenu(this.type,menuid,GlobalConstants.USERNAME,GlobalConstants.USERTOKEANkey).subscribe(res =>{
 

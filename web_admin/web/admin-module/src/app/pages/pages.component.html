@@ -1,67 +1,67 @@
      <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   
+      <!-- Content Header (Page header) -->
+      <section class="content-header" *ngIf="page != undefined">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              {{page.parent.pmenu}} 
+              <small *ngIf="type === 'C' && page != undefined"> {{page.child.menuname}}</small>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right"  *ngIf="type === 'C' && page != undefined">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{page.parent.parentLink}}">{{page.parent.pmenu}}</a></li>
+                <li class="breadcrumb-item active" > {{page.child.menuname}}</li>
+              </ol>
+              <ol class="breadcrumb float-sm-right"  *ngIf="type =='P' && page != undefined">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" > {{page.parent.pmenu}}</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
   
-  
-  <!-- Content Header (Page header) -->
-   <section class="content-header"  *ngIf="page != undefined">
-    <h1>
-      {{page.parent.pmenu}} 
-      <small *ngIf="type === 'C' && page != undefined"> {{page.child.menuname}}</small>
-    </h1>
-    <ol class="breadcrumb"  *ngIf="type === 'C' && page != undefined">
-      <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href="{{page.parent.parentLink}}">{{page.parent.pmenu}}</a></li>
-      <li class="active">{{page.child.menuname}}</li>
-    </ol>
-
-    <ol class="breadcrumb"  *ngIf="type =='P' && page != undefined">
-      <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a class="active" >{{page.parent.pmenu}}</a></li>
-    </ol>
-  </section>
   
   <!-- Main content -->
   <section class="content">
-    <div class="row" *ngFor="let parent of components; let j = index">
-      <!-- left column -->
-      <div class="col-md-12" *ngIf="parent.parent.parentType == 'form'">
+    <div class="container-fluid">
+
+    <ng-container  *ngFor="let parent of components; let j = index">
+
         <!-- general form elements -->
-        <div class="box box-primary" >
-          <div class="box-header with-border">
-            <h3 class="box-title">{{parent.parent.pcodeTittle}}</h3>
-           
-            <div class="box-tools pull-right">
-           
-              <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                <i class="fa fa-minus"></i>
-              </button>
-          
-              <div class="btn-group">
-                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-wrench"></i></button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
-                </ul>
-              </div>
-              <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        <div class="card card-primary"  *ngIf="parent.parent.parentType == 'form'">
+          <div class="card-header">
+            <h3 class="card-title">{{parent.parent.pcodeTittle}}</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i></button>
+              <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fas fa-times"></i></button>
             </div>
 
-          
           </div>
-          <!-- /.box-header -->
+        <!-- /.card-header -->
+
           <!-- form start -->
-          <form [formGroup]="insertform[parent.parent.id]" >
+         
+        
+        <div class="card-body">
+
+          <form role="form" [formGroup]="insertform[parent.parent.id]" >
+
             <pre>{{parent.parent.id | json}}</pre>
             <pre>{{insertform[parent.parent.id].value | json}}</pre>
- <div class="box-body" *ngFor="let component of parent.child; let i = index; let parentlen = count">
- 
+
+          <div class="row">
+            <div class="col-md-12">
   
-  <div *ngIf="component.comp.ctype == 'select'">
+  
+  <ng-container *ngFor="let component of parent.child; let i = index; let parentlen = count">
+  
+  <ng-container *ngIf="component.comp.ctype == 'select'">
         <!-- Execute code here if statement true -->
         <ng-container *ngTemplateOutlet="component.comp.groupname? withgroup: withoutgroup">
         </ng-container>
@@ -73,13 +73,13 @@
            </ng-container>
 
         <ng-template #dymaicarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+          <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
         <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </select> 
       </ng-template>
 
       <ng-template #staticarray>
-        <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+        <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
         <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
       </select> 
       </ng-template>
@@ -96,13 +96,13 @@
           </ng-container>
   
           <ng-template #dymaicarray>
-            <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+            <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
           <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </select>  
         </ng-template>
   
         <ng-template #staticarray>
-          <select formControlName="{{component.comp.name}}"  class="form-control"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+          <select formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
           <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
         </select>  
         </ng-template>
@@ -112,11 +112,11 @@
     </div>
     </ng-template>
 
-  </div> 
+  </ng-container> 
  <!-- End of condition of select -->
 
   
-  <div *ngIf="component.comp.ctype == 'input'">
+  <ng-container *ngIf="component.comp.ctype == 'input'">
     <!-- Execute code here if statement true -->
     <ng-container *ngIf="component.comp.groupname; then withgroup;else withoutgroup">
 </ng-container>
@@ -171,7 +171,7 @@
 
 <div class="form-group" formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'file'">
   <h3>{{component.comp.name}}</h3>
-  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
+  <input class="custom-file-input" type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
     <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
@@ -180,10 +180,10 @@
 
 <div class="form-group"  formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'file'">
   <div class="box">
-    <div class="box-header with-border">
-      <h3 class="box-title">{{component.comp.ccode}}</h3>
+    <div class="card-header">
+      <h3 class="card-title">{{component.comp.ccode}}</h3>
     </div>
-  <div class="box-body no-padding">
+  <div class="card-body no-padding">
 <table class="table table-condensed">
 
 <tr>
@@ -274,20 +274,26 @@
 </div>
 
 <div class="form-group" *ngIf="component.input.inputtypeID.itype == 'file'">
-  <h3>{{component.comp.name}}</h3>
-  <input type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
-  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
-    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
-    <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
-   </div>
+
+   <div class="input-group">
+    <div class="custom-file">
+      <input class="custom-file-input" type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
+      <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+        <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
+        <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
+       </div>
+     <label class="custom-file-label" > <label>{{component.comp.ccode}}</label></label>
+    </div>
+  </div>
+
 </div>
 
 <div class="form-group"  *ngIf="component.input.inputtypeID.itype == 'file'">
   <div class="box">
-    <div class="box-header with-border">
-      <h3 class="box-title">{{component.comp.ccode}}</h3>
+    <div class="card-header">
+      <h3 class="card-title">{{component.comp.ccode}}</h3>
     </div>
-  <div class="box-body no-padding">
+  <div class="card-body no-padding">
 <table class="table table-condensed">
 
 <tr>
@@ -339,10 +345,10 @@
 
 </ng-template>
 
-</div>
+</ng-container>
      
 
-<div class="box-footer" *ngIf="component.comp.ctype == 'button'">
+<div class="card-footer" *ngIf="component.comp.ctype == 'button'">
 
     <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button>             
 
@@ -351,45 +357,35 @@
   </div>
 
 
+  </ng-container>
+
             </div>
-            <!-- /.box-body -->
-  
-        
-          </form>
+         
+  </div>
+
+</form>
+</div>
+        <!-- /.card-body -->   
+          
         </div>
         <!-- /.box -->
 
 
 
-      <!--/.col (right) -->
-    </div>
-    <div class="col-md-12" *ngIf="parent.parent.parentType == 'table'">
-
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">{{parent.parent.pcodeTittle}}</h3>
-          <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-            <div class="btn-group">
-              <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-wrench"></i></button>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-              </ul>
-            </div>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+      <div class="card card-primary" *ngIf="parent.parent.parentType == 'table'">
+        <div class="card-header">
+          <h3 class="card-title">{{parent.parent.pcodeTittle}}</h3>              
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+              <i class="fas fa-minus"></i></button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+              <i class="fas fa-times"></i></button>
           </div>
         </div>
         <!-- /.box-header -->
-        <div class="box-body">
+        <div class="card-body">
           <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
           <button  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](component.button.buttonService,component.button.methodParamter,parent.parent.id,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button> 
-
           </ng-container>
       
           <br/>
@@ -404,13 +400,16 @@
               >
           </ag-grid-angular>
         </div>
-        <!-- /.box-body -->
+        <!-- /.card-body -->
       </div>
       <!-- /.box -->
 
+
+    </ng-container>
+  
     </div>
-    <!-- /.row -->
-    </div>
+<!-- /.container-fluid -->
+
   </section>
   <!-- /.content -->
 

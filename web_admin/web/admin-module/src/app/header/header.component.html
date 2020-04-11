@@ -165,7 +165,7 @@
           <ul class="nav nav-treeview">
             <li class="nav-item" *ngFor="let child of parent.child; let i = index">
               <ng-container *ngIf="child.pagesID === undefined ? false:true">
-              <a [attr.href]="child.menulink+'/C/'+ child.id" class="nav-link">
+              <a [attr.href]="child.menulink+'?type=C&menuid='+ child.id" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>{{child.menuname}}</p>
               </a>

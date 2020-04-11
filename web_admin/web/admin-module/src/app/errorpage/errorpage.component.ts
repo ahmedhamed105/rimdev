@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { LocationServiceService } from '../services/location-service.service';
 
 @Component({
   selector: 'app-errorpage',
@@ -12,22 +11,15 @@ export class ErrorpageComponent implements OnInit {
   public errorsatatus;
   public errormessage;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private locationService: LocationServiceService) { }
 
   ngOnInit() {
     console.log("as")
-    this.errorsatatus =  this.getQueryParams('status',window.location.href)|| 'None';
-    this.errormessage =  this.getQueryParams('reason',window.location.href)|| 'None';
+    this.errorsatatus =  this.locationService.getQueryParams('status',window.location.href)|| 'None';
+    this.errormessage =  this.locationService.getQueryParams('reason',window.location.href)|| 'None';
    
     }
 
-     getQueryParams( params, url ) {
-  
-      let href = url;
-      //this expression is to get the query strings
-      let reg = new RegExp( '[?&]' + params + '=([^&#]*)', 'i' );
-      let queryString = reg.exec(href);
-      return queryString ? queryString[1] : null;
-    };
+   
 
 }
