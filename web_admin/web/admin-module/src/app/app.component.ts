@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   constructor(private router: ActivatedRoute){}
 
   ngOnInit() {
+    const body = document.getElementsByTagName('body')[0];
     console.log(window.location.pathname );
    var URL= window.location.pathname 
     if(URL === '/' || URL === '/login'){
@@ -29,28 +30,34 @@ export class AppComponent implements OnInit {
       this.dashboard=0;
       this.page = 0;
       this.error = 0;
+    
+    body.classList.add('login-page');
    }
   else if( URL.includes('dashboard')){
     this.login=0;
     this.dashboard=1;
     this.page = 0;
     this.error = 0;
+    body.classList.add('sidebar-mini');
  }
  else if( URL.includes('page') || URL.includes('error') || URL.includes('blocked')) {
   this.login=0;
   this.dashboard=0;
   this.page = 1;
   this.error = 0;
+  body.classList.add('sidebar-mini');
 }else if(URL.includes('error') || URL.includes('blocked')) {
   this.login=0;
   this.dashboard=0;
   this.page = 0;
   this.error = 1;
+  body.classList.add('sidebar-mini');
 }else{
   this.login=0;
   this.dashboard=0;
   this.page = 0;
   this.error = 1;
+  body.classList.add('sidebar-mini');
 }
 
   }

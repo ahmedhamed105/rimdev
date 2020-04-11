@@ -25,30 +25,19 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/assets/bower_components/bootstrap/dist/css/bootstrap.min.css",
-              "src/assets/bower_components/font-awesome/css/font-awesome.min.css",
-              "src/assets/bower_components/Ionicons/css/ionicons.min.css",
-              "src/assets/css/AdminLTE.min.css",
-              "src/assets/css/skins/_all-skins.min.css",
-              "src/assets/bower_components/jvectormap/jquery-jvectormap.css",
+              "src/assets/plugins/fontawesome-free/css/all.min.css",
               "./node_modules/ag-grid-community/dist/styles/ag-grid.css",
-              "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css"
+              "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css",
+              "src/assets/css/adminlte.min.css"
             ],
             "scripts": [
               "../node_modules/crypto-js/crypto-js.js",
-              "src/assets/bower_components/jquery/dist/jquery.min.js",
-              "src/assets/bower_components/bootstrap/dist/js/bootstrap.min.js",
-              "src/assets/plugins/input-mask/jquery.inputmask.js",
-              "src/assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
-              "src/assets/plugins/input-mask/jquery.inputmask.extensions.js",
-              "src/assets/bower_components/fastclick/lib/fastclick.js",
-              "src/assets/js/adminlte.min.js",
+              "src/assets/plugins/jquery/jquery.min.js",
+              "src/assets/plugins/bootstrap/js/bootstrap.bundle.min.js",
+              "src/assets/plugins/chart.js/Chart.min.js",
+              "src/assets/js/adminlte.js",
               "src/assets/js/demo.js",
-              "src/assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js",
-              "src/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js",
-              "src/assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js",
-              "src/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
-              "src/assets/bower_components/chart.js/Chart.js"
+              "src/assets/js/pages/dashboard3.js"
             ]
           },
           "configurations": {

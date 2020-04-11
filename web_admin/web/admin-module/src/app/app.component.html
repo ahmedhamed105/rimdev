@@ -1,8 +1,7 @@
 
-
-<div class="login-box" *ngIf="login == 1">
+<ng-container *ngIf="login == 1">
 <app-loginpage></app-loginpage>
-</div>
+</ng-container>
 
 <div class="wrapper" *ngIf="dashboard == 1">
     <app-header></app-header>
@@ -11,11 +10,14 @@
 </div>
 
 
+
+
     <div class="wrapper" *ngIf="page == 1">
         <app-header></app-header>
         <router-outlet></router-outlet>
         <app-footer></app-footer>
         </div>
+ 
 
         <div class="wrapper" *ngIf="error == 1">
             <router-outlet></router-outlet>
