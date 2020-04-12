@@ -29,7 +29,7 @@
     <input placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
     <div class="input-group-append">
       <div class="input-group-text">
-        <span class="fas fa-lock"></span>
+        <span class="{{component.comp.labelIcon === undefined ? 'far fa-calendar-alt' : component.comp.labelIcon }}"></span>
       </div>
     </div>
     <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -38,38 +38,39 @@
    </div>
 </div>
 
-<div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.comp.ctype == 'input' && component.input.inputtypeID.itype == 'password'">
-  <input  placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-  <div class="input-group-append">
-    <div class="input-group-text">
-      <span class="fas fa-lock"></span>
-    </div>
-  </div>
-  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
-   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
- </div>
-</div>
-
-<div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.comp.ctype == 'input' && (component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email')">
-  <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
-  <div class="input-group-append">
-    <div class="input-group-text">
-      <span class="fas fa-lock"></span>
-    </div>
-  </div>
-  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
-   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
-   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
- </div>
-</div>
-
 
 <div class="input-group mb-3"  formGroupName="{{component.comp.groupname}}"  *ngIf="component.comp.ctype == 'input' && component.input.inputtypeID.itype == 'password'">
   <input  placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div class="input-group-append">
     <div class="input-group-text">
-      <span class="fas fa-lock"></span>
+      <span class="{{component.comp.labelIcon === undefined ? 'fas fa-lock' : component.comp.labelIcon }}"></span>
+    </div>
+  </div>
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+</div>
+
+
+<div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.comp.ctype == 'input' && component.input.inputtypeID.itype == 'text'">
+  <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div class="input-group-append">
+    <div class="input-group-text">
+      <span class="{{component.comp.labelIcon === undefined ? 'fas fa-edit' : component.comp.labelIcon }}"></span>
+    </div>
+  </div>
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+</div>
+
+<div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.comp.ctype == 'input' && component.input.inputtypeID.itype == 'email'">
+  <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div class="input-group-append">
+    <div class="input-group-text">
+      <span class="{{component.comp.labelIcon === undefined ? 'as fa-envelope-open-text' : component.comp.labelIcon }}"></span>
     </div>
   </div>
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -90,7 +91,7 @@
     <input   placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
     <div class="input-group-append">
       <div class="input-group-text">
-        <span class="fas fa-lock"></span>
+        <span class="{{component.comp.labelIcon === undefined ? 'far fa-calendar-alt' : component.comp.labelIcon }}"></span>
       </div>
     </div>
     <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -104,7 +105,7 @@
   <input  placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div class="input-group-append">
     <div class="input-group-text">
-      <span class="fas fa-lock"></span>
+      <span class="{{component.comp.labelIcon === undefined ? 'fas fa-lock' : component.comp.labelIcon }}"></span>
     </div>
   </div>
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -113,11 +114,25 @@
  </div>
 </div>
 
-<div class="input-group mb-3"    *ngIf="component.comp.ctype == 'input' && (component.input.inputtypeID.itype == 'text' || component.input.inputtypeID.itype == 'email')">
+<div class="input-group mb-3"    *ngIf="component.comp.ctype == 'input' && component.input.inputtypeID.itype == 'text'">
   <input  placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div class="input-group-append">
     <div class="input-group-text">
-      <span class="fas fa-lock"></span>
+      <span class="{{component.comp.labelIcon === undefined ? 'fas fa-edit' : component.comp.labelIcon }}"></span>
+    </div>
+  </div>
+  <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small> 
+   <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small> 
+ </div>
+</div>
+
+
+<div class="input-group mb-3"    *ngIf="component.comp.ctype == 'input' && component.input.inputtypeID.itype == 'email'">
+  <input  placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
+  <div class="input-group-append">
+    <div class="input-group-text">
+      <span class="{{component.comp.labelIcon === undefined ? 'fas fa-envelope-open-text' : component.comp.labelIcon }}"></span>
     </div>
   </div>
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">

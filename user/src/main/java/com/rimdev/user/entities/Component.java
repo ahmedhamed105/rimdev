@@ -90,6 +90,9 @@ public class Component implements Serializable {
     private Date dateCreate;
     @Column(name = "disable", nullable = false)
     private int disable;
+    @Column(name = "label_icon", length = 450)
+    private String labelIcon;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
@@ -119,6 +122,14 @@ public class Component implements Serializable {
         this.ccode = ccode;
         this.crequired = crequired;
         this.cpattern = cpattern;
+    }
+    
+    public String getLabelIcon() {
+        return labelIcon;
+    }
+
+    public void setLabelIcon(String labelIcon) {
+        this.labelIcon = labelIcon;
     }
     
     public int getDisable() {

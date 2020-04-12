@@ -11,6 +11,7 @@
     <li class="nav-item d-none d-sm-inline-block">
       <a href="#" class="nav-link">Contact</a>
     </li>
+    
   </ul>
 
   <!-- SEARCH FORM -->
@@ -112,6 +113,77 @@
         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
       </div>
     </li>
+
+ <!-- User Account: style can be found in dropdown.less -->
+ <li class="nav-item dropdown user user-menu">
+  <a href="#" class="nav-link" data-toggle="dropdown">
+    <img src="assets/img/user2-160x160.jpg" class="user-image" alt="User Image">
+  </a>
+  <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+    <!-- User image -->
+    <div class="card card-widget widget-user">
+      <!-- Add the bg color to the header using any of the bg-* classes -->
+      <div class="widget-user-header bg-info">
+        <h3 class="widget-user-username">Alexander Pierce</h3>
+        <h5 class="widget-user-desc">Founder & CEO</h5>
+      </div>
+      <div class="widget-user-image">
+        <img class="img-circle elevation-2" src="assets/img/user2-160x160.jpg" alt="User Avatar">
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">3,200</h5>
+              <span class="description-text">SALES</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">13,000</h5>
+              <span class="description-text">FOLLOWERS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4">
+            <div class="description-block">
+              <h5 class="description-header">35</h5>
+              <span class="description-text">PRODUCTS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+        
+            <div class="description-block"  *ngFor="let lang of langs" >
+           
+                <a class="btn btn-default" (click)="language(lang.languagecode)">{{lang.languagename}}</a>
+          
+            </div>
+          
+        </div>
+
+
+        <div class="row">
+        <a class="btn btn-default btn-flat" (click)="signout()">Sign out</a>
+        </div>
+      </div>
+      <!-- footer -->
+   
+      
+
+
+    </div>
+    <!-- /.widget-user -->
+  </div>
+</li>
+
     <li class="nav-item">
       <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button"><i
           class="fas fa-th-large"></i></a>

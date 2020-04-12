@@ -55,7 +55,7 @@ export class ErrorDialogService {
 
   var URL= window.location.pathname 
 if(error.code === 410 &&  URL !== '/login'){
-  window.location.replace("/login'");
+  window.location.replace('/login');
 }else{
   let data1 = {
     reason: error.error ,

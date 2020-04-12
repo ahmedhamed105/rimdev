@@ -7,6 +7,7 @@ export interface Icolumdef {
   fieldgroup:number,
   groupname:string,
   fielddisable: boolean,
+  disabled : boolean,
   ip:string,
   port:string,
   formnum:number,

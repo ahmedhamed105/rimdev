@@ -52,8 +52,8 @@
 
           <form role="form" [formGroup]="insertform[parent.parent.id]" >
 
-            <pre>{{parent.parent.id | json}}</pre>
-            <pre>{{insertform[parent.parent.id].value | json}}</pre>
+            <pre style="background-color: lightblue">{{parent.parent.id | json}}</pre>
+            <pre style="background-color: lawngreen;">{{insertform[parent.parent.id].value | json}}</pre>
 
           <div class="row">
             <div class="col-md-12">
@@ -73,9 +73,9 @@
 
         <ng-template #dymaicarray>
           <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-user' : component.comp.labelIcon}}"></i></span>
           </div> 
-          <select data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+          <select  formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
             <option disabled selected value>{{component.comp.ccode}}</option>
             <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
       </select> 
@@ -83,9 +83,9 @@
 
       <ng-template #staticarray>
         <div class="input-group-prepend">
-          <span class="input-group-text"><i class="fas fa-user"></i></span>
+          <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-user' : component.comp.labelIcon}}"></i></span>
         </div> 
-        <select  data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+        <select   formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],component.comp.groupname,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
           <option disabled selected value>{{component.comp.ccode}}</option>
           <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>
       </select> 
@@ -103,9 +103,9 @@
   
           <ng-template #dymaicarray>
             <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-user"></i></span>
+              <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-user' : component.comp.labelIcon}}"></i></span>
             </div> 
-            <select  data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+            <select   formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
               <option disabled selected value>{{component.comp.ccode}}</option>
               <option *ngFor="let object of objects[i+(j*parentlen)]" [value]="object[component.select.selectValue]">{{object[component.select.selectDisplay]}}</option>
         </select>  
@@ -113,9 +113,9 @@
   
         <ng-template #staticarray>
           <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-user' : component.comp.labelIcon}}"></i></span>
           </div> 
-          <select  data-placeholder="{{component.comp.ccode}}" formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
+          <select   formControlName="{{component.comp.name}}"  class="form-control  select2"  (change)="component.select.changemethod == null ?'':Makeaction(objects[i+(j*parentlen)],insertform[parent.parent.id],null,component.comp.name,component.select.changemethod,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)">
             <option disabled selected value>{{component.comp.ccode}}</option>
             <option *ngFor="let object of  objects[i+(j*parentlen)]" [value]="object.value">{{object.key}}</option>       
         </select>  
@@ -139,7 +139,7 @@
 <ng-template #withgroup>
   <div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'Date'">
     <div class="input-group-prepend">
-      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+      <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'far fa-calendar-alt' : component.comp.labelIcon }}"></i></span>
     </div>
     <input   type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}"   class="form-control"  >
     <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -151,7 +151,7 @@
 
 <div class="input-group mb-3"  formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'password'">
   <div class="input-group-prepend">
-    <span class="input-group-text"><i class="fas fa-key"></i></span>
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-key' : component.comp.labelIcon}}"></i></span>
   </div> 
   <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -168,7 +168,7 @@
 
 <div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'text'">
   <div class="input-group-prepend">
-    <span class="input-group-text"><i class="fas fa-edit"></i></span>
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-edit' : component.comp.labelIcon}}"></i></span>
   </div> 
   <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -180,7 +180,7 @@
 
 <div class="input-group mb-3" formGroupName="{{component.comp.groupname}}"  *ngIf="component.input.inputtypeID.itype == 'email'">
   <div class="input-group-prepend">
-    <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-envelope-open-text' : component.comp.labelIcon}}"></i></span>
   </div> 
   <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -192,7 +192,7 @@
 
 <div class="input-group mb-3" formGroupName="{{component.comp.groupname}}" *ngIf="component.input.inputtypeID.itype == 'file'">
   <div class="input-group-prepend">
-    <span class="input-group-text"><i class="far fa-file"></i></span>
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'far fa-file' : component.comp.labelIcon}}"></i></span>
   </div> 
   <div class="custom-file">
   <input class="custom-file-input" type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
@@ -266,7 +266,7 @@
 <ng-template #withoutgroup>
   <div class="input-group mb-3"  *ngIf="component.input.inputtypeID.itype == 'date'">
     <div class="input-group-prepend">
-      <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+      <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'far fa-calendar-alt' : component.comp.labelIcon }}"></i></span>
     </div> 
     <input   type="text" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}"   class="form-control"  >
     <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -278,7 +278,7 @@
 
 <div class="input-group mb-3"   *ngIf="component.input.inputtypeID.itype == 'password'">
   <div class="input-group-prepend">
-    <span class="input-group-text"><i class="fas fa-key"></i></span>
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-key' : component.comp.labelIcon}}"></i></span>
 
   </div> 
   <input placeholder="{{component.comp.ccode}}" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
@@ -296,7 +296,7 @@
 
 <div class="input-group mb-3"   *ngIf="component.input.inputtypeID.itype == 'text'">
   <div class="input-group-prepend">
-    <span class="input-group-text"><i class="fas fa-edit"></i></span>
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-edit' : component.comp.labelIcon }}"></i></span>
   </div> 
   <input placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -308,7 +308,7 @@
 
 <div class="input-group mb-3"   *ngIf="component.input.inputtypeID.itype == 'email'">
   <div class="input-group-prepend">
-    <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-envelope-open-text' : component.comp.labelIcon}}"></i></span>
   </div> 
   <input placeholder="{{component.comp.ccode}}"  [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" type="{{component.input.inputtypeID.itype}}"   class="form-control"  >
   <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
@@ -319,10 +319,10 @@
 
    <div class="input-group mb-3" *ngIf="component.input.inputtypeID.itype == 'file'">
     <div class="input-group-prepend">
-      <span class="input-group-text"><i class="far fa-file"></i></span>
+      <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'far fa-file' : component.comp.labelIcon}}"></i></span>
     </div> 
     <div class="custom-file">
-      <input class="custom-file-input" type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
+      <input  class="custom-file-input" type="{{component.input.inputtypeID.itype}}" accept="image/x-png,image/gif,image/jpeg" [class.is-invalid]="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" formControlName="{{component.comp.name}}" multiple (change)="addfiles($event,component.comp.name,component.comp.id,type =='C'?page.child.pagesID.id:page.parent.pagesID.id,parent.parent.id,component.comp.id,component.input.insertServ,component.input.insertParameter,parent.parent.comIP,parent.parent.comport)" />
       <div *ngIf="insertform[parent.parent.id].get(component.comp.name).invalid && insertform[parent.parent.id].get(component.comp.name).touched" class="invalid-feedback">
         <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.required" class="text-danger">{{component.comp.ccode}} is required</small>
         <small *ngIf="insertform[parent.parent.id].get(component.comp.name).errors?.pattern" class="text-danger">{{component.comp.ccode}} must enter correctly</small>
@@ -393,10 +393,14 @@
      
 
 <div class="card-footer" *ngIf="component.comp.ctype == 'button'">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><i class="{{component.comp.labelIcon === undefined ? 'fas fa-mouse' : component.comp.labelIcon }}"></i>
+      <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button>             
 
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button>             
-
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 0"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button>             
+      <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 0"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport)" >{{component.comp.ccode}}</button>             
+  
+    </span>
+  </div> 
 
   </div>
 
@@ -439,8 +443,7 @@
               [rowData]="rowData[parent.parent.id] | async"
               [columnDefs]="columnDefs[parent.parent.id]"
               rowSelection="single"
-              [gridOptions]="gridOptions[parent.parent.id]" 
-              [enableColResize]="true"
+              [gridOptions]="gridOptions[parent.parent.id]"
               >
           </ag-grid-angular>
         </div>

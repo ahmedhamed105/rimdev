@@ -51,7 +51,7 @@ language(code){
     signout(){
       this.cookieService.username('',GlobalConstants.rember);
       this.cookieService.usertokean('',GlobalConstants.rember);
-      this.router.navigate(['/login']);
+      window.location.replace("/login");
         }
 
 }
