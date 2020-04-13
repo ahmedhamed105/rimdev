@@ -56,12 +56,33 @@ export class LoginpageComponent implements OnInit,AfterViewInit {
  public passwords =[] ;
  public checkbox =[] ;
  passwordIsValid = false;
+ public background ;
 
 
  ngAfterViewInit(){
+console.log(this.background);
+  
 
-  this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-image', "url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')");
 }
+
+
+
+
+createImageFromBlob(image: Blob) {
+  let reader = new FileReader();
+  reader.addEventListener("load", () => {
+    this.background = reader.result;
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-image', "url('"+this.background+"')");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-repeat', "no-repeat");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-size', "cover");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-position', "center");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-attachment', "fixed");
+  }, false);
+  if (image) {
+    reader.readAsDataURL(image);
+  }
+}
+
   ngOnInit(){
 
 
@@ -107,6 +128,12 @@ export class LoginpageComponent implements OnInit,AfterViewInit {
        GlobalConstants.Devicetokean =this.pagetokean;
 
 
+       this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
+
+        this.createImageFromBlob(background);
+     
+
+  
     
     this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{
 
@@ -408,6 +435,7 @@ if(parent.parent.firstmethod === undefined){
     });
     
   });
+});
  
 if(this.isfile){
   this.fileupload.clearQueue();

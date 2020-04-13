@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -72,12 +74,34 @@ public class Pages implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
     
+    @Column(name = "image_flag", nullable = false)
+    private int imageFlag;
+    @JoinColumn(name = "files_upload_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private FilesUpload filesuploadID;
+    
 
     public Pages() {
     }
 
     public Pages(Integer id) {
         this.id = id;
+    }
+    
+    public int getImageFlag() {
+        return imageFlag;
+    }
+
+    public void setImageFlag(int imageFlag) {
+        this.imageFlag = imageFlag;
+    }
+
+    public FilesUpload getFilesuploadID() {
+        return filesuploadID;
+    }
+
+    public void setFilesuploadID(FilesUpload filesuploadID) {
+        this.filesuploadID = filesuploadID;
     }
     
     

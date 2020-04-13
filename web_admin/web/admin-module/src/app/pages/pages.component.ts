@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Renderer2, ElementRef } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
@@ -38,8 +38,9 @@ export class PagesComponent implements OnInit {
   public pagetokean ;
   public type ;
   public isfile;
+  public background ;
 
-  constructor(private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -54,6 +55,21 @@ export class PagesComponent implements OnInit {
  public dates =[] ;
  public passwords =[] ;
  passwordIsValid = false;
+
+ createImageFromBlob(image: Blob) {
+  let reader = new FileReader();
+  reader.addEventListener("load", () => {
+    this.background = reader.result;
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-image', "url('"+this.background+"')");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-repeat', "no-repeat");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-size', "cover");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-position', "center");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-attachment', "fixed");
+  }, false);
+  if (image) {
+    reader.readAsDataURL(image);
+  }
+}
 
  
 
@@ -151,6 +167,11 @@ export class PagesComponent implements OnInit {
      //  this.menus =data;
        this._MenushareService.updatemenu(data);
        });
+
+
+       this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
+
+        this.createImageFromBlob(background);
   
     this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{
 
@@ -453,6 +474,7 @@ if(parent.parent.firstmethod === undefined){
 
 
     });
+  });
     
   });
 

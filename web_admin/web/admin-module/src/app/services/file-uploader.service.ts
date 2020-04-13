@@ -149,17 +149,23 @@ export class FileUploaderService {
 
   private _downloadfile(queueObj: FileQueueObject,ip,port){
 
-    this.download(queueObj.fileid,ip,port).subscribe(data => saveAs(data, queueObj.filename));
+    this.download(queueObj,ip,port).subscribe(data => saveAs(data, queueObj.filename));
   }
   
 
-  public download(fileid,ip,port) {
+  public download(queueObj,ip,port) {
 
     var urlall=GlobalConstants.protocol+ip+":"+port+GlobalConstants.urldownload+"/"+GlobalConstants.language;
-    var url=urlall+"/"+fileid;
+    var url=urlall+"/"+queueObj.fileid;
 console.log(url);
-    return this.http.get(url, 
-      {responseType: 'blob'});
+let headers = new HttpHeaders({
+  'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
+  'Devicetokean':   queueObj.Devicetokean,
+  'pageid': queueObj.pagenumber });
+  let options = {  reportProgress: true ,responseType: 'blob' as  'blob',headers: headers };
+    return this.http.get(url, options);
   }
 
 

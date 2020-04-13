@@ -1,21 +1,27 @@
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper" *ngIf="page != undefined">
   <!-- Content Header (Page header) -->
-  <div class="content-header">
+  <section class="content-header" *ngIf="page != undefined">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Dashboard v3</h1>
-        </div><!-- /.col -->
+          {{page.parent.pmenu}} 
+          <small *ngIf="type === 'C' && page != undefined"> {{page.child.menuname}}</small>
+        </div>
         <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Dashboard v3</li>
+          <ol class="breadcrumb float-sm-right"  *ngIf="type === 'C' && page != undefined">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{page.parent.parentLink}}">{{page.parent.pmenu}}</a></li>
+            <li class="breadcrumb-item active" > {{page.child.menuname}}</li>
           </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
+          <ol class="breadcrumb float-sm-right"  *ngIf="type =='P' && page != undefined">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" > {{page.parent.pmenu}}</li>
+          </ol>
+        </div>
+      </div>
     </div><!-- /.container-fluid -->
-  </div>
+  </section>
   <!-- /.content-header -->
 
   <!-- Main content -->

@@ -1,10 +1,14 @@
 package com.rimdev.user.Services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
@@ -17,7 +21,6 @@ import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
-import com.rimdev.user.entities.User;
 import com.rimdev.user.ouputobject.Component_object;
 
 @Service
@@ -37,6 +40,11 @@ public class ComponentServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+
+	
+	
+	
 	
 	
 	public List<Component_object> getbyparent(int parentid,String langcode){

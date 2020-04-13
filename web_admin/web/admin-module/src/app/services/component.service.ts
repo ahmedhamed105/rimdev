@@ -29,6 +29,22 @@ export class ComponentService {
     }
 
 
+    getbackground(pageid: number,Devicetokean,pagenumber):any{
+
+      var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.background+GlobalConstants.language+"/";
+      url=url+pageid;
+      let headers = new HttpHeaders({
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
+        'Devicetokean':   Devicetokean,
+        'pageid': pagenumber
+       });
+        let options = { headers: headers,responseType: 'blob' as  'blob' };
+       return this._http.get(url, options);
+      }
+
+
     getmenu(type : String,menuid: String,username,usertokean):Observable<any>{
 
       var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";

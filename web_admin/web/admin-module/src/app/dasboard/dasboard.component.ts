@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { LocationServiceService } from '../services/location-service.service';
 import {  Router, ActivatedRoute } from '@angular/router';
 import { ComponentService } from '../services/component.service';
@@ -21,9 +21,26 @@ export class DasboardComponent implements OnInit {
   public type ;
   public pagenumber ;
   public pagetokean ;
+  public background ;
  
 
-  constructor(private _MenushareService:MenushareService,private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private locationService: LocationServiceService) { }
+  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private locationService: LocationServiceService) { }
+
+
+  createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+      this.background = reader.result;
+      this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-image', "url('"+this.background+"')");
+      this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-repeat', "no-repeat");
+      this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-size', "cover");
+      this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-position', "center");
+      this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-attachment', "fixed");
+    }, false);
+    if (image) {
+      reader.readAsDataURL(image);
+    }
+  }
 
   ngOnInit() {
 
@@ -79,6 +96,10 @@ var tokean = {
 
         GlobalConstants.Devicetokean =this.pagetokean;
 
+        this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
+
+          this.createImageFromBlob(background);
+
 
 var lang=this.cookieService.getCookie('language');
     if(lang === ""){
@@ -107,7 +128,7 @@ var lang=this.cookieService.getCookie('language');
 });
   });
 });
-    
+});   
   }
 
 
