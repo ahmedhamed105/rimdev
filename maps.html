@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Directions Service</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="window.open('https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=30.100427,31.340172&destinations=30.100427,32.340172&mode=driving&language=en-EN&key=AIzaSyDINgiwiJlHggo6ShzxaZ1VRhVhF0xOaEI');">Open distance</button>
+
+    <div id="map"></div>
+
+
+    <script>
+      function initMap() {
+        var fromlocation = {lat: 30.100427,  lng: 31.340172}
+        var tolocation = {lat: 30.100427,  lng: 32.340172}
+
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer();
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: fromlocation
+        });
+        directionsRenderer.setMap(map);
+
+        calculateAndDisplayRoute(directionsService, directionsRenderer,fromlocation,tolocation);
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsRenderer,from,to) {
+        directionsService.route(
+            {
+              origin: from,
+              destination: to,
+              travelMode: 'DRIVING',
+              optimizeWaypoints: true,
+              provideRouteAlternatives: true,
+              avoidFerries: true,
+              avoidHighways: true,
+              avoidTolls: true,
+            },
+            function(response, status) {
+              if (status === 'OK') {
+                directionsRenderer.setDirections(response);
+              } else {
+                window.alert('Directions request failed due to ' + status);
+              }
+            });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDINgiwiJlHggo6ShzxaZ1VRhVhF0xOaEI&callback=initMap">
+    </script>
+  </body>
+</html>
