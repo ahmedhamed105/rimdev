@@ -15,14 +15,12 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.user.Exception.DuplicationException;
-import com.rimdev.user.Exception.NoDataException;
-import com.rimdev.user.Exception.redirectlogin;
+import com.rimdev.user.Exception.NooauthException;
+import com.rimdev.user.Exception.PopupException;
+import com.rimdev.user.Exception.RedirectException;
 import com.rimdev.user.Repo.UserLoginRepo;
-import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.AES;
 import com.rimdev.user.Utils.Generate;
-import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
@@ -49,6 +47,9 @@ public class UserLoginServ {
 	@Autowired
 	TelephonesServ telephonesServ;
 	
+	@Autowired
+	ConfigurationServ configurationServ;
+	
 	
 
 public UserLogin getuserlogin(int id,String langcode) {
@@ -63,16 +64,16 @@ public UserLogin getuserlogin(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException(textConvertionServ.search("E108", langcode));
+				throw new NullPointerException(textConvertionServ.search("E108", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 }
 
@@ -87,16 +88,16 @@ public void checkuserlogin(int id,String langcode) {
 					}
 			else{
 				   // alternative processing....
-							throw new NoDataException(textConvertionServ.search("E108", langcode));
+							throw new NullPointerException(textConvertionServ.search("E108", langcode));
 				}
 				} catch (TransientDataAccessException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    } catch (RecoverableDataAccessException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    }catch (ScriptException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    }catch (NonTransientDataAccessException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    }
 		
 }
@@ -152,7 +153,7 @@ public List<UserLogin> getbyuser(int userid,String langcode) {
 		
 		if(loginlist == null || loginlist.size() <= 0) {
 			
-			throw new NoDataException(textConvertionServ.search("E109", langcode));
+			throw new NullPointerException(textConvertionServ.search("E109", langcode));
 
 		}
 		
@@ -187,7 +188,7 @@ public void check_username(String username,String langcode) {
 		 if (flowid.isPresent()){
 			  flowid.get();
 		
-				throw new DuplicationException(textConvertionServ.search("E105", langcode));
+				throw new PopupException(textConvertionServ.search("E105", langcode));
 
 					}
 			else{
@@ -223,7 +224,7 @@ public UserLogin getbyusername(String username,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("please enter correct username");
+				throw new NullPointerException("please enter correct username");
 
 				
 			}
@@ -254,8 +255,9 @@ public UserLogin getbyusernametokean(String username,String tokean,String langco
 
 					}
 			else{
-			   // alternative processing....
-				throw new redirectlogin("please enter correct Data");
+			   // your device is not authorised
+				
+				throw new NooauthException(textConvertionServ.search("E103", langcode),langcode);
 
 				
 			}
@@ -286,7 +288,7 @@ public UserLogin getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException(textConvertionServ.search("E109", langcode));
+				throw new NullPointerException(textConvertionServ.search("E109", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
@@ -331,7 +333,7 @@ public void save(UserLogin input,String langcode) {
 		
 	}else {
 		
-		throw new NoDataException(textConvertionServ.search("E107", langcode));
+		throw new NullPointerException(textConvertionServ.search("E107", langcode));
 	
 	}
 	
@@ -374,10 +376,15 @@ public Loginobject loginpage(Loginobject input,String langcode) {
 	
 	out.setUsername(input.getUsername());
 	UserLogin userlog=getusername(input.getUsername(), langcode,0);
+	
+	if(userlog == null) {
+		 throw new NullPointerException("Not permit to login");
+		
+	}
 
 	
 	if(! userlog.getUsertokean().equals(input.getTokean())) {
-		throw new redirectlogin("please enter good tokean");
+		throw new RedirectException("please enter good tokean");
 		
 	}
    
@@ -424,9 +431,11 @@ public static boolean isValid(String text,String pattern)
 
 public UserLogin getusername(String username,String langcode,int login){
 
+	configurationServ.getbykey("Login_email").getConfigboolean();
 	
 	UserLogin userlog = null;
-	if(isValid(username, emailRegex)) {
+	
+	if(isValid(username, emailRegex) && configurationServ.getbykey("Login_email").getConfigboolean() == 1) {
 	//	email ;
 		
 	Email em= emailServ.getbyemail(username, langcode);
@@ -440,25 +449,25 @@ public UserLogin getusername(String username,String langcode,int login){
 		} catch (Exception e) {
 			if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("please enter good username");
+			throw new NullPointerException("please enter good username");
 			else
-			throw new redirectlogin("please enter good username");
+			throw new RedirectException("please enter good username");
 		}
 	}else if(em.getDatastatusID().getDstatus().equals("Blocked"))  {
 		
 		if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("your email blocked");
+			throw new NullPointerException("your email blocked");
 			else
-			throw new redirectlogin("your email blocked");
+			throw new RedirectException("your email blocked");
 		
 	}else{
 		
 		if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("please check your email status");
+			throw new NullPointerException("please check your email status");
 			else
-			throw new redirectlogin("please check your email status");
+			throw new RedirectException("please check your email status");
 		
 	}
 	
@@ -468,22 +477,22 @@ public UserLogin getusername(String username,String langcode,int login){
 	
 	if(login == 1)
 		// TODO: handle exception
-		throw new NoDataException("user is blocked");
+		throw new NullPointerException("user is blocked");
 		else
-		throw new redirectlogin("user is blocked");
+		throw new RedirectException("user is blocked");
 	
 }else{
 	
 	if(login == 1)
 		// TODO: handle exception
-		throw new NoDataException("please confirm to Active your User");
+		throw new NullPointerException("please confirm to Active your User");
 		else
-		throw new redirectlogin("please confirm to Active your User");
+		throw new RedirectException("please confirm to Active your User");
 	
 }
 
 		
-	}else if(isValid(username, teleRegex)) {
+	}else if(isValid(username, teleRegex)  && configurationServ.getbykey("login_telephone").getConfigboolean() == 1) {
 		//tellphone
 		
 	Telephones tele=telephonesServ.getbytele(username, langcode);	
@@ -498,26 +507,26 @@ public UserLogin getusername(String username,String langcode,int login){
 	} catch (Exception e) {
 		if(login == 1)
 		// TODO: handle exception
-		throw new NoDataException("please enter good username");
+		throw new NullPointerException("please enter good username");
 		else
-		throw new redirectlogin("please enter good username");
+		throw new RedirectException("please enter good username");
 	}
 	
 	}else if(tele.getDatastatusID().getDstatus().equals("Blocked"))  {
 		
 		if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("your telephone blocked");
+			throw new NullPointerException("your telephone blocked");
 			else
-			throw new redirectlogin("your telephone blocked");
+			throw new RedirectException("your telephone blocked");
 		
 	}else{
 		
 		if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("please check your telephone status");
+			throw new NullPointerException("please check your telephone status");
 			else
-			throw new redirectlogin("please check your telephone status");
+			throw new RedirectException("please check your telephone status");
 		
 	}
 	
@@ -525,29 +534,33 @@ public UserLogin getusername(String username,String langcode,int login){
 		
 		if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("user is blocked");
+			throw new NullPointerException("user is blocked");
 			else
-			throw new redirectlogin("user is blocked");
+			throw new RedirectException("user is blocked");
 		
 	}else{
 		
 		if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("please confirm to Active your User");
+			throw new NullPointerException("please confirm to Active your User");
 			else
-			throw new redirectlogin("please confirm to Active your User");
+			throw new RedirectException("please confirm to Active your User");
 		
 	}	
 	
 	}else {
+		
+		if( configurationServ.getbykey("login_telephone").getConfigboolean() == 1)
+		{
+		//username login
 		try {
 		 userlog=getbyusername(username, langcode);
 		} catch (Exception e) {
 			if(login == 1)
 			// TODO: handle exception
-			throw new NoDataException("please enter good username");
+			throw new NullPointerException("please enter good username");
 			else
-			throw new redirectlogin("please enter good username");
+			throw new RedirectException("please enter good username");
 		}
 		
 		if(userlog.getUserID().getUserstatusID().getUserstatus().equals("Active")) {
@@ -557,18 +570,20 @@ public UserLogin getusername(String username,String langcode,int login){
 			
 			if(login == 1)
 				// TODO: handle exception
-				throw new NoDataException("user is blocked");
+				throw new NullPointerException("user is blocked");
 				else
-				throw new redirectlogin("user is blocked");
+				throw new RedirectException("user is blocked");
 			
 		}else{
 			
 			if(login == 1)
 				// TODO: handle exception
-				throw new NoDataException("please confirm to Active your User");
+				throw new NullPointerException("please confirm to Active your User");
 				else
-				throw new redirectlogin("please confirm to Active your User");
+				throw new RedirectException("please confirm to Active your User");
 			
+		}
+		
 		}
 		
 	}
@@ -584,11 +599,15 @@ public Loginobject login(Loginobject input,String langcode) {
 	
 	
 	Loginobject out=new Loginobject();
-	
-	
-	
+
 
 	UserLogin userlog = getusername(input.getUsername(), langcode,1);
+	
+	if(userlog == null) {
+		 throw new NullPointerException("Not permit to login");
+		
+	}
+	
 	
 	out.setUsername(userlog.getUsername());
 	
@@ -600,7 +619,7 @@ public Loginobject login(Loginobject input,String langcode) {
     
     if(! password.equals(origpassword)) {
     	
-    	 throw new NoDataException("please eneter correct password");
+    	 throw new NullPointerException("please eneter correct password");
     }
 
 
@@ -646,7 +665,7 @@ public String dencryp(String password) {
 	    
 	} catch (Exception e) {
 		// TODO: handle exception
-		throw new NoDataException("have a enc problem");
+		throw new NullPointerException("have a enc problem");
 	}
 
 	
@@ -659,7 +678,7 @@ public String getkey(String password) {
 	return password.substring(password.length() - 16);
 	} catch (Exception e) {
 		// TODO: handle exception
-		throw new NoDataException("have a enc problem");
+		throw new NullPointerException("have a enc problem");
 	}
 }
 
@@ -668,7 +687,7 @@ public String getencpassword(String password) {
 	return password.substring(0,password.length() - 16);
 	} catch (Exception e) {
 		// TODO: handle exception
-		throw new NoDataException("have a enc problem");
+		throw new NullPointerException("have a enc problem");
 	}
 }
 

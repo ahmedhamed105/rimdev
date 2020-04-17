@@ -3,6 +3,7 @@ package com.rimdev.user.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,7 @@ import com.maxmind.geoip2.model.CityResponse;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
 import com.rimdev.user.Services.DeviceipServ;
+import com.rimdev.user.Services.GroupPagesServ;
 import com.rimdev.user.Services.GroupWebServ;
 import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Services.UserLoginServ;
@@ -50,8 +52,6 @@ public class DeviceController {
 	@Autowired
 	DeviceServ deviceServ;
 	
-	@Autowired
-	DevicePageServ devicePageServ;
 	
 	@Autowired
 	PagesServ pagesServ;
@@ -64,6 +64,14 @@ public class DeviceController {
 	
 	@Autowired
 	GroupWebServ groupWebServ;
+	
+	@Autowired
+	GroupPagesServ GroupPagesServ;
+	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
+	
 	
 
 	
@@ -89,7 +97,7 @@ public class DeviceController {
 		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 
 		  
-		  return new ResponseEntity<List<pagesdevice>>(pagesServ.getpagesbydevice(deviceid,langcode), HttpStatus.OK);
+		  return new ResponseEntity<List<pagesdevice>>(devicePageServ.getpagesbydevice(deviceid,langcode), HttpStatus.OK);
 	  }
 	  
 	  
@@ -104,9 +112,9 @@ public @ResponseBody ResponseEntity<List<Device>> saveorupdate(HttpServletReques
 	Device out=null;
 	try {
 
-		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
+		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser(), langcode);
 		
-		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser()));
+		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser(), langcode));
 
 
 		//System.out.println(dev.getDevicename());
@@ -198,56 +206,54 @@ public Deviceip getip(String ip) {
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<Device> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) 
 		throws IOException, GeoIp2Exception {
-  // This returns a JSON or XML with the users
-//System.out.println(username + " "+usertokean);
-//System.out.println(request.toString());
+
 
 input.setDeviceip(request.getRemoteAddr());
 
 Deviceip geo=getip(request.getRemoteAddr());
 
 
-
 UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 
 
-	System.out.println("inserted page "+input.getDevicecode());
+
 	
-	Device out=null;
+Device out=null;
+DevicePage  out1=null;
 	try {
 		
 	
-		Device dev=deviceServ.checkdevicetwo(input.getDevicecode());
+		Device dev=deviceServ.checkdevicetwo(input.getDevicecode(),langcode);
 		if(dev == null) {
-	     dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser());
+	     dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser(),langcode);
 		}
 		
 		//System.out.println(dev.getDevicename());
-		if(dev != null ) {	
-			
-			input.setLoginFail(dev.getLoginFail());
-				
-			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
-		
-			  
-			  out=deviceServ.updateDP(dev,username, usertokean,langcode);
-	
-
+		if(dev != null ) {				
+			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));		  
+			  out1=deviceServ.updateDP(dev,username, usertokean,langcode);
 			} else {
-				out=deviceServ.SaveDP(input,username, usertokean,langcode);
+				  out1=deviceServ.SaveDP(input,username, usertokean,langcode);
+			
 			}
 		
 	} catch (Exception e) {
 		// TODO: handle exception
+		  out1=deviceServ.SaveDP(input,username, usertokean,langcode);
 		
-		out=deviceServ.SaveDP(input,username, usertokean,langcode);
 		
 
 	}
 	
-
+	out =out1.getDeviceId();
 	geo.setDeviceId(out);
 	deviceipServ.savebyip(geo, langcode);
+	
+	
+	GroupPagesServ.check_page(out1, langcode);
+	
+	
+	
 	
 	return new ResponseEntity<Device>(out, HttpStatus.OK);
 

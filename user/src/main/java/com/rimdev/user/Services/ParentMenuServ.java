@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.MenuDisplayRepo;
 import com.rimdev.user.Repo.ParentMenuRepo;
 import com.rimdev.user.entities.DevicePage;
@@ -44,7 +44,7 @@ public class ParentMenuServ {
 
 		if(com == null || com.size() <= 0) {
 			
-			throw new NoDataException(textConvertionServ.search("E109", langcode));
+			throw new PopupException(textConvertionServ.search("E109", langcode));
 			
 		}
 		

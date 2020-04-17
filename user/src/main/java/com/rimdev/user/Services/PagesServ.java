@@ -1,6 +1,5 @@
 package com.rimdev.user.Services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -11,17 +10,10 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.DuplicationException;
-import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.DevicePageRepo;
 import com.rimdev.user.Repo.PagesRepo;
-import com.rimdev.user.Utils.Generate;
-import com.rimdev.user.entities.Device;
-import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Pages;
-import com.rimdev.user.entities.UserLogin;
-import com.rimdev.user.ouputobject.pagesdevice;
 
 @Service
 public class PagesServ {
@@ -67,7 +59,7 @@ public void check_page(String pagename,String langcode) {
 		 if (flowid.isPresent()){
 			 flowid.get();
 		
-			throw new DuplicationException(textConvertionServ.search("E105", langcode));
+			throw new PopupException(textConvertionServ.search("E105", langcode));
 					}
 			else{
 			   // alternative processing....
@@ -104,7 +96,7 @@ public Pages getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException(textConvertionServ.search("E107", langcode));
+				throw new NullPointerException(textConvertionServ.search("E107", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
@@ -145,7 +137,7 @@ public void save(Pages input,String langcode) {
 		
 	}else {
 		
-		throw new NoDataException(textConvertionServ.search("E107", langcode));
+		throw new NullPointerException(textConvertionServ.search("E107", langcode));
 	
 	}
 
@@ -201,74 +193,6 @@ public void delete(Pages input,String langcode) {
 
 	
 
-	
-public List<pagesdevice> getpagesbydevice(int id,String langcode) {
-	List<DevicePage> p=new ArrayList<DevicePage>();
-	try {
-		 p= (List<DevicePage>)devicePageRepo.findbydeviceid(id);
-	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	} catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	}catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	}catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	}
-	
-	
-	if(p.size() <= 0)
-	{
-		throw new NoDataException("no pages");
-		
-	}
-	
-	
-	
-	List<pagesdevice> c= new ArrayList<pagesdevice>();
-	for(DevicePage dev:p) {
-		pagesdevice pa=new pagesdevice();
-		pa.setPage_name(dev.getPagesID().getPagename());
-		pa.setPage_Date(dev.getVisittime());
-		c.add(pa);
-		
-	}
-		
-		return c;
-		
-	}
-
-
-public String savedevpag(Device dev,Pages pa,String username,String tokean,String langcode) {
-	try {
-		UserLogin userlogin = null;
-
-	  userlogin =   userLoginServ.getbyusernametokean(username, tokean, langcode);	
-
-
-		Date visittime = new Date();
-		DevicePage a=new DevicePage();
-		a.setDeviceId(dev);
-		a.setPagesID(pa);
-		a.setVisittime(visittime);
-		a.setUserloginID(userlogin);
-		Generate gen=new Generate();
-		a.setPageTokean(gen.token(30));
-		devicePageRepo.save(a);
-		return a.getPageTokean();
-	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	} catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	}catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	}catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
-	}
-
-	
-}
-
 
 public Pages getbyid(int id) {
 	
@@ -283,11 +207,11 @@ public Pages getbyid(int id) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException("no pages");
+				throw new NullPointerException("no pages");
 			}
 	} catch (Exception e) {
 		// TODO: handle exception
-		throw new NoDataException("no pages");
+		throw new NullPointerException("no pages");
 	}
 	
 	

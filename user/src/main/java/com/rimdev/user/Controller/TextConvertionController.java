@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.LanguageMapServ;
 import com.rimdev.user.Services.TextConvertionServ;
@@ -117,7 +115,7 @@ public class TextConvertionController {
 		//	 System.out.println("enter 2");
 
 			if(langmap == null ) {
-			throw new NoDataException("no data found");
+			throw new NullPointerException("no data found");
 			
 			}else {
 		//		System.out.println("enter 4");
@@ -132,7 +130,7 @@ public class TextConvertionController {
 			// TODO: handle exception
 			
 			
-			throw new NoDataException("no data found");
+			throw new NullPointerException("no data found");
 		}
 
 			return getAllUsers(langcode);

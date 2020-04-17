@@ -14,8 +14,6 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.ComponentRepo;
 import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
@@ -57,7 +55,7 @@ public class ComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new NoDataException(textConvertionServ.search("E109", langcode));
+				throw new NullPointerException(textConvertionServ.search("E109", langcode));
 				
 			}
 			
@@ -110,7 +108,7 @@ public class ComponentServ {
 		
 		if(coms == null || coms.size() <= 0) {
 			
-			throw new NoDataException(textConvertionServ.search("E109", langcode));
+			throw new NullPointerException(textConvertionServ.search("E109", langcode));
 			
 		}
 		
@@ -133,7 +131,7 @@ public class ComponentServ {
 						}
 				else{
 				   // alternative processing....
-					throw new NoDataException(textConvertionServ.search("E108", langcode));
+					throw new NullPointerException(textConvertionServ.search("E108", langcode));
 				}
 		} catch (TransientDataAccessException  se) {
 			throw new NullPointerException(textConvertionServ.search("E104", langcode));

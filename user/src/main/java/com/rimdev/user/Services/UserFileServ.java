@@ -10,8 +10,6 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Component;
@@ -114,7 +112,7 @@ public UserFile getbyall(int files_upload_ID,int User_ID,int Component_ID,String
 			else{
 			   // alternative processing....
 				
-	   throw new NoDataException("file not found");
+	   throw new NullPointerException("file not found");
 			}
 	}catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));

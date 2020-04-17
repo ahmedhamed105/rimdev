@@ -11,7 +11,7 @@ import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.ParentComponentRepo;
 import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
@@ -52,7 +52,7 @@ public class ParentComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new NoDataException(textConvertionServ.search("E109", langcode));
+				throw new PopupException(textConvertionServ.search("E109", langcode));
 				
 			}
 			
@@ -109,7 +109,7 @@ public class ParentComponentServ {
 		
 		if(coms == null || coms.size() <= 0) {
 			
-			throw new NoDataException(textConvertionServ.search("E109", langcode));
+			throw new PopupException(textConvertionServ.search("E109", langcode));
 			
 		}
 		

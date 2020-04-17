@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rimdev.user.Exception.redirectlogin;
+import com.rimdev.user.Exception.BlockedException;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
 import com.rimdev.user.Services.GroupPagesServ;
@@ -59,6 +59,8 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
 
 	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 	  
+	  
+	  
 	//  System.out.println("begin 1");
 	  
 	  List<String> paramter =new ArrayList<String>();
@@ -69,17 +71,12 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
 	  groupWebServ.checkpriviledge(request, a,paramter,values);
 	  
 	   GroupPagesServ.check_page(a, langcode);
-			
-		  
-	  
-	  
-	  
-	  
+
 	  
 	  if(a.getDeviceId().getLoginFail() >= 3 ) {
 			deviceServ.blockdevice(a.getDeviceId());
 			
-			throw new redirectlogin("blocked");
+			throw new BlockedException("blocked");
 	  }
 
 	//  System.out.println(request.getRequestURI());

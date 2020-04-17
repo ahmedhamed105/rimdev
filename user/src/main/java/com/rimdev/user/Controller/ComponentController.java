@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.ComponentRepo;
 import com.rimdev.user.Services.ComponentServ;
 import com.rimdev.user.Services.DevicePageServ;

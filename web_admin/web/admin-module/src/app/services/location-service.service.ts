@@ -160,7 +160,7 @@ export class LocationServiceService {
 
 
 
-async  insert(usertokean,username) : Promise<devicetoken>{
+async  insert(usertokean,username) : Promise<any>{
   
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceinsert+"/"+GlobalConstants.language;
   let headers = new HttpHeaders({
@@ -170,7 +170,7 @@ async  insert(usertokean,username) : Promise<devicetoken>{
     'username':   username,
     'usertokean': usertokean });
 let options = { headers: headers };
-  return await   this._http.post<devicetoken>(urlall,this.device,options).toPromise();
+  return await   this._http.post<any>(urlall,this.device,options).toPromise();
   
 }
 

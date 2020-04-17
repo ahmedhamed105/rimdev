@@ -9,7 +9,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.user.Exception.redirectlogin;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.GroupPagesRepo;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.GroupPages;
@@ -57,15 +57,16 @@ public class GroupPagesServ {
 		
 		
 		GroupPriviledge group=devpage.getUserloginID().getGrouppriviledgeID();
+		
 		  if(group.getGroupstatusID().getId() == 1) {
 			  List<GroupPages> parents=  getbygroup(group.getId(), langcode);
 			  
 			  boolean outcomp=  pagesPriviledgeServ.validpage(devpage.getPagesID(), parents,devpage);
 			  if(!outcomp) {
-					 throw new redirectlogin("no Priviledge to enter");	
+					 throw new PopupException("no Priviledge to enter");	
 				}
 		  }else {
-			  throw new redirectlogin("no Priviledge to enter ");
+			  throw new PopupException("no Priviledge to enter ");
 		  }
 		
 	
@@ -83,7 +84,7 @@ public class GroupPagesServ {
 			  boolean outcomp=  pagesPriviledgeServ.validpage(page, parents,devpage);
 				return outcomp;
 		  }else {
-			  throw new redirectlogin("no Priviledge to enter ahmed");
+			  throw new PopupException("no Priviledge to enter ahmed");
 		  }
 		
 	

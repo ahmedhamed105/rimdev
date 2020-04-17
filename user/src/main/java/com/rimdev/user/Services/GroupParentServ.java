@@ -9,7 +9,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.user.Exception.redirectlogin;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.GroupParentRepo;
 import com.rimdev.user.Repo.ParentPriviledgeRepo;
 import com.rimdev.user.entities.DevicePage;
@@ -58,7 +58,7 @@ public class GroupParentServ {
 			  List<parent_comp> outcomp=  parentPriviledgeServ.removeparentnoprivil(comp, parents,devpage);
 				return outcomp;
 		  }else {
-			  throw new redirectlogin("no Priviledge to enter ahmed");
+			  throw new PopupException("no Priviledge to enter ahmed");
 		  }
 		
 	

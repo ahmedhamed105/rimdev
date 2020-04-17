@@ -11,9 +11,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.rimdev.user.Exception.DuplicationException;
-import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
@@ -56,13 +54,13 @@ public List<User> getall(String langcode) {
 	try {
 		return (List<User>) userRepo.findAll();
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	}
 
@@ -79,16 +77,16 @@ public void checkuser(int id,String langcode) {
 					}
 			else{
 				   // alternative processing....
-							throw new NoDataException(textConvertionServ.search("E108", langcode));
+							throw new NullPointerException(textConvertionServ.search("E108", langcode));
 				}
 				} catch (TransientDataAccessException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    } catch (RecoverableDataAccessException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    }catch (ScriptException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    }catch (NonTransientDataAccessException  se) {
-					throw new NoDataException(textConvertionServ.search("E104", langcode));
+					throw new NullPointerException(textConvertionServ.search("E104", langcode));
 			    }
 		
 }
@@ -106,16 +104,16 @@ public User getuser(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException(textConvertionServ.search("E108", langcode));
+				throw new NullPointerException(textConvertionServ.search("E108", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 }
 
@@ -136,13 +134,13 @@ public User getuserwithout(int id,String langcode) {
 				return null;
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 }
 
@@ -154,20 +152,20 @@ public void check_user(String firstname,String middlename,String lastname,String
 		 if (flowid.isPresent()){
 			 User  ouput = flowid.get();
 		
-				throw new DuplicationException(textConvertionServ.search("E105", langcode));
+				throw new PopupException(textConvertionServ.search("E105", langcode));
 
 					}
 			else{
 			   // alternative processing....
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 		
 }
@@ -188,13 +186,13 @@ public User Save(User input,String langcode) {
 		return ouput;
 
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }			
 		
 	}
@@ -208,13 +206,13 @@ public User update(User input,String langcode) {
 		User ouput =userRepo.save(input);	
 		return ouput;
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }		
 		
 	}
@@ -234,16 +232,16 @@ public FilesUpload savefile(threevalues input,String langcode) {
 		
 		
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (Exception e) {
 		// TODO: handle exception
-    	throw new NoDataException(textConvertionServ.search("E104", langcode));
+    	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	}
 	
 	
@@ -263,13 +261,13 @@ public FilesUpload deletefile(String fileid,String object, String componentid,St
 		userFileServ.delete(user, file,com, langcode);
 		
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	return file;
@@ -287,13 +285,13 @@ public List<UserFile> getfile(String userid,String langcode) {
 	return	userFileServ.getfilebyuser(user, langcode);
 		
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	
 	

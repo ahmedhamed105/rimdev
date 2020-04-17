@@ -10,14 +10,11 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Repository;
-
-import com.rimdev.user.Exception.redirectlogin;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.GroupWebRepo;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.GroupPriviledge;
 import com.rimdev.user.entities.GroupWeb;
-
-import javassist.NotFoundException;
 
 @Repository
 public class GroupWebServ {
@@ -76,11 +73,11 @@ public class GroupWebServ {
 				
 				if(!validsd) {
 					
-					 throw new redirectlogin("no Priviledge to enter "+URL);	
+					 throw new PopupException("no Priviledge to enter "+URL);	
 				}
 				 
 			  }else {
-				  throw new redirectlogin("no Priviledge to enter ahmed");
+				  throw new PopupException("no Priviledge to enter ahmed");
 			  }
 			
 		} catch (Exception e) {

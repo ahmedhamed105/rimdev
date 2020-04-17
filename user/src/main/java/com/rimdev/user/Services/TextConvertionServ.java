@@ -11,8 +11,6 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.TextConvertionRepo;
 import com.rimdev.user.entities.LanguageMap;
 import com.rimdev.user.entities.Languages;
@@ -178,7 +176,7 @@ public void Save(lang_object input,String langcode) {
 	
 	public String search(String code,String langcode){
 		if(code == null || langcode == null) {	
-			 new NoDataException("please enter code");
+			 new NullPointerException("please enter code");
 		}
 		System.out.println(code + " "+langcode);
 		Languages lan= languagesServ.getbycode(langcode,langcode);
@@ -228,7 +226,7 @@ public void Save(lang_object input,String langcode) {
 						}
 				else{
 				   // alternative processing....
-					throw new NoDataException("no TextConvertion found in "+ this.getClass().getName());
+					throw new NullPointerException("no TextConvertion found in "+ this.getClass().getName());
 				}
 		} catch (TransientDataAccessException  se) {
 			throw new NullPointerException(search("E104", langcode));

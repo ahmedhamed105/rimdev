@@ -153,7 +153,8 @@ export class PagesComponent implements OnInit {
       this.device =this.locationService.mydevice;
       console.log(this.device.devicetokean);
 
-      this.pagetokean =this.device.devicetokean;
+
+      this.pagetokean =this.device.deviceId.devicetokean;
 
       GlobalConstants.Devicetokean =this.pagetokean;
       

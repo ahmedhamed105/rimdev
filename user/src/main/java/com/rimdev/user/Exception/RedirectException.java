@@ -3,23 +3,19 @@ package com.rimdev.user.Exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class NoDataException extends RuntimeException{
-
+@ResponseStatus(value = HttpStatus.GONE)
+public class RedirectException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
-	public NoDataException() {
+	public RedirectException() {
 	        super();
 	    }
-	    public NoDataException(String message, Throwable cause) {
+	    public RedirectException(String message, Throwable cause) {
 	        super(message, cause);
 	    }
-	    public NoDataException(String message) {
+	    public RedirectException(String message) {
 	        super(message);
 	    }
-	    public NoDataException(Throwable cause) {
+	    public RedirectException(Throwable cause) {
 	        super(cause);
 	    }
-	
-	
-
 }

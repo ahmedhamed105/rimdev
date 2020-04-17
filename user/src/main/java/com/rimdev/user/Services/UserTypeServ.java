@@ -10,8 +10,6 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Repo.UserTypeRepo;
 import com.rimdev.user.entities.Area;
@@ -40,7 +38,7 @@ List<UserType> teles;
 		
 		teles = (List<UserType>) userTypeRepo.findAll();
 
-	//    throw new NoDataException("no data found in users");
+	//    throw new NullPointerException("no data found in users");
 
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
@@ -54,7 +52,7 @@ List<UserType> teles;
 	
 	if(teles == null || teles.size() <= 0) {
 		
-		throw new NoDataException(textConvertionServ.search("E108", langcode));
+		throw new NullPointerException(textConvertionServ.search("E108", langcode));
 		
 	}
 	

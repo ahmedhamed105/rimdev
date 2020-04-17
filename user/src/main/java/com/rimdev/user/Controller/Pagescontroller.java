@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Utils.ObjectUtils;
@@ -96,7 +94,7 @@ public @ResponseBody ResponseEntity<List<Pages>> delete(@RequestHeader("Deviceto
 
 	}else {
 		
-		throw new NoDataException("ID not Found or user id not found");
+		throw new NullPointerException("ID not Found or user id not found");
 
 	}
 		

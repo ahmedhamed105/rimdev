@@ -12,12 +12,11 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.user.Exception.NoDataException;
-import com.rimdev.user.Exception.redirectlogin;
 import com.rimdev.user.Repo.DeviceRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DeviceOs;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.DeviceType;
 import com.rimdev.user.entities.Deviceip;
 import com.rimdev.user.entities.Pages;
@@ -43,6 +42,8 @@ public class DeviceServ {
 	DeviceStatusServ deviceStatusServ;
 	
 	
+	@Autowired
+	ConfigurationServ configurationServ;
 	
 	@Autowired
 	LoginTypeServ loginTypeServ;
@@ -51,6 +52,10 @@ public class DeviceServ {
 	@Autowired
 	TextConvertionServ textConvertionServ;
 	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
+
 	
 	public void addfailedlogin(Device dev){
 		Date date = new Date();
@@ -88,17 +93,17 @@ public List<Device> getall(String langcode) {
 	try {
 		return (List<Device>) deviceRepo.findAll();
 } catch (TransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }
 		
 	}
-public Device checkdevicetwo(String Device_code) {
+public Device checkdevicetwo(String Device_code,String langcode) {
 	try {
 		Optional<Device> flowid =deviceRepo.findbydevicecode(Device_code);
 		 
@@ -111,22 +116,32 @@ public Device checkdevicetwo(String Device_code) {
 			   // alternative processing....
 				return null;
 			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
 	
 }
 
-public Device checkdevice(String ip,DeviceOs os,DeviceType type,String browser) {
+public Device checkdevice(String ip,DeviceOs os,DeviceType type,String browser,String langcode) {
 	try {
 		List<Device> a= (List<Device>) deviceRepo.findbyiposbrowser( ip, os, type, browser);
 	    return a.get(0);
 	
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
-	}
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
 	
 	
 }
@@ -166,13 +181,13 @@ public Device Save(Device input,String langcode) {
 		
 		return ouput;
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }			
 		
 	}
@@ -195,13 +210,13 @@ public Device update(Device input,String langcode) {
 	
 	return ouput;
 } catch (TransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }	
 }
 
@@ -210,7 +225,7 @@ public Device update(Device input,String langcode) {
 
 
 
-public Device SaveDP(Device input,String username,String tokean,String langcode) {
+public DevicePage SaveDP(Device input,String username,String tokean,String langcode) {
 		
 	try {	
 		
@@ -239,33 +254,37 @@ public Device SaveDP(Device input,String username,String tokean,String langcode)
         // convert date to calendar
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-		input.setTokeantime(c.getTime());
+        if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
+         c.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+         c.add(Calendar.MINUTE, configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+        }else {      	
+      	  c.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+        }
+          input.setTokeantime(c.getTime());
 		input.setDevicecreate(date);
 		input.setDevicemodify(date);
 		Device ouput =deviceRepo.save(input);	
 		
-
 		
 		Pages p= pagesServ.getbyid(input.getPage());
-		String pagetokean=pagesServ.savedevpag(ouput, p,username, tokean,langcode);
+		DevicePage out=devicePageServ.savedevpag(ouput, p,username, tokean,langcode);
 		
-		ouput.setDevicetokean(pagetokean);
+	
 		
-		return ouput;
+		return out;
 	} catch (TransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }			
 		
 	}
 
-public Device updateDP(Device input,String username,String tokean,String langcode) {
+public DevicePage updateDP(Device input,String username,String tokean,String langcode) {
 	
 	
 	try {
@@ -275,26 +294,30 @@ public Device updateDP(Device input,String username,String tokean,String langcod
 	Date date = new Date();
     Calendar c = Calendar.getInstance();
     c.setTime(date);
-    c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+    if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
+        c.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+        c.add(Calendar.MINUTE, configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+       }else {      	
+     	  c.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+       }
 	input.setTokeantime(c.getTime());
 	input.setDevicemodify(date);
 	Device ouput =deviceRepo.save(input);	
 
 	
 	Pages p= pagesServ.getbyid(input.getPage());
-	String pagetokean=pagesServ.savedevpag(ouput, p,username, tokean,langcode);
+	DevicePage out=devicePageServ.savedevpag(ouput, p,username, tokean,langcode);
 	
-	ouput.setDevicetokean(pagetokean);
-	
-	return ouput;
+
+	return out;
 } catch (TransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }	
 }
 

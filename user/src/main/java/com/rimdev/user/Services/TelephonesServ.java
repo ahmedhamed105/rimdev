@@ -14,8 +14,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.user.Exception.DuplicationException;
-import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.TelephonesRepo;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
@@ -47,7 +46,7 @@ public List<Telephones> getall(String langcode) {
 		
 		teles = (List<Telephones>) telephonesRepo.findAll();
 
-	//    throw new NoDataException("no data found in users");
+	//    throw new NullPointerException("no data found in users");
 
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
@@ -61,7 +60,7 @@ public List<Telephones> getall(String langcode) {
 	
 	if(teles == null || teles.size() <= 0) {
 		
-		throw new NoDataException(textConvertionServ.search("E108", langcode));
+		throw new NullPointerException(textConvertionServ.search("E108", langcode));
 		
 	}
 	
@@ -81,7 +80,7 @@ public void check_tele(String tele,String langcode) {
 		 if (flowid.isPresent()){
 			 flowid.get();
 		
-			throw new DuplicationException(textConvertionServ.search("E105", langcode));
+			throw new PopupException(textConvertionServ.search("E105", langcode));
 					}
 			else{
 			   // alternative processing....
@@ -117,7 +116,7 @@ public Telephones getbytele(String tele,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException(textConvertionServ.search("E107", langcode));
+				throw new NullPointerException(textConvertionServ.search("E107", langcode));
 
 
 			}
@@ -150,7 +149,7 @@ public Telephones getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NoDataException(textConvertionServ.search("E107", langcode));
+				throw new NullPointerException(textConvertionServ.search("E107", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
@@ -187,7 +186,7 @@ public List<Telephones> getbyuserlogin(int userid,String langcode) {
 	if(cu == null || cu.size() <= 0) {
 		
 		userServ.checkuser(userid, langcode);	
-		throw new NoDataException(textConvertionServ.search("E107", langcode));
+		throw new NullPointerException(textConvertionServ.search("E107", langcode));
 
 	}
 	
@@ -257,7 +256,7 @@ public void save(Telephones input,String langcode) {
 		
 	}else {
 		
-		throw new NoDataException(textConvertionServ.search("E107", langcode));
+		throw new NullPointerException(textConvertionServ.search("E107", langcode));
 	
 	}
 

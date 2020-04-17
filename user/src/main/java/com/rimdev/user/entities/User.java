@@ -84,9 +84,9 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date usercreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<Adress> adressCollection;
+    private Collection<Configuration> configurationCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<UserLog> userLogCollection;
+    private Collection<Adress> adressCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<UserLogin> userLoginCollection;
     @JoinColumn(name = "User_type_ID", referencedColumnName = "ID", nullable = false)
@@ -97,6 +97,7 @@ public class User implements Serializable {
     @JoinColumn(name = "User_status_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private UserStatus userstatusID;
+    
 
     public User() {
     }
@@ -179,6 +180,16 @@ public class User implements Serializable {
 	public void setiDnumber(String iDnumber) {
 		this.iDnumber = iDnumber;
 	}
+	
+	@XmlTransient
+	@JsonIgnore
+	public Collection<Configuration> getConfigurationCollection() {
+		return configurationCollection;
+	}
+
+	public void setConfigurationCollection(Collection<Configuration> configurationCollection) {
+		this.configurationCollection = configurationCollection;
+	}
 
 	@XmlTransient
     @JsonIgnore
@@ -209,18 +220,6 @@ public class User implements Serializable {
 
     public void setAdressCollection(Collection<Adress> adressCollection) {
         this.adressCollection = adressCollection;
-    }
-
-
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<UserLog> getUserLogCollection() {
-        return userLogCollection;
-    }
-
-    public void setUserLogCollection(Collection<UserLog> userLogCollection) {
-        this.userLogCollection = userLogCollection;
     }
 
     @XmlTransient

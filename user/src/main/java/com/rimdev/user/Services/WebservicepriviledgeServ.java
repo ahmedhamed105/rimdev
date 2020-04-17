@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.WebservicePriviledgeRepo;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.GroupWeb;

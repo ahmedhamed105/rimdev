@@ -9,8 +9,6 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.DeviceTypeRepo;
 import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.DeviceType;
@@ -30,13 +28,13 @@ public List<DeviceType> getall(String langcode) {
 	try {
 		return (List<DeviceType>) deviceTypeRepo.findAll();
 } catch (TransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }
 		
 	}

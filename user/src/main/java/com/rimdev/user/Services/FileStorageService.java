@@ -34,8 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.rimdev.user.Config.FileStorageProperties;
-import com.rimdev.user.Exception.DuplicationException;
-import com.rimdev.user.Exception.NoDataException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.FileStatusRepo;
 import com.rimdev.user.Repo.FilesUploadRepo;
 import com.rimdev.user.Repo.UserFileRepo;
@@ -83,7 +82,7 @@ public class FileStorageService {
 	        try {
 	            Files.createDirectories(this.fileStorageLocation);
 	        } catch (Exception ex) {
-	            throw new NoDataException("Could not create the directory where the uploaded files will be stored.", ex);
+	            throw new PopupException("Could not create the directory where the uploaded files will be stored.", ex);
 	        }
 	    }
 	    
@@ -215,7 +214,7 @@ public class FileStorageService {
 		    	
 		    	if(ind) {
 		    		//System.out.println("duplicate");
-		    		throw new DuplicationException(textConvertionServ.search("E105", langcode));
+		    		throw new PopupException(textConvertionServ.search("E105", langcode));
 		    	}
 
 		//  System.out.println(filetemp);
@@ -243,12 +242,12 @@ public class FileStorageService {
 	    			else{
 	    			   // alternative processing....
 	    				
-	      throw new NoDataException("Error no file status");
+	      throw new NullPointerException("Error no file status");
 
 	    			}
 	    	} catch (Exception e) {
 	    		// TODO: handle exception
-	  	      throw new NoDataException("Error ",e);
+	  	      throw new PopupException("Error ",e);
 	
 	    		
 	    	}
@@ -294,11 +293,11 @@ public class FileStorageService {
 	                return resource;
 	            } else {
 	            
-	                throw new NoDataException("File not found " + fileid);
+	                throw new NullPointerException("File not found " + fileid);
 	            }
 	        } catch (MalformedURLException ex) {
 	        	ex.printStackTrace();
-	            throw new NoDataException("File not found " + fileid, ex);
+	            throw new PopupException("File not found " + fileid, ex);
 	        }
 	    }
 	    
@@ -321,12 +320,12 @@ public class FileStorageService {
 		    			else{
 		    			   // alternative processing....
 		    				
-		      throw new NoDataException("Error no file status");
+		      throw new NullPointerException("Error no file status");
 
 		    			}
 		    	} catch (Exception e) {
 		    		// TODO: handle exception
-		  	      throw new NoDataException("Error ",e);
+		  	      throw new PopupException("Error ",e);
 		
 		    		
 		    	}
@@ -337,7 +336,7 @@ public class FileStorageService {
 	    		filesUploadRepo.save(filedel);
 			} catch (Exception e) {
 				// TODO: handle exception
-			    throw new NoDataException("Error ",e);
+			    throw new PopupException("Error ",e);
 			}
       
 	       
@@ -465,7 +464,7 @@ public class FileStorageService {
 	    			else{
 	    			   // alternative processing....
 	    				
-			   throw new NoDataException("file not found");
+			   throw new NullPointerException("file not found");
 	    			}
 	    	}catch (TransientDataAccessException  se) {
 				throw new NullPointerException(textConvertionServ.search("E104", langcode));

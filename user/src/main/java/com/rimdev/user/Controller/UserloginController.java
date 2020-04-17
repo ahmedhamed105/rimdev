@@ -68,6 +68,7 @@ public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate(HttpServletReq
   // This returns a JSON or XML with the users
 
 	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+
 	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  paramter.add("langcode");

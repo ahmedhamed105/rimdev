@@ -121,6 +121,7 @@ createImageFromBlob(image: Blob) {
 
     this.locationService.all_info(this.pagenumber,'0','public').then(res => {
       this.device =this.locationService.mydevice;
+
        console.log(this.device.devicetokean);
 
        this.pagetokean =this.device.devicetokean;

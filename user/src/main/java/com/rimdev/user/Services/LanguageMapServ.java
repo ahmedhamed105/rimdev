@@ -10,8 +10,6 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-
-import com.rimdev.user.Exception.NoDataException;
 import com.rimdev.user.Repo.LanguageMapRepo;
 import com.rimdev.user.entities.LanguageMap;
 import com.rimdev.user.entities.Languages;

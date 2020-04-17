@@ -92,7 +92,8 @@ var tokean = {
       this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,GlobalConstants.USERNAME).then(res => {
         this.device =this.locationService.mydevice;
         console.log(this.device.devicetokean);
-        this.pagetokean=this.device.devicetokean;
+  
+        this.pagetokean =this.device.deviceId.devicetokean;
 
         GlobalConstants.Devicetokean =this.pagetokean;
 
