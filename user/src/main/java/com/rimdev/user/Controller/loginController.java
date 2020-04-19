@@ -70,7 +70,7 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
 	  
 	  groupWebServ.checkpriviledge(request, a,paramter,values);
 	  
-	   GroupPagesServ.check_page(a, langcode);
+	   GroupPagesServ.check_page(request,a, langcode);
 
 	  
 	  if(a.getDeviceId().getLoginFail() >= 3 ) {

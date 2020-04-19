@@ -3,8 +3,8 @@ package com.rimdev.user.Repo;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.rimdev.user.entities.UserLog;
+import com.rimdev.user.entities.LogWarning;
 @Repository
-public interface UserLogRepo extends CrudRepository<UserLog, Integer>{
+public interface LogWarningRepo  extends CrudRepository<LogWarning, Integer>{
 
 }

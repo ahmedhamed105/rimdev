@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
@@ -15,12 +17,14 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.BlockedException;
 import com.rimdev.user.Exception.NooauthException;
 import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Exception.RedirectException;
 import com.rimdev.user.Repo.UserLoginRepo;
 import com.rimdev.user.Utils.AES;
 import com.rimdev.user.Utils.Generate;
+import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
@@ -49,6 +53,9 @@ public class UserLoginServ {
 	
 	@Autowired
 	ConfigurationServ configurationServ;
+	
+	@Autowired
+	LogServ logServ;
 	
 	
 
@@ -243,37 +250,6 @@ public UserLogin getbyusername(String username,String langcode) {
 
 
 
-public UserLogin getbyusernametokean(String username,String tokean,String langcode) {
-	
-	try {
-		Optional<UserLogin> flowid =userLoginRepo.findbyusernametokean(username,tokean);
-		 
-		 if (flowid.isPresent()){
-			 UserLogin a= flowid.get();
-		
-			return a;
-
-					}
-			else{
-			   // your device is not authorised
-				
-				throw new NooauthException(textConvertionServ.search("E103", langcode),langcode);
-
-				
-			}
-	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }
-
-	
-}
-
 
 
 public UserLogin getbyid(int id,String langcode) {
@@ -375,7 +351,7 @@ public Loginobject loginpage(Loginobject input,String langcode) {
 	Loginobject out=new Loginobject();
 	
 	out.setUsername(input.getUsername());
-	UserLogin userlog=getusername(input.getUsername(), langcode,0);
+	UserLogin userlog=null;//getusername(input.getUsername(), langcode,0);
 	
 	if(userlog == null) {
 		 throw new NullPointerException("Not permit to login");
@@ -429,9 +405,8 @@ public static boolean isValid(String text,String pattern)
 
 
 
-public UserLogin getusername(String username,String langcode,int login){
+public UserLogin getusername(HttpServletRequest request,String username,String langcode,Device dev,int login){
 
-	configurationServ.getbykey("Login_email").getConfigboolean();
 	
 	UserLogin userlog = null;
 	
@@ -442,32 +417,52 @@ public UserLogin getusername(String username,String langcode,int login){
 	
 	if(em.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Active")) {
 
+		// user is  Active
+		
+		
 	if(em.getDatastatusID().getDstatus().equals("Active")) {
+		
+		// Email is  Active
 		
 		try {
 		userlog=em.getUserloginID();
 		} catch (Exception e) {
-			if(login == 1)
+			String text= "email : "+username+" is wrong";
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 16, langcode," ");
+			
+			if(login == 2)
 			// TODO: handle exception
-			throw new NullPointerException("please enter good username");
+		    		throw new NooauthException(textConvertionServ.search("E105", langcode));		
+			else if(login == 1)
+	    		throw new PopupException(textConvertionServ.search("E105", langcode));	
 			else
-			throw new RedirectException("please enter good username");
+			    throw new RedirectException(textConvertionServ.search("E105", langcode));
+		
 		}
 	}else if(em.getDatastatusID().getDstatus().equals("Blocked"))  {
 		
-		if(login == 1)
-			// TODO: handle exception
-			throw new NullPointerException("your email blocked");
-			else
-			throw new RedirectException("your email blocked");
+		// Email is  blocked
+		
+	   	String text= "blocked email : "+username;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 17, langcode," ");			
+	
+		
+			throw new BlockedException(textConvertionServ.search("E106", langcode));					
+
 		
 	}else{
 		
-		if(login == 1)
-			// TODO: handle exception
-			throw new NullPointerException("please check your email status");
-			else
-			throw new RedirectException("please check your email status");
+		// Email is  not Active
+		
+	   	String text= "check email status : "+username;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 18, langcode," ");	
+		
+		if(login == 2) 
+			throw new NooauthException(textConvertionServ.search("E108", langcode));			
+		else if(login == 1) 
+			throw new PopupException(textConvertionServ.search("E108", langcode));					
+		else
+			throw new RedirectException(textConvertionServ.search("E108", langcode));
 		
 	}
 	
@@ -475,19 +470,27 @@ public UserLogin getusername(String username,String langcode,int login){
 	
 }else if(em.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
 	
-	if(login == 1)
-		// TODO: handle exception
-		throw new NullPointerException("user is blocked");
-		else
-		throw new RedirectException("user is blocked");
+	
+	String text= "blocked user : "+username;
+	logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 19, langcode," ");			
+
+	// user is blocked
+	throw new BlockedException(textConvertionServ.search("E106", langcode));					
+
 	
 }else{
 	
-	if(login == 1)
-		// TODO: handle exception
-		throw new NullPointerException("please confirm to Active your User");
+	// user is not Active
+	String text= "not Active user : "+username;
+	logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 20, langcode," ");			
+
+	
+	if(login == 2)
+	   		throw new NooauthException(textConvertionServ.search("E107", langcode));	
+	else if(login == 1)
+   		throw new PopupException(textConvertionServ.search("E107", langcode));	
 		else
-		throw new RedirectException("please confirm to Active your User");
+		throw new RedirectException(textConvertionServ.search("E107", langcode));
 	
 }
 
@@ -499,68 +502,90 @@ public UserLogin getusername(String username,String langcode,int login){
 	
 	
 	if(tele.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Active")) {
-
+		// User is  Active
 	
 	if(tele.getDatastatusID().getDstatus().equals("Active")) {
 	try {
 		userlog=tele.getUserloginID();
 	} catch (Exception e) {
-		if(login == 1)
-		// TODO: handle exception
-		throw new NullPointerException("please enter good username");
-		else
-		throw new RedirectException("please enter good username");
+		String text= "telephone : "+username+" is wrong";
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 23, langcode," ");
+		
+		if(login == 2)
+			// TODO: handle exception
+		    		throw new NooauthException(textConvertionServ.search("E105", langcode));		
+			else if(login == 1)
+	    		throw new PopupException(textConvertionServ.search("E105", langcode));	
+			else
+			    throw new RedirectException(textConvertionServ.search("E105", langcode));
+
 	}
 	
 	}else if(tele.getDatastatusID().getDstatus().equals("Blocked"))  {
 		
-		if(login == 1)
-			// TODO: handle exception
-			throw new NullPointerException("your telephone blocked");
-			else
-			throw new RedirectException("your telephone blocked");
+	 	String text= "blocked telephone : "+username;
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 21, langcode," ");
+		
+			throw new BlockedException(textConvertionServ.search("E106", langcode));					
+
 		
 	}else{
 		
-		if(login == 1)
-			// TODO: handle exception
-			throw new NullPointerException("please check your telephone status");
-			else
-			throw new RedirectException("please check your telephone status");
+	   	String text= "check telephone status : "+username;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 22, langcode," ");	
+		
+		if(login == 2) 
+			throw new NooauthException(textConvertionServ.search("E109", langcode));			
+		else if(login == 1) 
+			throw new PopupException(textConvertionServ.search("E109", langcode));					
+		else
+			throw new RedirectException(textConvertionServ.search("E109", langcode));
 		
 	}
 	
 	}else if(tele.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
+	
+		String text= "blocked user : "+username;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 19, langcode," ");	
 		
-		if(login == 1)
-			// TODO: handle exception
-			throw new NullPointerException("user is blocked");
-			else
-			throw new RedirectException("user is blocked");
+		throw new BlockedException(textConvertionServ.search("E106", langcode));					
+
 		
 	}else{
 		
-		if(login == 1)
-			// TODO: handle exception
-			throw new NullPointerException("please confirm to Active your User");
-			else
-			throw new RedirectException("please confirm to Active your User");
+		// user is not Active
+		String text= "not Active user : "+username;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 20, langcode," ");	
+		
+		if(login == 2)
+	   		throw new NooauthException(textConvertionServ.search("E107", langcode));	
+	else if(login == 1)
+   		throw new PopupException(textConvertionServ.search("E107", langcode));	
+		else
+		throw new RedirectException(textConvertionServ.search("E107", langcode));
 		
 	}	
 	
 	}else {
 		
-		if( configurationServ.getbykey("login_telephone").getConfigboolean() == 1)
+		if( configurationServ.getbykey("login_username").getConfigboolean() == 1)
 		{
 		//username login
 		try {
 		 userlog=getbyusername(username, langcode);
 		} catch (Exception e) {
-			if(login == 1)
-			// TODO: handle exception
-			throw new NullPointerException("please enter good username");
-			else
-			throw new RedirectException("please enter good username");
+			
+			String text= "username : "+username+" is wrong";
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 24, langcode," ");
+			
+			if(login == 2)
+				// TODO: handle exception
+			    		throw new NooauthException(textConvertionServ.search("E105", langcode));		
+				else if(login == 1)
+		    		throw new PopupException(textConvertionServ.search("E105", langcode));	
+				else
+				    throw new RedirectException(textConvertionServ.search("E105", langcode));
+
 		}
 		
 		if(userlog.getUserID().getUserstatusID().getUserstatus().equals("Active")) {
@@ -568,22 +593,42 @@ public UserLogin getusername(String username,String langcode,int login){
 		
 		}else if(userlog.getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
 			
-			if(login == 1)
-				// TODO: handle exception
-				throw new NullPointerException("user is blocked");
-				else
-				throw new RedirectException("user is blocked");
+			String text= "blocked user : "+username;
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 17, langcode," ");	
+			
+			throw new BlockedException(textConvertionServ.search("E106", langcode));					
+
 			
 		}else{
 			
-			if(login == 1)
-				// TODO: handle exception
-				throw new NullPointerException("please confirm to Active your User");
-				else
-				throw new RedirectException("please confirm to Active your User");
+			// user is not Active
+			String text= "not Active user : "+username;
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 20, langcode," ");	
+			
+			if(login == 2)
+		   		throw new NooauthException(textConvertionServ.search("E107", langcode));	
+		else if(login == 1)
+	   		throw new PopupException(textConvertionServ.search("E107", langcode));	
+			else
+			throw new RedirectException(textConvertionServ.search("E107", langcode));
+			
 			
 		}
 		
+		}else {
+			
+			String text= "email or telphone or username : "+username;
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 25, langcode," ");
+			
+			if(login == 2)
+				// TODO: handle exception
+			    		throw new NooauthException(textConvertionServ.search("E110", langcode));		
+				else if(login == 1)
+		    		throw new PopupException(textConvertionServ.search("E110", langcode));	
+				else
+				    throw new RedirectException(textConvertionServ.search("E110", langcode));
+
+			
 		}
 		
 	}
@@ -601,7 +646,7 @@ public Loginobject login(Loginobject input,String langcode) {
 	Loginobject out=new Loginobject();
 
 
-	UserLogin userlog = getusername(input.getUsername(), langcode,1);
+	UserLogin userlog = null; //getusername(input.getUsername(), langcode,1);
 	
 	if(userlog == null) {
 		 throw new NullPointerException("Not permit to login");

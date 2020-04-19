@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
@@ -12,6 +14,8 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.BlockedException;
+import com.rimdev.user.Exception.NooauthException;
 import com.rimdev.user.Repo.DeviceRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
@@ -19,6 +23,7 @@ import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.DeviceType;
 import com.rimdev.user.entities.Deviceip;
+import com.rimdev.user.entities.LoginType;
 import com.rimdev.user.entities.Pages;
 import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.response_all;
@@ -55,6 +60,8 @@ public class DeviceServ {
 	@Autowired
 	DevicePageServ devicePageServ;
 	
+	@Autowired
+	LogServ logServ;
 
 	
 	public void addfailedlogin(Device dev){
@@ -225,26 +232,42 @@ public Device update(Device input,String langcode) {
 
 
 
-public DevicePage SaveDP(Device input,String username,String tokean,String langcode) {
+public DevicePage SaveDP(HttpServletRequest request,Device input,String username,String tokean,String langcode) {
 		
 	try {	
 		
-		if(input.getDeviceOSID()==null || input.getDeviceOSID().getId()==null) {
+		System.out.println(input.getDeviceOSID().getDeviceOS());
+		
+		DeviceOs deviceos=deviceOsServ.getbyname(input.getDeviceOSID().getDeviceOS());
+		
+		if(deviceos==null) {
 			input.setDeviceOSID(deviceOsServ.getbyname("Unknown"));
 			
+		}else {
+			
+			input.setDeviceOSID(deviceos);
 		}
-		if(input.getDevicetypeID()==null || input.getDevicetypeID().getId()==null) {
+		
+		System.out.println(input.getDevicetypeID().getDevtype());
+		DeviceType devicetype=deviceTypeServ.getbyname(input.getDevicetypeID().getDevtype());
+		
+		if(devicetype==null) {
 			input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));		
+		}else {
+			input.setDevicetypeID(devicetype);
 		}
 		
-		if(input.getLogintypeID()==null || input.getLogintypeID().getId()==null) {
 		
-			input.setLogintypeID(loginTypeServ.getbyid(2));
+		LoginType logintype =loginTypeServ.getbytype(input.getLogintypeID().getLtype());
+		if(logintype == null) {
+		
+			throw new NooauthException(textConvertionServ.search("E104", langcode));
 	
+		}else {
+			 input.setLogintypeID(logintype);
 		}
 		
-		input.setLogintypeID(loginTypeServ.getbyid(input.getLogintypeID().getId()));
-		
+	
 		input.setDevicestatusID(deviceStatusServ.getbyid(1));
 		
 		
@@ -267,25 +290,78 @@ public DevicePage SaveDP(Device input,String username,String tokean,String langc
 		
 		
 		Pages p= pagesServ.getbyid(input.getPage());
-		DevicePage out=devicePageServ.savedevpag(ouput, p,username, tokean,langcode);
+		DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
 		
 	
 		
 		return out;
 	} catch (TransientDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }			
 		
 	}
 
-public DevicePage updateDP(Device input,String username,String tokean,String langcode) {
+
+
+
+
+public DevicePage updateDP(HttpServletRequest request,Device input,Device update,String username,String tokean,String langcode) {
 	
+	
+	if(input.getDevicestatusID().getId() == 2) {
+		
+	   	String text= "Device is blocked";
+		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 26, langcode," ");			
+	
+	    throw new BlockedException(textConvertionServ.search("E111", langcode));			
+		
+		
+	}
+	
+	System.out.println(input.getDeviceOSID().getDeviceOS());
+	
+	DeviceOs deviceos=deviceOsServ.getbyname(update.getDeviceOSID().getDeviceOS());
+	
+	if(deviceos==null) {
+		input.setDeviceOSID(deviceOsServ.getbyname("Unknown"));
+		
+	}else {
+		
+		input.setDeviceOSID(deviceos);
+	}
+	
+	System.out.println(input.getDevicetypeID().getDevtype());
+	DeviceType devicetype=deviceTypeServ.getbyname(update.getDevicetypeID().getDevtype());
+	
+	if(devicetype==null) {
+		input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));		
+	}else {
+		input.setDevicetypeID(devicetype);
+	}
+	
+	
+	LoginType logintype =loginTypeServ.getbytype(update.getLogintypeID().getLtype());
+	if(logintype == null) {
+	
+		throw new NooauthException(textConvertionServ.search("E104", langcode));
+
+	}else {
+		 input.setLogintypeID(logintype);
+	}
 	
 	try {
 	Generate gen=new Generate();
@@ -300,23 +376,48 @@ public DevicePage updateDP(Device input,String username,String tokean,String lan
        }else {      	
      	  c.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
        }
+    
+    input.setDeviceip(update.getDeviceip());
 	input.setTokeantime(c.getTime());
 	input.setDevicemodify(date);
+	input.setDevicebrowser(update.getDevicebrowser());
+	input.setDevicename(update.getDevicename());
+	input.setDeviceosunknow(update.getDeviceosunknow());
+	input.setDeviceosversion(update.getDeviceosversion());
+	input.setDevicemac(update.getDevicemac());
+	input.setDeviceinfo(update.getDeviceinfo());
+	input.setDesktopDevice(update.isDesktopDevice());
+	input.setTablet(update.isTablet());
+	input.setMobile(update.isMobile());
+	input.setDeviceBVersion(update.getDeviceBVersion());
+	input.setDevicelatitude(update.getDevicelatitude());
+	input.setDevicelong(update.getDevicelong());
+	input.setPage(update.getPage());
+	
 	Device ouput =deviceRepo.save(input);	
 
 	
 	Pages p= pagesServ.getbyid(input.getPage());
-	DevicePage out=devicePageServ.savedevpag(ouput, p,username, tokean,langcode);
+	DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
 	
 
 	return out;
 } catch (TransientDataAccessException  se) {
+	String text= "sql error"+tokean;
+	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());
 	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
+	String text= "sql error"+tokean;
+	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());
 	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
+	String text= "sql error"+tokean;
+	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());
 	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
+	se.printStackTrace();
+	String text= "sql error"+tokean;
+	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 3, langcode,se.getMessage());
 	throw new NullPointerException(textConvertionServ.search("E104", langcode));
 }	
 }

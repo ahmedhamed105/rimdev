@@ -34,8 +34,6 @@ import { GlobalConstants } from '../GlobalConstants';
               status = '';
               if (event instanceof HttpResponse) {
                 status = 'succeeded';
-                GlobalConstants.iserror =false;
-
             //    console.log(event);
               }
             },
@@ -45,8 +43,6 @@ import { GlobalConstants } from '../GlobalConstants';
               
               }else{
  
-                status = 'failed'; 
-                //    console.log(error); 
                   
                   if (error.error === undefined) {
                     // server-side error
@@ -57,27 +53,13 @@ import { GlobalConstants } from '../GlobalConstants';
                 // client-side error
                   errorMessage = error.error.message;
                   }
-      
-                  if(error.status === 400){
-                    GlobalConstants.iserror =false;
-             // window.alert(errorMessage);
-      
-      
-                  }else if(error.status === 410){
-                    GlobalConstants.iserror =false;
 
-                  }else{
-                   // console.log("ahmed hamed");
-                  //  console.log(error);
-                    GlobalConstants.iserror =true; 
-                  } 
-      
                   let error_ob={
                     code : error.status,
                     error :errorMessage
                   }
       
-                  this.errorDialogService.display_error(0,error_ob);
+                  this.errorDialogService.display_error(error_ob);
             
 
               }

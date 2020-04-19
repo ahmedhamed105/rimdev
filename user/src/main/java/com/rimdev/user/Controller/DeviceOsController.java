@@ -43,13 +43,6 @@ public class DeviceOsController {
 	  }
 	  
 	  
-	  
-	  @RequestMapping(value = "/dataall/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<DeviceOs>> getAll(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode){
-		  UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
 
-		  return new ResponseEntity<List<DeviceOs>>(deviceOsServ.getall(langcode), HttpStatus.OK);
-	  }
-	  
 
 }

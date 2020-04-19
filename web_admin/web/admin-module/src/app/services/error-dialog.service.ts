@@ -13,7 +13,7 @@ export class ErrorDialogService {
 
   public isDialogOpen: Boolean = false;
 
-    constructor(public dialog: MatDialog,public _LanguagegoService:LanguagegoService) { }
+    constructor(public dialog: MatDialog) { }
     openDialog(data): any {
         if (this.isDialogOpen) {
             return false;
@@ -33,46 +33,33 @@ export class ErrorDialogService {
     }
 
 
-    display_error(type,error){
+    display_error(error){
 
  console.log(error);
 
-     if(type === 1){
-      this._LanguagegoService.getlang(error,GlobalConstants.Devicetokean,GlobalConstants.pageid).subscribe(data => {
 
-       let data1 = {
-            reason: data['message'] === undefined?error.error:data['message'] ,
-            status: error.code
-        };
-
-        if(!GlobalConstants.iserror){
-          this.openDialog(data1);
-           }else{
-            window.location.replace('/error?status='+ data1.status+'&reason ='+data1.reason);           }
-      
-       });
-     }else{
-
-  var URL= window.location.pathname 
-if(error.code === 410 &&  URL !== '/login'){
-  window.location.replace('/login');
-}else{
-  let data1 = {
-    reason: error.error ,
-    status: error.code
+ let data1 = {
+  reason: error.error ,
+  status: error.code
 };
-  if(!GlobalConstants.iserror){
-    this.openDialog(data1);
-     }else{
-      window.location.replace('/error?status='+ data1.status+'&reason ='+data1.reason);
-     }
- }
 
+ if(error.code === 400){
+  //popup
+this.openDialog(data1);
+
+}else if(error.code === 410){
+  //redirect
+var URL= window.location.pathname 
+if(URL !== '/login'){
+  window.location.replace('/login');
 }
+
+}else{
+// other errors
+window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
+} 
     
 
-     
-      
       }
 
 

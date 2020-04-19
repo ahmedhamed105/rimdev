@@ -68,4 +68,30 @@ public LoginType getbyid(int id) {
 }
 
 
+
+public LoginType getbytype(String type) {
+	
+	
+	try {
+		Optional<LoginType> flowid =loginTypeRepo.findbyname(type);
+		 
+		 if (flowid.isPresent()){
+			 LoginType  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return null;
+	}
+	
+	
+	
+}
+
+
 }

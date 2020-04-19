@@ -133,6 +133,18 @@ public class Device implements Serializable {
     @JoinColumn(name = "login_type_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private LoginType logintypeID;
+    
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<LogFatal> logFatalCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<LogOther> logOtherCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<LogInfo> logInfoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<LogError> logErrorCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<LogWarning> logWarningCollection;
 
     public Device() {
     }
@@ -147,6 +159,57 @@ public class Device implements Serializable {
         this.tokeantime = tokeantime;
         this.devicemodify = devicemodify;
         this.devicecreate = devicecreate;
+    }
+    
+    
+	@XmlTransient
+    @JsonIgnore
+    public Collection<LogFatal> getLogFatalCollection() {
+        return logFatalCollection;
+    }
+
+    public void setLogFatalCollection(Collection<LogFatal> logFatalCollection) {
+        this.logFatalCollection = logFatalCollection;
+    }
+
+	@XmlTransient
+    @JsonIgnore
+    public Collection<LogOther> getLogOtherCollection() {
+        return logOtherCollection;
+    }
+
+    public void setLogOtherCollection(Collection<LogOther> logOtherCollection) {
+        this.logOtherCollection = logOtherCollection;
+    }
+
+	@XmlTransient
+    @JsonIgnore
+    public Collection<LogInfo> getLogInfoCollection() {
+        return logInfoCollection;
+    }
+
+    public void setLogInfoCollection(Collection<LogInfo> logInfoCollection) {
+        this.logInfoCollection = logInfoCollection;
+    }
+
+	@XmlTransient
+    @JsonIgnore
+    public Collection<LogError> getLogErrorCollection() {
+        return logErrorCollection;
+    }
+
+    public void setLogErrorCollection(Collection<LogError> logErrorCollection) {
+        this.logErrorCollection = logErrorCollection;
+    }
+
+	@XmlTransient
+    @JsonIgnore
+    public Collection<LogWarning> getLogWarningCollection() {
+        return logWarningCollection;
+    }
+
+    public void setLogWarningCollection(Collection<LogWarning> logWarningCollection) {
+        this.logWarningCollection = logWarningCollection;
     }
     
   

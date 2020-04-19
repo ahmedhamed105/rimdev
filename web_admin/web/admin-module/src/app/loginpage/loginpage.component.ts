@@ -10,7 +10,6 @@ import { Icolumdef } from '../objects/Icolumdef';
 import { Observable,of  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
-import * as _ from 'lodash';
 import { PasswordtableComponent } from '../passwordtable/passwordtable.component';
 import { EncryptionService } from '../services/encryption.service';
 import { MenulistService } from '../services/menulist.service';
@@ -24,7 +23,7 @@ import { MenushareService } from '../share_data/menushare.service';
   templateUrl: './loginpage.component.html',
   styleUrls: ['./loginpage.component.css']
 })
-export class LoginpageComponent implements OnInit,AfterViewInit {
+export class LoginpageComponent implements OnInit {
 
 
   @Output() onCompleteItem = new EventEmitter();
@@ -40,7 +39,7 @@ export class LoginpageComponent implements OnInit,AfterViewInit {
   public pagenumber = 12;
   public pagetokean ;
 
-  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private cookieService: CookiesService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -58,12 +57,6 @@ export class LoginpageComponent implements OnInit,AfterViewInit {
  passwordIsValid = false;
  public background ;
 
-
- ngAfterViewInit(){
-console.log(this.background);
-  
-
-}
 
 
 
@@ -436,11 +429,14 @@ if(parent.parent.firstmethod === undefined){
     });
     
   });
+
+  if(this.isfile){
+    this.fileupload.clearQueue();
+  }
+
 });
  
-if(this.isfile){
-  this.fileupload.clearQueue();
-}
+
  
 
 

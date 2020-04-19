@@ -3,7 +3,6 @@ export class GlobalConstants {
     public static ip: string = "localhost";
     public static port: string = "8081";
     public static language: string = "EN";
-    public static iserror: Boolean = false;
     public static menuurl: string = "/menu/all";
     public static langurl: string = "/langs/all";
     public static pagefrommenu: string = "/menu/get/";

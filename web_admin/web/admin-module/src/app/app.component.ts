@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
     this.error = 0;
     body.classList.add('sidebar-mini');
  }
- else if( URL.includes('page') || URL.includes('error') || URL.includes('blocked')) {
+ else if( URL.includes('page')) {
   this.login=0;
   this.dashboard=0;
   this.page = 1;

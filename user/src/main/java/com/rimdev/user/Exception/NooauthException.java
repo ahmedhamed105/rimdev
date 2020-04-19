@@ -15,11 +15,11 @@ public class NooauthException extends RuntimeException{
 	public NooauthException() {
 	        super();
 	    }
-	    public NooauthException(String message, Throwable cause,String langcode) {
+	    public NooauthException(String message, Throwable cause) {
 	    	 super(message, cause);
 	       
 	    }
-	    public NooauthException(String message,String langcode) {
+	    public NooauthException(String message) {
 	        super(message);
 	    }
 	    public NooauthException(Throwable cause) {

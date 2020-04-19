@@ -2,6 +2,8 @@ package com.rimdev.user.Services;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
@@ -9,6 +11,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.NooauthException;
 import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.GroupPagesRepo;
 import com.rimdev.user.entities.DevicePage;
@@ -33,6 +36,10 @@ public class GroupPagesServ {
 	TextConvertionServ textConvertionServ;
 	
 	
+	@Autowired
+	LogServ logServ;
+	
+	
 	
 	
 	
@@ -53,7 +60,7 @@ public class GroupPagesServ {
 	}
 	
 	
-	public void check_page(DevicePage devpage,String langcode) {
+	public void check_page(HttpServletRequest request,DevicePage devpage,String langcode) {
 		
 		
 		GroupPriviledge group=devpage.getUserloginID().getGrouppriviledgeID();
@@ -63,10 +70,23 @@ public class GroupPagesServ {
 			  
 			  boolean outcomp=  pagesPriviledgeServ.validpage(devpage.getPagesID(), parents,devpage);
 			  if(!outcomp) {
-					 throw new PopupException("no Priviledge to enter");	
+				  String text= "No priviledge for user : "+devpage.getUserloginID().getUsername();
+				  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), 0, 14, langcode," ");
+				  
+					 throw new NooauthException(textConvertionServ.search("E101", langcode));	
+				}else {
+					
+					String text= "have priviledge for user : "+devpage.getUserloginID().getUsername();
+					logServ.info(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), 0, 8, langcode," ");					
+					
+					
 				}
 		  }else {
-			  throw new PopupException("no Priviledge to enter ");
+			  
+			  String text= "No priviledge for user : "+devpage.getUserloginID().getUsername() +" group "+group.getGroupname()+" is closed";
+			  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), 0, 13, langcode," ");					
+				
+			  throw new NooauthException(textConvertionServ.search("E101", langcode));
 		  }
 		
 	

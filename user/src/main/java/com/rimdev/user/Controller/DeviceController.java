@@ -25,12 +25,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
+import com.rimdev.user.Exception.BlockedException;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
 import com.rimdev.user.Services.DeviceipServ;
 import com.rimdev.user.Services.GroupPagesServ;
 import com.rimdev.user.Services.GroupWebServ;
+import com.rimdev.user.Services.LogServ;
 import com.rimdev.user.Services.PagesServ;
+import com.rimdev.user.Services.TextConvertionServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Services.WebservicepriviledgeServ;
 import com.rimdev.user.Utils.ObjectUtils;
@@ -70,6 +73,12 @@ public class DeviceController {
 	
 	@Autowired
 	DevicePageServ devicePageServ;
+	
+	@Autowired
+	LogServ logServ;
+	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
 	
 	
@@ -213,47 +222,29 @@ input.setDeviceip(request.getRemoteAddr());
 Deviceip geo=getip(request.getRemoteAddr());
 
 
-UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
-
-
-
-	
 Device out=null;
 DevicePage  out1=null;
-	try {
-		
+
 	
 		Device dev=deviceServ.checkdevicetwo(input.getDevicecode(),langcode);
-		if(dev == null) {
-	     dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser(),langcode);
-		}
 		
 		//System.out.println(dev.getDevicename());
-		if(dev != null ) {				
-			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));		  
-			  out1=deviceServ.updateDP(dev,username, usertokean,langcode);
+		if(dev != null ) {
+	
+			  out1=deviceServ.updateDP(request,dev,input,username, usertokean,langcode);
 			} else {
-				  out1=deviceServ.SaveDP(input,username, usertokean,langcode);
+				  out1=deviceServ.SaveDP(request,input,username, usertokean,langcode);
 			
 			}
 		
-	} catch (Exception e) {
-		// TODO: handle exception
-		  out1=deviceServ.SaveDP(input,username, usertokean,langcode);
-		
-		
-
-	}
 	
 	out =out1.getDeviceId();
 	geo.setDeviceId(out);
 	deviceipServ.savebyip(geo, langcode);
 	
 	
-	GroupPagesServ.check_page(out1, langcode);
-	
-	
-	
+	GroupPagesServ.check_page(request,out1, langcode);
+
 	
 	return new ResponseEntity<Device>(out, HttpStatus.OK);
 

@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
+
+import com.rimdev.user.Exception.NooauthException;
 import com.rimdev.user.Repo.DevicePageRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
@@ -30,6 +35,9 @@ public class DevicePageServ {
 	@Autowired
 	UserLoginServ userLoginServ;
 	
+	@Autowired
+	LogServ logServ;
+	
 	public DevicePage check_tokean_page(String tokean,String pageid,String langcode) {
 		
 		try {
@@ -43,7 +51,7 @@ public class DevicePageServ {
 						}
 				else{
 				   // alternative processing....
-					throw new NullPointerException(textConvertionServ.search("E105", langcode));
+					throw new NooauthException(textConvertionServ.search("E103", langcode));
 					
 				}
 		}  catch (TransientDataAccessException  se) {
@@ -61,12 +69,25 @@ public class DevicePageServ {
 	
 	
 
-public DevicePage savedevpag(Device dev,Pages pa,String username,String tokean,String langcode) {
+public DevicePage savedevpag(HttpServletRequest request,Device dev,Pages pa,String username,String tokean,String langcode) {
 	try {
 		UserLogin userlogin = null;
 
-	    userlogin =  userLoginServ.getbyusernametokean(username, tokean, langcode);	
-		Date visittime = new Date();
+	    userlogin =  userLoginServ.getusername(request,username, langcode,dev,1);
+	    if(userlogin.getUsertokean().equals(tokean)) {
+			String text= "auth with username : "+username+" or token : "+tokean;
+			logServ.info(dev.getDeviceip(),request,text, dev, 0, 12, langcode," ");		
+	    	
+	    }else {
+	    	String text= "not  auth (token wrong) with username : "+username+" or token : "+tokean;
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode," ");			
+			throw new NooauthException(textConvertionServ.search("E103", langcode));
+	
+	    	
+	    }
+	    
+	    
+	    Date visittime = new Date();
 		DevicePage a=new DevicePage();
 		a.setDeviceId(dev);
 		a.setPagesID(pa);
@@ -76,12 +97,24 @@ public DevicePage savedevpag(Device dev,Pages pa,String username,String tokean,S
 		DevicePage out=devicePageRepo.save(a);
 		return out;
 	} catch (TransientDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());			
+	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());	
+		
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	}catch (ScriptException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());	
+		
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	}catch (NonTransientDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());	
+		
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	}
 

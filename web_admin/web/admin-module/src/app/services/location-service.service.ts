@@ -45,77 +45,104 @@ export class LocationServiceService {
       const userAgent=deviceInfo.userAgent;
 
 
+if(os === undefined){
+  this.device.deviceOSID={
+    id: 0,
+    deviceOS: 'unknown'
+  };
+}else{
+  console.log(os)
+  this.device.deviceOSID={
+    id: 0,
+    deviceOS: os
+  };
+}
+
     //  console.log(this.deviceService.getDeviceInfo());
-      await   this.getos(usertokean,username).then(res => {
+    //   await   this.getos(usertokean,username).then(res => {
         
-        this.deviceos=res;
-    //     console.log('finish2');
-    //     console.log(this.deviceos);
-        for(var i = 0; i < this.deviceos.length; i++) {
-       //   console.log(this.deviceos[i].deviceOS);
-            if (this.deviceos[i].deviceOS == os) {
-              this.device.deviceOSID=this.deviceos[i];
-                break;
-            }
-        }  
+    //     this.deviceos=res;
+    // //     console.log('finish2');
+    // //     console.log(this.deviceos);
+    //     for(var i = 0; i < this.deviceos.length; i++) {
+    //    //   console.log(this.deviceos[i].deviceOS);
+    //         if (this.deviceos[i].deviceOS == os) {
+    //           this.device.deviceOSID=this.deviceos[i];
+    //             break;
+    //         }
+    //     }  
   
-      //  console.log('finish4');
+    //   //  console.log('finish4');
  
  
-      });
+    //   });
+    if(devicename === undefined){  
+    this.device.devicetypeID=
+    {
+      id: 0,
+      devtype: 'unknown'
+    };
+    }else{
+     console.log(devicename)
+    this.device.devicetypeID=
+    {
+      id: 0,
+      devtype: 'unknown'
+    };
+  }
 
-     await this.gettype(usertokean,username).then(data => {
+    //  await this.gettype(usertokean,username).then(data => {
 
-        this.devicetype = data;
+    //     this.devicetype = data;
 
-      for(var i = 0; i < this.devicetype.length; i++) {
-      //  console.log(this.devicetype[i].devtype);
-          if (this.devicetype[i].devtype == devicename) {
-            this.device.devicetypeID=this.devicetype[i];
-              break;
-          }
-      }
-
-
-
-    
-
-
-      this.device.devicebrowser=browser;
-      this.device.deviceBVersion=browser_version;
-      this.device.deviceinfo=browser+browser_version;
-      this.device.deviceosversion=os_version;
-      this.device.deviceosunknow=userAgent;
-
-      this.device.mobile=isMobilea;
-      this.device.tablet=isTableta;
-      this.device.desktopDevice=isDesktopDevicea;
-      this.device.page=page;
-
-    });
+    //   for(var i = 0; i < this.devicetype.length; i++) {
+    //   //  console.log(this.devicetype[i].devtype);
+    //       if (this.devicetype[i].devtype == devicename) {
+    //         this.device.devicetypeID=this.devicetype[i];
+    //           break;
+    //       }
+    //   }
+    // });
 
     
 
+    this.device.devicebrowser=browser;
+    this.device.deviceBVersion=browser_version;
+    this.device.deviceinfo=browser+browser_version;
+    this.device.deviceosversion=os_version;
+    this.device.deviceosunknow=userAgent;
 
-      await this.getlogintype(usertokean,username).then(data => {
+    this.device.mobile=isMobilea;
+    this.device.tablet=isTableta;
+    this.device.desktopDevice=isDesktopDevicea;
+    this.device.page=page;
 
-        this.logintype = data;
 
-      for(var i = 0; i < this.logintype.length; i++) {
-      //  console.log(this.devicetype[i].devtype);
+    this.device.logintypeID ={
+      id: 0,
+      ltype: 'Admin'
+    };
 
-      if (this.logintype[i].ltype == 'unknown') {
-        this.device.logintypeID=this.logintype[i];
-      }
-          if (this.logintype[i].ltype == 'Admin') {
-            this.device.logintypeID=this.logintype[i];
-              break;
-          }
-      }
+
+    //   await this.getlogintype(usertokean,username).then(data => {
+
+    //     this.logintype = data;
+
+    //   for(var i = 0; i < this.logintype.length; i++) {
+    //   //  console.log(this.devicetype[i].devtype);
+
+    //   if (this.logintype[i].ltype == 'unknown') {
+    //     this.device.logintypeID=this.logintype[i];
+    //   }
+    //       if (this.logintype[i].ltype == 'Admin') {
+    //         this.device.logintypeID=this.logintype[i];
+    //           break;
+    //       }
+    //   }
 
     
 
-    });
+    // });
  //  await   this.getip().then(data => {
  //      this.device.deviceip=data['ip'];
  //     }).catch((error) => {
