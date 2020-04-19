@@ -60,9 +60,6 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
 	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 	  
 	  
-	  
-	//  System.out.println("begin 1");
-	  
 	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  paramter.add("langcode");
@@ -73,24 +70,11 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
 	   GroupPagesServ.check_page(request,a, langcode);
 
 	  
-	  if(a.getDeviceId().getLoginFail() >= 3 ) {
-			deviceServ.blockdevice(a.getDeviceId());
-			
-			throw new BlockedException("blocked");
-	  }
 
 	//  System.out.println(request.getRequestURI());
-	  Loginobject out;
-	try {
-		 out = userLoginServ.login(info, langcode);
+	  Loginobject out= userLoginServ.login(request,info, langcode,a);
 
-	} catch (Exception e) {
-		// TODO: handle exception
-		deviceServ.addfailedlogin(a.getDeviceId());
-		throw e;
-	}
 
-	deviceServ.sucesslogin(a.getDeviceId());
 	
     return ResponseEntity.ok()
   	      .cacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS))

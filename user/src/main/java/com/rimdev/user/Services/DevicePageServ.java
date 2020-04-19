@@ -73,7 +73,7 @@ public DevicePage savedevpag(HttpServletRequest request,Device dev,Pages pa,Stri
 	try {
 		UserLogin userlogin = null;
 
-	    userlogin =  userLoginServ.getusername(request,username, langcode,dev,1);
+	    userlogin =  userLoginServ.getusername(request,username, langcode,dev,2);
 	    if(userlogin.getUsertokean().equals(tokean)) {
 			String text= "auth with username : "+username+" or token : "+tokean;
 			logServ.info(dev.getDeviceip(),request,text, dev, 0, 12, langcode," ");		
@@ -98,22 +98,22 @@ public DevicePage savedevpag(HttpServletRequest request,Device dev,Pages pa,Stri
 		return out;
 	} catch (TransientDataAccessException  se) {
 		String text= "sql error"+tokean;
-		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());			
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 2, langcode,se.getMessage());			
 	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {
 		String text= "sql error"+tokean;
-		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());	
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 2, langcode,se.getMessage());	
 		
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	}catch (ScriptException  se) {
 		String text= "sql error"+tokean;
-		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());	
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 2, langcode,se.getMessage());	
 		
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	}catch (NonTransientDataAccessException  se) {
 		String text= "sql error"+tokean;
-		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode,se.getMessage());	
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 2, langcode,se.getMessage());	
 		
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	}

@@ -25,10 +25,12 @@ import com.rimdev.user.Repo.UserLoginRepo;
 import com.rimdev.user.Utils.AES;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.entities.UserStatus;
 import com.rimdev.user.ouputobject.Loginobject;
 
 @Service
@@ -43,6 +45,9 @@ public class UserLoginServ {
 	
 	@Autowired 
 	private UserServ userServ;
+	
+	@Autowired 
+	private UserStatusServ userStatusServ;
 	
 	
 	@Autowired
@@ -415,7 +420,7 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 		
 	Email em= emailServ.getbyemail(username, langcode);
 	
-	if(em.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Active")) {
+	if(em.getUserloginID().getUserstatusID().getUserstatus().equals("Active")) {
 
 		// user is  Active
 		
@@ -446,7 +451,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 	   	String text= "blocked email : "+username;
 		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 17, langcode," ");			
 	
-		
+		if(login == 1)
+			throw new PopupException(textConvertionServ.search("E106", langcode));					
+		else
 			throw new BlockedException(textConvertionServ.search("E106", langcode));					
 
 		
@@ -468,14 +475,18 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 	
 	
 	
-}else if(em.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
+}else if(em.getUserloginID().getUserstatusID().getUserstatus().equals("Blocked"))  {
 	
 	
 	String text= "blocked user : "+username;
 	logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 19, langcode," ");			
 
 	// user is blocked
-	throw new BlockedException(textConvertionServ.search("E106", langcode));					
+	if(login == 1)
+		throw new PopupException(textConvertionServ.search("E106", langcode));					
+	else
+		throw new BlockedException(textConvertionServ.search("E106", langcode));					
+				
 
 	
 }else{
@@ -501,7 +512,7 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 	Telephones tele=telephonesServ.getbytele(username, langcode);	
 	
 	
-	if(tele.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Active")) {
+	if(tele.getUserloginID().getUserstatusID().getUserstatus().equals("Active")) {
 		// User is  Active
 	
 	if(tele.getDatastatusID().getDstatus().equals("Active")) {
@@ -526,7 +537,11 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 	 	String text= "blocked telephone : "+username;
 			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 21, langcode," ");
 		
-			throw new BlockedException(textConvertionServ.search("E106", langcode));					
+			if(login == 1)
+				throw new PopupException(textConvertionServ.search("E106", langcode));					
+			else
+				throw new BlockedException(textConvertionServ.search("E106", langcode));					
+				
 
 		
 	}else{
@@ -543,12 +558,16 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 		
 	}
 	
-	}else if(tele.getUserloginID().getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
+	}else if(tele.getUserloginID().getUserstatusID().getUserstatus().equals("Blocked"))  {
 	
 		String text= "blocked user : "+username;
 		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 19, langcode," ");	
 		
-		throw new BlockedException(textConvertionServ.search("E106", langcode));					
+		if(login == 1)
+			throw new PopupException(textConvertionServ.search("E106", langcode));					
+		else
+			throw new BlockedException(textConvertionServ.search("E106", langcode));					
+				
 
 		
 	}else{
@@ -588,15 +607,19 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 
 		}
 		
-		if(userlog.getUserID().getUserstatusID().getUserstatus().equals("Active")) {
+		if(userlog.getUserstatusID().getUserstatus().equals("Active")) {
 
 		
-		}else if(userlog.getUserID().getUserstatusID().getUserstatus().equals("Blocked"))  {
+		}else if(userlog.getUserstatusID().getUserstatus().equals("Blocked"))  {
 			
 			String text= "blocked user : "+username;
 			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 17, langcode," ");	
 			
-			throw new BlockedException(textConvertionServ.search("E106", langcode));					
+			if(login == 1)
+				throw new PopupException(textConvertionServ.search("E106", langcode));					
+			else
+				throw new BlockedException(textConvertionServ.search("E106", langcode));					
+					
 
 			
 		}else{
@@ -640,19 +663,14 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 }
 
 
-public Loginobject login(Loginobject input,String langcode) {
+public Loginobject login(HttpServletRequest request,Loginobject input,String langcode,DevicePage page) {
 	
 	
 	Loginobject out=new Loginobject();
 
 
-	UserLogin userlog = null; //getusername(input.getUsername(), langcode,1);
-	
-	if(userlog == null) {
-		 throw new NullPointerException("Not permit to login");
-		
-	}
-	
+	UserLogin userlog = getusername(request,input.getUsername(), langcode,page.getDeviceId(),1);
+
 	
 	out.setUsername(userlog.getUsername());
 	
@@ -662,34 +680,79 @@ public Loginobject login(Loginobject input,String langcode) {
         
     System.out.println(password + " "+origpassword);
     
+    Calendar cal = Calendar.getInstance(); 
+    
     if(! password.equals(origpassword)) {
     	
-    	 throw new NullPointerException("please eneter correct password");
+      	userlog.setLoginModfiy(cal.getTime());
+      	int fail=userlog.getLoginFailed()+1;
+      	if(fail == 3) {
+      		UserStatus block = userStatusServ.getbyid(4);
+      		userlog.setUserstatusID(block);
+          	userlog.setLoginFailed(0);
+          	userlog.setLoginFlag(0);
+      	}else {
+      	userlog.setLoginFailed(fail);
+      	userlog.setLoginFlag(0);
+      	}
+      	userlog.setPagesID(page.getPagesID());
+      	out.setLogin(false);
+      	userLoginRepo.save(userlog);	    	
+    	String text= "password Wrong : "+password;
+		logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 27, langcode,"");
+	
+      	
+		throw new PopupException(textConvertionServ.search("E112", langcode));	
+
+    }else {
+    	
+    	Generate gen=new Generate();
+    	String tokean=gen.token(30);
+    	out.setTokean(tokean);
+    	userlog.setUsertokean(tokean);
+    	userlog.setLoginModfiy(cal.getTime());
+    	cal.add(Calendar.MONTH, 1);
+    	userlog.setExpiredate(cal.getTime());
+    	userlog.setPagesID(page.getPagesID());
+    	userlog.setLoginFailed(0);
+    	userlog.setLoginFlag(1);
+    	out.setLogin(true);
+    	try {
+    		userLoginRepo.save(userlog);
+    	}  catch (TransientDataAccessException  se) {
+    		String text= "sql error"+tokean;
+    		logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 2, langcode,se.getMessage());
+    		
+    		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+        } catch (RecoverableDataAccessException  se) {
+        	String text= "sql error"+tokean;
+    		logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 2, langcode,se.getMessage()); 	
+    		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+        }catch (ScriptException  se) {
+        	String text= "sql error"+tokean;
+    		logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 2, langcode,se.getMessage());
+    	
+    		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+        }catch (NonTransientDataAccessException  se) {
+        	String text= "sql error"+tokean;
+    		logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 2, langcode,se.getMessage());
+    	
+    		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+        }
+    	
+     	String text= "password Correct : "+password;
+    	logServ.info(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 28, langcode,"");
+    	
+    
+    	
     }
 
 
-    Calendar cal = Calendar.getInstance(); 
+
    
-	Generate gen=new Generate();
-	String tokean=gen.token(30);
-	out.setTokean(tokean);
-	userlog.setUsertokean(tokean);
-	userlog.setLoginModfiy(cal.getTime());
-	 cal.add(Calendar.MONTH, 1);
-	userlog.setExpiredate(cal.getTime());
-	out.setLogin(true);
 
-	try {
-		userLoginRepo.save(userlog);	
-	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }
+	
+
 	return out;
 	
 }

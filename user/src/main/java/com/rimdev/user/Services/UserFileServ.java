@@ -17,6 +17,7 @@ import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
+import com.rimdev.user.entities.UserLogin;
 
 
 
@@ -33,12 +34,12 @@ public class UserFileServ {
 	
 	
 	
-	public UserFile Save(User user,FilesUpload file,Component com,String langcode) {
+	public UserFile Save(UserLogin user,FilesUpload file,Component com,String langcode) {
 		
 		try {	
 			UserFile userfile=new UserFile();
 			userfile.setFilesuploadID(file);
-			userfile.setUserID(user);
+			userfile.setUserloginID(user);
 			userfile.setComponentID(com);
 			UserFile ouput =userFileRepo.save(userfile);	
 			return ouput;

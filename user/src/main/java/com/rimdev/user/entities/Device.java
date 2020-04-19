@@ -5,8 +5,8 @@
  */
 package com.rimdev.user.entities;
 
+
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
@@ -48,13 +48,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "Device.findByDevicename", query = "SELECT d FROM Device d WHERE d.devicename = :devicename")
     , @NamedQuery(name = "Device.findByDeviceinfo", query = "SELECT d FROM Device d WHERE d.deviceinfo = :deviceinfo")
     , @NamedQuery(name = "Device.findByDeviceip", query = "SELECT d FROM Device d WHERE d.deviceip = :deviceip")
+    , @NamedQuery(name = "Device.findByDevicecode", query = "SELECT d FROM Device d WHERE d.devicecode = :devicecode")
     , @NamedQuery(name = "Device.findByDevicemac", query = "SELECT d FROM Device d WHERE d.devicemac = :devicemac")
     , @NamedQuery(name = "Device.findByDeviceosversion", query = "SELECT d FROM Device d WHERE d.deviceosversion = :deviceosversion")
     , @NamedQuery(name = "Device.findByDeviceosunknow", query = "SELECT d FROM Device d WHERE d.deviceosunknow = :deviceosunknow")
     , @NamedQuery(name = "Device.findByDevicetokean", query = "SELECT d FROM Device d WHERE d.devicetokean = :devicetokean")
     , @NamedQuery(name = "Device.findByTokeantime", query = "SELECT d FROM Device d WHERE d.tokeantime = :tokeantime")
     , @NamedQuery(name = "Device.findByDevicemodify", query = "SELECT d FROM Device d WHERE d.devicemodify = :devicemodify")
-    , @NamedQuery(name = "Device.findByDevicecreate", query = "SELECT d FROM Device d WHERE d.devicecreate = :devicecreate")})
+    , @NamedQuery(name = "Device.findByDevicecreate", query = "SELECT d FROM Device d WHERE d.devicecreate = :devicecreate")
+    , @NamedQuery(name = "Device.findByDevicelong", query = "SELECT d FROM Device d WHERE d.devicelong = :devicelong")
+    , @NamedQuery(name = "Device.findByDevicelatitude", query = "SELECT d FROM Device d WHERE d.devicelatitude = :devicelatitude")
+    , @NamedQuery(name = "Device.findByDevicebrowser", query = "SELECT d FROM Device d WHERE d.devicebrowser = :devicebrowser")
+    , @NamedQuery(name = "Device.findByDeviceBVersion", query = "SELECT d FROM Device d WHERE d.deviceBVersion = :deviceBVersion")
+    , @NamedQuery(name = "Device.findByMobile", query = "SELECT d FROM Device d WHERE d.mobile = :mobile")
+    , @NamedQuery(name = "Device.findByDesktopDevice", query = "SELECT d FROM Device d WHERE d.desktopDevice = :desktopDevice")
+    , @NamedQuery(name = "Device.findByTablet", query = "SELECT d FROM Device d WHERE d.tablet = :tablet")
+    , @NamedQuery(name = "Device.findByPage", query = "SELECT d FROM Device d WHERE d.page = :page")})
 public class Device implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -69,6 +78,7 @@ public class Device implements Serializable {
     private String deviceinfo;
     @Column(name = "Device_ip", length = 45)
     private String deviceip;
+    @Basic(optional = false)
     @Column(name = "Device_code", nullable = false, length = 450)
     private String devicecode;
     @Column(name = "Device_mac", length = 45)
@@ -87,21 +97,12 @@ public class Device implements Serializable {
     @Basic(optional = false)
     @Column(name = "Device_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @XmlTransient
-    @JsonIgnore
     private Date devicemodify;
     @Basic(optional = false)
     @Column(name = "Device_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @XmlTransient
-    @JsonIgnore
     private Date devicecreate;
-    @JoinColumn(name = "Device_OS_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DeviceOs deviceOSID;
-    @JoinColumn(name = "Device_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DeviceType devicetypeID;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "Device_long", precision = 10, scale = 7)
     private BigDecimal devicelong;
     @Column(name = "Device_latitude", precision = 10, scale = 7)
@@ -110,31 +111,14 @@ public class Device implements Serializable {
     private String devicebrowser;
     @Column(name = "Device_BVersion", length = 45)
     private String deviceBVersion;
-    @Column(name = "Mobile", length = 45)
-    private boolean isMobile;
-    @Column(name = "Desktop_Device", length = 45)
-    private boolean isDesktopDevice;
-    @Column(name = "Tablet", length = 45)
-    private boolean isTablet;
-    @Column(name = "login_fail", nullable = false)
-    private int loginFail;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<Deviceip> deviceipCollection;
-    
-    
-    @JoinColumn(name = "Device_status_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DeviceStatus devicestatusID;
+    @Column(name = "Mobile")
+    private boolean mobile;
+    @Column(name = "Desktop_Device")
+    private boolean desktopDevice;
+    @Column(name = "Tablet")
+    private boolean tablet;
     @Column(name = "Page")
     private Integer page;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<DevicePage> devicePageCollection;
-    
-    @JoinColumn(name = "login_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private LoginType logintypeID;
-    
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
     private Collection<LogFatal> logFatalCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
@@ -145,6 +129,22 @@ public class Device implements Serializable {
     private Collection<LogError> logErrorCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
     private Collection<LogWarning> logWarningCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<DevicePage> devicePageCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
+    private Collection<Deviceip> deviceipCollection;
+    @JoinColumn(name = "Device_OS_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private DeviceOs deviceOSID;
+    @JoinColumn(name = "Device_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private DeviceStatus devicestatusID;
+    @JoinColumn(name = "Device_type_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private DeviceType devicetypeID;
+    @JoinColumn(name = "login_type_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private LoginType logintypeID;
 
     public Device() {
     }
@@ -153,81 +153,13 @@ public class Device implements Serializable {
         this.id = id;
     }
 
-    public Device(Integer id, String devicetokean, Date tokeantime, Date devicemodify, Date devicecreate) {
+    public Device(Integer id, String devicecode, String devicetokean, Date tokeantime, Date devicemodify, Date devicecreate) {
         this.id = id;
+        this.devicecode = devicecode;
         this.devicetokean = devicetokean;
         this.tokeantime = tokeantime;
         this.devicemodify = devicemodify;
         this.devicecreate = devicecreate;
-    }
-    
-    
-	@XmlTransient
-    @JsonIgnore
-    public Collection<LogFatal> getLogFatalCollection() {
-        return logFatalCollection;
-    }
-
-    public void setLogFatalCollection(Collection<LogFatal> logFatalCollection) {
-        this.logFatalCollection = logFatalCollection;
-    }
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<LogOther> getLogOtherCollection() {
-        return logOtherCollection;
-    }
-
-    public void setLogOtherCollection(Collection<LogOther> logOtherCollection) {
-        this.logOtherCollection = logOtherCollection;
-    }
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<LogInfo> getLogInfoCollection() {
-        return logInfoCollection;
-    }
-
-    public void setLogInfoCollection(Collection<LogInfo> logInfoCollection) {
-        this.logInfoCollection = logInfoCollection;
-    }
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<LogError> getLogErrorCollection() {
-        return logErrorCollection;
-    }
-
-    public void setLogErrorCollection(Collection<LogError> logErrorCollection) {
-        this.logErrorCollection = logErrorCollection;
-    }
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<LogWarning> getLogWarningCollection() {
-        return logWarningCollection;
-    }
-
-    public void setLogWarningCollection(Collection<LogWarning> logWarningCollection) {
-        this.logWarningCollection = logWarningCollection;
-    }
-    
-  
-    
-    public int getLoginFail() {
-		return loginFail;
-	}
-
-	public void setLoginFail(int loginFail) {
-		this.loginFail = loginFail;
-	}
-
-	public String getDevicecode() {
-        return devicecode;
-    }
-
-    public void setDevicecode(String devicecode) {
-        this.devicecode = devicecode;
     }
 
     public Integer getId() {
@@ -260,6 +192,14 @@ public class Device implements Serializable {
 
     public void setDeviceip(String deviceip) {
         this.deviceip = deviceip;
+    }
+
+    public String getDevicecode() {
+        return devicecode;
+    }
+
+    public void setDevicecode(String devicecode) {
+        this.devicecode = devicecode;
     }
 
     public String getDevicemac() {
@@ -318,55 +258,133 @@ public class Device implements Serializable {
         this.devicecreate = devicecreate;
     }
 
+    public BigDecimal getDevicelong() {
+        return devicelong;
+    }
+
+    public void setDevicelong(BigDecimal devicelong) {
+        this.devicelong = devicelong;
+    }
+
+    public BigDecimal getDevicelatitude() {
+        return devicelatitude;
+    }
+
+    public void setDevicelatitude(BigDecimal devicelatitude) {
+        this.devicelatitude = devicelatitude;
+    }
+
+    public String getDevicebrowser() {
+        return devicebrowser;
+    }
+
+    public void setDevicebrowser(String devicebrowser) {
+        this.devicebrowser = devicebrowser;
+    }
+
+    public String getDeviceBVersion() {
+        return deviceBVersion;
+    }
+
+    public void setDeviceBVersion(String deviceBVersion) {
+        this.deviceBVersion = deviceBVersion;
+    }
+
   
 
-	public boolean isMobile() {
-		return isMobile;
+    public boolean isMobile() {
+		return mobile;
 	}
 
-	public void setMobile(boolean isMobile) {
-		this.isMobile = isMobile;
+	public void setMobile(boolean mobile) {
+		this.mobile = mobile;
 	}
 
 	public boolean isDesktopDevice() {
-		return isDesktopDevice;
+		return desktopDevice;
 	}
 
-	public void setDesktopDevice(boolean isDesktopDevice) {
-		this.isDesktopDevice = isDesktopDevice;
+	public void setDesktopDevice(boolean desktopDevice) {
+		this.desktopDevice = desktopDevice;
 	}
 
 	public boolean isTablet() {
-		return isTablet;
+		return tablet;
 	}
 
-	public void setTablet(boolean isTablet) {
-		this.isTablet = isTablet;
+	public void setTablet(boolean tablet) {
+		this.tablet = tablet;
 	}
 
-
-    
-    
-    public Integer getPage() {
+	public Integer getPage() {
         return page;
     }
 
     public void setPage(Integer page) {
         this.page = page;
     }
-    
-    
-    
-    public LoginType getLogintypeID() {
-        return logintypeID;
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<LogFatal> getLogFatalCollection() {
+        return logFatalCollection;
     }
 
-    public void setLogintypeID(LoginType logintypeID) {
-        this.logintypeID = logintypeID;
+    public void setLogFatalCollection(Collection<LogFatal> logFatalCollection) {
+        this.logFatalCollection = logFatalCollection;
     }
-    
-    
-	@XmlTransient
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<LogOther> getLogOtherCollection() {
+        return logOtherCollection;
+    }
+
+    public void setLogOtherCollection(Collection<LogOther> logOtherCollection) {
+        this.logOtherCollection = logOtherCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<LogInfo> getLogInfoCollection() {
+        return logInfoCollection;
+    }
+
+    public void setLogInfoCollection(Collection<LogInfo> logInfoCollection) {
+        this.logInfoCollection = logInfoCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<LogError> getLogErrorCollection() {
+        return logErrorCollection;
+    }
+
+    public void setLogErrorCollection(Collection<LogError> logErrorCollection) {
+        this.logErrorCollection = logErrorCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<LogWarning> getLogWarningCollection() {
+        return logWarningCollection;
+    }
+
+    public void setLogWarningCollection(Collection<LogWarning> logWarningCollection) {
+        this.logWarningCollection = logWarningCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<DevicePage> getDevicePageCollection() {
+        return devicePageCollection;
+    }
+
+    public void setDevicePageCollection(Collection<DevicePage> devicePageCollection) {
+        this.devicePageCollection = devicePageCollection;
+    }
+
+    @XmlTransient
     @JsonIgnore
     public Collection<Deviceip> getDeviceipCollection() {
         return deviceipCollection;
@@ -376,34 +394,20 @@ public class Device implements Serializable {
         this.deviceipCollection = deviceipCollection;
     }
 
-    
-	@XmlTransient
-    @JsonIgnore
-    public Collection<DevicePage> getDevicePageCollection() {
-        return devicePageCollection;
-    }
-
-    public void setDevicePageCollection(Collection<DevicePage> devicePageCollection) {
-        this.devicePageCollection = devicePageCollection;
-    }
-    
-    
-    
-    
-    public DeviceStatus getDevicestatusID() {
-		return devicestatusID;
-	}
-
-	public void setDevicestatusID(DeviceStatus devicestatusID) {
-		this.devicestatusID = devicestatusID;
-	}
-
-	public DeviceOs getDeviceOSID() {
+    public DeviceOs getDeviceOSID() {
         return deviceOSID;
     }
 
     public void setDeviceOSID(DeviceOs deviceOSID) {
         this.deviceOSID = deviceOSID;
+    }
+
+    public DeviceStatus getDevicestatusID() {
+        return devicestatusID;
+    }
+
+    public void setDevicestatusID(DeviceStatus devicestatusID) {
+        this.devicestatusID = devicestatusID;
     }
 
     public DeviceType getDevicetypeID() {
@@ -413,43 +417,16 @@ public class Device implements Serializable {
     public void setDevicetypeID(DeviceType devicetypeID) {
         this.devicetypeID = devicetypeID;
     }
-    
-    
 
-    public BigDecimal getDevicelong() {
-		return devicelong;
-	}
+    public LoginType getLogintypeID() {
+        return logintypeID;
+    }
 
-	public void setDevicelong(BigDecimal devicelong) {
-		this.devicelong = devicelong;
-	}
+    public void setLogintypeID(LoginType logintypeID) {
+        this.logintypeID = logintypeID;
+    }
 
-	public BigDecimal getDevicelatitude() {
-		return devicelatitude;
-	}
-
-	public void setDevicelatitude(BigDecimal devicelatitude) {
-		this.devicelatitude = devicelatitude;
-	}
-	
-
-	public String getDevicebrowser() {
-		return devicebrowser;
-	}
-
-	public void setDevicebrowser(String devicebrowser) {
-		this.devicebrowser = devicebrowser;
-	}
-
-	public String getDeviceBVersion() {
-		return deviceBVersion;
-	}
-
-	public void setDeviceBVersion(String deviceBVersion) {
-		this.deviceBVersion = deviceBVersion;
-	}
-
-	@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -469,19 +446,10 @@ public class Device implements Serializable {
         return true;
     }
 
-	@Override
-	public String toString() {
-		return "Device [id=" + id + ", devicename=" + devicename + ", deviceinfo=" + deviceinfo + ", deviceip="
-				+ deviceip + ", devicecode=" + devicecode + ", devicemac=" + devicemac + ", deviceosversion="
-				+ deviceosversion + ", deviceosunknow=" + deviceosunknow + ", devicetokean=" + devicetokean
-				+ ", tokeantime=" + tokeantime + ", devicemodify=" + devicemodify + ", devicecreate=" + devicecreate
-				+ ", deviceOSID=" + deviceOSID + ", devicetypeID=" + devicetypeID + ", devicelong=" + devicelong
-				+ ", devicelatitude=" + devicelatitude + ", devicebrowser=" + devicebrowser + ", deviceBVersion="
-				+ deviceBVersion + ", isMobile=" + isMobile + ", isDesktopDevice=" + isDesktopDevice + ", isTablet="
-				+ isTablet + ", loginFail=" + loginFail + ", devicestatusID=" + devicestatusID + ", page=" + page
-				+ ", devicePageCollection=" + devicePageCollection + "]";
-	}
-
-   
+    @Override
+    public String toString() {
+        return "entity.Device[ id=" + id + " ]";
+    }
     
 }
+

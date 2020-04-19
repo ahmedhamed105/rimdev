@@ -17,7 +17,10 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -26,6 +29,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "user_status", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "UserStatus.findAll", query = "SELECT u FROM UserStatus u")
     , @NamedQuery(name = "UserStatus.findById", query = "SELECT u FROM UserStatus u WHERE u.id = :id")
@@ -42,7 +47,7 @@ public class UserStatus implements Serializable {
     @Column(name = "User_status", nullable = false, length = 450)
     private String userstatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userstatusID")
-    private Collection<User> userCollection;
+    private Collection<UserLogin> userLoginCollection;
 
     public UserStatus() {
     }
@@ -74,12 +79,12 @@ public class UserStatus implements Serializable {
 
     @XmlTransient
     @JsonIgnore
-    public Collection<User> getUserCollection() {
-        return userCollection;
+    public Collection<UserLogin> getUserLoginCollection() {
+        return userLoginCollection;
     }
 
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
+    public void setUserLoginCollection(Collection<UserLogin> userLoginCollection) {
+        this.userLoginCollection = userLoginCollection;
     }
 
     @Override

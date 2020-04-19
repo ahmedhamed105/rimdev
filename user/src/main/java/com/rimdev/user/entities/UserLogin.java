@@ -5,6 +5,7 @@
  */
 package com.rimdev.user.entities;
 
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -49,7 +50,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "UserLogin.findByUsername", query = "SELECT u FROM UserLogin u WHERE u.username = :username")
     , @NamedQuery(name = "UserLogin.findByPasswordEncy", query = "SELECT u FROM UserLogin u WHERE u.passwordEncy = :passwordEncy")
     , @NamedQuery(name = "UserLogin.findByLoginModfiy", query = "SELECT u FROM UserLogin u WHERE u.loginModfiy = :loginModfiy")
-    , @NamedQuery(name = "UserLogin.findByLoginCreate", query = "SELECT u FROM UserLogin u WHERE u.loginCreate = :loginCreate")})
+    , @NamedQuery(name = "UserLogin.findByLoginCreate", query = "SELECT u FROM UserLogin u WHERE u.loginCreate = :loginCreate")
+    , @NamedQuery(name = "UserLogin.findByNotes", query = "SELECT u FROM UserLogin u WHERE u.notes = :notes")
+    , @NamedQuery(name = "UserLogin.findByLoginkey", query = "SELECT u FROM UserLogin u WHERE u.loginkey = :loginkey")
+    , @NamedQuery(name = "UserLogin.findByLoginFailed", query = "SELECT u FROM UserLogin u WHERE u.loginFailed = :loginFailed")
+    , @NamedQuery(name = "UserLogin.findByLoginFlag", query = "SELECT u FROM UserLogin u WHERE u.loginFlag = :loginFlag")})
 public class UserLogin implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -82,24 +87,43 @@ public class UserLogin implements Serializable {
     private Date loginCreate;
     @Column(name = "Notes", length = 450)
     private String notes;
+    @Basic(optional = false)
     @Column(name = "Login_key", nullable = false, length = 450)
     private String loginkey;
+    @Column(name = "login_failed")
+    private Integer loginFailed;
+    @Basic(optional = false)
+    @Column(name = "login_flag", nullable = false)
+    private int loginFlag;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<Configuration> configurationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<UserFile> userFileCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
     private Collection<Telephones> telephonesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<Adress> adressCollection;
+    @JoinColumn(name = "Group_priviledge_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private GroupPriviledge grouppriviledgeID;
+    @JoinColumn(name = "Pages_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private Pages pagesID;
     @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private User userID;
+    @JoinColumn(name = "User_status_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private UserStatus userstatusID;
+    @JoinColumn(name = "User_type_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private UserType usertypeID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
     private Collection<Email> emailCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
     private Collection<PasswordHistory> passwordHistoryCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
     private Collection<DevicePage> devicePageCollection;
-    
-    @JoinColumn(name = "Group_priviledge_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private GroupPriviledge grouppriviledgeID;
-    
 
     public UserLogin() {
     }
@@ -108,24 +132,132 @@ public class UserLogin implements Serializable {
         this.id = id;
     }
 
-    
-    public UserLogin(Integer id, String username, String passwordEncy, Date loginModfiy, Date loginCreate) {
+    public UserLogin(Integer id, String username, String passwordEncy, Date loginModfiy, Date loginCreate, String loginkey, int loginFlag) {
         this.id = id;
         this.username = username;
         this.passwordEncy = passwordEncy;
         this.loginModfiy = loginModfiy;
         this.loginCreate = loginCreate;
-    }
-    
-    public GroupPriviledge getGrouppriviledgeID() {
-        return grouppriviledgeID;
+        this.loginkey = loginkey;
+        this.loginFlag = loginFlag;
     }
 
-    public void setGrouppriviledgeID(GroupPriviledge grouppriviledgeID) {
-        this.grouppriviledgeID = grouppriviledgeID;
+    public Integer getId() {
+        return id;
     }
-    
-    
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUsertokean() {
+        return usertokean;
+    }
+
+    public void setUsertokean(String usertokean) {
+        this.usertokean = usertokean;
+    }
+
+    public Date getExpiredate() {
+        return expiredate;
+    }
+
+    public void setExpiredate(Date expiredate) {
+        this.expiredate = expiredate;
+    }
+
+    public Date getCreatedate() {
+        return createdate;
+    }
+
+    public void setCreatedate(Date createdate) {
+        this.createdate = createdate;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswordEncy() {
+        return passwordEncy;
+    }
+
+    public void setPasswordEncy(String passwordEncy) {
+        this.passwordEncy = passwordEncy;
+    }
+
+    public Date getLoginModfiy() {
+        return loginModfiy;
+    }
+
+    public void setLoginModfiy(Date loginModfiy) {
+        this.loginModfiy = loginModfiy;
+    }
+
+    public Date getLoginCreate() {
+        return loginCreate;
+    }
+
+    public void setLoginCreate(Date loginCreate) {
+        this.loginCreate = loginCreate;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getLoginkey() {
+        return loginkey;
+    }
+
+    public void setLoginkey(String loginkey) {
+        this.loginkey = loginkey;
+    }
+
+    public Integer getLoginFailed() {
+        return loginFailed;
+    }
+
+    public void setLoginFailed(Integer loginFailed) {
+        this.loginFailed = loginFailed;
+    }
+
+    public int getLoginFlag() {
+        return loginFlag;
+    }
+
+    public void setLoginFlag(int loginFlag) {
+        this.loginFlag = loginFlag;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Configuration> getConfigurationCollection() {
+        return configurationCollection;
+    }
+
+    public void setConfigurationCollection(Collection<Configuration> configurationCollection) {
+        this.configurationCollection = configurationCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<UserFile> getUserFileCollection() {
+        return userFileCollection;
+    }
+
+    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
+        this.userFileCollection = userFileCollection;
+    }
+
     @XmlTransient
     @JsonIgnore
     public Collection<Telephones> getTelephonesCollection() {
@@ -136,6 +268,55 @@ public class UserLogin implements Serializable {
         this.telephonesCollection = telephonesCollection;
     }
 
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Adress> getAdressCollection() {
+        return adressCollection;
+    }
+
+    public void setAdressCollection(Collection<Adress> adressCollection) {
+        this.adressCollection = adressCollection;
+    }
+
+    public GroupPriviledge getGrouppriviledgeID() {
+        return grouppriviledgeID;
+    }
+
+    public void setGrouppriviledgeID(GroupPriviledge grouppriviledgeID) {
+        this.grouppriviledgeID = grouppriviledgeID;
+    }
+
+    public Pages getPagesID() {
+        return pagesID;
+    }
+
+    public void setPagesID(Pages pagesID) {
+        this.pagesID = pagesID;
+    }
+
+    public User getUserID() {
+        return userID;
+    }
+
+    public void setUserID(User userID) {
+        this.userID = userID;
+    }
+
+    public UserStatus getUserstatusID() {
+        return userstatusID;
+    }
+
+    public void setUserstatusID(UserStatus userstatusID) {
+        this.userstatusID = userstatusID;
+    }
+
+    public UserType getUsertypeID() {
+        return usertypeID;
+    }
+
+    public void setUsertypeID(UserType usertypeID) {
+        this.usertypeID = usertypeID;
+    }
 
     @XmlTransient
     @JsonIgnore
@@ -166,100 +347,6 @@ public class UserLogin implements Serializable {
     public void setDevicePageCollection(Collection<DevicePage> devicePageCollection) {
         this.devicePageCollection = devicePageCollection;
     }
-   
-    @XmlTransient
-    @JsonIgnore
-	public String getLoginkey() {
-		return loginkey;
-	}
-
-	public void setLoginkey(String loginkey) {
-		this.loginkey = loginkey;
-	}
-
-	public String getNotes() {
-		return notes;
-	}
-	
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-
-	public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsertokean() {
-        return usertokean;
-    }
-
-    public void setUsertokean(String usertokean) {
-        this.usertokean = usertokean;
-    }
-
-    public Date getExpiredate() {
-        return expiredate;
-    }
-
-    public void setExpiredate(Date expiredate) {
-        this.expiredate = expiredate;
-    }
-    @XmlTransient
-    @JsonIgnore
-    public Date getCreatedate() {
-        return createdate;
-    }
-
-    public void setCreatedate(Date createdate) {
-        this.createdate = createdate;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-
-    public String getPasswordEncy() {
-        return passwordEncy;
-    }
-
-    public void setPasswordEncy(String passwordEncy) {
-        this.passwordEncy = passwordEncy;
-    }
-    @XmlTransient
-    @JsonIgnore
-    public Date getLoginModfiy() {
-        return loginModfiy;
-    }
-
-    public void setLoginModfiy(Date loginModfiy) {
-        this.loginModfiy = loginModfiy;
-    }
-    @XmlTransient
-    @JsonIgnore
-    public Date getLoginCreate() {
-        return loginCreate;
-    }
-
-    public void setLoginCreate(Date loginCreate) {
-        this.loginCreate = loginCreate;
-    }
-
-    public User getUserID() {
-        return userID;
-    }
-
-    public void setUserID(User userID) {
-        this.userID = userID;
-    }
 
     @Override
     public int hashCode() {
@@ -287,3 +374,5 @@ public class UserLogin implements Serializable {
     }
     
 }
+
+

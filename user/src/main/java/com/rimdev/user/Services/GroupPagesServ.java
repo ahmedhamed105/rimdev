@@ -70,21 +70,21 @@ public class GroupPagesServ {
 			  
 			  boolean outcomp=  pagesPriviledgeServ.validpage(devpage.getPagesID(), parents,devpage);
 			  if(!outcomp) {
-				  String text= "No priviledge for user : "+devpage.getUserloginID().getUsername();
-				  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), 0, 14, langcode," ");
+				  String text= "page : "+ devpage.getPagesID().getPagename()+" No priviledge for user : "+devpage.getUserloginID().getUsername();
+				  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), devpage.getUserloginID().getId(), 14, langcode," ");
 				  
 					 throw new NooauthException(textConvertionServ.search("E101", langcode));	
 				}else {
 					
-					String text= "have priviledge for user : "+devpage.getUserloginID().getUsername();
-					logServ.info(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), 0, 8, langcode," ");					
+					String text= "page : "+ devpage.getPagesID().getPagename()+" have priviledge for user : "+devpage.getUserloginID().getUsername();
+					logServ.info(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), devpage.getUserloginID().getId(), 8, langcode," ");					
 					
 					
 				}
 		  }else {
 			  
-			  String text= "No priviledge for user : "+devpage.getUserloginID().getUsername() +" group "+group.getGroupname()+" is closed";
-			  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), 0, 13, langcode," ");					
+			  String text= "page : "+ devpage.getPagesID().getPagename()+" No priviledge for user : "+devpage.getUserloginID().getUsername() +" group "+group.getGroupname()+" is closed";
+			  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), devpage.getUserloginID().getId(), 13, langcode," ");					
 				
 			  throw new NooauthException(textConvertionServ.search("E101", langcode));
 		  }

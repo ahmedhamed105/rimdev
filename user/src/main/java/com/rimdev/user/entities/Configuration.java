@@ -19,6 +19,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  *
  * @author ahmed.elemam
@@ -26,6 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "configuration", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "Configuration.findAll", query = "SELECT c FROM Configuration c")
     , @NamedQuery(name = "Configuration.findById", query = "SELECT c FROM Configuration c WHERE c.id = :id")
@@ -64,9 +70,9 @@ public class Configuration implements Serializable {
     @Column(name = "modify_Date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifyDate;
-    @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
-    private User userID;
+    private UserLogin userloginID;
 
     public Configuration() {
     }
@@ -146,12 +152,12 @@ public class Configuration implements Serializable {
         this.modifyDate = modifyDate;
     }
 
-    public User getUserID() {
-        return userID;
+    public UserLogin getUserloginID() {
+        return userloginID;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUserloginID(UserLogin userloginID) {
+        this.userloginID = userloginID;
     }
 
     @Override
@@ -180,3 +186,4 @@ public class Configuration implements Serializable {
     }
     
 }
+

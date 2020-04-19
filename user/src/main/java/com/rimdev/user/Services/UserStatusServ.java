@@ -1,6 +1,7 @@
 package com.rimdev.user.Services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Repo.UserStatusRepo;
 import com.rimdev.user.entities.DataStatus;
 import com.rimdev.user.entities.UserStatus;
+import com.rimdev.user.entities.UserType;
 
 @Service
 public class UserStatusServ {
@@ -38,6 +40,31 @@ public class UserStatusServ {
 	    }
 			
 		}
+	
+	
+
+public UserStatus getbyid(int id) {
+	
+	try {
+		Optional<UserStatus> flowid =userStatusRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 UserStatus  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return null;
+	}
+	
+
+	
+}
 	
 	
 

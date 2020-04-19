@@ -1,7 +1,6 @@
 package com.rimdev.user.entities;
 
 
-
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -40,15 +39,15 @@ public class UserFile implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
-    @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private User userID;
-    @JoinColumn(name = "files_upload_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private FilesUpload filesuploadID;
     @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Component componentID;
+    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private UserLogin userloginID;
+    @JoinColumn(name = "files_upload_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private FilesUpload filesuploadID;
 
     public UserFile() {
     }
@@ -65,12 +64,20 @@ public class UserFile implements Serializable {
         this.id = id;
     }
 
-    public User getUserID() {
-        return userID;
+    public Component getComponentID() {
+        return componentID;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setComponentID(Component componentID) {
+        this.componentID = componentID;
+    }
+
+    public UserLogin getUserloginID() {
+        return userloginID;
+    }
+
+    public void setUserloginID(UserLogin userloginID) {
+        this.userloginID = userloginID;
     }
 
     public FilesUpload getFilesuploadID() {
@@ -80,19 +87,8 @@ public class UserFile implements Serializable {
     public void setFilesuploadID(FilesUpload filesuploadID) {
         this.filesuploadID = filesuploadID;
     }
-    
-    
 
-    public Component getComponentID() {
-        return componentID;
-    }
-
-    public void setComponentID(Component componentID) {
-        this.componentID = componentID;
-    }
-    
-
-	@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

@@ -29,6 +29,10 @@ public class GroupWebServ {
 	WebservicepriviledgeServ webservicepriviledgeServ;
 	
 	
+	@Autowired
+	LogServ logServ;
+	
+	
 	public List<GroupWeb> getbygroup(int groupid,String langcode) {
 		try {
 			return (List<GroupWeb>) groupWebRepo.getbygroup(groupid);
@@ -59,25 +63,33 @@ public class GroupWebServ {
 			  if(group.getGroupstatusID().getId() == 1) {
 				  List<GroupWeb> webservices=  getbygroup(group.getId(), langcode);
 				  
-				  
-				  
-				boolean found=false;
 				
 				String URL = webservicepriviledgeServ.makeUrl(request,paramter,values);
-				System.out.println("ahmed hamed"+ URL);
+				//System.out.println("ahmed hamed"+ URL);
 				
 	
 				
 				boolean validsd=webservicepriviledgeServ.findwebservices(page,URL, webservices);
-				System.out.println(validsd);
+				//System.out.println(validsd);
 				
 				if(!validsd) {
+					  String text= "webservice : "+ page.getPagesID().getPagename()+" No priviledge for user : "+page.getUserloginID().getUsername() +" group "+group.getGroupname()+" is closed";
+					  logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 15, langcode," ");					
+						
+				 throw new PopupException(textConvertionServ.search("E101", langcode));
+				}else {
 					
-					 throw new PopupException("no Priviledge to enter "+URL);	
+					String text= "webservice : "+ page.getPagesID().getPagename()+" have priviledge for user : "+page.getUserloginID().getUsername();
+					logServ.info(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 9, langcode," ");					
+					
 				}
 				 
 			  }else {
-				  throw new PopupException("no Priviledge to enter ahmed");
+				  
+				  String text= "webservice : "+ page.getPagesID().getPagename()+" No priviledge for user : "+page.getUserloginID().getUsername() +" group "+group.getGroupname()+" is closed";
+				  logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 13, langcode," ");					
+					
+				  throw new PopupException(textConvertionServ.search("E101", langcode));
 			  }
 			
 		} catch (Exception e) {

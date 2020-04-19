@@ -5,6 +5,8 @@
  */
 package com.rimdev.user.entities;
 
+
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -12,12 +14,9 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -50,6 +49,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "User.findByBirthdate", query = "SELECT u FROM User u WHERE u.birthdate = :birthdate")
     , @NamedQuery(name = "User.findByUseridnumber", query = "SELECT u FROM User u WHERE u.useridnumber = :useridnumber")
     , @NamedQuery(name = "User.findByPassportnumber", query = "SELECT u FROM User u WHERE u.passportnumber = :passportnumber")
+    , @NamedQuery(name = "User.findByIDnumber", query = "SELECT u FROM User u WHERE u.iDnumber = :iDnumber")
     , @NamedQuery(name = "User.findByUsermodify", query = "SELECT u FROM User u WHERE u.usermodify = :usermodify")
     , @NamedQuery(name = "User.findByUsercreate", query = "SELECT u FROM User u WHERE u.usercreate = :usercreate")})
 public class User implements Serializable {
@@ -84,20 +84,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date usercreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<Configuration> configurationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<Adress> adressCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<UserLogin> userLoginCollection;
-    @JoinColumn(name = "User_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserType usertypeID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Collection<UserFile> userFileCollection;    
-    @JoinColumn(name = "User_status_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserStatus userstatusID;
-    
 
     public User() {
     }
@@ -106,17 +93,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-
-
-    public UserStatus getUserstatusID() {
-        return userstatusID;
+    public User(Integer id, Date usermodify, Date usercreate) {
+        this.id = id;
+        this.usermodify = usermodify;
+        this.usercreate = usercreate;
     }
 
-    public void setUserstatusID(UserStatus userstatusID) {
-        this.userstatusID = userstatusID;
-    }
-
-	public Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -172,27 +155,14 @@ public class User implements Serializable {
         this.passportnumber = passportnumber;
     }
 
-  
-    public String getiDnumber() {
-		return iDnumber;
-	}
+    public String getIDnumber() {
+        return iDnumber;
+    }
 
-	public void setiDnumber(String iDnumber) {
-		this.iDnumber = iDnumber;
-	}
-	
-	@XmlTransient
-	@JsonIgnore
-	public Collection<Configuration> getConfigurationCollection() {
-		return configurationCollection;
-	}
+    public void setIDnumber(String iDnumber) {
+        this.iDnumber = iDnumber;
+    }
 
-	public void setConfigurationCollection(Collection<Configuration> configurationCollection) {
-		this.configurationCollection = configurationCollection;
-	}
-
-	@XmlTransient
-    @JsonIgnore
     public Date getUsermodify() {
         return usermodify;
     }
@@ -200,26 +170,13 @@ public class User implements Serializable {
     public void setUsermodify(Date usermodify) {
         this.usermodify = usermodify;
     }
-    @XmlTransient
-    @JsonIgnore
+
     public Date getUsercreate() {
         return usercreate;
     }
 
     public void setUsercreate(Date usercreate) {
         this.usercreate = usercreate;
-    }
-
-
-
-    @XmlTransient
-   @JsonIgnore
-    public Collection<Adress> getAdressCollection() {
-        return adressCollection;
-    }
-
-    public void setAdressCollection(Collection<Adress> adressCollection) {
-        this.adressCollection = adressCollection;
     }
 
     @XmlTransient
@@ -232,23 +189,6 @@ public class User implements Serializable {
         this.userLoginCollection = userLoginCollection;
     }
 
-    public UserType getUsertypeID() {
-        return usertypeID;
-    }
-
-    public void setUsertypeID(UserType usertypeID) {
-        this.usertypeID = usertypeID;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<UserFile> getUserFileCollection() {
-        return userFileCollection;
-    }
-
-    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
-        this.userFileCollection = userFileCollection;
-    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -275,3 +215,4 @@ public class User implements Serializable {
     }
     
 }
+

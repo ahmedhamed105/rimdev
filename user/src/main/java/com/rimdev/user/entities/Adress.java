@@ -5,6 +5,7 @@
  */
 package com.rimdev.user.entities;
 
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -21,11 +22,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -52,8 +51,8 @@ public class Adress implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
     @Basic(optional = false)
@@ -80,9 +79,9 @@ public class Adress implements Serializable {
     @JoinColumn(name = "Area_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Area areaID;
-    @JoinColumn(name = "User_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
-    private User userID;
+    private UserLogin userloginID;
 
     public Adress() {
     }
@@ -153,8 +152,7 @@ public class Adress implements Serializable {
     public void setAdlatitude(String adlatitude) {
         this.adlatitude = adlatitude;
     }
-    @XmlTransient
-    @JsonIgnore
+
     public Date getAddModify() {
         return addModify;
     }
@@ -162,8 +160,7 @@ public class Adress implements Serializable {
     public void setAddModify(Date addModify) {
         this.addModify = addModify;
     }
-    @XmlTransient
-    @JsonIgnore
+
     public Date getAddCreate() {
         return addCreate;
     }
@@ -180,12 +177,12 @@ public class Adress implements Serializable {
         this.areaID = areaID;
     }
 
-    public User getUserID() {
-        return userID;
+    public UserLogin getUserloginID() {
+        return userloginID;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setUserloginID(UserLogin userloginID) {
+        this.userloginID = userloginID;
     }
 
     @Override
@@ -214,3 +211,4 @@ public class Adress implements Serializable {
     }
     
 }
+

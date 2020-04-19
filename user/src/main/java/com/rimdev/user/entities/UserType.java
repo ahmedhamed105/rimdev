@@ -5,6 +5,7 @@
  */
 package com.rimdev.user.entities;
 
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -68,7 +69,7 @@ public class UserType implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date typeCreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usertypeID")
-    private Collection<User> userCollection;
+    private Collection<UserLogin> userLoginCollection;
 
     public UserType() {
     }
@@ -108,8 +109,7 @@ public class UserType implements Serializable {
     public void setPublishnot(int publishnot) {
         this.publishnot = publishnot;
     }
-    @XmlTransient
-    @JsonIgnore
+
     public Date getTypeModify() {
         return typeModify;
     }
@@ -117,8 +117,7 @@ public class UserType implements Serializable {
     public void setTypeModify(Date typeModify) {
         this.typeModify = typeModify;
     }
-    @XmlTransient
-    @JsonIgnore
+
     public Date getTypeCreate() {
         return typeCreate;
     }
@@ -129,12 +128,12 @@ public class UserType implements Serializable {
 
     @XmlTransient
     @JsonIgnore
-    public Collection<User> getUserCollection() {
-        return userCollection;
+    public Collection<UserLogin> getUserLoginCollection() {
+        return userLoginCollection;
     }
 
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
+    public void setUserLoginCollection(Collection<UserLogin> userLoginCollection) {
+        this.userLoginCollection = userLoginCollection;
     }
 
     @Override

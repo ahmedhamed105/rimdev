@@ -221,12 +221,12 @@ public User update(User input,String langcode) {
 public FilesUpload savefile(threevalues input,String langcode) {
 
 	try {
-		User user=getuser(Integer.parseInt(input.getValue1()), langcode);
+		//User user=getuser(Integer.parseInt(input.getValue1()), langcode);
 		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
 		Component com=componentServ.getComponentbyid(Integer.parseInt(input.getValue3()), langcode);
 		
 		
-		userFileServ.Save(user, file,com, langcode);
+		userFileServ.Save(null, file,com, langcode);
 		
 		return file;
 		
