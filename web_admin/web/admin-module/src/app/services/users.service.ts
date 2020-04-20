@@ -71,8 +71,13 @@ export class UsersService {
           }
 
 
-          tokean_check(object,Devicetokean,pageid):Observable<[]>{
-          return this.insertbyurl(object,GlobalConstants.usertokean,GlobalConstants.ip,GlobalConstants.port,Devicetokean,pageid);
+          tokean_check():Observable<[]>{
+            var tokeanq = {
+              username : GlobalConstants.USERNAME,
+              tokean : GlobalConstants.USERTOKEANkey
+            
+            }
+          return this.insertbyurl(tokeanq,GlobalConstants.usertokean,GlobalConstants.ip,GlobalConstants.port,GlobalConstants.Devicetokean,GlobalConstants.pageid);
           }
  
 

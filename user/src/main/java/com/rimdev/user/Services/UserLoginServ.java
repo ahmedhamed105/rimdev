@@ -253,7 +253,47 @@ public UserLogin getbyusername(String username,String langcode) {
 	
 }
 
+public UserLogin getbyusernametokean(HttpServletRequest request,String username,String tokean,String langcode,DevicePage Dev) {
+	
+	try {
+		Optional<UserLogin> flowid =userLoginRepo.findbyusernametokean(username,tokean);
+		 
+		 if (flowid.isPresent()){
+			 UserLogin a= flowid.get();
+			 
+				String text= "User tokean is ok : "+username+" or token : "+tokean;
+				logServ.info(Dev.getDeviceId().getDeviceip(),request,text, Dev.getDeviceId(), Dev.getUserloginID().getId(), 12, langcode,"");				
+			return a;
 
+					}
+			else{
+			   // your device is not authorised
+				String text= "User tokean is Wrong "+username+" or token : "+tokean;
+				logServ.errorlog(Dev.getDeviceId().getDeviceip(),request,text, Dev.getDeviceId(), Dev.getUserloginID().getId(), 3, langcode,"");			
+				throw new NooauthException(textConvertionServ.search("E103", langcode));
+				
+			}
+	}  catch (TransientDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(Dev.getDeviceId().getDeviceip(),request,text, Dev.getDeviceId(), Dev.getUserloginID().getId() , 2, langcode,se.getMessage());	
+	
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(Dev.getDeviceId().getDeviceip(),request,text, Dev.getDeviceId(), Dev.getUserloginID().getId() , 2, langcode,se.getMessage());
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(Dev.getDeviceId().getDeviceip(),request,text, Dev.getDeviceId(), Dev.getUserloginID().getId() , 2, langcode,se.getMessage());
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(Dev.getDeviceId().getDeviceip(),request,text, Dev.getDeviceId(), Dev.getUserloginID().getId() , 2, langcode,se.getMessage());
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
+
+	
+}
 
 
 
@@ -352,44 +392,73 @@ public void update(UserLogin input,String langcode) {
 
 
 
-public Loginobject loginpage(Loginobject input,String langcode) {
+public Loginobject loginpage(HttpServletRequest request,DevicePage devpag,Loginobject input,String langcode) {
 	Loginobject out=new Loginobject();
-	
 	out.setUsername(input.getUsername());
-	UserLogin userlog=null;//getusername(input.getUsername(), langcode,0);
+	UserLogin userlogin= getusername(request, input.getUsername(), langcode, devpag.getDeviceId(), 0);
 	
-	if(userlog == null) {
-		 throw new NullPointerException("Not permit to login");
+	if(userlogin.getUsertokean().equals(input.getTokean())) {
+		String text= "User auth with username : "+input.getUsername()+" or token : "+input.getTokean();
+		logServ.info(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 29, langcode," ");		
+    	
+    }else {
+    	String text= "not  auth (User token wrong) with username : "+input.getUsername()+" or token : "+input.getTokean();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 30, langcode," ");			
+		throw new NooauthException(textConvertionServ.search("E103", langcode));
+
+    	
+    }
+	
+	if(userlogin.getLoginFlag() != 1) {
+		String text= "not  auth (User token wrong) with username : "+input.getUsername()+" or token : "+input.getTokean();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 31, langcode," ");			
+		throw new NooauthException(textConvertionServ.search("E113", langcode));
+
 		
 	}
 
-	
-	if(! userlog.getUsertokean().equals(input.getTokean())) {
-		throw new RedirectException("please enter good tokean");
-		
-	}
    
 
     Calendar cal = Calendar.getInstance(); 
    
 	Generate gen=new Generate();
 	String tokean=gen.token(30);
+	userlogin.setLoginModfiy(cal.getTime());
+    if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
+    	cal.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+    	cal.add(Calendar.MINUTE, configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+       }else {      	
+    	   cal.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+       }
+    userlogin.setExpiredate(cal.getTime());
+	out.setUsername(userlogin.getUsername());
 	out.setTokean(tokean);
-	userlog.setUsertokean(tokean);
-	userlog.setLoginModfiy(cal.getTime());
-	cal.add(Calendar.MONTH, 1);
-	userlog.setExpiredate(cal.getTime());
-	out.setLogin(true);
+	userlogin.setUsertokean(tokean);		
 
+if(userlogin.getLoginFlag() == 1) {
+	out.setLogin(true);	
+}else {
+	out.setLogin(false);	
+}
+
+	
 	try {
-		userLoginRepo.save(userlog);	
+		userLoginRepo.save(userlogin);	
 	}  catch (TransientDataAccessException  se) {
+		String text= "sql error"+tokean;
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
+    	String text= "sql error"+tokean;
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
+    	String text= "sql error"+tokean;
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
+    	String text= "sql error"+tokean;
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	return out;
@@ -711,7 +780,12 @@ public Loginobject login(HttpServletRequest request,Loginobject input,String lan
     	out.setTokean(tokean);
     	userlog.setUsertokean(tokean);
     	userlog.setLoginModfiy(cal.getTime());
-    	cal.add(Calendar.MONTH, 1);
+        if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
+        	cal.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
+        	cal.add(Calendar.MINUTE, configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+           }else {      	
+        	   cal.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
+           }
     	userlog.setExpiredate(cal.getTime());
     	userlog.setPagesID(page.getPagesID());
     	userlog.setLoginFailed(0);

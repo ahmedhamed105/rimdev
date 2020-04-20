@@ -39,7 +39,7 @@ export class LoginpageComponent implements OnInit {
   public pagenumber = 12;
   public pagetokean ;
 
-  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private cookieService: CookiesService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private UsersService:UsersService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private cookieService: CookiesService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -86,7 +86,20 @@ createImageFromBlob(image: Blob) {
 
 
 
-    this.cookieService.checkboxrember('0');
+    this.cookieService.checkboxrember('1');
+
+    GlobalConstants.rember = this.cookieService.getCookie('rember');
+  if( GlobalConstants.rember === '1'){
+    var username = this.cookieService.getCookie('username');
+    var usertokean = this.cookieService.getCookie('usertokean');
+    if(username === "" || usertokean === ""){
+      window.location.replace("/login");
+    }else{
+      GlobalConstants.USERNAME = username; // To Get Cookie
+      GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
+    }
+  }
+
 
     var lang = this.cookieService.getCookie('language') ;
 
@@ -121,6 +134,12 @@ createImageFromBlob(image: Blob) {
 
        GlobalConstants.Devicetokean =this.pagetokean;
 
+
+
+   //    this.UsersService.tokean_check().subscribe(tokean => {
+
+   //     console.log(tokean['login'])
+      
 
        this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
 
@@ -436,7 +455,7 @@ if(parent.parent.firstmethod === undefined){
 
 });
  
-
+ // });
  
 
 
@@ -548,7 +567,6 @@ onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
 
       form.reset();
 
-      this.cookieService.checkboxrember('1');
 
       if(related === 'login'){
         if(data['username'] == undefined || data['tokean'] == undefined){

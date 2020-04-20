@@ -45,11 +45,11 @@ export class ComponentService {
       }
 
 
-    getmenu(type : String,menuid: String,username,usertokean):Observable<any>{
+    getmenu(type,menuid):Observable<any>{
 
       var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.pagefrommenu+GlobalConstants.language+"/";
 
-      url=url+type+"/"+menuid;
+      url=url+type+'/'+menuid;
 
       console.log(GlobalConstants.language)
 
@@ -57,8 +57,10 @@ export class ComponentService {
         'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-        'username':   username,
-        'usertokean': usertokean });
+         'pageid' :   GlobalConstants.pageid,
+        'username':   GlobalConstants.USERNAME,
+        'usertokean': GlobalConstants.USERTOKEANkey,
+        'devicetokean': GlobalConstants.Devicetokean });
         let options = { headers: headers };
   
       return  this._http.get<any>(url,options);

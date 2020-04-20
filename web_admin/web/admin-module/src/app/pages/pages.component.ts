@@ -95,12 +95,8 @@ export class PagesComponent implements OnInit {
       
       
     
-    var tokean = {
-      username : GlobalConstants.USERNAME,
-      tokean : GlobalConstants.USERTOKEANkey
-    
-    }
-        this._usersservice.tokean_check(tokean,'','').subscribe(tokean => {
+
+        this._usersservice.tokean_check().subscribe(tokean => {
     
           this.cookieService.username(tokean['username'],GlobalConstants.rember);
           this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
@@ -140,7 +136,7 @@ export class PagesComponent implements OnInit {
     }
 
 
-    this._ComponentService.getmenu(this.type,menuid,GlobalConstants.USERNAME,GlobalConstants.USERTOKEANkey).subscribe(res =>{
+    this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
 
     this.page=res;
 
@@ -158,12 +154,12 @@ export class PagesComponent implements OnInit {
 
       GlobalConstants.Devicetokean =this.pagetokean;
       
-    this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
+    this._LanguagegoService.getalllang().subscribe(data => {
      // this.langs=data;
      this._MenushareService.updatelang(data);     
          });
      
-         this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
+         this._MenulistService.getmenu()
      .subscribe(data => {
      //  this.menus =data;
        this._MenushareService.updatemenu(data);

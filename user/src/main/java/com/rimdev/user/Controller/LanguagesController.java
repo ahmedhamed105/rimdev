@@ -2,6 +2,8 @@ package com.rimdev.user.Controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.LanguagesServ;
+import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Languages;
+import com.rimdev.user.entities.UserLogin;
 
 
 @Controller // This means that this class is a Controller
@@ -31,11 +35,16 @@ public class LanguagesController {
 	@Autowired
 	DevicePageServ devicePageServ;
 	
-	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Languages>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){ 
+	@Autowired
+	UserLoginServ userLoginServ;
 	
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
- 
+	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<Languages>> getAllUsers(HttpServletRequest request,@RequestHeader("pageid") String  pageid,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("devicetokean") String  devicetokean,@PathVariable("langcode") String langcode){ 
+	
+		  DevicePage devpage= devicePageServ.check_tokean_page(devicetokean, pageid, langcode);
+
+		  UserLogin a= userLoginServ.getbyusernametokean(request,username, usertokean, langcode,devpage);
+
 		  return new ResponseEntity<List<Languages>>(languagesServ.getalllang(langcode), HttpStatus.OK);
 	  }
 	  

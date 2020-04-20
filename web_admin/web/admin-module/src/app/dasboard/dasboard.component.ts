@@ -44,12 +44,11 @@ export class DasboardComponent implements OnInit {
 
   ngOnInit() {
 
-
-
-
     var menuid ='1';
-
+    this.pagenumber = '1';
     this.type ='P';
+
+    GlobalConstants.pageid = this.pagenumber;
 
     GlobalConstants.rember = this.cookieService.getCookie('rember');
   if( GlobalConstants.rember === '1'){
@@ -66,36 +65,39 @@ export class DasboardComponent implements OnInit {
   console.log(GlobalConstants.USERNAME);
   console.log(GlobalConstants.USERTOKEANkey);
 
-var tokean = {
-  username : GlobalConstants.USERNAME,
-  tokean : GlobalConstants.USERTOKEANkey
-
-}
 
 
-    this.UsersService.tokean_check(tokean,'','').subscribe(tokean => {
+
+this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,GlobalConstants.USERNAME).then(res => {
+  this.device =this.locationService.mydevice;
+  console.log(this.device.devicetokean);
+
+   
+  this.pagetokean =this.device.devicetokean;
+
+  GlobalConstants.Devicetokean =this.pagetokean;
+
+
+    this.UsersService.tokean_check().subscribe(tokean => {
       
       this.cookieService.username(tokean['username'],GlobalConstants.rember);
       this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
 
+      if(tokean['login'] === false) {
+        window.location.replace("/");
+     }
 
-      this._ComponentService.getmenu(this.type,menuid,GlobalConstants.USERNAME,GlobalConstants.USERTOKEANkey).subscribe(res =>{
+
+
+      this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
 
         this.page=res;
     
         console.log(this.page)
   
-        this.pagenumber = this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id'];
+     //   this.pagenumber = this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id'];
     
-        GlobalConstants.pageid = this.pagenumber;
-
-      this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,GlobalConstants.USERNAME).then(res => {
-        this.device =this.locationService.mydevice;
-        console.log(this.device.devicetokean);
-  
-        this.pagetokean =this.device.deviceId.devicetokean;
-
-        GlobalConstants.Devicetokean =this.pagetokean;
+    //    GlobalConstants.pageid = this.pagenumber;
 
         this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
 
@@ -112,12 +114,12 @@ var lang=this.cookieService.getCookie('language');
 
     }
 
-    this._LanguagegoService.getalllang(this.pagetokean,this.pagenumber.toString()).subscribe(data => {
+    this._LanguagegoService.getalllang().subscribe(data => {
  //this.langs=data;
  this._MenushareService.updatelang(data);
     });
 
-    this._MenulistService.getmenu(this.pagetokean,this.pagenumber.toString())
+    this._MenulistService.getmenu()
 .subscribe(data => {
   //this.menus =data;
   this._MenushareService.updatemenu(data);
@@ -127,9 +129,11 @@ var lang=this.cookieService.getCookie('language');
 
 
 });
-  });
+ 
 });
-});   
+}); 
+
+});
   }
 
 

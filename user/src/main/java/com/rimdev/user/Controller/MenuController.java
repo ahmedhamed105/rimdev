@@ -1,6 +1,9 @@
 package com.rimdev.user.Controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,19 +38,23 @@ public class MenuController {
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<menu_object>> getUsersbyuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){ 
+	  public  ResponseEntity<List<menu_object>> getUsersbyuser(HttpServletRequest request,@RequestHeader("pageid") String  pageid,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("devicetokean") String  devicetokean,@PathVariable("langcode") String langcode){ 
 	
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-	
+		  DevicePage devpage= devicePageServ.check_tokean_page(devicetokean, pageid, langcode);
+
+		  UserLogin a= userLoginServ.getbyusernametokean(request,username, usertokean, langcode,devpage);
+
 		  
-		  
-		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode,a), HttpStatus.OK);
+		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode,devpage), HttpStatus.OK);
 	  }
 	  
 	  
 	  @RequestMapping(value = "/get/{langcode}/{type}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<menuparsub> getid(@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("id") int menuid){ 
-		//  UserLogin a= userLoginServ.getbyusernametokean(username, usertokean, langcode);
+	  public  ResponseEntity<menuparsub> getid(HttpServletRequest request,@RequestHeader("pageid") String  pageid,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("devicetokean") String  devicetokean,@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("id") int menuid){ 
+		
+		  DevicePage devpage= devicePageServ.check_tokean_page(devicetokean, pageid, langcode);
+
+		  UserLogin a= userLoginServ.getbyusernametokean(request,username, usertokean, langcode,devpage);
 
 		  
 		  return new ResponseEntity<menuparsub>(parentMenuServ.getmenus(type,menuid,langcode), HttpStatus.OK);
