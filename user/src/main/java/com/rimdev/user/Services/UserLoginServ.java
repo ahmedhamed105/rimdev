@@ -412,14 +412,25 @@ public Loginobject loginpage(HttpServletRequest request,DevicePage devpag,Logino
 	if(userlogin.getLoginFlag() != 1) {
 		String text= "not  auth (User token wrong) with username : "+input.getUsername()+" or token : "+input.getTokean();
 		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 31, langcode," ");			
-		throw new NooauthException(textConvertionServ.search("E113", langcode));
+		throw new RedirectException(textConvertionServ.search("E113", langcode));
 
 		
+	}
+	  Calendar cal = Calendar.getInstance(); 
+		String as= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
+
+	  System.out.println(as);
+	  
+	if(userlogin.getExpiredate().before(cal.getTime())) {
+		String text= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 31, langcode," ");			
+		throw new RedirectException(textConvertionServ.search("E113", langcode));
+
 	}
 
    
 
-    Calendar cal = Calendar.getInstance(); 
+  
    
 	Generate gen=new Generate();
 	String tokean=gen.token(30);

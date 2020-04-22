@@ -90,12 +90,7 @@ public @ResponseBody ResponseEntity<Loginobject> check_tokean(HttpServletRequest
 	
 	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
 	  System.out.println(info.getUsername()+" "+info.getTokean());
-	  
-	  if(info.getUsername() == null || info.getUsername().equals("")) {	  
-		  info.setUsername(a.getUserloginID().getUsername());
-		  info.setTokean(a.getUserloginID().getUsertokean());
-		  
-	  }
+
 
 	Loginobject out = userLoginServ.loginpage(request,a,info, langcode);
 
