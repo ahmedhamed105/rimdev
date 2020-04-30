@@ -90,15 +90,10 @@ createImageFromBlob(image: Blob) {
 
     GlobalConstants.rember = this.cookieService.getCookie('rember');
   if( GlobalConstants.rember === '1'){
-    var username = this.cookieService.getCookie('username');
-    var usertokean = this.cookieService.getCookie('usertokean');
-    if(username === "" || usertokean === ""){
-      window.location.replace("/login");
-    }else{
-      GlobalConstants.USERNAME = username; // To Get Cookie
-      GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
-    }
+    GlobalConstants.USERNAME = this.cookieService.getCookie('username');
+    GlobalConstants.USERTOKEANkey = this.cookieService.getCookie('usertokean');
   }
+  
 
 
     var lang = this.cookieService.getCookie('language') ;
@@ -125,30 +120,22 @@ createImageFromBlob(image: Blob) {
     GlobalConstants.pageid = this.pagenumber.toString();
 
 
-    this.locationService.all_info(this.pagenumber,'0','public').then(res => {
+    this.locationService.all_info(this.pagenumber).then(res => {
       this.device =this.locationService.mydevice;
 
-       console.log(this.device.devicetokean);
+      this.cookieService.username(this.device['username'],GlobalConstants.rember);
+      this.cookieService.usertokean(this.device['usertokean'],GlobalConstants.rember);
 
-       this.pagetokean =this.device.devicetokean;
+      console.log(this.device['username']+" "+this.device['usertokean']);
 
-       GlobalConstants.Devicetokean =this.pagetokean;
-
-
-
-   //    this.UsersService.tokean_check().subscribe(tokean => {
-
-   //     console.log(tokean['login'])
-      
-
-       this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
+       this._ComponentService.getbackground(this.pagenumber.toString()).subscribe(background =>{
 
         this.createImageFromBlob(background);
      
 
   
     
-    this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{
+    this._ComponentService.getbypage(this.pagenumber.toString()).subscribe(res =>{
 
       res.forEach((parent,indexp) => {
 
@@ -453,9 +440,8 @@ if(parent.parent.firstmethod === undefined){
     this.fileupload.clearQueue();
   }
 
-});
  
- // });
+  });
  
 
 

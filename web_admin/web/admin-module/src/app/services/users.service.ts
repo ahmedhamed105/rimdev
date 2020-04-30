@@ -79,6 +79,17 @@ export class UsersService {
             }
           return this.insertbyurl(tokeanq,GlobalConstants.usertokean,GlobalConstants.ip,GlobalConstants.port,GlobalConstants.Devicetokean,GlobalConstants.pageid);
           }
+
+
+
+          public_tokean_check():Observable<[]>{
+            var tokeanq = {
+              username : 'public',
+              tokean : '0'
+            
+            }
+          return this.insertbyurl(tokeanq,GlobalConstants.usertokean,GlobalConstants.ip,GlobalConstants.port,GlobalConstants.Devicetokean,GlobalConstants.pageid);
+          }
  
 
 }

@@ -39,18 +39,25 @@ public class UserloginController {
 	GroupWebServ groupWebServ;
 
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<UserLogin>> getAllUsers( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<UserLogin>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 	
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	  
 		  return new ResponseEntity<List<UserLogin>>(userLoginServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
 	  @RequestMapping(value = "/user/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<UserLogin>> getbyuser( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id") int userid){
+	  public  ResponseEntity<List<UserLogin>> getbyuser( HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") int userid){
 
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  paramter.add("id");
+	  values.add(String.valueOf(userid));
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	  
 	  
 		  return new ResponseEntity<List<UserLogin>>(userLoginServ.getbyuser(userid, langcode), HttpStatus.OK);
 	  }
@@ -64,17 +71,12 @@ public class UserloginController {
 	  
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody UserLogin info) {
+public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody UserLogin info) {
   // This returns a JSON or XML with the users
 
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-
 	  List<String> paramter =new ArrayList<String>();
-	  List<String> values =new ArrayList<String>();
-	  paramter.add("langcode");
-	  values.add(langcode);
-	  
-	  groupWebServ.checkpriviledge(request, a,paramter,values);
+List<String> values =new ArrayList<String>();
+DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	System.out.println(info.getPasswordEncy());
 	String key = userLoginServ.getkey(info.getPasswordEncy());

@@ -68,7 +68,7 @@ export class DasboardComponent implements OnInit {
 
 
 
-this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,GlobalConstants.USERNAME).then(res => {
+this.locationService.all_info(this.pagenumber).then(res => {
   this.device =this.locationService.mydevice;
   console.log(this.device.devicetokean);
 
@@ -99,7 +99,7 @@ this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,Glob
     
     //    GlobalConstants.pageid = this.pagenumber;
 
-        this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
+        this._ComponentService.getbackground(this.pagenumber.toString()).subscribe(background =>{
 
           this.createImageFromBlob(background);
 

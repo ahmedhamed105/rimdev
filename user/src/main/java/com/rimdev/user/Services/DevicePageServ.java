@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import com.rimdev.user.Utils.Generate;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,10 +39,45 @@ public class DevicePageServ {
 	@Autowired
 	LogServ logServ;
 	
-	public DevicePage check_tokean_page(String tokean,String pageid,String langcode) {
+	@Autowired
+	GroupWebServ groupWebServ;
+	
+	@Autowired
+	PagesServ pagesServ;
+	
+	@Autowired
+	DevicePageServ devicePageServ;
+	
+	@Autowired
+	DeviceServ deviceServ;
+	
+	@Autowired
+	GroupPagesServ groupPagesServ;
+	
+	public DevicePage check_webservice(HttpServletRequest request,String tokean,String username,String pageid,String langcode,String devicecode,List<String> paramter,List<String> values) {
 		
+		DevicePage devpage=getdevicepage(request, tokean, username, pageid, langcode,devicecode);
+		
+		userLoginServ.check_userlogin_without(request, devpage.getDeviceId(), devpage.getPagesID(), username, tokean, langcode);
+		
+		groupPagesServ.check_page(request,devpage, langcode);
+		
+		  paramter.add("langcode");
+		  values.add(langcode);
+		  
+		  groupWebServ.checkpriviledge(request, devpage,paramter,values);
+		  
+		  return devpage;
+	}
+	
+	
+	
+	
+public DevicePage getdevicepage(HttpServletRequest request,String tokean,String username,String pageid,String langcode,String devicecode) {
+		
+		int pagenumber =Integer.parseInt(pageid);
 		try {
-			int pagenumber =Integer.parseInt(pageid);
+			
 			Optional<DevicePage> flowid =devicePageRepo.findbytokeanpage(tokean, pagenumber);
 			 
 			 if (flowid.isPresent()){
@@ -51,49 +87,50 @@ public class DevicePageServ {
 						}
 				else{
 				   // alternative processing....
-					throw new NooauthException(textConvertionServ.search("E103", langcode));
+				UserLogin userlogin = userLoginServ.getbyid(1, langcode); 
+				Pages p= pagesServ.getbyid(pagenumber);
+				Device dev=deviceServ.checkdevicetwo(devicecode, langcode);
+				DevicePage out=devicePageServ.savedevicepagewithout(request,dev, p,userlogin,langcode);
+				return  out;
+					
 					
 				}
-		}  catch (TransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
-	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
-	    }catch (ScriptException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
-	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		}  catch (Exception  se) {
+			UserLogin userlogin = userLoginServ.getbyid(1, langcode); 
+			Pages p= pagesServ.getbyid(pagenumber);
+			Device dev=deviceServ.checkdevicetwo(devicecode, langcode);
+			DevicePage out=devicePageServ.savedevicepagewithout(request,dev, p,userlogin,langcode);
+			return  out;
+			
 	    }
 
 		
 	}
 	
+
 	
 
 public DevicePage savedevpag(HttpServletRequest request,Device dev,Pages pa,String username,String tokean,String langcode) {
 	try {
 		UserLogin userlogin = null;
-
-	    userlogin =  userLoginServ.getusername(request,username, langcode,dev,2);
-	    if(userlogin.getUsertokean().equals(tokean)) {
-			String text= "Device auth with username : "+username+" or token : "+tokean;
-			logServ.info(dev.getDeviceip(),request,text, dev, userlogin.getId(), 12, langcode," ");		
-	    	
+		DevicePage a=new DevicePage();
+	    userlogin =  userLoginServ.check_userlogin(request, dev, pa, username, tokean, langcode);
+	    if(userlogin == null || userlogin.getId() == 1) {
+	    	userlogin = userLoginServ.getbyid(1, langcode);  
+	    	Generate gen=new Generate();
+	    	String publictokean = gen.token(30);
+			a.setPageTokean(publictokean);
 	    }else {
-	    	String text= "not  auth (Device token wrong) with username : "+username+" or token : "+tokean;
-			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode," ");			
-			throw new NooauthException(textConvertionServ.search("E103", langcode));
-	
-	    	
+			a.setPageTokean(userlogin.getUsertokean());	
 	    }
 	    
-	    
 	    Date visittime = new Date();
-		DevicePage a=new DevicePage();
+	
 		a.setDeviceId(dev);
 		a.setPagesID(pa);
 		a.setVisittime(visittime);
 		a.setUserloginID(userlogin);
-		a.setPageTokean(dev.getDevicetokean());
+
 		DevicePage out=devicePageRepo.save(a);
 		return out;
 	} catch (TransientDataAccessException  se) {
@@ -121,6 +158,44 @@ public DevicePage savedevpag(HttpServletRequest request,Device dev,Pages pa,Stri
 	
 }
 
+
+
+public DevicePage savedevicepagewithout(HttpServletRequest request,Device dev,Pages pa,UserLogin user,String langcode) {
+	try {
+
+	    Date visittime = new Date();
+		DevicePage a=new DevicePage();
+		a.setDeviceId(dev);
+		a.setPagesID(pa);
+		a.setVisittime(visittime);
+		a.setUserloginID(user);
+		a.setPageTokean(user.getUsertokean());
+		DevicePage out=devicePageRepo.save(a);
+		return out;
+	} catch (TransientDataAccessException  se) {
+		String text= "sql error"+se.getMessage();
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, user.getId(), 2, langcode,se.getMessage());			
+	
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		String text= "sql error"+se.getMessage();
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, user.getId(), 2, langcode,se.getMessage());	
+		
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		String text= "sql error"+se.getMessage();
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, user.getId(), 2, langcode,se.getMessage());	
+		
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		String text= "sql error"+se.getMessage();
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, user.getId(), 2, langcode,se.getMessage());	
+		
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	}
+
+	
+}
 
 
 

@@ -27,6 +27,7 @@ import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Email;
+import com.rimdev.user.entities.Pages;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserLogin;
@@ -61,6 +62,8 @@ public class UserLoginServ {
 	
 	@Autowired
 	LogServ logServ;
+	
+	
 	
 	
 
@@ -392,28 +395,79 @@ public void update(UserLogin input,String langcode) {
 
 
 
-public Loginobject loginpage(HttpServletRequest request,DevicePage devpag,Loginobject input,String langcode) {
-	Loginobject out=new Loginobject();
-	out.setUsername(input.getUsername());
-	UserLogin userlogin= getusername(request, input.getUsername(), langcode, devpag.getDeviceId(), 0);
-	
-	if(userlogin.getUsertokean().equals(input.getTokean())) {
-		String text= "User auth with username : "+input.getUsername()+" or token : "+input.getTokean();
-		logServ.info(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 29, langcode," ");		
-    	
-    }else {
-    	String text= "not  auth (User token wrong) with username : "+input.getUsername()+" or token : "+input.getTokean();
-		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 30, langcode," ");			
-		throw new NooauthException(textConvertionServ.search("E103", langcode));
 
-    	
-    }
+public UserLogin check_userlogin_without(HttpServletRequest request,Device dev,Pages pa,String username,String tokean,String langcode) {
+
+	UserLogin userlogin= getusername(request,username, langcode,dev,3);
+	
+	  if(userlogin == null) {
+	    	userlogin = getbyid(1, langcode);  
+	    	return userlogin;
+	    }else {
+		    if(userlogin.getUsertokean().equals(tokean)) {
+				String text= "Device auth with username : "+username+" or token : "+tokean;
+				logServ.info(dev.getDeviceip(),request,text, dev, userlogin.getId(), 12, langcode," ");		
+		    	
+		    }else {
+		    	userlogin = getbyid(1, langcode);  
+		    	String text= "not  auth (Device token wrong) with username : "+username+" or token : "+tokean;
+				logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 3, langcode," ");
+				return userlogin;
+		    }
+	    	
+	    }
 	
 	if(userlogin.getLoginFlag() != 1) {
-		String text= "not  auth (User token wrong) with username : "+input.getUsername()+" or token : "+input.getTokean();
-		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 31, langcode," ");			
-		throw new RedirectException(textConvertionServ.search("E113", langcode));
+		userlogin = getbyid(1, langcode); 
+		String text= " username : "+username+" not login change to public";
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 3, langcode," ");
+		return userlogin;
+		
+	}
+	  Calendar cal = Calendar.getInstance(); 
+		String as= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
 
+	  
+	if(userlogin.getExpiredate().before(cal.getTime())) {
+		String text= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 31, langcode," ");			
+		throw new NooauthException(textConvertionServ.search("E113", langcode));
+
+	}
+
+  
+
+	return userlogin;
+	
+}
+
+
+public UserLogin check_userlogin(HttpServletRequest request,Device dev,Pages pa,String username,String tokean,String langcode) {
+
+	UserLogin userlogin= getusername(request,username, langcode,dev,3);
+	
+	  if(userlogin == null) {
+	    	userlogin = getbyid(1, langcode);  
+	    	return userlogin;
+	    }else {
+		    if(userlogin.getUsertokean().equals(tokean)) {
+				String text= "Device auth with username : "+username+" or token : "+tokean;
+				logServ.info(dev.getDeviceip(),request,text, dev, userlogin.getId(), 12, langcode," ");		
+		    	
+		    }else {
+		    	userlogin = getbyid(1, langcode);  
+		    	String text= "not  auth (Device token wrong) with username : "+username+" or token : "+tokean;
+				logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 3, langcode," ");
+				return userlogin;
+		    }
+	    	
+	    }
+	
+	if(userlogin.getLoginFlag() != 1) {
+		userlogin = getbyid(1, langcode); 
+		String text= " username : "+username+" not login change to public";
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 3, langcode," ");
+		return userlogin;
 		
 	}
 	  Calendar cal = Calendar.getInstance(); 
@@ -423,17 +477,14 @@ public Loginobject loginpage(HttpServletRequest request,DevicePage devpag,Logino
 	  
 	if(userlogin.getExpiredate().before(cal.getTime())) {
 		String text= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
-		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 31, langcode," ");			
-		throw new RedirectException(textConvertionServ.search("E113", langcode));
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 31, langcode," ");			
+		throw new NooauthException(textConvertionServ.search("E113", langcode));
 
 	}
 
-   
-
   
-   
 	Generate gen=new Generate();
-	String tokean=gen.token(30);
+	String newtokean=gen.token(30);
 	userlogin.setLoginModfiy(cal.getTime());
     if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
     	cal.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
@@ -442,37 +493,29 @@ public Loginobject loginpage(HttpServletRequest request,DevicePage devpag,Logino
     	   cal.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
        }
     userlogin.setExpiredate(cal.getTime());
-	out.setUsername(userlogin.getUsername());
-	out.setTokean(tokean);
 	userlogin.setUsertokean(tokean);		
-
-if(userlogin.getLoginFlag() == 1) {
-	out.setLogin(true);	
-}else {
-	out.setLogin(false);	
-}
 
 	
 	try {
 		userLoginRepo.save(userlogin);	
 	}  catch (TransientDataAccessException  se) {
 		String text= "sql error"+tokean;
-		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());	
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 2, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
     	String text= "sql error"+tokean;
-		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());	
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 2, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
     	String text= "sql error"+tokean;
-		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());	
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 2, langcode,se.getMessage());	
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
     	String text= "sql error"+tokean;
-		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(), 2, langcode,se.getMessage());
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 2, langcode,se.getMessage());
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
-	return out;
+	return userlogin;
 	
 }
 String emailRegex = "[a-zA-Z0-9.!#$%&amp;’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+"; 
@@ -515,7 +558,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 			String text= "email : "+username+" is wrong";
 			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 16, langcode," ");
 			
-			if(login == 2)
+			if(login == 3)
+	    		return null;	
+			 else if(login == 2)
 			// TODO: handle exception
 		    		throw new NooauthException(textConvertionServ.search("E105", langcode));		
 			else if(login == 1)
@@ -544,7 +589,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 	   	String text= "check email status : "+username;
 		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 18, langcode," ");	
 		
-		if(login == 2) 
+		if(login == 3)
+    		return null;	
+		 else if(login == 2) 
 			throw new NooauthException(textConvertionServ.search("E108", langcode));			
 		else if(login == 1) 
 			throw new PopupException(textConvertionServ.search("E108", langcode));					
@@ -576,7 +623,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 	logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 20, langcode," ");			
 
 	
-	if(login == 2)
+	if(login == 3)
+		return null;	
+	 else if(login == 2)
 	   		throw new NooauthException(textConvertionServ.search("E107", langcode));	
 	else if(login == 1)
    		throw new PopupException(textConvertionServ.search("E107", langcode));	
@@ -602,7 +651,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 		String text= "telephone : "+username+" is wrong";
 		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 23, langcode," ");
 		
-		if(login == 2)
+		if(login == 3)
+    		return null;	
+		 else if(login == 2)
 			// TODO: handle exception
 		    		throw new NooauthException(textConvertionServ.search("E105", langcode));		
 			else if(login == 1)
@@ -629,7 +680,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 	   	String text= "check telephone status : "+username;
 		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 22, langcode," ");	
 		
-		if(login == 2) 
+		if(login == 3)
+    		return null;	
+		 else if(login == 2) 
 			throw new NooauthException(textConvertionServ.search("E109", langcode));			
 		else if(login == 1) 
 			throw new PopupException(textConvertionServ.search("E109", langcode));					
@@ -656,7 +709,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 		String text= "not Active user : "+username;
 		logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 20, langcode," ");	
 		
-		if(login == 2)
+		if(login == 3)
+    		return null;	
+		 else if(login == 2)
 	   		throw new NooauthException(textConvertionServ.search("E107", langcode));	
 	else if(login == 1)
    		throw new PopupException(textConvertionServ.search("E107", langcode));	
@@ -677,7 +732,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 			String text= "username : "+username+" is wrong";
 			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 24, langcode," ");
 			
-			if(login == 2)
+			 if(login == 3)
+	    		return null;	
+			 else if(login == 2)
 				// TODO: handle exception
 			    		throw new NooauthException(textConvertionServ.search("E105", langcode));		
 				else if(login == 1)
@@ -708,7 +765,9 @@ public UserLogin getusername(HttpServletRequest request,String username,String l
 			String text= "not Active user : "+username;
 			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 20, langcode," ");	
 			
-			if(login == 2)
+			if(login == 3)
+	    		return null;	
+			 else if(login == 2)
 		   		throw new NooauthException(textConvertionServ.search("E107", langcode));	
 		else if(login == 1)
 	   		throw new PopupException(textConvertionServ.search("E107", langcode));	

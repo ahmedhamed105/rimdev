@@ -52,8 +52,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "Device.findByDevicemac", query = "SELECT d FROM Device d WHERE d.devicemac = :devicemac")
     , @NamedQuery(name = "Device.findByDeviceosversion", query = "SELECT d FROM Device d WHERE d.deviceosversion = :deviceosversion")
     , @NamedQuery(name = "Device.findByDeviceosunknow", query = "SELECT d FROM Device d WHERE d.deviceosunknow = :deviceosunknow")
-    , @NamedQuery(name = "Device.findByDevicetokean", query = "SELECT d FROM Device d WHERE d.devicetokean = :devicetokean")
-    , @NamedQuery(name = "Device.findByTokeantime", query = "SELECT d FROM Device d WHERE d.tokeantime = :tokeantime")
     , @NamedQuery(name = "Device.findByDevicemodify", query = "SELECT d FROM Device d WHERE d.devicemodify = :devicemodify")
     , @NamedQuery(name = "Device.findByDevicecreate", query = "SELECT d FROM Device d WHERE d.devicecreate = :devicecreate")
     , @NamedQuery(name = "Device.findByDevicelong", query = "SELECT d FROM Device d WHERE d.devicelong = :devicelong")
@@ -87,13 +85,6 @@ public class Device implements Serializable {
     private String deviceosversion;
     @Column(name = "Device_os_unknow", length = 1000)
     private String deviceosunknow;
-    @Basic(optional = false)
-    @Column(name = "Device_tokean", nullable = false, length = 45)
-    private String devicetokean;
-    @Basic(optional = false)
-    @Column(name = "Tokean_time", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date tokeantime;
     @Basic(optional = false)
     @Column(name = "Device_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -156,8 +147,6 @@ public class Device implements Serializable {
     public Device(Integer id, String devicecode, String devicetokean, Date tokeantime, Date devicemodify, Date devicecreate) {
         this.id = id;
         this.devicecode = devicecode;
-        this.devicetokean = devicetokean;
-        this.tokeantime = tokeantime;
         this.devicemodify = devicemodify;
         this.devicecreate = devicecreate;
     }
@@ -226,21 +215,6 @@ public class Device implements Serializable {
         this.deviceosunknow = deviceosunknow;
     }
 
-    public String getDevicetokean() {
-        return devicetokean;
-    }
-
-    public void setDevicetokean(String devicetokean) {
-        this.devicetokean = devicetokean;
-    }
-
-    public Date getTokeantime() {
-        return tokeantime;
-    }
-
-    public void setTokeantime(Date tokeantime) {
-        this.tokeantime = tokeantime;
-    }
 
     public Date getDevicemodify() {
         return devicemodify;

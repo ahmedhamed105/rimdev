@@ -1,6 +1,9 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +43,12 @@ public class AddUserController {
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Adress>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Adress>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 		  
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		return new ResponseEntity<List<Adress>>(adressServ.getall(), HttpStatus.OK);
 	  }
 
@@ -51,10 +56,12 @@ public class AddUserController {
 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Adress>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody List<Adress> emails) {
+public @ResponseBody ResponseEntity<List<Adress>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody List<Adress> emails) {
   // This returns a JSON or XML with the users
 	
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	for (Adress input : emails) {
 		

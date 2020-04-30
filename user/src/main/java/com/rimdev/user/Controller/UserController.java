@@ -1,7 +1,9 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.BeanUtils;
@@ -42,10 +44,12 @@ public class UserController {
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<User>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<User>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 
-		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-  
+		  List<String> paramter =new ArrayList<String>();
+		  List<String> values =new ArrayList<String>();
+		  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+
 		  return new ResponseEntity<List<User>>(userServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
@@ -56,10 +60,14 @@ public class UserController {
 	  }
 	  
 	  @RequestMapping(value = "/get/{langcode}/{id}", method = RequestMethod.GET)
-	  public ResponseEntity<User> getuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable @NotNull int id){
+	  public ResponseEntity<User> getuser(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable @NotNull int id){
 	
-		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-  
+		  List<String> paramter =new ArrayList<String>();
+		  List<String> values =new ArrayList<String>();
+		  paramter.add("id");
+		  values.add(String.valueOf(id));		  
+		  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+
 		  User a = new User();
 		  try {
 			 a = userServ.getuser(id,langcode);
@@ -76,10 +84,11 @@ public class UserController {
 	 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<User>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody User input) {
-	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+public @ResponseBody ResponseEntity<List<User>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody User input) {
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	
 	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
 //System.out.println(input.getFirstName());
@@ -117,9 +126,11 @@ public @ResponseBody ResponseEntity<List<User>> saveorupdate(@RequestHeader("Dev
 
 
 @RequestMapping(value = "/file/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<FilesUpload> savefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody threevalues input) {
+public @ResponseBody ResponseEntity<FilesUpload> savefile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody threevalues input) {
  
-	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
@@ -136,9 +147,13 @@ public @ResponseBody ResponseEntity<FilesUpload> savefile(@RequestHeader("Device
 
 
 @RequestMapping(value = "/filebyuser/{langcode}/{id}", method = RequestMethod.GET)
-public @ResponseBody ResponseEntity<List<UserFile>> savefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id") String userid) {
+public @ResponseBody ResponseEntity<List<UserFile>> savefile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") String userid) {
  
-	  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+paramter.add("id");
+values.add(String.valueOf(userid));	
+DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
@@ -154,9 +169,11 @@ public @ResponseBody ResponseEntity<List<UserFile>> savefile(@RequestHeader("Dev
 
 
 @RequestMapping(value = "/deletefile/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<FilesUpload> deletefile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestParam("fileid") String fileid,@RequestParam("object") String object,@RequestParam("component") String componentid) {
+public @ResponseBody ResponseEntity<FilesUpload> deletefile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestParam("fileid") String fileid,@RequestParam("object") String object,@RequestParam("component") String componentid) {
 	
-	DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	
 	// This returns a JSON or XML with the users

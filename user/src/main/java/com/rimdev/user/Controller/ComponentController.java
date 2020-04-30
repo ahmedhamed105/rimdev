@@ -43,8 +43,7 @@ public class ComponentController {
 	@Autowired
 	DevicePageServ devicePageServ;
 	
-	@Autowired
-	GroupWebServ groupWebServ;
+
 	
     @Autowired
     private FileStorageService fileStorageService;
@@ -55,45 +54,31 @@ public class ComponentController {
 	
     
 	
-	  @RequestMapping(value = "/page/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<parent_comp>> getUsersbyuser(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") int pageid){ 
+	  @RequestMapping(value = "/page/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<List<parent_comp>> getUsersbyuser(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
 		
-		  
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pagenum, langcode);
-
 		  List<String> paramter =new ArrayList<String>();
-		  List<String> values =new ArrayList<String>();
-		  paramter.add("langcode");
-		  values.add(langcode);
-		  paramter.add("id");
-		  values.add(String.valueOf(pageid));
-		  
-		  groupWebServ.checkpriviledge(request, a,paramter,values);
-		
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  return ResponseEntity.ok()
 		  	      .cacheControl(CacheControl.maxAge(1, TimeUnit.SECONDS))
-		  	      .body(parentComponentServ.getbypage(pageid,langcode,a));
+		  	      .body(parentComponentServ.getbypage(Integer.parseInt(pagenum),langcode,a));
 	  }
 	  
 	  
 	  
-	  @RequestMapping(value = "/background/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<Resource> getbackground(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") int pageid){ 
+	  @RequestMapping(value = "/background/{langcode}", method = RequestMethod.GET)
+	  public  ResponseEntity<Resource> getbackground(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
 		
 		  
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pagenum, langcode);
-
 		  List<String> paramter =new ArrayList<String>();
-		  List<String> values =new ArrayList<String>();
-		  paramter.add("langcode");
-		  values.add(langcode);
-		  paramter.add("id");
-		  values.add(String.valueOf(pageid));
-		  
-		  groupWebServ.checkpriviledge(request, a,paramter,values);
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  int fileid= 1;
 		 try {
-			  Pages pa=pagesServ.getbyid(pageid);
+			  Pages pa=pagesServ.getbyid(Integer.parseInt(pagenum));
 			   fileid= pa.getFilesuploadID().getId();
 			
 		} catch (Exception e) {

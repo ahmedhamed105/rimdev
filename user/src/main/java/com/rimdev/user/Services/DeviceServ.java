@@ -17,16 +17,12 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.BlockedException;
 import com.rimdev.user.Exception.NooauthException;
 import com.rimdev.user.Repo.DeviceRepo;
-import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.DeviceType;
-import com.rimdev.user.entities.Deviceip;
 import com.rimdev.user.entities.LoginType;
 import com.rimdev.user.entities.Pages;
-import com.rimdev.user.entities.UserLogin;
-import com.rimdev.user.ouputobject.response_all;
 
 @Service
 public class DeviceServ {
@@ -157,13 +153,11 @@ public Device Save(Device input,String langcode) {
 		
 		
 		Date date = new Date();
-		Generate gen=new Generate();
-		input.setDevicetokean(gen.token(30));
+	
         // convert date to calendar
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-		input.setTokeantime(c.getTime());
 		input.setDevicecreate(date);
 		input.setDevicemodify(date);
 		Device ouput =deviceRepo.save(input);	
@@ -188,14 +182,12 @@ public Device update(Device input,String langcode) {
 	
 	
 	try {
-	Generate gen=new Generate();
-	input.setDevicetokean(gen.token(30));
+
     // convert date to calendar
 	Date date = new Date();
     Calendar c = Calendar.getInstance();
     c.setTime(date);
     c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-	input.setTokeantime(c.getTime());
 	input.setDevicemodify(date);
 	Device ouput =deviceRepo.save(input);	
 
@@ -257,18 +249,8 @@ public DevicePage SaveDP(HttpServletRequest request,Device input,String username
 		
 		
 		Date date = new Date();
-		Generate gen=new Generate();
-		input.setDevicetokean(gen.token(30));
-        // convert date to calendar
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
-         c.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-         c.add(Calendar.MINUTE, configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
-        }else {      	
-      	  c.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
-        }
-          input.setTokeantime(c.getTime());
 		input.setDevicecreate(date);
 		input.setDevicemodify(date);
 		Device ouput =deviceRepo.save(input);	
@@ -348,22 +330,14 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 		 input.setLogintypeID(logintype);
 	}
 	
+	Device ouput ;
+	
 	try {
-	Generate gen=new Generate();
-	input.setDevicetokean(gen.token(30));
     // convert date to calendar
 	Date date = new Date();
     Calendar c = Calendar.getInstance();
     c.setTime(date);
-    if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
-        c.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-        c.add(Calendar.MINUTE, configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
-       }else {      	
-     	  c.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
-       }
-    
     input.setDeviceip(update.getDeviceip());
-	input.setTokeantime(c.getTime());
 	input.setDevicemodify(date);
 	input.setDevicebrowser(update.getDevicebrowser());
 	input.setDevicename(update.getDevicename());
@@ -379,14 +353,9 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 	input.setDevicelong(update.getDevicelong());
 	input.setPage(update.getPage());
 	
-	Device ouput =deviceRepo.save(input);	
+	 ouput =deviceRepo.save(input);	
 
 	
-	Pages p= pagesServ.getbyid(input.getPage());
-	DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
-	
-
-	return out;
 } catch (TransientDataAccessException  se) {
 	String text= "sql error"+tokean;
 	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
@@ -404,7 +373,18 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 	String text= "sql error"+tokean;
 	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
 	throw new NullPointerException(textConvertionServ.search("E104", langcode));
-}	
+}
+	
+	
+	//get page entity
+		Pages p= pagesServ.getbyid(input.getPage());
+		
+		
+		DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
+		
+
+		return out;
+	
 }
 
 

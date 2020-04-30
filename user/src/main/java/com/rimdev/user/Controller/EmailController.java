@@ -3,6 +3,8 @@ package com.rimdev.user.Controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,10 +40,12 @@ public class EmailController {
 	
 	
 	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<select_object>> getprimary(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<select_object>> getprimary(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 		
-		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
- 
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage devpag= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  List<select_object> sel =new ArrayList<select_object>();
 		  select_object a =new select_object();
 		  a.setKey("YES");
@@ -55,18 +59,24 @@ public class EmailController {
 	  }
 
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Email>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 	
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-	  
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  return new ResponseEntity<List<Email>>(emailServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
 	  @RequestMapping(value = "/user/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getUsersbyuser(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-
+	  public  ResponseEntity<List<Email>> getUsersbyuser(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") int userid){ 
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  paramter.add("id");
+	  values.add(String.valueOf(userid));
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  
 		  return new ResponseEntity<List<Email>>(emailServ.getbyuserlogin(userid,langcode), HttpStatus.OK);
 	  }
@@ -78,12 +88,13 @@ public class EmailController {
 	  }
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
+public @ResponseBody ResponseEntity<List<Email>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
   // This returns a JSON or XML with the users
 	
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	
 	if(emails.getId() !=null) {
 		
 	
@@ -118,10 +129,12 @@ public @ResponseBody ResponseEntity<List<Email>> saveorupdate(@RequestHeader("De
 
 
 @RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> delete(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
+public @ResponseBody ResponseEntity<List<Email>> delete(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
   // This returns a JSON or XML with the users
 	
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	if(emails.getId() !=null  && emails.getUserloginID() != null && emails.getUserloginID().getId() != null) {
 		

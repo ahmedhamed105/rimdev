@@ -43,6 +43,7 @@ import com.rimdev.user.entities.Deviceip;
 import com.rimdev.user.entities.GroupPriviledge;
 import com.rimdev.user.entities.GroupWeb;
 import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.ouputobject.loginpra;
 import com.rimdev.user.ouputobject.pagesdevice;
 
 import javassist.NotFoundException;
@@ -85,10 +86,11 @@ public class DeviceController {
 
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Device>> getAll( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  public  ResponseEntity<List<Device>> getAll( HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
+		  List<String> paramter =new ArrayList<String>();
+		  List<String> values =new ArrayList<String>();
+		  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-		  
 		    return ResponseEntity.ok()
 		    	      .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
 		    	      .body(deviceServ.getall(langcode));
@@ -102,10 +104,14 @@ public class DeviceController {
 	  
 	  
 	  @RequestMapping(value = "/page/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<pagesdevice>> getpages( @RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("id")  int deviceid){	  
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  public  ResponseEntity<List<pagesdevice>> getpages(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id")  int deviceid){	  
+		
+		  List<String> paramter =new ArrayList<String>();
+		  List<String> values =new ArrayList<String>();
+		  paramter.add("id");
+		  values.add(String.valueOf(deviceid));
+		  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-		  
 		  return new ResponseEntity<List<pagesdevice>>(devicePageServ.getpagesbydevice(deviceid,langcode), HttpStatus.OK);
 	  }
 	  
@@ -113,9 +119,11 @@ public class DeviceController {
 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Device>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Device input) {
+public @ResponseBody ResponseEntity<List<Device>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
 
 	Device out=null;
@@ -213,7 +221,7 @@ public Deviceip getip(String ip) {
 
 
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Device> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) 
+public @ResponseBody ResponseEntity<loginpra> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) 
 		throws IOException, GeoIp2Exception {
 
 
@@ -236,17 +244,18 @@ DevicePage  out1=null;
 				  out1=deviceServ.SaveDP(request,input,username, usertokean,langcode);
 			
 			}
-		
-	
+
 	out =out1.getDeviceId();
 	geo.setDeviceId(out);
 	deviceipServ.savebyip(geo, langcode);
 	
 	
 	GroupPagesServ.check_page(request,out1, langcode);
+	loginpra outlogin = new loginpra();
+	outlogin.setUsername(out1.getUserloginID().getUsername());
+	outlogin.setUsertokean(out1.getPageTokean());
 
-	
-	return new ResponseEntity<Device>(out, HttpStatus.OK);
+	return new ResponseEntity<loginpra>(outlogin, HttpStatus.OK);
 
 
 	

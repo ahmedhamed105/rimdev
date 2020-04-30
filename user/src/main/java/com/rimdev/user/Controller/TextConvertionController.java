@@ -1,6 +1,9 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,9 +40,15 @@ public class TextConvertionController {
 	
 	
 	  @RequestMapping(value = "/code/{langcode}/{txtcode}", method = RequestMethod.GET)
-	  public @ResponseBody ResponseEntity<singleString>  convertbycode(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@PathVariable("txtcode") String txtcode){ 
-		  DevicePage dg= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  public @ResponseBody ResponseEntity<singleString>  convertbycode(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("txtcode") String txtcode){ 
 
+		  
+	  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  paramter.add("txtcode");
+	  values.add(txtcode);
+	  DevicePage devpag= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  
 		  //exception handled	
 		  singleString a =new singleString();
@@ -50,9 +59,11 @@ public class TextConvertionController {
 
 	  
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<lang_object>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){ 
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-
+	  public  ResponseEntity<List<lang_object>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  
 		  return new ResponseEntity<List<lang_object>>(textConvertionServ.getalllang(langcode), HttpStatus.OK);
 
@@ -66,10 +77,12 @@ public class TextConvertionController {
 	  
 	  
 	  @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<List<lang_object>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
+	  public @ResponseBody ResponseEntity<List<lang_object>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
 	
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-  
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  // This returns a JSON or XML with the users
 		  LanguageMap langmap;
 		try {
@@ -104,10 +117,12 @@ public class TextConvertionController {
 	  
 	  
 	  @RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<List<lang_object>> delete(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
+	  public @ResponseBody ResponseEntity<List<lang_object>> delete(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
 
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-	  
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  // This returns a JSON or XML with the users
 		  LanguageMap langmap;
 		try {

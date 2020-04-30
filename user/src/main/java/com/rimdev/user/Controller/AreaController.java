@@ -1,6 +1,9 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,6 @@ import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Area;
 import com.rimdev.user.entities.DevicePage;
-import com.rimdev.user.entities.Email;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/Area") // 
@@ -32,12 +34,12 @@ public class AreaController {
 	DevicePageServ devicePageServ;
 
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Area>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Area>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 		
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-		  
-		  
-		  
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		  
 		  return new ResponseEntity<List<Area>>(areaServ.getall(), HttpStatus.OK);
 	  }
@@ -45,9 +47,11 @@ public class AreaController {
 	  
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Area>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody List<Area> Areas) {
+public @ResponseBody ResponseEntity<List<Area>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody List<Area> Areas) {
   // This returns a JSON or XML with the users
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	for (Area input : Areas) {
 		

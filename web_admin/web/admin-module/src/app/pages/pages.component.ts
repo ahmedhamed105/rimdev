@@ -145,7 +145,7 @@ export class PagesComponent implements OnInit {
     this.pagenumber=this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id'];
     GlobalConstants.pageid = this.pagenumber;
   
-    this.locationService.all_info(this.pagenumber,GlobalConstants.USERTOKEANkey,GlobalConstants.USERNAME).then(res => {
+    this.locationService.all_info(this.pagenumber).then(res => {
       this.device =this.locationService.mydevice;
       console.log(this.device.devicetokean);
 
@@ -166,11 +166,11 @@ export class PagesComponent implements OnInit {
        });
 
 
-       this._ComponentService.getbackground(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(background =>{
+       this._ComponentService.getbackground(this.pagenumber.toString()).subscribe(background =>{
 
         this.createImageFromBlob(background);
   
-    this._ComponentService.getbypage(this.pagenumber,this.pagetokean,this.pagenumber.toString()).subscribe(res =>{
+    this._ComponentService.getbypage(this.pagenumber.toString()).subscribe(res =>{
 
       
       

@@ -1,5 +1,6 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,24 +39,26 @@ public class MenuController {
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<menu_object>> getUsersbyuser(HttpServletRequest request,@RequestHeader("pageid") String  pageid,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("devicetokean") String  devicetokean,@PathVariable("langcode") String langcode){ 
+	  public  ResponseEntity<List<menu_object>> getUsersbyuser(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
 	
-		  DevicePage devpage= devicePageServ.check_tokean_page(devicetokean, pageid, langcode);
-
-		  UserLogin a= userLoginServ.getbyusernametokean(request,username, usertokean, langcode,devpage);
-
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 		  
-		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode,devpage), HttpStatus.OK);
+		  return new ResponseEntity<List<menu_object>>(parentMenuServ.getallmenus(langcode,a), HttpStatus.OK);
 	  }
 	  
 	  
 	  @RequestMapping(value = "/get/{langcode}/{type}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<menuparsub> getid(HttpServletRequest request,@RequestHeader("pageid") String  pageid,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("devicetokean") String  devicetokean,@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("id") int menuid){ 
+	  public  ResponseEntity<menuparsub> getid(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("type") String type,@PathVariable("id") int menuid){ 
 		
-		  DevicePage devpage= devicePageServ.check_tokean_page(devicetokean, pageid, langcode);
-
-		  UserLogin a= userLoginServ.getbyusernametokean(request,username, usertokean, langcode,devpage);
-
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  paramter.add("type");
+	  values.add(type);
+	  paramter.add("id");
+	  values.add(String.valueOf(menuid));
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 		  
 		  return new ResponseEntity<menuparsub>(parentMenuServ.getmenus(type,menuid,langcode), HttpStatus.OK);
 	  }

@@ -1,6 +1,8 @@
 package com.rimdev.user.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,10 +45,13 @@ public class FilesController {
 	
 	
 	  @RequestMapping(value = "/uploadFile/{langcode}", method = RequestMethod.POST)
-    public ResponseEntity<FilesUpload> uploadsingleFile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestParam("file") MultipartFile file,@RequestParam("pageid") int pageid,@RequestParam("parentid") int parentid,@RequestParam("componentid") int componentid) {
+    public ResponseEntity<FilesUpload> uploadsingleFile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestParam("file") MultipartFile file,@RequestParam("pageid") int pageid,@RequestParam("parentid") int parentid,@RequestParam("componentid") int componentid) {
 		 System.out.println(pageid+" "+parentid+" "+componentid);
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pagenum, langcode);
-
+		 
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
 		return new ResponseEntity<FilesUpload>(fileStorageService.storeFile(file,pageid,parentid,componentid,langcode), HttpStatus.OK);
 		 
 		
@@ -55,10 +60,14 @@ public class FilesController {
     
     
     @RequestMapping(value = "/downloadFile/{langcode}/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Resource> downloadFile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,HttpServletRequest request,@PathVariable("langcode") String langcode,@PathVariable("id") int fileid) {
+    public ResponseEntity<Resource> downloadFile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") int fileid) {
     
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  paramter.add("id");
+	  values.add(String.valueOf(fileid));
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
     	// Load file as Resource
         return fileStorageService.getresource(request,fileid,langcode);
 
@@ -67,9 +76,12 @@ public class FilesController {
     
     
     @PostMapping("/deleteFile/{langcode}")
-    public ResponseEntity<FilesUpload> deleteFile(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,HttpServletRequest request,@RequestParam("fileid") int fileid,@PathVariable("langcode") String langcode) {
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-
+    public ResponseEntity<FilesUpload> deleteFile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestParam("fileid") int fileid) {
+	
+    	List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
     	
     	FilesUpload result = new FilesUpload();
     	

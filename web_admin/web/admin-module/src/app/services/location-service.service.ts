@@ -30,7 +30,7 @@ export class LocationServiceService {
   public logintype = [];
   public mydevice;
 
-   async all_info(page ,usertokean,username) 
+   async all_info(page) 
   {
       const deviceInfo = this.deviceService.getDeviceInfo();
       const isMobilea = this.deviceService.isMobile();
@@ -174,11 +174,9 @@ if(os === undefined){
   //     console.log('navg '+this.device.devicelong);
 
 
-      await this.insert(usertokean,username).then(res => {
+      await this.insert().then(res => {
      this.mydevice =res;
-        if(res['devicestatusID']['id'] === 2){
-          window.location.replace('/blocked');
-        }
+     
       });
    
 
@@ -187,74 +185,21 @@ if(os === undefined){
 
 
 
-async  insert(usertokean,username) : Promise<any>{
+async  insert() : Promise<any>{
   
   var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceinsert+"/"+GlobalConstants.language;
   let headers = new HttpHeaders({
     'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-    'username':   username,
-    'usertokean': usertokean });
+    'username':   GlobalConstants.USERNAME,
+    'usertokean': GlobalConstants.USERTOKEANkey });
 let options = { headers: headers };
   return await   this._http.post<any>(urlall,this.device,options).toPromise();
   
 }
 
 
-async  getos(usertokean,username) : Promise<IdeviceOS[]>{
-
-
-  // console.log('finish3');
-  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Deviceos+"/"+GlobalConstants.language;
-  let headers = new HttpHeaders({
-    'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-    'username':   username,
-    'usertokean': usertokean });
-let options = { headers: headers };
-  return await   this._http.get<IdeviceOS[]>(urlall,options).toPromise();
-  
-}
-
-async  gettype(usertokean,username) : Promise<Idevicetype[]>{
-
- // console.log('finish5');
- var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Devicetype+"/"+GlobalConstants.language;
- let headers = new HttpHeaders({
-  'Cache-Control': 'no-cache',
-  'Pragma': 'no-cache',
-  'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-  'username':   username,
-  'usertokean': usertokean });
-let options = { headers: headers };
-  return await   this._http.get<Idevicetype[]>(urlall,options).toPromise();
-  
-}
-
-
-async  getlogintype(usertokean,username) : Promise<Ilogintype[]>{
-  // console.log('finish5');
-  var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.logintype+"/"+GlobalConstants.language;
-  let headers = new HttpHeaders({
-    'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-   'username':   username,
-   'usertokean': usertokean });
- let options = { headers: headers };
-   return await   this._http.get<Ilogintype[]>(urlall,options).toPromise();
-   
- }
-
-
-async  getip() : Promise<string>{
-
-//  console.log('finish ip');
-  return await   this._http.get<string>('https://jsonip.com').toPromise();
-  
-}
 
 
 async  getnavigation():Promise<any>{

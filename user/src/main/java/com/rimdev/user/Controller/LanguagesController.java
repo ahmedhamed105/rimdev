@@ -1,5 +1,6 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,25 +40,28 @@ public class LanguagesController {
 	UserLoginServ userLoginServ;
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Languages>> getAllUsers(HttpServletRequest request,@RequestHeader("pageid") String  pageid,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("devicetokean") String  devicetokean,@PathVariable("langcode") String langcode){ 
+	  public  ResponseEntity<List<Languages>> getAlllang(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
 	
-		  DevicePage devpage= devicePageServ.check_tokean_page(devicetokean, pageid, langcode);
-
-		  UserLogin a= userLoginServ.getbyusernametokean(request,username, usertokean, langcode,devpage);
-
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	 
+		
 		  return new ResponseEntity<List<Languages>>(languagesServ.getalllang(langcode), HttpStatus.OK);
 	  }
 	  
 	  
-	  public  ResponseEntity<List<Languages>> getAllUsers( String langcode){ 
+	  public  ResponseEntity<List<Languages>> getAll( String langcode){ 
 		  return new ResponseEntity<List<Languages>>(languagesServ.getalllang(langcode), HttpStatus.OK);
 	  }
 	  
 	  @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<List<Languages>> saveorupdate(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Languages input) {
+	  public @ResponseBody ResponseEntity<List<Languages>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Languages input) {
 	
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
- 
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	  
 		  // This returns a JSON or XML with the users
 		  Languages user=null;
 		try {
@@ -79,12 +83,12 @@ public class LanguagesController {
 
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("enter 5");
+			//System.out.println("enter 5");
 			user= languagesServ.Save(input,langcode);
 
 		}
 
-			return getAllUsers(langcode);
+			return getAll(langcode);
 			
 		
 		  }

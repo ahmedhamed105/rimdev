@@ -1,6 +1,9 @@
 package com.rimdev.user.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +18,7 @@ import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.LoginTypeServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.entities.DevicePage;
-import com.rimdev.user.entities.DeviceType;
 import com.rimdev.user.entities.LoginType;
-import com.rimdev.user.entities.UserLogin;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/Logintype") // 
@@ -34,9 +35,12 @@ public class LoginTypeController {
 	DevicePageServ devicePageServ;
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<LoginType>> getAllUsers(@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode){
-		  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-		  
+	  public  ResponseEntity<List<LoginType>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
+		
+		  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	  
 		  return new ResponseEntity<List<LoginType>>(loginTypeServ.getall(langcode), HttpStatus.OK);
 	  }
 	  

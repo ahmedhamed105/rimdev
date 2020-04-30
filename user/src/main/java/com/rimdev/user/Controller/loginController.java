@@ -52,23 +52,14 @@ public class loginController {
 	
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Loginobject info) {
+public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Loginobject info) {
 
 	
 	// System.out.println("begin 0");
 
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-	  
-	  
 	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
-	  paramter.add("langcode");
-	  values.add(langcode);
-	  
-	  groupWebServ.checkpriviledge(request, a,paramter,values);
-	  
-	   GroupPagesServ.check_page(request,a, langcode);
-
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	  
 
 	//  System.out.println(request.getRequestURI());
@@ -81,20 +72,6 @@ public @ResponseBody ResponseEntity<Loginobject> saveorupdate(HttpServletRequest
   	      .body(out);
 	
 	//return  new ResponseEntity<Loginobject>(out, HttpStatus.OK);
-
-}
-
-
-@RequestMapping(value = "/check/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Loginobject> check_tokean(HttpServletRequest request,@RequestHeader("Devicetokean") String  Devicetokean,@RequestHeader("pageid") String  pageid,@PathVariable("langcode") String langcode,@RequestBody Loginobject info) {
-	
-	  DevicePage a= devicePageServ.check_tokean_page(Devicetokean, pageid, langcode);
-	  System.out.println(info.getUsername()+" "+info.getTokean());
-
-
-	Loginobject out = userLoginServ.loginpage(request,a,info, langcode);
-
-	return  new ResponseEntity<Loginobject>(out, HttpStatus.OK);
 
 }
 
