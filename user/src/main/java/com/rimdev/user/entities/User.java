@@ -17,6 +17,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -85,6 +87,10 @@ public class User implements Serializable {
     private Date usercreate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Collection<UserLogin> userLoginCollection;
+    
+    @JoinColumn(name = "files_upload_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private FilesUpload filesuploadID;
 
     public User() {
     }
@@ -97,6 +103,14 @@ public class User implements Serializable {
         this.id = id;
         this.usermodify = usermodify;
         this.usercreate = usercreate;
+    }
+    
+    public FilesUpload getFilesuploadID() {
+        return filesuploadID;
+    }
+
+    public void setFilesuploadID(FilesUpload filesuploadID) {
+        this.filesuploadID = filesuploadID;
     }
 
     public Integer getId() {

@@ -17,6 +17,8 @@ export class FooterComponent implements OnInit {
 
   public display = 0;
 
+  public app ;
+
   constructor(private router:Router,private cookieService: CookiesService,private _MenushareService:MenushareService) { }
 
   ngOnInit(): void {
@@ -39,6 +41,13 @@ export class FooterComponent implements OnInit {
       this.langs = mymessage;
 
      });
+
+     this._MenushareService.getapp()
+     .subscribe(appdata => {
+    this.app = appdata;
+
+  });
+
   }
 
 

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import { AppRoutingModule, routingComponents } from './app-routing.module';
@@ -17,6 +17,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {NgxWebstorageModule} from 'ngx-webstorage';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -40,8 +41,12 @@ import { FooterComponent } from './footer/footer.component';
     FileUploadModule,
     MatDialogModule,
     BrowserAnimationsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressSpinnerModule
 
+  ],
+  schemas: [ 
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

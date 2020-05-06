@@ -1,9 +1,18 @@
 package com.rimdev.user.ouputobject;
 
+import java.util.List;
+
+import com.rimdev.user.entities.Application;
+import com.rimdev.user.entities.Notification;
+import com.rimdev.user.entities.UserLogin;
+
 public class loginpra {
 	
 	String usertokean;
 	String username;
+	UserLogin userid;
+	Application app;
+	List<Notification> notif;
 	
 	
 	
@@ -11,6 +20,34 @@ public class loginpra {
 	public loginpra() {
 		super();
 	}
+	
+	
+	
+	
+	public List<Notification> getNotif() {
+		return notif;
+	}
+
+
+
+
+	public void setNotif(List<Notification> notif) {
+		this.notif = notif;
+	}
+
+
+
+
+	public Application getApp() {
+		return app;
+	}
+
+
+	public void setApp(Application app) {
+		this.app = app;
+	}
+
+
 	public String getUsertokean() {
 		return usertokean;
 	}
@@ -22,6 +59,12 @@ public class loginpra {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public UserLogin getUserid() {
+		return userid;
+	}
+	public void setUserid(UserLogin userid) {
+		this.userid = userid;
 	} 
 	
 	

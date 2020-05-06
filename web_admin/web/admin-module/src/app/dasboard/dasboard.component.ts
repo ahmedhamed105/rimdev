@@ -9,6 +9,7 @@ import { LanguagegoService } from '../services/languagego.service';
 import { GlobalConstants } from '../GlobalConstants';
 import { UsersService } from '../services/users.service';
 import { MenushareService } from '../share_data/menushare.service';
+import { SpinnerService } from '../services/spinner.service';
 @Component({
   selector: 'app-dasboard',
   templateUrl: './dasboard.component.html',
@@ -20,11 +21,10 @@ export class DasboardComponent implements OnInit {
   public page ;
   public type ;
   public pagenumber ;
-  public pagetokean ;
   public background ;
  
 
-  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private locationService: LocationServiceService) { }
+  constructor(private spinnerService: SpinnerService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private UsersService:UsersService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,public _ComponentService: ComponentService,private locationService: LocationServiceService) { }
 
 
   createImageFromBlob(image: Blob) {
@@ -48,44 +48,45 @@ export class DasboardComponent implements OnInit {
     this.pagenumber = '1';
     this.type ='P';
 
-    GlobalConstants.pageid = this.pagenumber;
+
+
+   
+    this.cookieService.checkboxrember('1');
 
     GlobalConstants.rember = this.cookieService.getCookie('rember');
   if( GlobalConstants.rember === '1'){
-    var username = this.cookieService.getCookie('username');
-    var usertokean = this.cookieService.getCookie('usertokean');
-    if(username === "" || usertokean === ""){
-      window.location.replace("/login");
-    }else{
-      GlobalConstants.USERNAME = username; // To Get Cookie
-      GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
-    }
+    GlobalConstants.USERNAME = this.cookieService.getCookie('username');
+    GlobalConstants.USERTOKEANkey = this.cookieService.getCookie('usertokean');
   }
-
-  console.log(GlobalConstants.USERNAME);
-  console.log(GlobalConstants.USERTOKEANkey);
+  
 
 
+    var lang = this.cookieService.getCookie('language') ;
+
+    if(lang === ""){
+
+      this.cookieService.language("EN");
+    }else{
+      GlobalConstants.language = lang; // To Get Cookie
 
 
-this.locationService.all_info(this.pagenumber).then(res => {
+    }
+
+
+    GlobalConstants.pageid = this.pagenumber;
+
+
+this.locationService.all_info().then(res => {
+
   this.device =this.locationService.mydevice;
-  console.log(this.device.devicetokean);
 
-   
-  this.pagetokean =this.device.devicetokean;
-
-  GlobalConstants.Devicetokean =this.pagetokean;
+  this.cookieService.username(this.device['username'],GlobalConstants.rember);
+  this.cookieService.usertokean(this.device['usertokean'],GlobalConstants.rember);
 
 
-    this.UsersService.tokean_check().subscribe(tokean => {
-      
-      this.cookieService.username(tokean['username'],GlobalConstants.rember);
-      this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
-
-      if(tokean['login'] === false) {
-        window.location.replace("/");
-     }
+  this._MenushareService.updateuser(this.device.userid);
+  this._MenushareService.updateapp(this.device.app);
+  this._MenushareService.updatenotif(this.device.notif);
 
 
 
@@ -99,7 +100,7 @@ this.locationService.all_info(this.pagenumber).then(res => {
     
     //    GlobalConstants.pageid = this.pagenumber;
 
-        this._ComponentService.getbackground(this.pagenumber.toString()).subscribe(background =>{
+        this._ComponentService.getbackground().subscribe(background =>{
 
           this.createImageFromBlob(background);
 
@@ -133,7 +134,6 @@ var lang=this.cookieService.getCookie('language');
 });
 }); 
 
-});
   }
 
 

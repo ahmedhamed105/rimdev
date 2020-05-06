@@ -16,7 +16,5 @@ export interface Icolumdef {
   editable: boolean,      
   resizable: boolean,
   checkboxSelection: boolean,
-  cellRenderer: string,
-  pagetokean : string,
-  pagenumber: string
+  cellRenderer: string
  }

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { MenushareService } from '../share_data/menushare.service';
 import { CookiesService } from '../services/cookies.service';
 import { GlobalConstants } from '../GlobalConstants';
-import { Router } from '@angular/router';
+import { ComponentService } from '../services/component.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +18,18 @@ export class HeaderComponent implements OnInit {
 
   public display = 0;
 
-  constructor(private router:Router,private cookieService: CookiesService,private _MenushareService:MenushareService) { }
+  public user ;
+
+  public profileimage;
+
+  public app ;
+
+  public notif =[];
+
+  constructor(private sanitizer: DomSanitizer,public _ComponentService: ComponentService,private cookieService: CookiesService,private _MenushareService:MenushareService) { }
+
+
+
 
   ngOnInit(): void {
 
@@ -38,6 +50,29 @@ export class HeaderComponent implements OnInit {
       this.langs = mymessage;
 
      });
+
+     this._MenushareService.getuser()
+     .subscribe(userdata => {
+       this.user = userdata;
+       this._MenushareService.getapp()
+       .subscribe(appdata => {
+      this.app = appdata;
+      this._MenushareService.getnotif()
+      .subscribe(notifdata => {
+        this.notif= notifdata;
+        console.log(this.notif);
+      this._ComponentService.getimage(this.user.userID.filesuploadID.id).subscribe(image =>{
+        let unsafeImageUrl = URL.createObjectURL(image);
+
+        this.profileimage = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+      });
+       });
+      });
+     });
+
+
+
+  
 
   }
 

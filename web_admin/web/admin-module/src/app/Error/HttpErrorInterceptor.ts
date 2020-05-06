@@ -12,6 +12,7 @@ import { ErrorDialogService } from '../services/error-dialog.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalConstants } from '../GlobalConstants';
+import { SpinnerService } from '../services/spinner.service';
 
 
 @Injectable({
@@ -20,24 +21,27 @@ import { GlobalConstants } from '../GlobalConstants';
    export class HttpErrorInterceptor implements HttpInterceptor {
       InterceptorSkipHeader = 'X-Skip-Interceptor';
 
-    constructor(private router: Router,public errorDialogService: ErrorDialogService) { }
+    constructor(private spinnerService: SpinnerService,private router: Router,public errorDialogService: ErrorDialogService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       const startTime = Date.now();
       let status: string;
       let errorMessage = '';
-
+      this.spinnerService.show();
       return next.handle(request)
         .pipe(
           tap(
             event => {
               status = '';
               if (event instanceof HttpResponse) {
+                this.spinnerService.hide();
                 status = 'succeeded';
             //    console.log(event);
               }
             },
             error => {
+              this.spinnerService.hide();
+
               if(error.url=== 'https://jsonip.com')
               {
               

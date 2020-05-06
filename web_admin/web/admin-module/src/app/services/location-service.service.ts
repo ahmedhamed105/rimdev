@@ -30,7 +30,7 @@ export class LocationServiceService {
   public logintype = [];
   public mydevice;
 
-   async all_info(page) 
+   async all_info() 
   {
       const deviceInfo = this.deviceService.getDeviceInfo();
       const isMobilea = this.deviceService.isMobile();
@@ -115,12 +115,12 @@ if(os === undefined){
     this.device.mobile=isMobilea;
     this.device.tablet=isTableta;
     this.device.desktopDevice=isDesktopDevicea;
-    this.device.page=page;
+    this.device.page= Number(GlobalConstants.pageid);
 
 
-    this.device.logintypeID ={
+    this.device.applicationID ={
       id: 0,
-      ltype: 'Admin'
+      appname: 'Admin'
     };
 
 
@@ -192,8 +192,10 @@ async  insert() : Promise<any>{
     'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-    'username':   GlobalConstants.USERNAME,
-    'usertokean': GlobalConstants.USERTOKEANkey });
+      'username':   GlobalConstants.USERNAME,
+      'usertokean': GlobalConstants.USERTOKEANkey,
+      'pageid': GlobalConstants.pageid,
+      'Devicecode': GlobalConstants.PCCODE});
 let options = { headers: headers };
   return await   this._http.post<any>(urlall,this.device,options).toPromise();
   

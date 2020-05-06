@@ -13,8 +13,10 @@ export class ComponentService {
 
   constructor(private _http:HttpClient) { }
 
+  
 
-  getbypage(pagenumber):Observable<Icomponent[]>{
+
+  getbypage():Observable<Icomponent[]>{
 
     var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.Componentpage+GlobalConstants.language;
     let headers = new HttpHeaders({
@@ -23,14 +25,34 @@ export class ComponentService {
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
       'username':   GlobalConstants.USERNAME,
       'usertokean': GlobalConstants.USERTOKEANkey,
-      'pageid': pagenumber,
+      'pageid': GlobalConstants.pageid,
       'Devicecode': GlobalConstants.PCCODE });
       let options = { headers: headers };
     return  this._http.get<Icomponent[]>(url,options);
     }
 
 
-    getbackground(pagenumber):any{
+
+    getimage(fileid):any{
+
+      var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.renderimage+GlobalConstants.language;
+     url=url+"/"+fileid
+     
+      let headers = new HttpHeaders({
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
+        'username':   GlobalConstants.USERNAME,
+        'usertokean': GlobalConstants.USERTOKEANkey,
+        'pageid': GlobalConstants.pageid,
+        'Devicecode': GlobalConstants.PCCODE
+       });
+        let options = { headers: headers,responseType: 'blob' as  'blob' };
+       return this._http.get(url, options);
+      }
+
+
+    getbackground():any{
 
       var url=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.background+GlobalConstants.language;
       let headers = new HttpHeaders({
@@ -39,7 +61,7 @@ export class ComponentService {
         'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
         'username':   GlobalConstants.USERNAME,
         'usertokean': GlobalConstants.USERTOKEANkey,
-        'pageid': pagenumber,
+        'pageid': GlobalConstants.pageid,
         'Devicecode': GlobalConstants.PCCODE
        });
         let options = { headers: headers,responseType: 'blob' as  'blob' };
@@ -59,10 +81,10 @@ export class ComponentService {
         'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-         'pageid' :   GlobalConstants.pageid,
-        'username':   GlobalConstants.USERNAME,
-        'usertokean': GlobalConstants.USERTOKEANkey,
-        'devicetokean': GlobalConstants.Devicetokean });
+      'username':   GlobalConstants.USERNAME,
+      'usertokean': GlobalConstants.USERTOKEANkey,
+      'pageid': GlobalConstants.pageid,
+      'Devicecode': GlobalConstants.PCCODE });
         let options = { headers: headers };
   
       return  this._http.get<any>(url,options);

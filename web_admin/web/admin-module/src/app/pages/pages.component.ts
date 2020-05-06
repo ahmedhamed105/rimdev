@@ -18,6 +18,7 @@ import { MenulistService } from '../services/menulist.service';
 import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
 import { MenushareService } from '../share_data/menushare.service';
+import { SpinnerService } from '../services/spinner.service';
 
 
 @Component({
@@ -35,12 +36,11 @@ export class PagesComponent implements OnInit {
   public arraystatic = [];
   public page ;
   public pagenumber ;
-  public pagetokean ;
   public type ;
   public isfile;
   public background ;
 
-  constructor(private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private spinnerService: SpinnerService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -75,46 +75,28 @@ export class PagesComponent implements OnInit {
 
   ngOnInit(){
 
-   
 
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
+   
+    this.cookieService.checkboxrember('1');
 
     GlobalConstants.rember = this.cookieService.getCookie('rember');
-      if(GlobalConstants.rember  === '1'){
-    var username = this.cookieService.getCookie('username');
-    var usertokean = this.cookieService.getCookie('usertokean');
-    if(username === "" || usertokean === ""){
-       window.location.replace("/login");
-    }else{
-      GlobalConstants.USERNAME = username; // To Get Cookie
-      GlobalConstants.USERTOKEANkey = usertokean; // To Get Cookie
-    }
-      }
-      
-      
-    
-
-        this._usersservice.tokean_check().subscribe(tokean => {
-    
-          this.cookieService.username(tokean['username'],GlobalConstants.rember);
-          this.cookieService.usertokean(tokean['tokean'],GlobalConstants.rember);
-    
-    
-          console.log(GlobalConstants.USERNAME);
-          console.log(GlobalConstants.USERTOKEANkey);
+  if( GlobalConstants.rember === '1'){
+    GlobalConstants.USERNAME = this.cookieService.getCookie('username');
+    GlobalConstants.USERTOKEANkey = this.cookieService.getCookie('usertokean');
+  }
+  
 
 
-    if(this.cookieService.getCookie('language') === ""){
+    var lang = this.cookieService.getCookie('language') ;
+
+    if(lang === ""){
 
       this.cookieService.language("EN");
     }else{
-      GlobalConstants.language = this.cookieService.getCookie('language'); // To Get Cookie
+      GlobalConstants.language = lang; // To Get Cookie
 
 
     }
-
 
 
 
@@ -124,7 +106,9 @@ export class PagesComponent implements OnInit {
     this.dates =[] ;
 
     var menuid =   this.locationService.getQueryParams('menuid',window.location.href); ;//this.route.snapshot.paramMap.get("id").toString();
-
+    
+    this.pagenumber =   this.locationService.getQueryParams('pageid',window.location.href); ;//this.route.snapshot.paramMap.get("id").toString();
+    GlobalConstants.pageid = this.pagenumber;
     this.type = this.locationService.getQueryParams('type',window.location.href) ;  //this.route.snapshot.paramMap.get("type");
 
     if(menuid === undefined || this.type === undefined ){
@@ -136,23 +120,22 @@ export class PagesComponent implements OnInit {
     }
 
 
+    this.locationService.all_info().then(res => {
+
+      this.device =this.locationService.mydevice;
+
+      this._MenushareService.updateuser(this.device.userid);
+
+      this.cookieService.username(this.device['username'],GlobalConstants.rember);
+      this.cookieService.usertokean(this.device['usertokean'],GlobalConstants.rember);
+
+
     this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
 
     this.page=res;
 
     console.log(this.page)
 
-    this.pagenumber=this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id'];
-    GlobalConstants.pageid = this.pagenumber;
-  
-    this.locationService.all_info(this.pagenumber).then(res => {
-      this.device =this.locationService.mydevice;
-      console.log(this.device.devicetokean);
-
-
-      this.pagetokean =this.device.deviceId.devicetokean;
-
-      GlobalConstants.Devicetokean =this.pagetokean;
       
     this._LanguagegoService.getalllang().subscribe(data => {
      // this.langs=data;
@@ -166,11 +149,11 @@ export class PagesComponent implements OnInit {
        });
 
 
-       this._ComponentService.getbackground(this.pagenumber.toString()).subscribe(background =>{
+       this._ComponentService.getbackground().subscribe(background =>{
 
         this.createImageFromBlob(background);
   
-    this._ComponentService.getbypage(this.pagenumber.toString()).subscribe(res =>{
+    this._ComponentService.getbypage().subscribe(res =>{
 
       
       
@@ -249,7 +232,7 @@ if(element.comp.ctype == 'select'){
         if(element.select.arrayObject === 1){
           if(element.select.webService != undefined){
 
-            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport,this.pagetokean,this.pagenumber.toString())
+            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport)
             .subscribe(data => {this.objects[index+parentin] = data;
            //  console.log(index+indexp);
           //  console.log(element.select.webService)
@@ -312,9 +295,7 @@ if(element.comp.ctype == 'select'){
     editable: false,      
     resizable: true,
     checkboxSelection: true,
-    cellRenderer: "",
-    pagetokean : this.pagetokean,
-    pagenumber: this.pagenumber.toString()
+    cellRenderer: ""
   };
   this.column.push(b);
  // this.columnDefs[parent.parent.id][0] = b;
@@ -346,9 +327,7 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer: "",
-    pagetokean : this.pagetokean,
-    pagenumber: this.pagenumber.toString()
+    cellRenderer: ""
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -375,9 +354,7 @@ if(element.comp.ctype === 'label'){
     editable: true,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer : "",
-    pagetokean : this.pagetokean,
-    pagenumber: this.pagenumber.toString()
+    cellRenderer : ""
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -404,9 +381,7 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer : "passRenderer",
-    pagetokean : this.pagetokean,
-    pagenumber: this.pagenumber.toString()
+    cellRenderer : "passRenderer"
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -435,9 +410,7 @@ if(element.comp.ctype === 'label'){
     editable: false,      
     resizable: true,
     checkboxSelection: false,
-    cellRenderer: "selRenderer",
-    pagetokean : this.pagetokean,
-    pagenumber: this.pagenumber.toString()
+    cellRenderer: "selRenderer"
   };
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
@@ -463,7 +436,7 @@ if(parent.parent.firstmethod === undefined){
 
 }else{
   console.log("go");
-  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport,this.pagetokean,this.pagenumber.toString())
+  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport)
 
 }
 
@@ -482,7 +455,7 @@ if(this.isfile){
 }
  
 
-        });
+       
 
   }
 
@@ -510,7 +483,7 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port,this.pagetokean,this.pagenumber.toString());
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port);
 }
 
 
@@ -566,7 +539,7 @@ if(group != null){
     var selectobject = array.filter(x => x[comp] == id)[0];
 //get table no action
 if(related === 'table'){
-  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port,this.pagetokean,this.pagenumber.toString());
+  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port);
 }
   
 
@@ -590,7 +563,7 @@ if(related === 'table'){
        {
      console.log(node)
 
-    this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port,this.pagetokean,this.pagenumber.toString());
+    this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port);
     
 
       });
@@ -615,7 +588,7 @@ if(related === 'table'){
         console.log(node)
         if(this.isfile){
         this.fileupload.clearQueue();
-        this.fileupload.addfilesuser(serv,node[para],node[para],ip,port,this.pagetokean,this.pagenumber.toString());
+        this.fileupload.addfilesuser(serv,node[para],node[para],ip,port);
         this.file.forEach(element => {
           this.insertform[relcom].get(element).setValidators([]);
           this.insertform[relcom].get(element).updateValueAndValidity();
@@ -629,7 +602,7 @@ if(related === 'table'){
        
           this.insertform[relcom].patchValue(node);
       }else if(related === 'table'){
-        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para],ip,port,this.pagetokean,this.pagenumber.toString());
+        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para],ip,port);
       }
 
 
@@ -660,7 +633,7 @@ onSubmit(form,serv,related,relcom,ip,port){
 
   console.log(form.value)
 }
-     this._usersservice.insertbyurl(form.value,serv,ip,port,this.pagetokean,this.pagenumber.toString()).subscribe(data => {
+     this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
 
     console.log(data)
 

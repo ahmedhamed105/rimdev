@@ -17,12 +17,14 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Exception.BlockedException;
 import com.rimdev.user.Exception.NooauthException;
 import com.rimdev.user.Repo.DeviceRepo;
+import com.rimdev.user.Utils.Generate;
+import com.rimdev.user.entities.Application;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DeviceOs;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.DeviceType;
-import com.rimdev.user.entities.LoginType;
 import com.rimdev.user.entities.Pages;
+import com.rimdev.user.entities.UserLogin;
 
 @Service
 public class DeviceServ {
@@ -47,7 +49,7 @@ public class DeviceServ {
 	ConfigurationServ configurationServ;
 	
 	@Autowired
-	LoginTypeServ loginTypeServ;
+	ApplicationServ applicationServ;
 	
 	
 	@Autowired
@@ -235,13 +237,13 @@ public DevicePage SaveDP(HttpServletRequest request,Device input,String username
 		}
 		
 		
-		LoginType logintype =loginTypeServ.getbytype(input.getLogintypeID().getLtype());
-		if(logintype == null) {
+		Application application =applicationServ.getbytype(input.getApplicationID().getAppname());
+		if(application == null) {
 		
 			throw new NooauthException(textConvertionServ.search("E104", langcode));
 	
 		}else {
-			 input.setLogintypeID(logintype);
+			 input.setApplicationID(application);
 		}
 		
 	
@@ -321,13 +323,13 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 	}
 	
 	
-	LoginType logintype =loginTypeServ.getbytype(update.getLogintypeID().getLtype());
-	if(logintype == null) {
+	Application application =applicationServ.getbytype(update.getApplicationID().getAppname());
+	if(application == null) {
 	
 		throw new NooauthException(textConvertionServ.search("E104", langcode));
 
 	}else {
-		 input.setLogintypeID(logintype);
+		 input.setApplicationID(application);
 	}
 	
 	Device ouput ;
@@ -381,6 +383,9 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 		
 		
 		DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
+		
+		UserLogin  userlog =out.getUserloginID();
+		
 		
 
 		return out;

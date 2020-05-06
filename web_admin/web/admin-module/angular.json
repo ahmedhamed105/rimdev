@@ -28,7 +28,8 @@
               "src/assets/plugins/fontawesome-free/css/all.min.css",
               "./node_modules/ag-grid-community/dist/styles/ag-grid.css",
               "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css",
-              "src/assets/css/adminlte.min.css"
+              "src/assets/css/adminlte.min.css",
+              "src/app/global.css"
             ],
             "scripts": [
               "../node_modules/crypto-js/crypto-js.js",

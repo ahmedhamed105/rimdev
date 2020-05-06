@@ -1,3 +1,6 @@
+<div id="preloader" *ngIf="spinnerService.visibility | async">
+  <div id="loader"></div>
+</div>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper" *ngIf="page != undefined">
   <!-- Content Header (Page header) -->

@@ -29,9 +29,9 @@ public List<parent_comp> removeparentnoprivil(List<parent_comp> comp,List<GroupP
 			 for (parent_comp componen : comp) {
 				// System.out.println(groupParent.getParentpriviledgeID().getParentcomponentID()); 
 				  if(groupParent.getParentpriviledgeID().getParentcomponentID().equals(componen.getParent())) {
-					  if((groupParent.getParentpriviledgeID().getAdminDevice() == 1 && devpage.getDeviceId().getLogintypeID().getLtype().equals("Admin"))
-								|| (groupParent.getParentpriviledgeID().getWebDevice() == 1 && devpage.getDeviceId().getLogintypeID().getLtype().equals("Web"))
-								|| (groupParent.getParentpriviledgeID().getMobileDevice() == 1 && devpage.getDeviceId().getLogintypeID().getLtype().equals("Mobile"))
+					  if((groupParent.getParentpriviledgeID().getAdminDevice() == 1 && devpage.getDeviceId().getApplicationID().getAppname().equals("Admin"))
+								|| (groupParent.getParentpriviledgeID().getWebDevice() == 1 && devpage.getDeviceId().getApplicationID().getAppname().equals("Web"))
+								|| (groupParent.getParentpriviledgeID().getMobileDevice() == 1 && devpage.getDeviceId().getApplicationID().getAppname().equals("Mobile"))
 									 
 									 ) {
 								 if(devpage.getDeviceId().isDesktopDevice() && groupParent.getParentpriviledgeID().getIsdesktop() == 1) {

@@ -31,9 +31,9 @@ public class WebservicepriviledgeServ {
 			  if(groupWeb.getWebservicepriviledgeID().getWebService().equals(webservice)) {
 			
 			
-					 if((groupWeb.getWebservicepriviledgeID().getAdminDevice() == 1 && page.getDeviceId().getLogintypeID().getLtype().equals("Admin"))
-						|| (groupWeb.getWebservicepriviledgeID().getWebDevice() == 1 && page.getDeviceId().getLogintypeID().getLtype().equals("Web"))
-						|| (groupWeb.getWebservicepriviledgeID().getMobileDevice() == 1 && page.getDeviceId().getLogintypeID().getLtype().equals("Mobile"))
+					 if((groupWeb.getWebservicepriviledgeID().getAdminDevice() == 1 && page.getDeviceId().getApplicationID().getAppname().equals("Admin"))
+						|| (groupWeb.getWebservicepriviledgeID().getWebDevice() == 1 && page.getDeviceId().getApplicationID().getAppname().equals("Web"))
+						|| (groupWeb.getWebservicepriviledgeID().getMobileDevice() == 1 && page.getDeviceId().getApplicationID().getAppname().equals("Mobile"))
 							 
 							 ) {
 						 if(page.getDeviceId().isDesktopDevice() && groupWeb.getWebservicepriviledgeID().getIsdesktop() == 1) {

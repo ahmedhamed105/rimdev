@@ -1,3 +1,7 @@
+<div id="preloader" *ngIf="spinnerService.visibility | async">
+  <div id="loader"></div>
+</div>
+
 <div class="login-box" *ngFor="let parent of components; let j = index" >
 
   <!-- /.login-logo -->

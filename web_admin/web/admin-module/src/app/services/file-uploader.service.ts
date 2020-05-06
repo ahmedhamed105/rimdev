@@ -34,8 +34,6 @@ export enum FileQueueStatus {
     public insertserv:any;
     public insertparmeter:any;
     public object:any;
-    public Devicetokean:any;
-    public pagenumber:any;
 
   
     constructor(file: any,type: any,index: any,pageid:number,parentid:number,componentid:number) {
@@ -106,9 +104,9 @@ export class FileUploaderService {
   }
 
   // public functions
-  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port,Devicetokean,pagenumber) {
+  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port) {
     // add file to the queue
-    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter,ip,port,Devicetokean,pagenumber));
+    _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter,ip,port));
   }
 
   public clearQueue() {
@@ -162,16 +160,18 @@ let headers = new HttpHeaders({
   'Cache-Control': 'no-cache',
     'Pragma': 'no-cache',
     'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-  'Devicetokean':   queueObj.Devicetokean,
-  'pageid': queueObj.pagenumber });
+    'username':   GlobalConstants.USERNAME,
+    'usertokean': GlobalConstants.USERTOKEANkey,
+    'pageid': GlobalConstants.pageid,
+    'Devicecode': GlobalConstants.PCCODE });
   let options = {  reportProgress: true ,responseType: 'blob' as  'blob',headers: headers };
     return this.http.get(url, options);
   }
 
 
-  public addfilesuser(url,userid,delteobject,ip,port,Devicetokean,pageid): any{
+  public addfilesuser(url,userid,delteobject,ip,port): any{
 
-   this._usersservice.getbyvalue(url,userid,ip,port,Devicetokean,pageid).subscribe(
+   this._usersservice.getbyvalue(url,userid,ip,port).subscribe(
         
         data => {
           
@@ -194,8 +194,6 @@ let headers = new HttpHeaders({
             queueObj.fileid = singlefile['filesuploadID']['id'];
             queueObj.componentid = singlefile['componentID']['id'];
             queueObj.object = delteobject;
-            queueObj.Devicetokean=Devicetokean;
-            queueObj.pagenumber=pageid;
 
                // push to the queue
                if(this._files[singlefile['componentID']['id']] === undefined){
@@ -219,7 +217,7 @@ let headers = new HttpHeaders({
   }
 
   // private functions
-  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insertserv,inspara,ip,port,Devicetokean,pagenumber) {
+  private _addToQueue(file: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insertserv,inspara,ip,port) {
 
 console.log(index)
 
@@ -228,8 +226,6 @@ console.log(index)
     queueObj.index = index;
     queueObj.insertserv = insertserv;
     queueObj.insertparmeter = inspara;
-    queueObj.Devicetokean=Devicetokean;
-    queueObj.pagenumber=pagenumber;
     // set the individual object events
     queueObj.upload = (object) => this._upload(queueObj,object,ip,port);
     queueObj.delete = (deleteserv) => this._deleteFromQueuepost(queueObj,deleteserv,ip,port);
@@ -254,8 +250,10 @@ console.log(index)
     'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-    'Devicetokean':   queueObj.Devicetokean,
-    'pageid': queueObj.pagenumber });
+      'username':   GlobalConstants.USERNAME,
+      'usertokean': GlobalConstants.USERTOKEANkey,
+      'pageid': GlobalConstants.pageid,
+      'Devicecode': GlobalConstants.PCCODE});
     let options = {  reportProgress: true,headers: headers };
 
     // upload file and report progress
@@ -312,8 +310,10 @@ console.log(index)
       'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-      'Devicetokean':   queueObj.Devicetokean,
-      'pageid': queueObj.pagenumber });
+      'username':   GlobalConstants.USERNAME,
+      'usertokean': GlobalConstants.USERTOKEANkey,
+      'pageid': GlobalConstants.pageid,
+      'Devicecode': GlobalConstants.PCCODE });
       let options = {  reportProgress: true,headers: headers };
 
     var req = new HttpRequest('POST', urlall, form, options);
@@ -361,7 +361,7 @@ console.log(index)
     // update the FileQueueObject as completed
 if(para === 0){
   console.log("insert");
-  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid,ip,port,queueObj.Devicetokean,queueObj.pagenumber).subscribe(data => {
+  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid,ip,port).subscribe(data => {
 console.log(data);
 queueObj.progress = 100;
 queueObj.status = FileQueueStatus.Success;

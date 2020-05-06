@@ -91,7 +91,24 @@ public class ComponentController {
 		 
 	  }
 	  
+	  
+	  @RequestMapping(value = "/image/{langcode}/{imageid}", method = RequestMethod.GET)
+	  public  ResponseEntity<Resource> getimage(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("imageid") int imageid){ 
+		
+		  
+	  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  paramter.add("imageid");
+	  values.add(String.valueOf(imageid));
+	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
+		
+		
+			  return fileStorageService.getresource(request,imageid,langcode);
+		
+		 
+	  }
+	  
 	  
 
 }

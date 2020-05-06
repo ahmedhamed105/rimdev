@@ -447,6 +447,9 @@ public UserLogin check_userlogin(HttpServletRequest request,Device dev,Pages pa,
 	UserLogin userlogin= getusername(request,username, langcode,dev,3);
 	
 	  if(userlogin == null) {
+			String text= " username Wrong : "+username+" or token : "+tokean;
+			logServ.errorlog(dev.getDeviceip(),request,text, dev, 0, 3, langcode," ");
+		
 	    	userlogin = getbyid(1, langcode);  
 	    	return userlogin;
 	    }else {
@@ -476,13 +479,13 @@ public UserLogin check_userlogin(HttpServletRequest request,Device dev,Pages pa,
 	  System.out.println(as);
 	  
 	if(userlogin.getExpiredate().before(cal.getTime())) {
+		
 		String text= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
-		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 31, langcode," ");			
-		throw new NooauthException(textConvertionServ.search("E113", langcode));
+		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 31, langcode," ");				
+
 
 	}
-
-  
+	
 	Generate gen=new Generate();
 	String newtokean=gen.token(30);
 	userlogin.setLoginModfiy(cal.getTime());
@@ -493,7 +496,9 @@ public UserLogin check_userlogin(HttpServletRequest request,Device dev,Pages pa,
     	   cal.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
        }
     userlogin.setExpiredate(cal.getTime());
-	userlogin.setUsertokean(tokean);		
+	userlogin.setUsertokean(newtokean);	
+
+  
 
 	
 	try {

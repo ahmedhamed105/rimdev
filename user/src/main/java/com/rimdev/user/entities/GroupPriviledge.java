@@ -1,6 +1,7 @@
 package com.rimdev.user.entities;
 
 
+
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -17,10 +18,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -29,8 +27,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Entity
 @Table(name = "group_priviledge", catalog = "rim_user", schema = "")
 @XmlRootElement
-@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
-@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "GroupPriviledge.findAll", query = "SELECT g FROM GroupPriviledge g")
     , @NamedQuery(name = "GroupPriviledge.findById", query = "SELECT g FROM GroupPriviledge g WHERE g.id = :id")
@@ -46,6 +42,8 @@ public class GroupPriviledge implements Serializable {
     @Column(name = "Group_name", nullable = false, length = 450)
     private String groupname;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grouppriviledgeID")
+    private Collection<Notification> notificationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grouppriviledgeID")
     private Collection<UserLogin> userLoginCollection;
     @JoinColumn(name = "Group_status_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
@@ -54,6 +52,8 @@ public class GroupPriviledge implements Serializable {
     private Collection<GroupParent> groupParentCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grouppriviledgeID")
     private Collection<GroupWeb> groupWebCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grouppriviledgeID")
+    private Collection<GroupPages> groupPagesCollection;
 
     public GroupPriviledge() {
     }
@@ -81,6 +81,16 @@ public class GroupPriviledge implements Serializable {
 
     public void setGroupname(String groupname) {
         this.groupname = groupname;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Notification> getNotificationCollection() {
+        return notificationCollection;
+    }
+
+    public void setNotificationCollection(Collection<Notification> notificationCollection) {
+        this.notificationCollection = notificationCollection;
     }
 
     @XmlTransient
@@ -119,6 +129,16 @@ public class GroupPriviledge implements Serializable {
 
     public void setGroupWebCollection(Collection<GroupWeb> groupWebCollection) {
         this.groupWebCollection = groupWebCollection;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<GroupPages> getGroupPagesCollection() {
+        return groupPagesCollection;
+    }
+
+    public void setGroupPagesCollection(Collection<GroupPages> groupPagesCollection) {
+        this.groupPagesCollection = groupPagesCollection;
     }
 
     @Override

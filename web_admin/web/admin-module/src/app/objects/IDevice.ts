@@ -18,9 +18,9 @@ export interface IDevice {
         id: number,
         devtype: String
     },
-    logintypeID : {
+    applicationID : {
         id: number,
-        ltype: String
+        appname: String
     },
     devicebrowser: String,
     deviceBVersion : String,

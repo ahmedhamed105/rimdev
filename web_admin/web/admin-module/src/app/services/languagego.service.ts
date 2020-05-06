@@ -12,14 +12,16 @@ export class LanguagegoService {
   
   constructor(private _http:HttpClient) { }
 
-    getlang(search,Devicetokean,pageid){
+    getlang(search){
       var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.searchlang+"/"+GlobalConstants.language+"/"+search;
       let headers = new HttpHeaders({
         'Cache-Control': 'no-cache',
       'Pragma': 'no-cache',
       'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-        'Devicetokean':   Devicetokean,
-        'pageid': pageid });
+      'username':   GlobalConstants.USERNAME,
+      'usertokean': GlobalConstants.USERTOKEANkey,
+      'pageid': GlobalConstants.pageid,
+      'Devicecode': GlobalConstants.PCCODE});
         let options = { headers: headers };
       return  this._http.get<{}>(urlall,options);
       }
@@ -31,10 +33,10 @@ export class LanguagegoService {
           'Cache-Control': 'no-cache',
         'Pragma': 'no-cache',
         'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-           'pageid' :   GlobalConstants.pageid,
-          'username':   GlobalConstants.USERNAME,
-          'usertokean': GlobalConstants.USERTOKEANkey,
-          'devicetokean': GlobalConstants.Devicetokean });
+        'username':   GlobalConstants.USERNAME,
+        'usertokean': GlobalConstants.USERTOKEANkey,
+        'pageid': GlobalConstants.pageid,
+        'Devicecode': GlobalConstants.PCCODE });
           let options = { headers: headers };
         return  this._http.get<[]>(urlall,options);
     

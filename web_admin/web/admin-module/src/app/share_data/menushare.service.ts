@@ -8,6 +8,10 @@ export class MenushareService {
   private menu = new Subject<any>();
   private lang = new Subject<any>();
   private header = new Subject<any>();
+  private user = new Subject<any>();
+  private app = new Subject<any>();
+  private notif = new Subject<any>();
+
   constructor() { }
 
 
@@ -35,4 +39,33 @@ getheader(): Observable<any> {
 updateheader(message: any) {
 this.header.next(message);
 }
+
+
+getuser(): Observable<any> {
+  return this.user.asObservable();
+}
+
+updateuser(message: any) {
+this.user.next(message);
+}
+
+
+getapp(): Observable<any> {
+  return this.app.asObservable();
+}
+
+updateapp(message: any) {
+this.app.next(message);
+}
+
+
+
+getnotif(): Observable<any> {
+  return this.notif.asObservable();
+}
+
+updatenotif(message: any) {
+this.notif.next(message);
+}
+
 }

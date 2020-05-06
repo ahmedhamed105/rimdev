@@ -16,10 +16,10 @@ export class MenulistService {
       'Cache-Control': 'no-cache',
     'Pragma': 'no-cache',
     'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-       'pageid' :   GlobalConstants.pageid,
-      'username':   GlobalConstants.USERNAME,
-      'usertokean': GlobalConstants.USERTOKEANkey,
-      'devicetokean': GlobalConstants.Devicetokean });
+    'username':   GlobalConstants.USERNAME,
+    'usertokean': GlobalConstants.USERTOKEANkey,
+    'pageid': GlobalConstants.pageid,
+    'Devicecode': GlobalConstants.PCCODE});
       let options = { headers: headers };
   
     return  this._http.get<[]>(urlall,options);

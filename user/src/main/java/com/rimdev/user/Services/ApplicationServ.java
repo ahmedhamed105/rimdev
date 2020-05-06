@@ -9,25 +9,24 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-import com.rimdev.user.Repo.LoginTypeRepo;
-import com.rimdev.user.entities.DeviceType;
-import com.rimdev.user.entities.LoginType;
+import com.rimdev.user.Repo.ApplicationRepo;
+import com.rimdev.user.entities.Application;
 
 @Service
-public class LoginTypeServ {
+public class ApplicationServ {
 	
 	@Autowired
-	LoginTypeRepo loginTypeRepo;
+	ApplicationRepo applicationRepo;
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
 	
 	
 	
-	public List<LoginType> getall(String langcode) {
+	public List<Application> getall(String langcode) {
 
 		try {
-			return (List<LoginType>) loginTypeRepo.findAll();
+			return (List<Application>) applicationRepo.findAll();
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {
@@ -43,14 +42,14 @@ public class LoginTypeServ {
 	
 	
 
-public LoginType getbyid(int id) {
+public Application getbyid(int id) {
 	
 	
 	try {
-		Optional<LoginType> flowid =loginTypeRepo.findById(id);
+		Optional<Application> flowid =applicationRepo.findById(id);
 		 
 		 if (flowid.isPresent()){
-			 LoginType  ouput = flowid.get();
+			 Application  ouput = flowid.get();
 		
 			  return ouput;
 					}
@@ -69,14 +68,14 @@ public LoginType getbyid(int id) {
 
 
 
-public LoginType getbytype(String type) {
+public Application getbytype(String type) {
 	
 	
 	try {
-		Optional<LoginType> flowid =loginTypeRepo.findbyname(type);
+		Optional<Application> flowid =applicationRepo.findbyname(type);
 		 
 		 if (flowid.isPresent()){
-			 LoginType  ouput = flowid.get();
+			 Application  ouput = flowid.get();
 		
 			  return ouput;
 					}

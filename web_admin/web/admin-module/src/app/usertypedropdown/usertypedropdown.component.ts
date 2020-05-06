@@ -46,7 +46,7 @@ export class UsertypedropdownComponent implements AgRendererComponent {
     if(this.params.colDef.Serv === ""){
     }else{
 
-      this._usersservice.getbyurl(this.params.colDef.Serv,this.params.colDef.ip,this.params.colDef.port,this.params.colDef.pagetokean,this.params.colDef.pagenumber)
+      this._usersservice.getbyurl(this.params.colDef.Serv,this.params.colDef.ip,this.params.colDef.port)
       .subscribe(data => {
         this.objects[this.params.colDef.formnum] = data;
   });

@@ -32,6 +32,7 @@ import com.rimdev.user.Services.DeviceipServ;
 import com.rimdev.user.Services.GroupPagesServ;
 import com.rimdev.user.Services.GroupWebServ;
 import com.rimdev.user.Services.LogServ;
+import com.rimdev.user.Services.NotificationServ;
 import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Services.TextConvertionServ;
 import com.rimdev.user.Services.UserLoginServ;
@@ -42,6 +43,7 @@ import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Deviceip;
 import com.rimdev.user.entities.GroupPriviledge;
 import com.rimdev.user.entities.GroupWeb;
+import com.rimdev.user.entities.Notification;
 import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.loginpra;
 import com.rimdev.user.ouputobject.pagesdevice;
@@ -81,8 +83,8 @@ public class DeviceController {
 	@Autowired
 	TextConvertionServ textConvertionServ;
 	
-	
-	
+	@Autowired
+	NotificationServ notificationServ;
 
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
@@ -221,7 +223,7 @@ public Deviceip getip(String ip) {
 
 
 @RequestMapping(value = "/DevicePage/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<loginpra> DevicePage(HttpServletRequest request,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@PathVariable("langcode") String langcode,@RequestBody Device input) 
+public @ResponseBody ResponseEntity<loginpra> DevicePage(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Device input) 
 		throws IOException, GeoIp2Exception {
 
 
@@ -254,6 +256,10 @@ DevicePage  out1=null;
 	loginpra outlogin = new loginpra();
 	outlogin.setUsername(out1.getUserloginID().getUsername());
 	outlogin.setUsertokean(out1.getPageTokean());
+	outlogin.setUserid(out1.getUserloginID());
+	outlogin.setApp(out1.getUserloginID().getApplicationID());
+	List<Notification> notif= notificationServ.getbygroup(out1.getUserloginID().getGrouppriviledgeID().getId());
+	outlogin.setNotif(notif);
 
 	return new ResponseEntity<loginpra>(outlogin, HttpStatus.OK);
 

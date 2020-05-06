@@ -26,9 +26,9 @@ public class PagesPriviledgeServ {
 			 
 			 if(groupPages.getPagespriviledgeID().getPagesID().equals(page)) {
 				 
-				 if((groupPages.getPagespriviledgeID().getAdminDevice() == 1 && devpage.getDeviceId().getLogintypeID().getLtype().equals("Admin"))
-							|| (groupPages.getPagespriviledgeID().getWebDevice() == 1 && devpage.getDeviceId().getLogintypeID().getLtype().equals("Web"))
-							|| (groupPages.getPagespriviledgeID().getMobileDevice() == 1 && devpage.getDeviceId().getLogintypeID().getLtype().equals("Mobile"))
+				 if((groupPages.getPagespriviledgeID().getAdminDevice() == 1 && devpage.getDeviceId().getApplicationID().getAppname().equals("Admin"))
+							|| (groupPages.getPagespriviledgeID().getWebDevice() == 1 && devpage.getDeviceId().getApplicationID().getAppname().equals("Web"))
+							|| (groupPages.getPagespriviledgeID().getMobileDevice() == 1 && devpage.getDeviceId().getApplicationID().getAppname().equals("Mobile"))
 								 
 								 ) {
 							 if(devpage.getDeviceId().isDesktopDevice() && groupPages.getPagespriviledgeID().getIsdesktop() == 1) {

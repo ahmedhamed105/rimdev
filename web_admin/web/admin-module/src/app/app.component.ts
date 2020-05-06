@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MenulistService } from './services/menulist.service';
-import { ErrorDialogService } from './services/error-dialog.service';
-import { CookiesService } from './services/cookies.service';
-import { GlobalConstants } from './GlobalConstants';
-import { LanguagegoService } from './services/languagego.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

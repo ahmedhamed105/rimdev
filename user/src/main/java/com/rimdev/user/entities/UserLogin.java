@@ -5,7 +5,6 @@
  */
 package com.rimdev.user.entities;
 
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -27,10 +26,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -39,8 +35,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Entity
 @Table(name = "user_login", catalog = "rim_user", schema = "")
 @XmlRootElement
-@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
-@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "UserLogin.findAll", query = "SELECT u FROM UserLogin u")
     , @NamedQuery(name = "UserLogin.findById", query = "SELECT u FROM UserLogin u WHERE u.id = :id")
@@ -103,6 +97,11 @@ public class UserLogin implements Serializable {
     private Collection<Telephones> telephonesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
     private Collection<Adress> adressCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userloginID")
+    private Collection<Notification> notificationCollection;
+    @JoinColumn(name = "Application_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private Application applicationID;
     @JoinColumn(name = "Group_priviledge_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private GroupPriviledge grouppriviledgeID;
@@ -278,6 +277,24 @@ public class UserLogin implements Serializable {
         this.adressCollection = adressCollection;
     }
 
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Notification> getNotificationCollection() {
+        return notificationCollection;
+    }
+
+    public void setNotificationCollection(Collection<Notification> notificationCollection) {
+        this.notificationCollection = notificationCollection;
+    }
+
+    public Application getApplicationID() {
+        return applicationID;
+    }
+
+    public void setApplicationID(Application applicationID) {
+        this.applicationID = applicationID;
+    }
+
     public GroupPriviledge getGrouppriviledgeID() {
         return grouppriviledgeID;
     }
@@ -374,5 +391,4 @@ public class UserLogin implements Serializable {
     }
     
 }
-
 

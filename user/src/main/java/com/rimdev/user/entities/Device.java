@@ -28,10 +28,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -40,8 +37,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @Entity
 @Table(name = "device", catalog = "rim_user", schema = "")
 @XmlRootElement
-@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
-@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "Device.findAll", query = "SELECT d FROM Device d")
     , @NamedQuery(name = "Device.findById", query = "SELECT d FROM Device d WHERE d.id = :id")
@@ -61,7 +56,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "Device.findByMobile", query = "SELECT d FROM Device d WHERE d.mobile = :mobile")
     , @NamedQuery(name = "Device.findByDesktopDevice", query = "SELECT d FROM Device d WHERE d.desktopDevice = :desktopDevice")
     , @NamedQuery(name = "Device.findByTablet", query = "SELECT d FROM Device d WHERE d.tablet = :tablet")
-    , @NamedQuery(name = "Device.findByPage", query = "SELECT d FROM Device d WHERE d.page = :page")})
+    , @NamedQuery(name = "Device.findByPage", query = "SELECT d FROM Device d WHERE d.page = :page")
+    , @NamedQuery(name = "Device.findByLogintypeID", query = "SELECT d FROM Device d WHERE d.logintypeID = :logintypeID")})
 public class Device implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -110,6 +106,9 @@ public class Device implements Serializable {
     private boolean tablet;
     @Column(name = "Page")
     private Integer page;
+    @Basic(optional = false)
+    @Column(name = "login_type_ID", nullable = false)
+    private int logintypeID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
     private Collection<LogFatal> logFatalCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
@@ -124,6 +123,9 @@ public class Device implements Serializable {
     private Collection<DevicePage> devicePageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
     private Collection<Deviceip> deviceipCollection;
+    @JoinColumn(name = "Application_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private Application applicationID;
     @JoinColumn(name = "Device_OS_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private DeviceOs deviceOSID;
@@ -133,9 +135,6 @@ public class Device implements Serializable {
     @JoinColumn(name = "Device_type_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private DeviceType devicetypeID;
-    @JoinColumn(name = "login_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private LoginType logintypeID;
 
     public Device() {
     }
@@ -144,11 +143,12 @@ public class Device implements Serializable {
         this.id = id;
     }
 
-    public Device(Integer id, String devicecode, String devicetokean, Date tokeantime, Date devicemodify, Date devicecreate) {
+    public Device(Integer id, String devicecode, Date devicemodify, Date devicecreate, int logintypeID) {
         this.id = id;
         this.devicecode = devicecode;
         this.devicemodify = devicemodify;
         this.devicecreate = devicecreate;
+        this.logintypeID = logintypeID;
     }
 
     public Integer getId() {
@@ -215,7 +215,6 @@ public class Device implements Serializable {
         this.deviceosunknow = deviceosunknow;
     }
 
-
     public Date getDevicemodify() {
         return devicemodify;
     }
@@ -264,7 +263,6 @@ public class Device implements Serializable {
         this.deviceBVersion = deviceBVersion;
     }
 
-  
 
     public boolean isMobile() {
 		return mobile;
@@ -296,6 +294,14 @@ public class Device implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public int getLogintypeID() {
+        return logintypeID;
+    }
+
+    public void setLogintypeID(int logintypeID) {
+        this.logintypeID = logintypeID;
     }
 
     @XmlTransient
@@ -368,6 +374,14 @@ public class Device implements Serializable {
         this.deviceipCollection = deviceipCollection;
     }
 
+    public Application getApplicationID() {
+        return applicationID;
+    }
+
+    public void setApplicationID(Application applicationID) {
+        this.applicationID = applicationID;
+    }
+
     public DeviceOs getDeviceOSID() {
         return deviceOSID;
     }
@@ -390,14 +404,6 @@ public class Device implements Serializable {
 
     public void setDevicetypeID(DeviceType devicetypeID) {
         this.devicetypeID = devicetypeID;
-    }
-
-    public LoginType getLogintypeID() {
-        return logintypeID;
-    }
-
-    public void setLogintypeID(LoginType logintypeID) {
-        this.logintypeID = logintypeID;
     }
 
     @Override
