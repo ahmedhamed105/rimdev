@@ -85,16 +85,14 @@ public class UserController {
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<List<User>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody User input) {
-	  List<String> paramter =new ArrayList<String>();
+	
+	List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	// This returns a JSON or XML with the users
-//System.out.println("enter 1");
-//System.out.println(input.getFirstName());
 	User user=null;
 	try {
-		 user= userServ.getuserwithout(input.getId(),langcode);
+		 user= userServ.getuserbyid(input.getId(),langcode);
 	//	 System.out.println("enter 2");
 
 		if(user == null ) {
@@ -103,7 +101,7 @@ DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pa
 		
 		}else {
 	//		System.out.println("enter 4");
-	    BeanUtils.copyProperties(input, user, ObjectUtils.getNullPropertyNames(input));
+	      input.setId(user.getId());
 	 //   System.out.println(user.getFirstName());
 	    user=userServ.update(user,langcode);
 			

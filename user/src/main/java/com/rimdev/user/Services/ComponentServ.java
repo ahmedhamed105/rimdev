@@ -11,6 +11,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.ComponentRepo;
 import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
@@ -52,7 +53,7 @@ public class ComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new NullPointerException(textConvertionServ.search("E109", langcode));
+				throw new PopupException(textConvertionServ.search("E116", langcode));
 				
 			}
 			

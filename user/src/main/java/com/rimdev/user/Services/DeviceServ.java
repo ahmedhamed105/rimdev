@@ -384,9 +384,6 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 		
 		DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
 		
-		UserLogin  userlog =out.getUserloginID();
-		
-		
 
 		return out;
 	

@@ -52,7 +52,7 @@ public class ParentComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new PopupException(textConvertionServ.search("E109", langcode));
+				throw new PopupException(textConvertionServ.search("E115", langcode));
 				
 			}
 			
@@ -62,7 +62,7 @@ public class ParentComponentServ {
 				component.setPcodeTittle(textConvertionServ.search(component.getPcodeTittle(), langcode));
 				
 				parent_comp a = new parent_comp();
-				try {
+			
 					List<Component_object>	 select =componentServ.getbyparent(component.getId(), langcode);
 					if(select.size() > 0 ) {
 						a.setParent(component);
@@ -76,20 +76,8 @@ public class ParentComponentServ {
 						}
 						
 					}
-				} catch (Exception e) {
-					// TODO: handle exception
-					if(!component.getParentType().equals("form")) {
-						a.setParent(component);
-				//		a.setChild(select);
-						coms.add(a);									
-					}
-					
-				}
-		
 				
-			
-			
-
+	
 				
 			}
 
@@ -109,7 +97,7 @@ public class ParentComponentServ {
 		
 		if(coms == null || coms.size() <= 0) {
 			
-			throw new PopupException(textConvertionServ.search("E109", langcode));
+			throw new PopupException(textConvertionServ.search("E117", langcode));
 			
 		}
 		

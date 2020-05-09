@@ -119,7 +119,7 @@ public User getuser(int id,String langcode) {
 
 
 
-public User getuserwithout(int id,String langcode) {
+public User getuserbyid(int id,String langcode) {
 	
 	try {
 		Optional<User> flowid =userRepo.findById(id);

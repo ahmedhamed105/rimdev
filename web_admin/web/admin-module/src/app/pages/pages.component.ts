@@ -124,10 +124,12 @@ export class PagesComponent implements OnInit {
 
       this.device =this.locationService.mydevice;
 
-      this._MenushareService.updateuser(this.device.userid);
-
       this.cookieService.username(this.device['username'],GlobalConstants.rember);
       this.cookieService.usertokean(this.device['usertokean'],GlobalConstants.rember);
+
+      this._MenushareService.updateuser(this.device.userid);
+      this._MenushareService.updateapp(this.device.app);
+      this._MenushareService.updatenotif(this.device.notif);
 
 
     this._ComponentService.getmenu(this.type,menuid).subscribe(res =>{
@@ -618,11 +620,6 @@ onSubmit(form,serv,related,relcom,ip,port){
   
 
  if( this.passwords.length > 0){
-
- 
-
-
-
 
   this.passwords.forEach(element => {
 
