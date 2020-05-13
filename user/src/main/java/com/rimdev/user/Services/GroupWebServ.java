@@ -52,7 +52,7 @@ public class GroupWebServ {
 	
 	public void checkpriviledge(HttpServletRequest request,DevicePage page,List<String> paramter,List<String> values)  {
 	
-		System.out.println("begin");
+		//System.out.println("begin");
 		
 		try {
 			

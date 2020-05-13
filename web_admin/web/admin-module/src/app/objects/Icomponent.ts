@@ -28,7 +28,9 @@
             crequired: number,
             cpattern: number,
             patterndesgin : string,
-            disable: number
+            disable: number,
+            fieldEncry : number,
+            parentGroup : string
         },
         select : {
             id: number,

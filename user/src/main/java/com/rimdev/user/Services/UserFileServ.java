@@ -34,6 +34,8 @@ public class UserFileServ {
 	
 	
 	
+
+	
 	public UserFile Save(UserLogin user,FilesUpload file,Component com,String langcode) {
 		
 		try {	

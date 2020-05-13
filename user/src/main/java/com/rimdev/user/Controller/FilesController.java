@@ -48,11 +48,11 @@ public class FilesController {
     public ResponseEntity<FilesUpload> uploadsingleFile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestParam("file") MultipartFile file,@RequestParam("pageid") int pageid,@RequestParam("parentid") int parentid,@RequestParam("componentid") int componentid) {
 		 System.out.println(pageid+" "+parentid+" "+componentid);
 		 
-		  List<String> paramter =new ArrayList<String>();
+	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
-		return new ResponseEntity<FilesUpload>(fileStorageService.storeFile(file,pageid,parentid,componentid,langcode), HttpStatus.OK);
+		return new ResponseEntity<FilesUpload>(fileStorageService.storeFile(file,pageid,parentid,componentid,langcode,a), HttpStatus.OK);
 		 
 		
     }
@@ -62,7 +62,7 @@ public class FilesController {
     @RequestMapping(value = "/downloadFile/{langcode}/{id}", method = RequestMethod.GET)
     public ResponseEntity<Resource> downloadFile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") int fileid) {
     
-		  List<String> paramter =new ArrayList<String>();
+	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  paramter.add("id");
 	  values.add(String.valueOf(fileid));

@@ -16,6 +16,8 @@ export class PasswordtableComponent implements AgRendererComponent{
 
   public objects = [[]];
   jform :FormGroup  []=[];
+  tmpform :FormGroup;
+  public password;
 
 
   public params:any = {
@@ -25,18 +27,36 @@ export class PasswordtableComponent implements AgRendererComponent{
 
 
   setvalue(form){
-    var text=  form.get(this.params.colDef.field).value;
+
+    var text =form;
+    if(this.params.colDef.parentgroup != null){
+      text =text.get(this.params.colDef.parentgroup);
+    }
+
+    if(this.params.colDef.groupname != null){
+      text =text.get(this.params.colDef.groupname);
+      }
+    
+      text=  text.get(this.params.colDef.field).value;
    
     var status = this._EncryptionService.encypttext(text);
 
-    if(this.params.colDef.fieldgroup === 0){
-     this.params.data[this.params.colDef.field] = status;
+    this.password = status;
 
-    }else{  
-       this.params.data[this.params.colDef.field][this.params.colDef.selectValue] = status;
+    if(this.params.colDef.parentgroup != null && this.params.colDef.groupname != null){
+      this.params.data[this.params.colDef.parentgroup][this.params.colDef.groupname][this.params.colDef.field] = status;
+    }else if(this.params.colDef.groupname != null && this.params.colDef.groupname == null){
+      this.params.data[this.params.colDef.parentgroup][this.params.colDef.field] = status;
 
-
+     }else if(this.params.colDef.groupname == null && this.params.colDef.groupname != null){
+      this.params.data[this.params.colDef.groupname][this.params.colDef.field] = status;
+    }else{
+      this.params.data[this.params.colDef.field] = status;
     }
+
+    
+
+    
   }
   
   agInit(params:any):void {
@@ -44,23 +64,31 @@ export class PasswordtableComponent implements AgRendererComponent{
    // console.log(this.params);
 
 
-    
-
- 
-
     this.jform[this.params.colDef.formnum] = this.fb.group({
     });
 
- 
-if(this.params.colDef.fieldgroup === 0){
 
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: this.params.data[this.params.colDef.field], disabled: this.params.colDef.fielddisable}, [Validators.required]));
+    var value =this.params.data;
 
-}else{
 
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: this.params.data[this.params.colDef.field][this.params.colDef.selectValue], disabled: this.params.colDef.fielddisable}, [Validators.required]));
+    if(this.params.colDef.parentgroup != null){
+      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));;
+      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
+      value =value[this.params.colDef.parentgroup];
+    }
 
-}
+    if(this.params.colDef.groupname != null){
+      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.groupname, new FormGroup({}));;
+      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
+      value =value[this.params.colDef.groupname];
+    }
+
+    value = value[this.params.colDef.field];
+  
+
+  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
+
+
 
   }
 

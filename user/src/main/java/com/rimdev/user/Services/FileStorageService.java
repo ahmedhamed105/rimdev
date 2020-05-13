@@ -40,6 +40,7 @@ import com.rimdev.user.Repo.FilesUploadRepo;
 import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.FileStatus;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.UserFile;
@@ -73,6 +74,11 @@ public class FileStorageService {
 	 int sparentid;
 	 String sfilename;
 	 BigDecimal comtime;
+	 
+	 
+	
+		
+		
 
 	    @Autowired
 	    public FileStorageService(FileStorageProperties fileStorageProperties) {
@@ -187,11 +193,13 @@ public class FileStorageService {
 	    	
 	    }
 
-	    public FilesUpload storeFile(MultipartFile file,int pageid,int parentid,int componentid,String langcode) {
+	    public FilesUpload storeFile(MultipartFile file,int pageid,int parentid,int componentid,String langcode,DevicePage devpag) {
 
 	   	  scomponentid=componentid;
 		  spageid=pageid;
 		  sparentid=parentid;
+		  
+		  FilesUpload fileu=new FilesUpload();
 	    	
 	    		Path main =	create_maindirectory() ;
 		    	Path temp =	create_tempdirectory() ;
@@ -199,23 +207,51 @@ public class FileStorageService {
 			    	
 		    	Path filetemp =save_file(file, temp);
 		    	
-		   // 	  System.out.println(filetemp);
+		 	 // System.out.println(main.toFile().getAbsolutePath());
 		    	
-		    	boolean ind=true;
+		    
 		    	try {
-		    		 ind=fileEquals(filetemp.toFile(),main.toFile());
-		    		  filetemp.toFile().delete();
+		    		File samefile=fileEquals(filetemp.toFile(),main.toFile());
+		    		//System.out.println(samefile);	
+		    		if(samefile != null) {
+		    	
+		    		//	System.out.println(samefile.getName());		
+		    		//	System.out.println(samefile.getAbsolutePath());	
+		    			
+		    			   try {
+		    		    		
+		    Optional<FilesUpload> fileupload = filesUploadRepo.findbyfile(samefile.getName(), samefile.getParent());
+		    		    		 
+		    		    		 if (fileupload.isPresent()){
+		    		    			 fileu=fileupload.get();
+		    		    			  filetemp.toFile().delete();
+		    		    			  return fileu;
+		    		    			}
+		    		    			else{
+		    		    			   // alternative processing....
+		    		   
+		    		    			}
+		    		    	} catch (Exception e) {
+		    		    		// TODO: handle exception
+		    		 
+		    		    	}
+		    			
+		    			
+		    		}	    		
+		    		
 				} catch (NullPointerException e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					ind=false;
+					//ind=false;
 				}
 		    	
 		    	
-		    	if(ind) {
-		    		//System.out.println("duplicate");
-		    		throw new PopupException(textConvertionServ.search("E105", langcode));
-		    	}
+		   // 	boolean ind=true;
+		    	
+		   // 	if(ind) {
+		   // 		//System.out.println("duplicate");
+		   // 		throw new PopupException(textConvertionServ.search("E118", langcode));
+		  //  	}
 
 		//  System.out.println(filetemp);
 		    	
@@ -252,12 +288,9 @@ public class FileStorageService {
 	    		
 	    	}
 	       
-	       System.out.println(maintemp.getParent().toString());
-	       System.out.println(maintemp.toString());
-	  
-	  
+	
 	       
-	       FilesUpload fileu=new FilesUpload();
+	      
 	       fileu.setFilesName(sfilename);
 	       fileu.setFilesUrl(fileDownloadUri);
 	       fileu.setFilesSize(new BigDecimal(file.getSize()/1000));
@@ -292,12 +325,13 @@ public class FileStorageService {
 	            if(resource.exists()) {
 	                return resource;
 	            } else {
-	            
-	                throw new NullPointerException("File not found " + fileid);
+	            	return null;
+	               // throw new PopupException("File not found " + fileid);
 	            }
 	        } catch (MalformedURLException ex) {
 	        	ex.printStackTrace();
-	            throw new PopupException("File not found " + fileid, ex);
+	        	return null;
+	          //  throw new PopupException("File not found " + fileid, ex);
 	        }
 	    }
 	    
@@ -344,18 +378,21 @@ public class FileStorageService {
 	    
 	    
 	    
-	    public  boolean fileEquals(File file1,File directory) {
+	    public  File fileEquals(File file1,File directory) {
 	    	
 	    	comtime=new BigDecimal(0);
+	    	int ident=0;
+	    	File same=null;
 	    	
-	  //  System.out.println("path : "+file1.getParentFile());	
+	   //System.out.println("path : "+directory.getAbsolutePath());	
 	    File[] files;
 	    files=directory.listFiles();
+	   // System.out.println("path : "+files.length);	
 	    File file2=null;
 	    // For each pathname in the pathnames array
         for (File filec : files) {
             // Print the names of files and directories
-        	System.out.println(filec.getAbsolutePath());
+        //	System.out.println(filec.getAbsolutePath());
         	file2=filec;
         	
 
@@ -416,7 +453,9 @@ public class FileStorageService {
 	                        + (runTime / 1000000) + " ms. [" + runTime + " ns.]");
 	                fis1.close();
 		            fis2.close();
-	                return true;
+		            ident ++;
+		            same=file2;
+		            break;
 	            } else {
 	            	BigDecimal a=new BigDecimal(runTime / 1000000);
 	            	comtime=comtime.add(a);
@@ -424,7 +463,7 @@ public class FileStorageService {
 	                        + (runTime / 1000000) + " ms. [" + runTime + " ns.]");
 	                fis1.close();
 		            fis2.close();
-	                
+		           
 	                
 	            }
 
@@ -432,14 +471,17 @@ public class FileStorageService {
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            return true;
-	        	
+	            ident ++;
+	            same=file2;
+	            break;
 	        }
         }
         
-        
-		return false;
-
+        if(ident >= 1) {
+        return	same;  	
+        }else {
+		return null;
+        }
 
 	    }
 	    
@@ -484,9 +526,18 @@ public class FileStorageService {
 			
 			// Load file as Resource
 	        Resource resource = loadFileAsResource(fileid,langcode);
+	        String contentType = null;
+	        if(resource == null) {
+	        	 contentType = "application/octet-stream";
+	        	return ResponseEntity.ok()
+		                .contentType(MediaType.parseMediaType(contentType))
+		                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "no" + "\"")
+		                .body(resource);
+	        	
+	        }
 
 	        // Try to determine file's content type
-	        String contentType = null;
+	       
 	        try {
 	            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
 	        } catch (IOException ex) {

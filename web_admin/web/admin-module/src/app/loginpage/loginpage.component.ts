@@ -59,7 +59,16 @@ export class LoginpageComponent implements OnInit {
 
 
 
-
+ createImage(url: any) {
+  
+    this.background = url;
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-image', "url('"+this.background+"')");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-repeat', "no-repeat");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-size', "cover");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-position', "center");
+    this.renderer.setStyle(this.elementRef.nativeElement.ownerDocument.body,'background-attachment', "fixed");
+  
+}
 
 createImageFromBlob(image: Blob) {
   let reader = new FileReader();
@@ -130,9 +139,15 @@ createImageFromBlob(image: Blob) {
 
        this._ComponentService.getbackground().subscribe(background =>{
 
-        this.createImageFromBlob(background);
-     
+    //    console.log(background);
+        if(background.size === 0){
+          this.createImage('assets/img/avatar04.png');
+        }else{
+          this.createImageFromBlob(background);
+        }
 
+        
+     
   
     
     this._ComponentService.getbypage().subscribe(res =>{
@@ -264,6 +279,7 @@ if(element.comp.ctype == 'select'){
     selectValue:"",
     fieldgroup:0,
     groupname:"",
+    parentgroup: "",
     fielddisable: false,
     disabled : false,
     ip:"",
@@ -282,32 +298,61 @@ if(element.comp.ctype == 'select'){
 
 a.forEach((element,index) => {
 
-
+  var b : Icolumdef;
 
   var parentin=indexp*a.length;
 
 if(element.comp.ctype === 'label'){
 
-  var b : Icolumdef = {
-    headerName : element.comp.ccode,
-    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
-    Serv: "",
-    selectDisplay:"",
-    selectValue:"",
-    fieldgroup:0,
-    groupname:"",
-    fielddisable: element.comp.disable === 1 ? true:false,
-    disabled : element.comp.disable === 1 ? true:false,
-    ip:parent.parent.comIP,
-    port:parent.parent.comport,
-    formnum:0,
-    sortable: true, 
-    filter: true, 
-    editable: false,      
-    resizable: true,
-    checkboxSelection: false,
-    cellRenderer: ""
-  };
+  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
+     b = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.parentGroup+'.'+element.comp.name:element.comp.parentGroup+'.'+element.comp.groupname+'.'+element.comp.name,
+      Serv: "",
+      selectDisplay:"",
+      selectValue:"",
+      fieldgroup:0,
+      groupname:"",
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:0,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer: ""
+    };
+
+  }else{
+     b  = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
+      Serv: "",
+      selectDisplay:"",
+      selectValue:"",
+      fieldgroup:0,
+      groupname:"",
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:0,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer: ""
+    };
+
+  }
+
+ 
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
 
@@ -315,26 +360,56 @@ if(element.comp.ctype === 'label'){
 
 }else if(element.comp.ctype === 'input'){
 
-  var b : Icolumdef= {
-    headerName : element.comp.ccode,
-    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
-    Serv: "",
-    selectDisplay:"",
-    selectValue:"",
-    fieldgroup:0,
-    groupname:"",
-    fielddisable: element.comp.disable === 1 ? true:false,
-    disabled : element.comp.disable === 1 ? true:false,
-    ip:parent.parent.comIP,
-    port:parent.parent.comport,
-    formnum:0,
-    sortable: true, 
-    filter: true, 
-    editable: true,      
-    resizable: true,
-    checkboxSelection: false,
-    cellRenderer : ""
-  };
+
+  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
+
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.parentGroup+'.'+element.comp.name:element.comp.parentGroup+'.'+element.comp.groupname+'.'+element.comp.name,
+      Serv: "",
+      selectDisplay:"",
+      selectValue:"",
+      fieldgroup:0,
+      groupname:"",
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:0,
+      sortable: true, 
+      filter: true, 
+      editable: true,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer : ""
+    };
+  }else{
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
+      Serv: "",
+      selectDisplay:"",
+      selectValue:"",
+      fieldgroup:0,
+      groupname:"",
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:0,
+      sortable: true, 
+      filter: true, 
+      editable: true,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer : ""
+    };
+    
+  }
+
+  
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
   
@@ -342,26 +417,58 @@ if(element.comp.ctype === 'label'){
 
 }else if(element.comp.ctype === 'password'){
 
-  var b : Icolumdef= {
-    headerName : element.comp.ccode,
-    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
-    Serv: element.select.webService,
-    selectDisplay:element.select.selectDisplay,
-    selectValue:element.select.selectValue,
-    fieldgroup: element.comp.groupname === undefined? 0 : 1,
-    groupname : element.comp.groupname === undefined?null:element.comp.groupname,
-    fielddisable: element.comp.disable === 1 ? true:false,
-    disabled : element.comp.disable === 1 ? true:false,
-    ip:parent.parent.comIP,
-    port:parent.parent.comport,
-    formnum:index,
-    sortable: true, 
-    filter: true, 
-    editable: false,      
-    resizable: true,
-    checkboxSelection: false,
-    cellRenderer : "passRenderer"
-  };
+  
+
+  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
+
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.name,
+      Serv: element.select.webService,
+      selectDisplay:element.select.selectDisplay,
+      selectValue:element.select.selectValue,
+      fieldgroup: element.comp.groupname === undefined? 0 : 1,
+      groupname : element.comp.groupname === undefined?null:element.comp.groupname,
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:index,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer : "passRenderer"
+    };
+
+  }else{
+
+    b = {
+      headerName : element.comp.ccode,
+      field :  element.comp.name,
+      Serv: element.select.webService,
+      selectDisplay:element.select.selectDisplay,
+      selectValue:element.select.selectValue,
+      fieldgroup: element.comp.groupname === undefined? 0 : 1,
+      groupname : element.comp.groupname === undefined?null:element.comp.groupname,
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:index,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer : "passRenderer"
+    };
+    
+  }
+
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
   
@@ -369,35 +476,69 @@ if(element.comp.ctype === 'label'){
 
 }else if(element.comp.ctype === 'select'){
 
-  console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
+  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
+      Serv: element.select.webService,
+      selectDisplay:element.select.selectDisplay,
+      selectValue:element.select.selectValue,
+      fieldgroup: element.comp.groupname === undefined? 0 : 1,
+      groupname : element.comp.groupname === undefined?null:element.comp.groupname,
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:index,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer: "selRenderer"
+    };
 
-  var b : Icolumdef= {
-    headerName : element.comp.ccode,
-    field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
-    Serv: element.select.webService,
-    selectDisplay:element.select.selectDisplay,
-    selectValue:element.select.selectValue,
-    fieldgroup: element.comp.groupname === undefined? 0 : 1,
-    groupname : element.comp.groupname === undefined?null:element.comp.groupname,
-    fielddisable: element.comp.disable === 1 ? true:false,
-    disabled : element.comp.disable === 1 ? true:false,
-    ip:parent.parent.comIP,
-    port:parent.parent.comport,
-    formnum:index,
-    sortable: true, 
-    filter: true, 
-    editable: false,      
-    resizable: true,
-    checkboxSelection: false,
-    cellRenderer: "selRenderer"
-  };
+  }else{
+
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
+      Serv: element.select.webService,
+      selectDisplay:element.select.selectDisplay,
+      selectValue:element.select.selectValue,
+      fieldgroup: element.comp.groupname === undefined? 0 : 1,
+      groupname : element.comp.groupname === undefined?null:element.comp.groupname,
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:index,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer: "selRenderer"
+    };
+
+    
+  }
+
+  //console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
+
+
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
 
 
 }else{
 
+  
 }
+
+
 
 
 

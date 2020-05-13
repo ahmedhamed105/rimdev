@@ -92,6 +92,11 @@ public class Component implements Serializable {
     private int disable;
     @Column(name = "label_icon", length = 450)
     private String labelIcon;
+    @Column(name = "parent_group", length = 450)
+    private String parentGroup;
+    @Basic(optional = false)
+    @Column(name = "field_encry", nullable = false)
+    private int fieldEncry;
     
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
@@ -124,7 +129,25 @@ public class Component implements Serializable {
         this.cpattern = cpattern;
     }
     
-    public String getLabelIcon() {
+    
+    
+    public String getParentGroup() {
+		return parentGroup;
+	}
+
+	public void setParentGroup(String parentGroup) {
+		this.parentGroup = parentGroup;
+	}
+
+	public int getFieldEncry() {
+		return fieldEncry;
+	}
+
+	public void setFieldEncry(int fieldEncry) {
+		this.fieldEncry = fieldEncry;
+	}
+
+	public String getLabelIcon() {
         return labelIcon;
     }
 

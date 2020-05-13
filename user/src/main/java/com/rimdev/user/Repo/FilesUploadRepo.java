@@ -15,5 +15,8 @@ public interface FilesUploadRepo  extends CrudRepository<FilesUpload, Integer>{
 	
 	@Query(value ="SELECT * FROM rim_user.files_upload where files_name = ?1" , nativeQuery = true)
 	Optional<FilesUpload> findbyfilename(String filename);
+	
+	@Query(value ="SELECT * FROM rim_user.files_upload where files_name = ?1 AND file_path = ?2" , nativeQuery = true)
+	Optional<FilesUpload> findbyfile(String filename,String path);
 
 }

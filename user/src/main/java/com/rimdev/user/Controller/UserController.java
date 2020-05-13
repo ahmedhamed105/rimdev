@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.UserServ;
-import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
+import com.rimdev.user.ouputobject.Userobject;
 import com.rimdev.user.ouputobject.threevalues;
 
 @Controller // This means that this class is a Controller
@@ -44,21 +43,18 @@ public class UserController {
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<User>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Userobject>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 
 		  List<String> paramter =new ArrayList<String>();
 		  List<String> values =new ArrayList<String>();
 		  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-		  return new ResponseEntity<List<User>>(userServ.getall(langcode), HttpStatus.OK);
+		  return new ResponseEntity<List<Userobject>>(userServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
 	  
-	  public  ResponseEntity<List<User>> getAllUsers(String langcode){
-		  return new ResponseEntity<List<User>>(userServ.getall(langcode), HttpStatus.OK);
-	  }
-	  
+
 	  @RequestMapping(value = "/get/{langcode}/{id}", method = RequestMethod.GET)
 	  public ResponseEntity<User> getuser(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable @NotNull int id){
 	
@@ -84,41 +80,35 @@ public class UserController {
 	 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<User>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody User input) {
+public @ResponseBody ResponseEntity<User> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody User input) {
 	
 	List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	User user=null;
-	try {
-		 user= userServ.getuserbyid(input.getId(),langcode);
-	//	 System.out.println("enter 2");
+
+User user;
+if(input.getId() == null) {
+	 user=userServ.Save(input,langcode);
+	
+}else {
+	 user= userServ.getuserbyid(input.getId(),langcode);
+//	 System.out.println("enter 2");
 
 		if(user == null ) {
-		//	System.out.println("enter 3");
 			user=userServ.Save(input,langcode);
 		
 		}else {
-	//		System.out.println("enter 4");
 	      input.setId(user.getId());
-	 //   System.out.println(user.getFirstName());
-	    user=userServ.update(user,langcode);
+	     user=userServ.update(user,langcode);
 			
 		}
 		
-
-	} catch (Exception e) {
-		// TODO: handle exception
-		System.out.println("enter 5");
-		user= userServ.Save(input,langcode);
-
-	}
+}
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 
 
-	 return getAllUsers(langcode);
 
-	
 }
 
 
@@ -130,9 +120,7 @@ public @ResponseBody ResponseEntity<FilesUpload> savefile(HttpServletRequest req
 List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	// This returns a JSON or XML with the users
-//System.out.println("enter 1");
-//System.out.println(input.getFirstName());
+
 	System.out.println(input.getValue1() +" "+input.getValue2() +" "+input.getValue3());
 	
 	FilesUpload out= userServ.savefile(input, langcode);

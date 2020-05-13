@@ -303,7 +303,7 @@ console.log(index)
     form.append('pageid', queueObj.pageid);
     form.append('parentid', queueObj.parentid);
     form.append('componentid', queueObj.componentid);
-  //  form.append('userid', queueObj.userid);
+    
     // upload file and report progress
     var urlall=GlobalConstants.protocol+ip+":"+port+GlobalConstants.urladd+"/"+GlobalConstants.language;
     let headers = new HttpHeaders({
@@ -361,7 +361,7 @@ console.log(index)
     // update the FileQueueObject as completed
 if(para === 0){
   console.log("insert");
-  this._usersservice.postbythreevalue(queueObj.insertserv,object,response.body.id,compid,ip,port).subscribe(data => {
+  this._usersservice.postbythreevalue(queueObj.insertserv,object.id,response.body.id,compid,ip,port).subscribe(data => {
 console.log(data);
 queueObj.progress = 100;
 queueObj.status = FileQueueStatus.Success;

@@ -1,5 +1,6 @@
 package com.rimdev.user.Services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -10,16 +11,16 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import com.rimdev.user.Exception.PopupException;
-import com.rimdev.user.Repo.UserFileRepo;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.FilesUpload;
-import com.rimdev.user.entities.Pages;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
+import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.ouputobject.Userobject;
 import com.rimdev.user.ouputobject.threevalues;
 
 @Service
@@ -27,7 +28,7 @@ public class UserServ {
 	
 	
 	@Autowired 
-	private UserRepo userRepo;
+	 UserRepo userRepo;
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
@@ -38,21 +39,31 @@ public class UserServ {
 	
 	@Autowired
 	ComponentServ componentServ;
-	
-	
 
-	
 	@Autowired
 	UserFileServ userFileServ;
 	
+	@Autowired
+	UserLoginServ userLoginServ;
 	
 
 	
 	
-public List<User> getall(String langcode) {
+public List<Userobject> getall(String langcode) {
+	
+	List<Userobject> ob=new ArrayList<Userobject>();
 	
 	try {
-		return (List<User>) userRepo.findAll();
+		List<User> user= (List<User>) userRepo.findAll();
+		
+		for (User user2 : user) {
+			Userobject a= new Userobject();
+			a.setUser(user2);
+			a.setLogin(null);
+			ob.add(a);
+		}
+		
+		return ob;
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
@@ -121,27 +132,42 @@ public User getuser(int id,String langcode) {
 
 public User getuserbyid(int id,String langcode) {
 	
+//	System.out.println("null 0");
+	
 	try {
 		Optional<User> flowid =userRepo.findById(id);
 		 
 		 if (flowid.isPresent()){
+			//	System.out.println("null g");
 			 User  ouput = flowid.get();
 		
 			  return ouput;
 					}
 			else{
+				
+		//		System.out.println("null 1");
 			   // alternative processing....
 				return null;
 			}
 	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
+    	se.printStackTrace();
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
+    	se.printStackTrace();
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }
+    	se.printStackTrace();
+	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NullPointerException e) {
+    //	System.out.println("null 2");
+		// TODO: handle exception
+    	e.printStackTrace();
+   // 	return null;
+	}
+	return null;
 }
 
 public void check_user(String firstname,String middlename,String lastname,String langcode) {
@@ -172,13 +198,14 @@ public void check_user(String firstname,String middlename,String lastname,String
 
 
 
-
 public User Save(User input,String langcode) {
 	
-	try {	
+	try {
+		FilesUpload file=	fileStorageService.getfilebyid(1, langcode);
+		input.setFilesuploadID(file);
 		Date date = new Date();
 		Generate gen=new Generate();
-		String tokean=gen.token(10);
+		String tokean=gen.token(30);
 		input.setUseridnumber(tokean);
 		input.setUsercreate(date);
 		input.setUsermodify(date);
@@ -221,16 +248,17 @@ public User update(User input,String langcode) {
 public FilesUpload savefile(threevalues input,String langcode) {
 
 	try {
-		//User user=getuser(Integer.parseInt(input.getValue1()), langcode);
 		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
 		Component com=componentServ.getComponentbyid(Integer.parseInt(input.getValue3()), langcode);
 		
+		UserLogin userlog=userLoginServ.getbyuser(Integer.parseInt(input.getValue1()), langcode).get(0);
+	
 		
-		userFileServ.Save(null, file,com, langcode);
+		userFileServ.Save(userlog, file,com, langcode);
 		
 		return file;
 		
-		
+	
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
@@ -239,10 +267,7 @@ public FilesUpload savefile(threevalues input,String langcode) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (Exception e) {
-		// TODO: handle exception
-    	throw new NullPointerException(textConvertionServ.search("E104", langcode));
-	}
+    }
 	
 	
 }

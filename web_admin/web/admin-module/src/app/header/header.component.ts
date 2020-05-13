@@ -62,9 +62,18 @@ export class HeaderComponent implements OnInit {
         this.notif= notifdata;
         console.log(this.notif);
       this._ComponentService.getimage(this.user.userID.filesuploadID.id).subscribe(image =>{
-        let unsafeImageUrl = URL.createObjectURL(image);
+      
+      
+        if(image.size === 0){
+          this.profileimage = 'assets/img/avatar04.png';
+        }else{
+          let unsafeImageUrl = URL.createObjectURL(image);
 
         this.profileimage = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+        }
+
+  
+       
       });
        });
       });

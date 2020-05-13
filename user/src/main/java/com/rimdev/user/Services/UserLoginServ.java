@@ -168,7 +168,7 @@ public List<UserLogin> getbyuser(int userid,String langcode) {
 		
 		if(loginlist == null || loginlist.size() <= 0) {
 			
-			throw new NullPointerException(textConvertionServ.search("E109", langcode));
+			throw new PopupException(textConvertionServ.search("E109", langcode));
 
 		}
 		
@@ -431,7 +431,7 @@ public UserLogin check_userlogin_without(HttpServletRequest request,Device dev,P
 	if(userlogin.getExpiredate().before(cal.getTime())) {
 		String text= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
 		logServ.errorlog(dev.getDeviceip(),request,text, dev, userlogin.getId(), 31, langcode," ");			
-		throw new NooauthException(textConvertionServ.search("E113", langcode));
+		throw new RedirectException(textConvertionServ.search("E113", langcode));
 
 	}
 

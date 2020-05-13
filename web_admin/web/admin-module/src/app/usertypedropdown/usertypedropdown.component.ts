@@ -14,6 +14,7 @@ export class UsertypedropdownComponent implements AgRendererComponent {
 
   public objects = [[]];
   jform :FormGroup  []=[];
+  tmpform :FormGroup;
 
 
   public params:any = {
@@ -23,22 +24,35 @@ export class UsertypedropdownComponent implements AgRendererComponent {
 
 
   setvalue(form){
-    var status;
-    if(this.params.colDef.fieldgroup === 0){
-     status = form.get(this.params.colDef.field).value;
-     this.params.data[this.params.colDef.field] = status;
 
-    }else{
-       status = form.get(this.params.colDef.field).value;
-       this.params.data[this.params.colDef.field][this.params.colDef.selectValue] = status;
-
-
+    var text =form;
+    if(this.params.colDef.parentgroup != null){
+      text =text.get(this.params.colDef.parentgroup);
     }
+
+    if(this.params.colDef.groupname != null){
+      text =text.get(this.params.colDef.groupname);
+      }
+    
+      text=  text.get(this.params.colDef.field).value;
+ 
+
+    if(this.params.colDef.parentgroup != null && this.params.colDef.groupname != null){
+      this.params.data[this.params.colDef.parentgroup][this.params.colDef.groupname][this.params.colDef.field] = text;
+    }else if(this.params.colDef.groupname != null && this.params.colDef.groupname == null){
+      this.params.data[this.params.colDef.parentgroup][this.params.colDef.field] = text;
+
+     }else if(this.params.colDef.groupname == null && this.params.colDef.groupname != null){
+      this.params.data[this.params.colDef.groupname][this.params.colDef.field] = text;
+    }else{
+      this.params.data[this.params.colDef.field] = text;
+    }
+
   }
   
   agInit(params:any):void {
       this.params = params;
-   // console.log(this.params);
+   console.log(this.params);
 
 
     
@@ -57,15 +71,26 @@ export class UsertypedropdownComponent implements AgRendererComponent {
     });
 
  
-if(this.params.colDef.fieldgroup === 0){
+    var value =this.params.data;
 
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: this.params.data[this.params.colDef.field], disabled: this.params.colDef.fielddisable}, [Validators.required]));
 
-}else{
+    if(this.params.colDef.parentgroup != null){
+      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));;
+      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
+      value =value[this.params.colDef.parentgroup];
+    }
 
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: this.params.data[this.params.colDef.field][this.params.colDef.selectValue], disabled: this.params.colDef.fielddisable}, [Validators.required]));
+    if(this.params.colDef.groupname != null){
+      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.groupname, new FormGroup({}));;
+      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
+      value =value[this.params.colDef.groupname];
+    }
 
-}
+    value = value[this.params.colDef.field];
+  
+
+  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
+
 
   }
 

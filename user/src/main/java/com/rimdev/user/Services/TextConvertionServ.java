@@ -178,7 +178,7 @@ public void Save(lang_object input,String langcode) {
 		if(code == null || langcode == null) {	
 			 new NullPointerException("please enter code");
 		}
-		System.out.println(code + " "+langcode);
+		//System.out.println(code + " "+langcode);
 		Languages lan= languagesServ.getbycode(langcode,langcode);
 		LanguageMap lanmap= languageMapServ.getbycode(code,langcode);
 		if(lanmap == null || lan == null) {

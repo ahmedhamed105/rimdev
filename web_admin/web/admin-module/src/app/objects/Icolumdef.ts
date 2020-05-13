@@ -6,6 +6,7 @@ export interface Icolumdef {
   selectValue:string,
   fieldgroup:number,
   groupname:string,
+  parentgroup:string,
   fielddisable: boolean,
   disabled : boolean,
   ip:string,

@@ -95,7 +95,7 @@ public class TextConvertionController {
 			
 			}else {
 		//		System.out.println("enter 4");
-				System.out.println("ahmed "+input.getText2());
+		//		System.out.println("ahmed "+input.getText2());
 
 		    textConvertionServ.update(input,langmap,langcode);
 				
@@ -134,7 +134,7 @@ public class TextConvertionController {
 			
 			}else {
 		//		System.out.println("enter 4");
-				System.out.println("ahmed "+input.getText2());
+		//		System.out.println("ahmed "+input.getText2());
 
 		    textConvertionServ.delete(input,langmap,langcode);
 				

@@ -27,7 +27,7 @@ public class WebservicepriviledgeServ {
 		boolean found =false;
 		 for (GroupWeb groupWeb : oblist) {
 			 
-			 System.out.println(groupWeb.getWebservicepriviledgeID().getWebService());
+			// System.out.println(groupWeb.getWebservicepriviledgeID().getWebService());
 			  if(groupWeb.getWebservicepriviledgeID().getWebService().equals(webservice)) {
 			
 			
