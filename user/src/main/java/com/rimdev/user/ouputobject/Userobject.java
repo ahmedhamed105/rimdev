@@ -7,8 +7,7 @@ public class Userobject {
 	
 	User User;
 	UserLogin login;
-	
-	
+		
 	
 	public Userobject() {
 		super();

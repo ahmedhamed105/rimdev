@@ -1,10 +1,13 @@
 <form [formGroup]="jform[params.colDef.formnum]">
-
-    <div class="form-group">
+  <div  *ngIf="params.colDef.parentgroup != null" formGroupName="{{params.colDef.parentgroup}}">
+    <div class="form-group" *ngIf="params.colDef.groupname != null" formGroupName="{{params.colDef.groupname}}">
       <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
         <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
     </select>  
   </div>
+
+  </div>
+   
  
   
 </form>

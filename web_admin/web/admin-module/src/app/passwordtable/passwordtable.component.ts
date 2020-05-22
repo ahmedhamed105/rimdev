@@ -27,7 +27,7 @@ export class PasswordtableComponent implements AgRendererComponent{
 
 
   setvalue(form){
-
+console.log(form)
     var text =form;
     if(this.params.colDef.parentgroup != null){
       text =text.get(this.params.colDef.parentgroup);
@@ -61,7 +61,7 @@ export class PasswordtableComponent implements AgRendererComponent{
   
   agInit(params:any):void {
       this.params = params;
-   // console.log(this.params);
+   console.log(this.params);
 
 
     this.jform[this.params.colDef.formnum] = this.fb.group({
@@ -70,25 +70,25 @@ export class PasswordtableComponent implements AgRendererComponent{
 
     var value =this.params.data;
 
-
     if(this.params.colDef.parentgroup != null){
-      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));;
-      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
-      value =value[this.params.colDef.parentgroup];
-    }
+      this.jform[this.params.colDef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));
+     
+      this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
+    
+      if(this.params.colDef.groupname != null){
+        this.tmpform.addControl(this.params.colDef.groupname, new FormGroup({}));;
+       // this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
+       this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup).get(this.params.colDef.groupname) as FormGroup;
+       
+        
+      }
+    }else{
 
-    if(this.params.colDef.groupname != null){
-      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.groupname, new FormGroup({}));;
-      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
-      value =value[this.params.colDef.groupname];
+      this.tmpform = this.jform[this.params.colDef.formnum];
     }
-
-    value = value[this.params.colDef.field];
   
-
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
-
-
+    value = value[this.params.colDef.parentgroup][this.params.colDef.field];
+    this.tmpform.addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
 
   }
 

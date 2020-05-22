@@ -75,21 +75,28 @@ export class UsertypedropdownComponent implements AgRendererComponent {
 
 
     if(this.params.colDef.parentgroup != null){
-      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));;
-      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
-      value =value[this.params.colDef.parentgroup];
+      this.jform[this.params.colDef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));
+     
+      this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
+    
+      if(this.params.colDef.groupname != null){
+        this.tmpform.addControl(this.params.colDef.groupname, new FormGroup({}));;
+       // this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
+       this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup).get(this.params.colDef.groupname) as FormGroup;
+       
+        
+      }
+    }else{
+
+      this.tmpform = this.jform[this.params.colDef.formnum];
     }
 
-    if(this.params.colDef.groupname != null){
-      this.jform[this.params.coldef.formnum].addControl(this.params.colDef.groupname, new FormGroup({}));;
-      this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
-      value =value[this.params.colDef.groupname];
-    }
-
-    value = value[this.params.colDef.field];
   
 
-  this.jform[this.params.colDef.formnum].addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
+  
+    console.log(value)
+
+    this.tmpform.addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
 
 
   }

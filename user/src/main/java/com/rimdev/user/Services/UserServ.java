@@ -54,12 +54,12 @@ public List<Userobject> getall(String langcode) {
 	List<Userobject> ob=new ArrayList<Userobject>();
 	
 	try {
-		List<User> user= (List<User>) userRepo.findAll();
+		List<UserLogin> user= (List<UserLogin>) userLoginServ.getalllogin(langcode);
 		
-		for (User user2 : user) {
+		for (UserLogin user2 : user) {
 			Userobject a= new Userobject();
-			a.setUser(user2);
-			a.setLogin(null);
+			a.setUser(user2.getUserID());
+			a.setLogin(user2);
 			ob.add(a);
 		}
 		

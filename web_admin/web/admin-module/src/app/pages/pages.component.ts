@@ -38,6 +38,7 @@ export class PagesComponent implements OnInit {
   public pagenumber ;
   public type ;
   public isfile;
+  private domLayout;
 
   constructor(private spinnerService: SpinnerService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
@@ -254,7 +255,8 @@ if(element.comp.ctype == 'select'){
 
   this.gridOptions[parent.parent.id]= <GridOptions>{};
   this.gridOptions[parent.parent.id].frameworkComponents = { "selRenderer" : UsertypedropdownComponent,"passRenderer" : PasswordtableComponent };
-
+  this.gridOptions[parent.parent.id].rowHeight = 100;
+  this.domLayout = 'autoHeight';
   var a=  parent.child.sort((a, b) => {
     return a.comp.seqNum -b.comp.seqNum;
   });
@@ -280,7 +282,8 @@ if(element.comp.ctype == 'select'){
     editable: false,      
     resizable: true,
     checkboxSelection: true,
-    cellRenderer: ""
+    cellRenderer: "",
+    
   };
   this.column.push(b);
  // this.columnDefs[parent.parent.id][0] = b;
@@ -319,7 +322,8 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer: ""
+      cellRenderer: "",
+      
     };
 
   }else{
@@ -343,7 +347,8 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer: ""
+      cellRenderer: "",
+      
     };
 
   }
@@ -380,7 +385,8 @@ if(element.comp.ctype === 'label'){
       editable: true,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer : ""
+      cellRenderer : "",
+      
     };
    
   }else{
@@ -405,7 +411,8 @@ if(element.comp.ctype === 'label'){
       editable: true,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer : ""
+      cellRenderer : "",
+      
     };
     
   }
@@ -441,7 +448,8 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer : "passRenderer"
+      cellRenderer : "passRenderer",
+      
     };
     
 
@@ -466,7 +474,8 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer : "passRenderer"
+      cellRenderer : "passRenderer",
+      
     };
     
   }
@@ -499,7 +508,8 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer: "selRenderer"
+      cellRenderer: "selRenderer",
+      
     };
 
   }else{
@@ -523,7 +533,8 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer: "selRenderer"
+      cellRenderer: "selRenderer",
+      
     };
 
     
@@ -616,7 +627,7 @@ createItem(child,pargroup,group,req,pat,dpattern,formindex) {
 if(group != null){
 
   if(this.insertform[formindex].get(pargroup) == null){
-    this.insertform[formindex].addControl(pargroup, new FormGroup({}));;
+    this.insertform[formindex].addControl(pargroup, new FormGroup({}));
   }
 
   this.tmpform = this.insertform[formindex].get(pargroup) as FormGroup;
