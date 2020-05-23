@@ -1,16 +1,48 @@
 <form [formGroup]="jform[params.colDef.formnum]">
-  <div  *ngIf="params.colDef.parentgroup != null" formGroupName="{{params.colDef.parentgroup}}">
-    <div class="form-group" *ngIf="params.colDef.groupname != null" formGroupName="{{params.colDef.groupname}}">
-      <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
-        <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
-    </select>  
-  </div>
 
-  </div>
-   
- 
-  
+  <ng-container *ngTemplateOutlet="params.colDef.parentgroup != null? withparent: withoutparent">
+  </ng-container>
+  <ng-template #withparent>
+      <div class="form-group"  formGroupName="{{params.colDef.parentgroup}}">
+          <ng-container *ngTemplateOutlet="params.colDef.groupname != null ? withgroup: withoutgroup">
+          </ng-container>
+
+          <ng-template #withgroup>
+              <div class="form-group" formGroupName="{{params.colDef.groupname}}">
+                <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
+                  <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
+              </select>  
+              </div>
+          </ng-template>
+          <ng-template #withoutgroup>
+            <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
+              <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
+          </select>  
+          </ng-template>
+      </div>
+
+  </ng-template>
+  <ng-template #withoutparent>
+      <ng-container *ngTemplateOutlet="params.colDef.groupname != null ? withgroup: withoutgroup">
+      </ng-container>
+
+      <ng-template #withgroup>
+          <div class="form-group" formGroupName="{{params.colDef.groupname}}">
+            <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
+              <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
+          </select>  
+          </div>
+      </ng-template>
+      <ng-template #withoutgroup>
+        <select formControlName="{{params.colDef.field}}"  class="form-control"  (change)="setvalue(jform[params.colDef.formnum])">
+          <option *ngFor="let da of objects[params.colDef.formnum]"   value="{{da[params.colDef.selectValue]}}">{{da[params.colDef.selectDisplay]}}</option>
+      </select>  
+      </ng-template>
+
+  </ng-template>
+
 </form>
+
 
 
 
