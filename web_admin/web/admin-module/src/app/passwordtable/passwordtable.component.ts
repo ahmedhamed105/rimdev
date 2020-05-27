@@ -17,7 +17,7 @@ export class PasswordtableComponent implements AgRendererComponent{
   public objects = [[]];
   jform :FormGroup  []=[];
   tmpform :FormGroup;
-  public password;
+  password :string []=[];
 
 
   public params:any = {
@@ -27,7 +27,7 @@ export class PasswordtableComponent implements AgRendererComponent{
 
 
   setvalue(form){
-console.log(form)
+//console.log(form)
     var text =form;
     if(this.params.colDef.parentgroup != null){
       text =text.get(this.params.colDef.parentgroup);
@@ -38,10 +38,12 @@ console.log(form)
       }
     
       text=  text.get(this.params.colDef.field).value;
+
+      this.password[this.params.colDef.formnum] = text;
    
     var status = this._EncryptionService.encypttext(text);
 
-    this.password = status;
+    
 
     if(this.params.colDef.parentgroup != null && this.params.colDef.groupname != null){
       this.params.data[this.params.colDef.parentgroup][this.params.colDef.groupname][this.params.colDef.field] = status;
@@ -61,7 +63,7 @@ console.log(form)
   
   agInit(params:any):void {
       this.params = params;
-   console.log(this.params);
+   //console.log(this.params);
 
 
     this.jform[this.params.colDef.formnum] = this.fb.group({

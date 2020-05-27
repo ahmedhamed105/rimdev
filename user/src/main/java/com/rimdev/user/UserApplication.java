@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import com.rimdev.user.Config.FileStorageProperties;
-import com.rimdev.user.Config.WebConfiguration;
 
 @SpringBootApplication
 @EnableConfigurationProperties({

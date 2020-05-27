@@ -26,6 +26,7 @@ export class UsertypedropdownComponent implements AgRendererComponent {
   setvalue(form){
 
     var text =form;
+ 
     if(this.params.colDef.parentgroup != null){
       text =text.get(this.params.colDef.parentgroup);
     }
@@ -35,7 +36,7 @@ export class UsertypedropdownComponent implements AgRendererComponent {
       }
     
       text=  text.get(this.params.colDef.field).value;
- 
+     
 
     if(this.params.colDef.parentgroup != null && this.params.colDef.groupname != null){
       this.params.data[this.params.colDef.parentgroup][this.params.colDef.groupname][this.params.colDef.field] = text;
@@ -48,14 +49,13 @@ export class UsertypedropdownComponent implements AgRendererComponent {
       this.params.data[this.params.colDef.field] = text;
     }
 
+    
+
   }
   
   agInit(params:any):void {
       this.params = params;
-   console.log(this.params);
-
-
-    
+  
 
     if(this.params.colDef.Serv === ""){
     }else{
@@ -78,12 +78,12 @@ export class UsertypedropdownComponent implements AgRendererComponent {
       this.jform[this.params.colDef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));
      
       this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
-    
+      value=value[this.params.colDef.parentgroup]
       if(this.params.colDef.groupname != null){
         this.tmpform.addControl(this.params.colDef.groupname, new FormGroup({}));;
        // this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
        this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup).get(this.params.colDef.groupname) as FormGroup;
-       
+       value=value[this.params.colDef.groupname]
         
       }
     }else{
@@ -94,7 +94,8 @@ export class UsertypedropdownComponent implements AgRendererComponent {
   
 
   
-    console.log(value)
+    
+    value=value[this.params.colDef.field]
 
     this.tmpform.addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
 

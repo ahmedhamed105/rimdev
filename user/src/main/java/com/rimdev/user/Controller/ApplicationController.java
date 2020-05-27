@@ -21,7 +21,7 @@ import com.rimdev.user.entities.Application;
 import com.rimdev.user.entities.DevicePage;
 
 @Controller // This means that this class is a Controller
-@RequestMapping(path="/Logintype") // 
+@RequestMapping(path="/App") // 
 public class ApplicationController {
 	
 	
