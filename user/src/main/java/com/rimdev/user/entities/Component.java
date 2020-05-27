@@ -98,7 +98,6 @@ public class Component implements Serializable {
     @Column(name = "field_encry", nullable = false)
     private int fieldEncry;
     
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")

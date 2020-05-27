@@ -52,8 +52,12 @@ export class PagesComponent implements OnInit {
  public column:Icolumdef[] = [];
  
  public file =[] ;
- public dates =[] ;
- public passwords =[] ;
+ public dates :any [][] =[] ;
+ public datestmp :any [] =[] ;
+ public passwords :any [][]=[] ;
+ public tpasswords :any []=[] ;
+ public passwordstable :any [][] =[] ;
+ public tpasswordstable :any [] =[] ;
  passwordIsValid = false;
 
 
@@ -173,6 +177,15 @@ export class PagesComponent implements OnInit {
         var parentin=indexp*a.length;
 
 
+        if(element.comp.fieldEncry === 1){
+
+          this.tpasswords.push(element);
+
+        }
+
+      
+
+
         if(element.comp.ctype == 'button'){
 
 
@@ -193,13 +206,13 @@ export class PagesComponent implements OnInit {
 
           }else if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'date'){
              
-            this.dates.push(element.comp.name);
+            this.datestmp.push(element);
 
      
 
          }else if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'password'){
              
-          this.passwords.push(element.comp.name);
+          
 
    
 
@@ -250,6 +263,10 @@ if(element.comp.ctype == 'select'){
 });
 
 
+this.passwords[parent.parent.id]=this.tpasswords;
+this.dates[parent.parent.id]=this.datestmp;
+
+
 }else if(parent.child != null && parent.parent.parentType === 'table'){
 
 
@@ -294,6 +311,14 @@ a.forEach((element,index) => {
   var b : Icolumdef;
 
   var parentin=indexp*a.length;
+
+  if(element.comp.fieldEncry === 1){
+
+    this.tpasswordstable.push(element);
+
+  }
+
+  this.passwordstable[parent.parent.id]=this.tpasswordstable;
 
 
   console.log(element.comp.parentGroup +' '+element.comp.ctype)
@@ -483,7 +508,7 @@ if(element.comp.ctype === 'label'){
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
   
- 
+
 
 }else if(element.comp.ctype === 'select'){
 
@@ -741,7 +766,7 @@ if(related === 'table'){
 
   tableaction(serv,para,index,related,relcom,ip,port){
 
-    console.log(this.gridOptions[index])
+   // console.log(this.gridOptions[index])
     const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
@@ -753,8 +778,36 @@ if(related === 'table'){
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
-     console.log(node)
+     
 
+     if( this.passwordstable[index].length > 0){
+
+      this.passwordstable[index].forEach(element => {
+        var value;
+        var nodetmp;
+      
+        if(element.comp.parentGroup != null && element.comp.groupname != null){
+          nodetmp = node[element.comp.parentGroup][element.comp.groupname][element.comp.name];
+          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+          node[element.comp.parentGroup][element.comp.groupname][element.comp.name]=value;
+        }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+          nodetmp = node[element.comp.parentGroup][element.comp.name];
+          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+          node[element.comp.parentGroup][element.comp.name]=value;
+         }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+          nodetmp = node[element.comp.groupname][element.comp.name];
+          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+          node[element.comp.groupname][element.comp.name]=value;
+        }else{
+          nodetmp = node[element.comp.name];
+          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+          node[element.comp.name]=value;
+        }
+    
+      });
+    
+    }
+    console.log(node)
     this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port);
     
 
@@ -788,8 +841,28 @@ if(related === 'table'){
 
         }
 
-        this.dates.forEach(element => {
-          node[element]= formatDate(node[element], GlobalConstants.format, GlobalConstants.locale)
+        this.dates[index].forEach(element => {
+          var value;
+          var nodetmp;
+        
+          if(element.comp.parentGroup != null && element.comp.groupname != null){
+            nodetmp = node[element.comp.parentGroup][element.comp.groupname][element.comp.name];
+            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+            node[element.comp.parentGroup][element.comp.groupname][element.comp.name]=value;
+          }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+            nodetmp = node[element.comp.parentGroup][element.comp.name];
+            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+            node[element.comp.parentGroup][element.comp.name]=value;
+           }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+            nodetmp = node[element.comp.groupname][element.comp.name];
+            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+            node[element.comp.groupname][element.comp.name]=value;
+          }else{
+            nodetmp = node[element.comp.name];
+            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+            node[element.comp.name]=value;
+          }
+        //  node[element]= formatDate(node[element], GlobalConstants.format, GlobalConstants.locale)
         });
        
           this.insertform[relcom].patchValue(node);
@@ -805,21 +878,37 @@ if(related === 'table'){
 
   
 
-onSubmit(form,serv,related,relcom,ip,port){
+onSubmit(index,form,serv,related,relcom,ip,port){
 
+  if( this.passwords[index].length > 0){
+
+    this.passwords[index].forEach(element => {
+      var value;
+      var nodetmp;
+    
+      if(element.comp.parentGroup != null && element.comp.groupname != null){
+        nodetmp = form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValue(value);
+      }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+        nodetmp = form.get(element.comp.parentGroup).get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.parentGroup).get(element.comp.name).setValue(value);
+       }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+        nodetmp = form.get(element.comp.groupname).get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.groupname).get(element.comp.name).setValue(value);
+      }else{
+        nodetmp = form.get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.name).setValue(value);
+      }
   
-
- if( this.passwords.length > 0){
-
-  this.passwords.forEach(element => {
-
-
-    form.get(element).setValue(this._EncryptionService.encypttext(form.get(element).value.trim()));
-  });
+    });
+  
+  }
 
 
-  console.log(form.value)
-}
      this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
 
     console.log(data)

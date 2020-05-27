@@ -41,7 +41,7 @@ export class PasswordtableComponent implements AgRendererComponent{
 
       this.password[this.params.colDef.formnum] = text;
    
-    var status = this._EncryptionService.encypttext(text);
+    var status = text;
 
     
 
