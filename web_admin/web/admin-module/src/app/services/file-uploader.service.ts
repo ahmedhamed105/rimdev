@@ -7,6 +7,7 @@ import { saveAs } from 'file-saver';
 import { UsersService } from '../services/users.service';
 import { Data } from '@angular/router';
 import { GlobalConstants } from '../GlobalConstants';
+import { ErrorDialogService } from './error-dialog.service';
 
 
 export enum FileQueueStatus {
@@ -74,7 +75,7 @@ export class FileUploaderService {
 
 
 
-  constructor(private http: HttpClient,private _usersservice:UsersService) {
+  constructor(private _ErrorDialogService :ErrorDialogService,private http: HttpClient,private _usersservice:UsersService) {
     
   }
 
@@ -93,8 +94,8 @@ export class FileUploaderService {
   }
 
     // the filelength
-    public get filelength() {
-      return this._files.length;
+    public  filelength(index) {
+      return this._files[index].length;
 
   }
 
@@ -104,8 +105,39 @@ export class FileUploaderService {
   }
 
   // public functions
-  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port) {
+  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr) {
     // add file to the queue
+
+    var filescount=data.length+ this.filelength(index);
+
+    if(filecount === undefined){
+      filecount = 0;
+    }
+  
+    if(filescount > filecount){
+      let map = new Map();
+      map.set("filecount",filecount); 
+      alert(this._ErrorDialogService.formaterror(fileCounterr,map));
+      return false;
+  
+    }
+  
+    if(maxfilesize === undefined){
+      maxfilesize = 0;
+    }
+  
+    if (data[0].size > maxfilesize) {
+      let map = new Map();
+      map.set("maxfilesize",maxfilesize); 
+      alert(this._ErrorDialogService.formaterror(fileSizeerr,map));
+       return false;
+   }
+  
+   if (!GlobalConstants.allowed_types.includes(data[0].type)) {
+     alert('Only Images are allowed ( JPG | PNG )');
+       return false;
+   }
+
     _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter,ip,port));
   }
 

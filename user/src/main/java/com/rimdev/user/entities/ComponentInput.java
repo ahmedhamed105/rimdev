@@ -70,6 +70,14 @@ public class ComponentInput implements Serializable {
     private String insertParameter;
     @Column(name = "delete_parameter", length = 450)
     private String deleteParameter;
+    @Column(name = "file_count")
+    private Integer fileCount;
+    @Column(name = "file_size")
+    private Integer fileSize;
+    @Column(name = "file_counterr", length = 450)
+    private String fileCounterr;
+    @Column(name = "file_sizeerr", length = 450)
+    private String fileSizeerr;
 
     public ComponentInput() {
     }
@@ -77,8 +85,33 @@ public class ComponentInput implements Serializable {
     public ComponentInput(Integer id) {
         this.id = id;
     }
+    
 
-    public ComponentInput(Integer id, String inputActions) {
+    public String getFileCounterr() {
+		return fileCounterr;
+	}
+
+	public void setFileCounterr(String fileCounterr) {
+		this.fileCounterr = fileCounterr;
+	}
+
+	public String getFileSizeerr() {
+		return fileSizeerr;
+	}
+
+	public void setFileSizeerr(String fileSizeerr) {
+		this.fileSizeerr = fileSizeerr;
+	}
+
+	public Integer getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Integer fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public ComponentInput(Integer id, String inputActions) {
         this.id = id;
         this.inputActions = inputActions;
     }
@@ -145,8 +178,18 @@ public class ComponentInput implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+    
+    
 
-    public String getInputActions() {
+    public Integer getFileCount() {
+		return fileCount;
+	}
+
+	public void setFileCount(Integer fileCount) {
+		this.fileCount = fileCount;
+	}
+
+	public String getInputActions() {
         return inputActions;
     }
 

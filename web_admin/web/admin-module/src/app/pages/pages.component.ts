@@ -51,7 +51,8 @@ export class PagesComponent implements OnInit {
  columnDefs: Icolumdef[] []=[];
  public column:Icolumdef[] = [];
  
- public file =[] ;
+ public file :any [][] =[] ;
+ public filetmp :any [] =[] ;
  public dates :any [][] =[] ;
  public datestmp :any [] =[] ;
  public passwords :any [][]=[] ;
@@ -199,7 +200,7 @@ export class PagesComponent implements OnInit {
              
              this.isfile = true;
 
-             this.file.push(element.comp.name);
+             this.filetmp.push(element);
 
            this.queue[element.comp.id] = this.fileupload.queue(element.comp.id);
            this.fileupload.onCompleteItem = this.completeItem;
@@ -265,6 +266,7 @@ if(element.comp.ctype == 'select'){
 
 this.passwords[parent.parent.id]=this.tpasswords;
 this.dates[parent.parent.id]=this.datestmp;
+this.file[parent.parent.id]=this.filetmp;
 
 
 }else if(parent.child != null && parent.parent.parentType === 'table'){
@@ -625,23 +627,20 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
 
- addfiles($event,name,index,pageid,parentid,compid,insert,parameter,ip,port) {
+ addfiles($event,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr) {
 
   const fileBrowser = $event.target;
+
+  //console.log(fileBrowser.files.length);
+
+  //console.log(this.fileupload.filelength(index));
+
+  //console.log(fileBrowser.files.length+this.fileupload.filelength(index));
+
   
 
-  if (fileBrowser.files[0].size > GlobalConstants.max_size) {
-    alert('size is alrger than ');
-     return false;
- }
-
- if (!GlobalConstants.allowed_types.includes(fileBrowser.files[0].type)) {
-   alert('Only Images are allowed ( JPG | PNG )');
-     return false;
- }
-
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port);
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr);
 }
 
 
@@ -834,9 +833,24 @@ if(related === 'table'){
         if(this.isfile){
         this.fileupload.clearQueue();
         this.fileupload.addfilesuser(serv,node[para],node[para],ip,port);
-        this.file.forEach(element => {
-          this.insertform[relcom].get(element).setValidators([]);
-          this.insertform[relcom].get(element).updateValueAndValidity();
+        this.file[index].forEach(element => {
+
+          if(element.comp.parentGroup != null && element.comp.groupname != null){
+            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValidators([]);
+            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).updateValueAndValidity();
+          }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.name).setValidators([]);
+            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.name).updateValueAndValidity();
+           }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+            this.insertform[relcom].get(element.comp.groupname).get(element.comp.name).setValidators([]);
+            this.insertform[relcom].get(element.comp.groupname).get(element.comp.name).updateValueAndValidity();
+          }else{ 
+            this.insertform[relcom].get(element.comp.name).setValidators([]);
+            this.insertform[relcom].get(element.comp.name).updateValueAndValidity();
+          }
+          
+        //  this.insertform[relcom].get(element).setValidators([]);
+       //   this.insertform[relcom].get(element).updateValueAndValidity();
         });
 
         }

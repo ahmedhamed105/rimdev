@@ -98,6 +98,7 @@ public class User implements Serializable {
     public User(Integer id) {
         this.id = id;
     }
+    
 
     public User(Integer id, Date usermodify, Date usercreate) {
         this.id = id;

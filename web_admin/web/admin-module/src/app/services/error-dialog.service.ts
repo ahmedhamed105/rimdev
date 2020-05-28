@@ -63,4 +63,19 @@ window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
       }
 
 
+
+   public formaterror(error,map){
+
+    for (let [key, value] of map.entries()) {
+      error =error.replace(key,value);
+  }
+
+       error =error.replace("{{","");
+
+      error =error.replace("}}","");
+
+
+return error;
+
+      }    
 }

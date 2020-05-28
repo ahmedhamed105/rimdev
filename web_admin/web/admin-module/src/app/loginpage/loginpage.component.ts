@@ -587,23 +587,11 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
 
- addfiles($event,name,index,pageid,parentid,compid,insert,parameter,ip,port) {
+ addfiles($event,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr) {
 
   const fileBrowser = $event.target;
-  
-
-  if (fileBrowser.files[0].size > GlobalConstants.max_size) {
-    alert('size is alrger than ');
-     return false;
- }
-
- if (!GlobalConstants.allowed_types.includes(fileBrowser.files[0].type)) {
-   alert('Only Images are allowed ( JPG | PNG )');
-     return false;
- }
-
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port);
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr);
 }
 
 
