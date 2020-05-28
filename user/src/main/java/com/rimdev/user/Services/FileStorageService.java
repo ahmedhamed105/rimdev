@@ -42,6 +42,7 @@ import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.FileStatus;
+import com.rimdev.user.entities.FileType;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.UserFile;
 
@@ -65,6 +66,9 @@ public class FileStorageService {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	@Autowired
+	FileTypeServ fileTypeServ;
 	
 	
 	 private  Path fileStorageLocation;
@@ -199,6 +203,15 @@ public class FileStorageService {
 		  spageid=pageid;
 		  sparentid=parentid;
 		  
+		  FileType ftype= null;
+		  
+		  try {
+			  ftype=  fileTypeServ.getbymime(file.getContentType(), langcode);
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw e;
+		}
+		  
 		  FilesUpload fileu=new FilesUpload();
 	    	
 	    		Path main =	create_maindirectory() ;
@@ -294,7 +307,7 @@ public class FileStorageService {
 	       fileu.setFilesName(sfilename);
 	       fileu.setFilesUrl(fileDownloadUri);
 	       fileu.setFilesSize(new BigDecimal(file.getSize()/1000));
-	       fileu.setFilesType(file.getContentType());
+	       fileu.setFiletypeID(ftype);
 	       fileu.setFilecomruntime(comtime);
 	       fileu.setFilestatusID(filst);
 	       fileu.setFilePath(maintemp.getParent().toString());

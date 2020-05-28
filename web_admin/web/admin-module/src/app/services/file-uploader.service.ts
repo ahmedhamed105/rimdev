@@ -105,7 +105,7 @@ export class FileUploaderService {
   }
 
   // public functions
-  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr) {
+  public addToQueue(data: any,type:string,index:number,pageid:number,parentid:number,componentid:number,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror) {
     // add file to the queue
 
     var filescount=data.length+ this.filelength(index);
@@ -121,6 +121,31 @@ export class FileUploaderService {
       return false;
   
     }
+
+
+    if(filetypes.length <= 0){
+      let map = new Map();
+      map.set("wrongtype",'unsupported');
+      alert(this._ErrorDialogService.formaterror(fileTypeerror,map));
+      return false;
+    }else{
+  
+      var count=0;
+  
+      filetypes.forEach((type) => {
+        if (type.fmime === data[0].type) {
+          count ++;
+        }
+      });
+  
+      if(count <= 0){
+        let map = new Map();
+        map.set("wrongtype",data[0].type); 
+        alert(this._ErrorDialogService.formaterror(fileTypeerror,map));
+        return false;
+      }
+  
+    }
   
     if(maxfilesize === undefined){
       maxfilesize = 0;
@@ -132,11 +157,7 @@ export class FileUploaderService {
       alert(this._ErrorDialogService.formaterror(fileSizeerr,map));
        return false;
    }
-  
-   if (!GlobalConstants.allowed_types.includes(data[0].type)) {
-     alert('Only Images are allowed ( JPG | PNG )');
-       return false;
-   }
+
 
     _.each(data, (file: any) => this._addToQueue(file,type,index,pageid,parentid,componentid,insert,parameter,ip,port));
   }

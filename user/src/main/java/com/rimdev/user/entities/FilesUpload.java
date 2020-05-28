@@ -39,8 +39,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     , @NamedQuery(name = "FilesUpload.findById", query = "SELECT f FROM FilesUpload f WHERE f.id = :id")
     , @NamedQuery(name = "FilesUpload.findByFilesUrl", query = "SELECT f FROM FilesUpload f WHERE f.filesUrl = :filesUrl")
     , @NamedQuery(name = "FilesUpload.findByFilesSize", query = "SELECT f FROM FilesUpload f WHERE f.filesSize = :filesSize")
-    , @NamedQuery(name = "FilesUpload.findByFilesName", query = "SELECT f FROM FilesUpload f WHERE f.filesName = :filesName")
-    , @NamedQuery(name = "FilesUpload.findByFilesType", query = "SELECT f FROM FilesUpload f WHERE f.filesType = :filesType")})
+    , @NamedQuery(name = "FilesUpload.findByFilesName", query = "SELECT f FROM FilesUpload f WHERE f.filesName = :filesName")})
 public class FilesUpload implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,9 +58,9 @@ public class FilesUpload implements Serializable {
     @Basic(optional = false)
     @Column(name = "files_name", nullable = false, length = 45)
     private String filesName;
-    @Basic(optional = false)
-    @Column(name = "files_type", nullable = false, length = 500)
-    private String filesType;
+    @JoinColumn(name = "file_type_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private FileType filetypeID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "filesuploadID")
     private Collection<UserFile> userFileCollection;
     @Column(name = "filecomruntime", precision = 20, scale = 6)
@@ -82,12 +81,19 @@ public class FilesUpload implements Serializable {
         this.id = id;
     }
 
-    public FilesUpload(Integer id, String filesUrl, BigDecimal filesSize, String filesName, String filesType) {
+    public FilesUpload(Integer id, String filesUrl, BigDecimal filesSize, String filesName) {
         this.id = id;
         this.filesUrl = filesUrl;
         this.filesSize = filesSize;
         this.filesName = filesName;
-        this.filesType = filesType;
+    }
+    
+    public FileType getFiletypeID() {
+        return filetypeID;
+    }
+
+    public void setFiletypeID(FileType filetypeID) {
+        this.filetypeID = filetypeID;
     }
 
     public String getFilePath() {
@@ -130,13 +136,6 @@ public class FilesUpload implements Serializable {
         this.filesName = filesName;
     }
 
-    public String getFilesType() {
-        return filesType;
-    }
-
-    public void setFilesType(String filesType) {
-        this.filesType = filesType;
-    }
 
     @XmlTransient
     @JsonIgnore

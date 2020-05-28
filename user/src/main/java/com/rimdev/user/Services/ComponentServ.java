@@ -15,8 +15,10 @@ import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.ComponentRepo;
 import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
+import com.rimdev.user.entities.ComponentFile;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
+import com.rimdev.user.entities.FileType;
 import com.rimdev.user.ouputobject.Component_object;
 
 @Service
@@ -36,6 +38,9 @@ public class ComponentServ {
 	
 	@Autowired
 	TextConvertionServ textConvertionServ;
+	
+	@Autowired
+	ComponentFileServ componentFileServ;
 	
 
 	
@@ -62,6 +67,7 @@ public class ComponentServ {
 				ComponentSelect select = new ComponentSelect();
 				ComponentInput input=new ComponentInput();
 				ComponentButton button=new ComponentButton();
+				List<FileType> filetype=new ArrayList<>();
 				
 				
 				component.setCcode(textConvertionServ.search(component.getCcode(), langcode));
@@ -74,6 +80,14 @@ public class ComponentServ {
 				}
 				try {
 					 input =componentInputServ.getbycomponent(component.getId(), langcode).get(0);
+					 List<ComponentFile> files =componentFileServ.getbyinputcomp(input, langcode);
+				
+				if(files.size() > 0) {
+					for (ComponentFile componentFile : files) {
+						filetype.add(componentFile.getFiletypeID());
+					}
+					
+				}
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
@@ -83,11 +97,14 @@ public class ComponentServ {
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
+				
+			
 
 				a.setComp(component);
 				a.setSelect(select);
 				a.setInput(input);
 				a.setButton(button);
+				a.setAllowfiletype(filetype);
 				coms.add(a);
 				
 			}

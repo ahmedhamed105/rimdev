@@ -1,9 +1,12 @@
 package com.rimdev.user.ouputobject;
 
+import java.util.List;
+
 import com.rimdev.user.entities.Component;
 import com.rimdev.user.entities.ComponentButton;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
+import com.rimdev.user.entities.FileType;
 
 public class Component_object {
 	
@@ -11,11 +14,18 @@ public class Component_object {
 	ComponentSelect select;
 	ComponentInput input;
 	ComponentButton button;
+	List<FileType> allowfiletype;
 	
 	 
 	
 	
 	
+	public List<FileType> getAllowfiletype() {
+		return allowfiletype;
+	}
+	public void setAllowfiletype(List<FileType> allowfiletype) {
+		this.allowfiletype = allowfiletype;
+	}
 	public Component_object() {
 		super();
 	}

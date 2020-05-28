@@ -55,7 +55,7 @@ public class ComponentController {
     
 	
 	  @RequestMapping(value = "/page/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<parent_comp>> getUsersbyuser(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
+	  public  ResponseEntity<List<parent_comp>> getcompbypage(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
 		
 		  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();

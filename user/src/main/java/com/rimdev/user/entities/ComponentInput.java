@@ -2,9 +2,11 @@ package com.rimdev.user.entities;
 
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -78,6 +81,11 @@ public class ComponentInput implements Serializable {
     private String fileCounterr;
     @Column(name = "file_sizeerr", length = 450)
     private String fileSizeerr;
+    @Column(name = "file_typeerror", length = 450)
+    private String fileTypeerror;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentinputID")
+    private Collection<ComponentFile> componentFileCollection;
 
     public ComponentInput() {
     }
@@ -85,7 +93,25 @@ public class ComponentInput implements Serializable {
     public ComponentInput(Integer id) {
         this.id = id;
     }
+      
     
+    public String getFileTypeerror() {
+		return fileTypeerror;
+	}
+
+	public void setFileTypeerror(String fileTypeerror) {
+		this.fileTypeerror = fileTypeerror;
+	}
+
+	@XmlTransient
+    @JsonIgnore
+    public Collection<ComponentFile> getComponentFileCollection() {
+        return componentFileCollection;
+    }
+
+    public void setComponentFileCollection(Collection<ComponentFile> componentFileCollection) {
+        this.componentFileCollection = componentFileCollection;
+    }
 
     public String getFileCounterr() {
 		return fileCounterr;
