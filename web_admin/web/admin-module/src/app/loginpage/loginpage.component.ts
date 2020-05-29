@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ElementRef, AfterViewInit, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
@@ -20,6 +20,7 @@ import { MenushareService } from '../share_data/menushare.service';
 import { SpinnerService } from '../services/spinner.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-loginpage',
   templateUrl: './loginpage.component.html',
   styleUrls: ['./loginpage.component.css']

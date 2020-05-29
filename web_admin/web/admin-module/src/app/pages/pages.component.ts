@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, Renderer2, ElementRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Renderer2, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { LocationServiceService } from '../services/location-service.service';
 import { UsersService } from '../services/users.service';
@@ -22,6 +22,7 @@ import { SpinnerService } from '../services/spinner.service';
 
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-pages',
   templateUrl: './pages.component.html',
   styleUrls: ['./pages.component.css']
@@ -40,7 +41,7 @@ export class PagesComponent implements OnInit {
   public isfile;
   private domLayout;
 
-  constructor(private spinnerService: SpinnerService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private errordis :ErrorDialogService,private spinnerService: SpinnerService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private _LanguagegoService :LanguagegoService,private cookieService: CookiesService,private _MenulistService : MenulistService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,private router:Router,private route: ActivatedRoute,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -128,7 +129,7 @@ export class PagesComponent implements OnInit {
 
     this.page=res;
 
-    console.log(this.page)
+   // console.log(this.page)
 
       
     this._LanguagegoService.getalllang().subscribe(data => {
@@ -145,7 +146,7 @@ export class PagesComponent implements OnInit {
   
     this._ComponentService.getbypage().subscribe(res =>{
 
-      console.log(res);
+     // console.log(res);
       
 
       res.forEach((parent,indexp) => {
@@ -323,7 +324,6 @@ a.forEach((element,index) => {
   this.passwordstable[parent.parent.id]=this.tpasswordstable;
 
 
-  console.log(element.comp.parentGroup +' '+element.comp.ctype)
 
 if(element.comp.ctype === 'label'){
 
@@ -778,7 +778,6 @@ if(related === 'table'){
     const selectedDataStringPresentation = selectedData.map( node =>
        {
      
-
      if( this.passwordstable[index].length > 0){
 
       this.passwordstable[index].forEach(element => {
@@ -806,7 +805,7 @@ if(related === 'table'){
       });
     
     }
-    console.log(node)
+    //console.log(node)
     this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port);
     
 
@@ -829,7 +828,7 @@ if(related === 'table'){
     const selectedDataStringPresentation = selectedData.map( node =>
        {
         if(related === 'form'){
-        console.log(node)
+      //  console.log(node)
         if(this.isfile){
         this.fileupload.clearQueue();
         this.fileupload.addfilesuser(serv,node[para],node[para],ip,port);
@@ -925,7 +924,7 @@ onSubmit(index,form,serv,related,relcom,ip,port){
 
      this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
 
-    console.log(data)
+   // console.log(data)
 
       if(this.rowData === undefined){
       }else{

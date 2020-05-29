@@ -64,11 +64,29 @@ window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
 
 
 
-   public formaterror(error,map){
+   public formaterror(error,map,field,date){
 
-    for (let [key, value] of map.entries()) {
-      error =error.replace(key,value);
-  }
+    if(error === undefined){
+      error='error';
+    }
+if(map != null){
+  for (let [key, value] of map.entries()) {
+    error =error.replace(key,value);
+}
+}
+
+if(field != null){
+  if(field===undefined){
+  field='field';
+}
+  error =error.replace('field',field);
+}
+
+if(date != null){
+  error =error.replace('date',date);
+}
+
+
 
        error =error.replace("{{","");
 

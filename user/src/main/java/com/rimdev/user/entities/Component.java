@@ -97,7 +97,11 @@ public class Component implements Serializable {
     @Basic(optional = false)
     @Column(name = "field_encry", nullable = false)
     private int fieldEncry;
-    
+    @Column(name = "required_error", length = 450)
+    private String requiredError;
+    @Column(name = "patern_error", length = 450)
+    private String paternError;
+        
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
@@ -128,9 +132,25 @@ public class Component implements Serializable {
         this.cpattern = cpattern;
     }
     
+   
     
-    
-    public String getParentGroup() {
+    public String getRequiredError() {
+		return requiredError;
+	}
+
+	public void setRequiredError(String requiredError) {
+		this.requiredError = requiredError;
+	}
+
+	public String getPaternError() {
+		return paternError;
+	}
+
+	public void setPaternError(String paternError) {
+		this.paternError = paternError;
+	}
+
+	public String getParentGroup() {
 		return parentGroup;
 	}
 

@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit {
       this._MenushareService.getnotif()
       .subscribe(notifdata => {
         this.notif= notifdata;
-        console.log(this.notif);
+       // console.log(this.notif);
       this._ComponentService.getimage(this.user.userID.filesuploadID.id).subscribe(image =>{
       
       

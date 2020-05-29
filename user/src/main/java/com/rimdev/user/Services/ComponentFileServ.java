@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.rimdev.user.Repo.ComponentFileRepo;
 import com.rimdev.user.entities.ComponentFile;
 import com.rimdev.user.entities.ComponentInput;
-import com.rimdev.user.entities.FileType;
 
 @Service
 public class ComponentFileServ {
