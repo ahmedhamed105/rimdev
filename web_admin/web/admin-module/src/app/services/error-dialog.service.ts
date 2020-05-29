@@ -69,10 +69,18 @@ window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
     if(error === undefined){
       error='error';
     }
+
 if(map != null){
-  for (let [key, value] of map.entries()) {
-    error =error.replace(key,value);
-}
+  console.log(typeof(map))
+  if(typeof(map)==='string'){
+    error =error.replace('data',map);
+  }else{
+    for (let [key, value] of map.entries()) {
+      error =error.replace(key,value);
+  }
+
+  }
+
 }
 
 if(field != null){
