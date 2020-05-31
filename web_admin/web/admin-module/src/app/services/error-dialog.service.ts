@@ -71,7 +71,7 @@ window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
     }
 
 if(map != null){
-  console.log(typeof(map))
+ // console.log(typeof(map))
   if(typeof(map)==='string'){
     error =error.replace('data',map);
   }else{
