@@ -104,7 +104,7 @@ DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pag
 	}else {
 	
 		userLoginServ.check_username(info.getUsername(),langcode);
-		userLoginServ.save(info,langcode);
+		userLoginServ.save(info,langcode,Integer.parseInt(pagenum));
 	}
 		
 	

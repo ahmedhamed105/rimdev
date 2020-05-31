@@ -176,7 +176,7 @@
   </div>
   <!-- /.col -->
   <div class="col-4">
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport,parent.parent.routingInd,parent.parent.routingLoc)" >{{component.comp.ccode}}</button>   
+    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.button.buttonMethod == null ?'':this[component.button.buttonMethod](parent.parent.id,insertform[parent.parent.id],component.button.buttonService,parent.parent.relatedType,parent.parent.relatedParent,parent.parent.comIP,parent.parent.comport,parent.parent.routingInd,parent.parent.routingLoc)" >{{component.comp.ccode}}</button>   
   <!-- /.col -->
 </div>
 </div>

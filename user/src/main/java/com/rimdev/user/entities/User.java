@@ -170,15 +170,17 @@ public class User implements Serializable {
         this.passportnumber = passportnumber;
     }
 
-    public String getIDnumber() {
-        return iDnumber;
-    }
+  
 
-    public void setIDnumber(String iDnumber) {
-        this.iDnumber = iDnumber;
-    }
+    public String getiDnumber() {
+		return iDnumber;
+	}
 
-    public Date getUsermodify() {
+	public void setiDnumber(String iDnumber) {
+		this.iDnumber = iDnumber;
+	}
+
+	public Date getUsermodify() {
         return usermodify;
     }
 
@@ -224,10 +226,15 @@ public class User implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entity.User[ id=" + id + " ]";
-    }
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", middleName=" + middleName + ", lastname=" + lastname
+				+ ", birthdate=" + birthdate + ", useridnumber=" + useridnumber + ", passportnumber=" + passportnumber
+				+ ", iDnumber=" + iDnumber + ", usermodify=" + usermodify + ", usercreate=" + usercreate
+				+ ", userLoginCollection=" + userLoginCollection + ", filesuploadID=" + filesuploadID + "]";
+	}
+
+ 
     
 }
 

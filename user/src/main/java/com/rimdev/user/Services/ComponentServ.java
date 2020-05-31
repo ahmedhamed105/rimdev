@@ -58,7 +58,7 @@ public class ComponentServ {
 			
 			if(com == null || com.size() <= 0) {
 				
-				throw new PopupException(textConvertionServ.search("E116", langcode));
+				return new ArrayList<>();
 				
 			}
 			

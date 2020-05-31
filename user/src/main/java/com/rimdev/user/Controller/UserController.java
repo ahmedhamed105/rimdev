@@ -1,11 +1,15 @@
 package com.rimdev.user.Controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +23,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.user.Services.DevicePageServ;
+import com.rimdev.user.Services.NotificationServ;
+import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Services.UserServ;
+import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
+import com.rimdev.user.entities.UserLogin;
 import com.rimdev.user.ouputobject.Userobject;
 import com.rimdev.user.ouputobject.threevalues;
 
@@ -38,6 +46,12 @@ public class UserController {
 	
 	@Autowired
 	DevicePageServ devicePageServ;
+	
+	@Autowired
+	UserLoginServ  userLoginServ;
+	
+	@Autowired
+	NotificationServ notificationServ;
 	
 
 	
@@ -80,37 +94,92 @@ public class UserController {
 	 
 
 @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<User> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody User input) {
+public @ResponseBody ResponseEntity<UserLogin> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Userobject input) {
 	
 	List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
+input.getUser().setiDnumber(userLoginServ.dencryp(input.getUser().getiDnumber()));
+
 
 User user;
-if(input.getId() == null) {
-	 user=userServ.Save(input,langcode);
+if(input.getUser().getId() == null) {
 	
+	 user=userServ.Save(input.getUser(),langcode);
+	 
 }else {
-	 user= userServ.getuserbyid(input.getId(),langcode);
-//	 System.out.println("enter 2");
-
+	 user= userServ.getuserbyid(input.getUser().getId(),langcode);
 		if(user == null ) {
-			user=userServ.Save(input,langcode);
+			user=userServ.Save(input.getUser(),langcode);
 		
 		}else {
-	      input.setId(user.getId());
+	      input.getUser().setId(user.getId());
 	     user=userServ.update(user,langcode);
 			
 		}
 		
 }
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+
+
+input.getLogin().setUserID(user);
+
+
+UserLogin info =input.getLogin();
+String key = userLoginServ.getkey(info.getPasswordEncy());
+String pass = userLoginServ.getencpassword(info.getPasswordEncy());
+
+info.setLoginkey(key);
+info.setPasswordEncy(pass);
+
+  userLoginServ.check_username(info.getUsername(),langcode);
+ 
+if(info.getId() !=null) {
+	UserLogin found= userLoginServ.getbyid(info.getId(),langcode);
+		
+		if(found != null) {   
+          info.setId(found.getId());
+          userLoginServ.update(info,langcode);
+
+		}else {
+			userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
+			
+		}
+}else {
+	
+	userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
+	
+}
+
+
+notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
+
+
+return new ResponseEntity<UserLogin>(info, HttpStatus.OK);
 
 
 
 }
 
+
+
+
+@RequestMapping(value = "/profile/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<FilesUpload> saveprofilefile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody threevalues input) {
+ 
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+
+
+	System.out.println(input.getValue1() +" "+input.getValue2() +" "+input.getValue3());
+	
+	FilesUpload out= userServ.saveprofilefile(input, langcode);
+	
+	 return new ResponseEntity<FilesUpload>(out, HttpStatus.OK);
+
+	
+}
 
 
 @RequestMapping(value = "/file/{langcode}", method = RequestMethod.POST)

@@ -24,6 +24,10 @@ public class Userobject {
 	public void setLogin(UserLogin login) {
 		this.login = login;
 	}
+	@Override
+	public String toString() {
+		return "Userobject [User=" + User.getId() + ", login=" + login.getId() + "]";
+	}
 	
 	
 	

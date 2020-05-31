@@ -51,12 +51,17 @@ export class LoginpageComponent implements OnInit {
  columnDefs: Icolumdef[] []=[];
  public column:Icolumdef[] = [];
  
- public file =[] ;
- public dates =[] ;
- public passwords =[] ;
- public checkbox =[] ;
+ public file :any [][] =[] ;
+ public filetmp :any [] =[] ;
+ public dates :any [][] =[] ;
+ public datestmp :any [] =[] ;
+ public passwords :any [][]=[] ;
+ public tpasswords :any []=[] ;
+ public passwordstable :any [][] =[] ;
+ public tpasswordstable :any [] =[] ;
  passwordIsValid = false;
  public background ;
+ private domLayout;
 
 
 
@@ -91,9 +96,6 @@ createImageFromBlob(image: Blob) {
 
 
 
-    this._MenushareService.updatelang(undefined); 
-    this._MenushareService.updatemenu(undefined);
-
 
 
     this.cookieService.checkboxrember('1');
@@ -120,38 +122,47 @@ createImageFromBlob(image: Blob) {
 
 
 
-
     this.isfile =false;
-    this.file= [];
-    this.dates =[] ;
 
-
-  
+   // var menuid =   this.locationService.getQueryParams('menuid',window.location.href); ;//this.route.snapshot.paramMap.get("id").toString();
+    
+    
     GlobalConstants.pageid = this.pagenumber.toString();
 
+  //  this.type = this.locationService.getQueryParams('type',window.location.href) ;  //this.route.snapshot.paramMap.get("type");
 
+  
     this.locationService.all_info().then(res => {
+
       this.device =this.locationService.mydevice;
 
       this.cookieService.username(this.device['username'],GlobalConstants.rember);
       this.cookieService.usertokean(this.device['usertokean'],GlobalConstants.rember);
 
-   //   console.log(this.device['username']+" "+this.device['usertokean']);
 
-       this._ComponentService.getbackground().subscribe(background =>{
-
-    //    console.log(background);
-        if(background.size === 0){
-          this.createImage('assets/img/avatar04.png');
-        }else{
-          this.createImageFromBlob(background);
-        }
-
-        
-     
+      this._MenushareService.updatelang(undefined); 
+      this._MenushareService.updatemenu(undefined);
   
-    
+  
+
+
+      this._ComponentService.getbackground().subscribe(background =>{
+  
+        //    console.log(background);
+  if(background.size === 0){
+    this.createImage('assets/img/avatar04.png');
+  }else{
+    this.createImageFromBlob(background);
+  }
+
+      
+
+
+  
     this._ComponentService.getbypage().subscribe(res =>{
+
+     // console.log(res);
+      
 
       res.forEach((parent,indexp) => {
 
@@ -183,6 +194,15 @@ createImageFromBlob(image: Blob) {
         var parentin=indexp*a.length;
 
 
+        if(element.comp.fieldEncry === 1){
+
+          this.tpasswords.push(element);
+
+        }
+
+      
+
+
         if(element.comp.ctype == 'button'){
 
 
@@ -190,26 +210,26 @@ createImageFromBlob(image: Blob) {
 
 
 
-          this.createItem(element.comp.name,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,parent.parent.id);
+          this.createItem(element.comp.name,element.comp.parentGroup,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,parent.parent.id);
         
           if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'file'){
              
              this.isfile = true;
 
-             this.file.push(element.comp.name);
+             this.filetmp.push(element);
 
            this.queue[element.comp.id] = this.fileupload.queue(element.comp.id);
            this.fileupload.onCompleteItem = this.completeItem;
 
           }else if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'date'){
              
-            this.dates.push(element.comp.name);
+            this.datestmp.push(element);
 
      
 
          }else if(element.comp.ctype == 'input' &&  element.input.inputtypeID.itype == 'password'){
              
-          this.passwords.push(element.comp.name);
+          
 
    
 
@@ -229,7 +249,7 @@ if(element.comp.ctype == 'select'){
 
             this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport)
             .subscribe(data => {this.objects[index+parentin] = data;
-           //  console.log(index+indexp);
+            
           //  console.log(element.select.webService)
         });
            }
@@ -260,12 +280,18 @@ if(element.comp.ctype == 'select'){
 });
 
 
+this.passwords[parent.parent.id]=this.tpasswords;
+this.dates[parent.parent.id]=this.datestmp;
+this.file[parent.parent.id]=this.filetmp;
+
+
 }else if(parent.child != null && parent.parent.parentType === 'table'){
 
 
   this.gridOptions[parent.parent.id]= <GridOptions>{};
   this.gridOptions[parent.parent.id].frameworkComponents = { "selRenderer" : UsertypedropdownComponent,"passRenderer" : PasswordtableComponent };
-
+  this.gridOptions[parent.parent.id].rowHeight = 100;
+  this.domLayout = 'autoHeight';
   var a=  parent.child.sort((a, b) => {
     return a.comp.seqNum -b.comp.seqNum;
   });
@@ -291,7 +317,8 @@ if(element.comp.ctype == 'select'){
     editable: false,      
     resizable: true,
     checkboxSelection: true,
-    cellRenderer: ""
+    cellRenderer: "",
+    
   };
   this.column.push(b);
  // this.columnDefs[parent.parent.id][0] = b;
@@ -303,33 +330,22 @@ a.forEach((element,index) => {
 
   var parentin=indexp*a.length;
 
+  if(element.comp.fieldEncry === 1){
+
+    this.tpasswordstable.push(element);
+
+  }
+
+  this.passwordstable[parent.parent.id]=this.tpasswordstable;
+
+
+
 if(element.comp.ctype === 'label'){
 
-  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
-     b = {
-      headerName : element.comp.ccode,
-      field : element.comp.groupname === undefined? element.comp.parentGroup+'.'+element.comp.name:element.comp.parentGroup+'.'+element.comp.groupname+'.'+element.comp.name,
-      Serv: "",
-      selectDisplay:"",
-      selectValue:"",
-      fieldgroup:0,
-      groupname:"",
-      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
-      formnum:0,
-      sortable: true, 
-      filter: true, 
-      editable: false,      
-      resizable: true,
-      checkboxSelection: false,
-      cellRenderer: ""
-    };
 
-  }else{
-     b  = {
+  if(element.comp.parentGroup === undefined){
+    
+    b  = {
       headerName : element.comp.ccode,
       field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
       Serv: "",
@@ -348,7 +364,33 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer: ""
+      cellRenderer: "",
+      
+    };
+
+  }else{
+
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.parentGroup+'.'+element.comp.name:element.comp.parentGroup+'.'+element.comp.groupname+'.'+element.comp.name,
+      Serv: "",
+      selectDisplay:"",
+      selectValue:"",
+      fieldgroup:0,
+      groupname:"",
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:0,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer: "",
+      
     };
 
   }
@@ -361,8 +403,36 @@ if(element.comp.ctype === 'label'){
 
 }else if(element.comp.ctype === 'input'){
 
+  
 
-  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
+
+  if(element.comp.parentGroup === undefined){
+
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
+      Serv: "",
+      selectDisplay:"",
+      selectValue:"",
+      fieldgroup:0,
+      groupname:"",
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:0,
+      sortable: true, 
+      filter: true, 
+      editable: true,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer : "",
+      
+    };
+   
+  }else{
+
 
     b = {
       headerName : element.comp.ccode,
@@ -383,29 +453,8 @@ if(element.comp.ctype === 'label'){
       editable: true,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer : ""
-    };
-  }else{
-    b = {
-      headerName : element.comp.ccode,
-      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname+'.'+element.comp.name,
-      Serv: "",
-      selectDisplay:"",
-      selectValue:"",
-      fieldgroup:0,
-      groupname:"",
-      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
-      formnum:0,
-      sortable: true, 
-      filter: true, 
-      editable: true,      
-      resizable: true,
-      checkboxSelection: false,
-      cellRenderer : ""
+      cellRenderer : "",
+      
     };
     
   }
@@ -420,31 +469,7 @@ if(element.comp.ctype === 'label'){
 
   
 
-  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
-
-    b = {
-      headerName : element.comp.ccode,
-      field : element.comp.name,
-      Serv: element.select.webService,
-      selectDisplay:element.select.selectDisplay,
-      selectValue:element.select.selectValue,
-      fieldgroup: element.comp.groupname === undefined? 0 : 1,
-      groupname : element.comp.groupname === undefined?null:element.comp.groupname,
-      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
-      formnum:index,
-      sortable: true, 
-      filter: true, 
-      editable: false,      
-      resizable: true,
-      checkboxSelection: false,
-      cellRenderer : "passRenderer"
-    };
-
-  }else{
+  if(element.comp.parentGroup === undefined){
 
     b = {
       headerName : element.comp.ccode,
@@ -465,7 +490,34 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer : "passRenderer"
+      cellRenderer : "passRenderer",
+      
+    };
+    
+
+  }else{
+
+    b = {
+      headerName : element.comp.ccode,
+      field : element.comp.name,
+      Serv: element.select.webService,
+      selectDisplay:element.select.selectDisplay,
+      selectValue:element.select.selectValue,
+      fieldgroup: element.comp.groupname === undefined? 0 : 1,
+      groupname : element.comp.groupname === undefined?null:element.comp.groupname,
+      parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
+      fielddisable: element.comp.disable === 1 ? true:false,
+      disabled : element.comp.disable === 1 ? true:false,
+      ip:parent.parent.comIP,
+      port:parent.parent.comport,
+      formnum:index,
+      sortable: true, 
+      filter: true, 
+      editable: false,      
+      resizable: true,
+      checkboxSelection: false,
+      cellRenderer : "passRenderer",
+      
     };
     
   }
@@ -473,14 +525,15 @@ if(element.comp.ctype === 'label'){
  // this.columnDefs[parent.parent.id][index+1]= b;
  this.column.push(b);
   
- 
+
 
 }else if(element.comp.ctype === 'select'){
 
-  if(element.comp.parentGroup != null || element.comp.parentGroup != undefined){
+  if(element.comp.parentGroup === undefined){
+
     b = {
       headerName : element.comp.ccode,
-      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
+      field :  element.comp.name,
       Serv: element.select.webService,
       selectDisplay:element.select.selectDisplay,
       selectValue:element.select.selectValue,
@@ -497,14 +550,15 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer: "selRenderer"
+      cellRenderer: "selRenderer",
+      
     };
 
   }else{
 
     b = {
       headerName : element.comp.ccode,
-      field : element.comp.groupname === undefined? element.comp.name:element.comp.groupname,
+      field : element.comp.name,
       Serv: element.select.webService,
       selectDisplay:element.select.selectDisplay,
       selectValue:element.select.selectValue,
@@ -521,7 +575,8 @@ if(element.comp.ctype === 'label'){
       editable: false,      
       resizable: true,
       checkboxSelection: false,
-      cellRenderer: "selRenderer"
+      cellRenderer: "selRenderer",
+      
     };
 
     
@@ -536,10 +591,7 @@ if(element.comp.ctype === 'label'){
 
 }else{
 
-  
 }
-
-
 
 
 
@@ -556,8 +608,10 @@ this.columnDefs[parent.parent.id]=this.column;
 if(parent.parent.firstmethod === undefined){
 
 }else{
-  console.log("go");
-  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport)
+  
+  this.rowData[parent.parent.id] =  this._usersservice.getbyurl(parent.parent.firstmethod,parent.parent.comIP,parent.parent.comport);
+
+  
 
 }
 
@@ -565,15 +619,15 @@ if(parent.parent.firstmethod === undefined){
 
 
     });
+ 
     
   });
 
-  if(this.isfile){
-    this.fileupload.clearQueue();
-  }
-
+});
  
-  });
+if(this.isfile){
+  this.fileupload.clearQueue();
+}
  
 
 
@@ -591,17 +645,37 @@ completeItem = (item: FileQueueObject, response: any) => {
  addfiles($event,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror) {
 
   const fileBrowser = $event.target;
+
+  //console.log(fileBrowser.files.length);
+
+  //console.log(this.fileupload.filelength(index));
+
+  //console.log(fileBrowser.files.length+this.fileupload.filelength(index));
+
+  
+
  
   this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror);
 }
 
 
-createItem(child,group,req,pat,dpattern,formindex) {
+createItem(child,pargroup,group,req,pat,dpattern,formindex) {
+  if(pargroup != null){
+// parent group have value
+
 if(group != null){
-  if(this.insertform[formindex].get(group)== null){
-    this.insertform[formindex].addControl(group, new FormGroup({}));
+
+  if(this.insertform[formindex].get(pargroup) == null){
+    this.insertform[formindex].addControl(pargroup, new FormGroup({}));
   }
-  this.tmpform = this.insertform[formindex].get(group) as FormGroup;
+
+  this.tmpform = this.insertform[formindex].get(pargroup) as FormGroup;
+
+  if(this.tmpform.get(group)== null){
+    this.tmpform.addControl(group, new FormGroup({}));
+  }
+
+  this.tmpform = this.insertform[formindex].get(pargroup).get(group) as FormGroup;
 
   if(req === 1 && pat === 1){
     
@@ -616,18 +690,66 @@ if(group != null){
 }else{
 
 
+  if(this.insertform[formindex].get(pargroup) == null){
+    this.insertform[formindex].addControl(pargroup, new FormGroup({}));;
+  }
+
+  this.tmpform = this.insertform[formindex].get(pargroup) as FormGroup;
+
+
+
   if(req === 1 && pat === 1){
     
-    this.insertform[formindex].addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
+    this.tmpform.addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
   }else if(req === 1 && pat === 0){
-    this.insertform[formindex].addControl(child,  new FormControl('', [Validators.required]));
+    this.tmpform.addControl(child,  new FormControl('', [Validators.required]));
   }else if(req === 0 && pat === 1){
-    this.insertform[formindex].addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
+    this.tmpform.addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
   }else{
-    this.insertform[formindex].addControl(child,  new FormControl(''));
+    this.tmpform.addControl(child,  new FormControl(''));
   }
 
 }
+
+
+  }else{
+// parent group null value
+
+
+    if(group != null){
+      if(this.insertform[formindex].get(group)== null){
+        this.insertform[formindex].addControl(group, new FormGroup({}));
+      }
+      this.tmpform = this.insertform[formindex].get(group) as FormGroup;
+    
+      if(req === 1 && pat === 1){
+        
+        this.tmpform.addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
+      }else if(req === 1 && pat === 0){
+        this.tmpform.addControl(child,  new FormControl('', [Validators.required]));
+      }else if(req === 0 && pat === 1){
+        this.tmpform.addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
+      }else{
+        this.tmpform.addControl(child,  new FormControl(''));
+      }
+    }else{
+    
+    
+      if(req === 1 && pat === 1){
+        
+        this.insertform[formindex].addControl(child,  new FormControl('', [Validators.required,Validators.pattern(dpattern)]));
+      }else if(req === 1 && pat === 0){
+        this.insertform[formindex].addControl(child,  new FormControl('', [Validators.required]));
+      }else if(req === 0 && pat === 1){
+        this.insertform[formindex].addControl(child,  new FormControl('', [Validators.pattern(dpattern)]));
+      }else{
+        this.insertform[formindex].addControl(child,  new FormControl(''));
+      }
+    
+    }
+    
+
+  }
 
 
  
@@ -635,21 +757,39 @@ if(group != null){
 
 
 
-onSubmit(form,serv,related,relcom,ip,port,routingInd,routingLoc){
+
+onSubmit(index,form,serv,related,relcom,ip,port,routingInd,routingLoc){
 
   
 
- if( this.passwords.length > 0){
+  if( this.passwords[index].length > 0){
 
-  this.passwords.forEach(element => {
+    this.passwords[index].forEach(element => {
+      var value;
+      var nodetmp;
+    
+      if(element.comp.parentGroup != null && element.comp.groupname != null){
+        nodetmp = form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValue(value);
+      }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+        nodetmp = form.get(element.comp.parentGroup).get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.parentGroup).get(element.comp.name).setValue(value);
+       }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+        nodetmp = form.get(element.comp.groupname).get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.groupname).get(element.comp.name).setValue(value);
+      }else{
+        nodetmp = form.get(element.comp.name).value.trim();
+        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+        form.get(element.comp.name).setValue(value);
+      }
+  
+    });
+  
+  }
 
-
-    form.get(element).setValue(this._EncryptionService.encypttext(form.get(element).value.trim()));
-  });
-
-
-  console.log(form.value)
-}
 
 
      this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
@@ -725,12 +865,6 @@ checked(event:MatCheckboxChange){
  //   this.cookieService.checkboxrember('0');
 //  }
 
-}
-
-
-getUrl()
-{
-  return "url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')";
 }
 
 

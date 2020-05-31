@@ -64,6 +64,10 @@ public class UserLoginServ {
 	LogServ logServ;
 	
 	
+	@Autowired
+	PagesServ pagesServ;
+	
+	
 	
 	
 
@@ -331,17 +335,21 @@ public UserLogin getbyid(int id,String langcode) {
 
 
 
-public void save(UserLogin input,String langcode) {
+public void save(HttpServletRequest request,DevicePage devpag,UserLogin input,String langcode,int pageid) {
 	
 	
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
 		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
 		input.setUserID(usero);
 		
+		Pages pag=pagesServ.getbyid(pageid, langcode);
+		
 		Date date = new Date();
 		input.setCreatedate(date);
 		input.setLoginCreate(date);
 		input.setLoginModfiy(date);
+		input.setPagesID(pag);
+		input.setLoginFailed(0);
 		try {
 			userLoginRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
@@ -355,9 +363,14 @@ public void save(UserLogin input,String langcode) {
 			throw new NullPointerException(textConvertionServ.search("E104", langcode));
 	    }
 		
+		
+		String text= "user "+input.getUsername()+" created by "+devpag.getUserloginID().getUsername();
+		logServ.info(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode," ");		
+    	
+		
 	}else {
 		
-		throw new NullPointerException(textConvertionServ.search("E107", langcode));
+		throw new PopupException(textConvertionServ.search("E107", langcode));
 	
 	}
 	
@@ -474,9 +487,9 @@ public UserLogin check_userlogin(HttpServletRequest request,Device dev,Pages pa,
 		
 	}
 	  Calendar cal = Calendar.getInstance(); 
-		String as= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
+	//	String as= "tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime();
 
-	  System.out.println(as);
+	//  System.out.println(as);
 	  
 	if(userlogin.getExpiredate().before(cal.getTime())) {
 		
@@ -490,12 +503,17 @@ public UserLogin check_userlogin(HttpServletRequest request,Device dev,Pages pa,
 	String newtokean=gen.token(30);
 	userlogin.setLoginModfiy(cal.getTime());
     if( configurationServ.getbykey("Tokean_Expiration_flag").getConfignum() == 1) {
+    //	System.out.println( configurationServ.getbykey("Tokean_Expiration_hours").getConfignum());
+    //	System.out.println( configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum());
+
     	cal.add(Calendar.HOUR, configurationServ.getbykey("Tokean_Expiration_hours").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);
     	cal.add(Calendar.MINUTE, configurationServ.getbykey("Tokean_Expiration_minutes").getConfignum()); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
        }else {      	
     	   cal.add(Calendar.MONTH, 12); //same with c.add(Calendar.DAY_OF_MONTH, 1);	
        }
+   // System.out.println("tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime());
     userlogin.setExpiredate(cal.getTime());
+   // System.out.println("tokean Expire "+userlogin.getExpiredate() + " now "+cal.getTime());
 	userlogin.setUsertokean(newtokean);	
 
   

@@ -64,6 +64,11 @@ public class ParentComponentServ {
 				parent_comp a = new parent_comp();
 			
 					List<Component_object>	 select =componentServ.getbyparent(component.getId(), langcode);
+					if(select.size() == 0) {
+						
+						continue;
+					}
+					
 					if(select.size() > 0 ) {
 						a.setParent(component);
 						a.setChild(select);

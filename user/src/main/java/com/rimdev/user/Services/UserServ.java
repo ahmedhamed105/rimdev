@@ -251,7 +251,7 @@ public FilesUpload savefile(threevalues input,String langcode) {
 		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
 		Component com=componentServ.getComponentbyid(Integer.parseInt(input.getValue3()), langcode);
 		
-		UserLogin userlog=userLoginServ.getbyuser(Integer.parseInt(input.getValue1()), langcode).get(0);
+		UserLogin userlog=userLoginServ.getuserlogin(Integer.parseInt(input.getValue1()), langcode);
 	
 		
 		userFileServ.Save(userlog, file,com, langcode);
@@ -271,6 +271,38 @@ public FilesUpload savefile(threevalues input,String langcode) {
 	
 	
 }
+
+
+
+public FilesUpload saveprofilefile(threevalues input,String langcode) {
+
+	try {
+		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
+		Component com=componentServ.getComponentbyid(Integer.parseInt(input.getValue3()), langcode);
+		
+		UserLogin userlog=userLoginServ.getuserlogin(Integer.parseInt(input.getValue1()), langcode);
+	
+		
+		userlog.getUserID().setFilesuploadID(file);
+		
+		userRepo.save(userlog.getUserID());
+		
+		return file;
+		
+	
+	} catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
+	
+	
+}
+
 
 
 

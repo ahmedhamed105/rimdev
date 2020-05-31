@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.rimdev.user.Exception.NooauthException;
 import com.rimdev.user.Exception.PopupException;
+import com.rimdev.user.Exception.RedirectException;
 import com.rimdev.user.Repo.GroupPagesRepo;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.GroupPages;
@@ -73,7 +74,7 @@ public class GroupPagesServ {
 				  String text= "page : "+ devpage.getPagesID().getPagename()+" No priviledge for user : "+devpage.getUserloginID().getUsername();
 				  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), devpage.getUserloginID().getId(), 14, langcode," ");
 				  
-					 throw new NooauthException(textConvertionServ.search("E101", langcode));	
+					 throw new RedirectException(textConvertionServ.search("E101", langcode));	
 				}else {
 					
 					String text= "page : "+ devpage.getPagesID().getPagename()+" have priviledge for user : "+devpage.getUserloginID().getUsername();
@@ -86,7 +87,7 @@ public class GroupPagesServ {
 			  String text= "page : "+ devpage.getPagesID().getPagename()+" No priviledge for user : "+devpage.getUserloginID().getUsername() +" group "+group.getGroupname()+" is closed";
 			  logServ.errorlog(devpage.getDeviceId().getDeviceip(),request,text, devpage.getDeviceId(), devpage.getUserloginID().getId(), 13, langcode," ");					
 				
-			  throw new NooauthException(textConvertionServ.search("E101", langcode));
+			  throw new RedirectException(textConvertionServ.search("E101", langcode));
 		  }
 		
 	

@@ -95,8 +95,6 @@ export class PagesComponent implements OnInit {
 
 
     this.isfile =false;
-    this.file= [];
-    this.dates =[] ;
 
     var menuid =   this.locationService.getQueryParams('menuid',window.location.href); ;//this.route.snapshot.paramMap.get("id").toString();
     
@@ -920,8 +918,8 @@ onSubmit(index,form,serv,related,relcom,ip,port){
     });
   
   }
-
-
+  console.log(form);
+console.log(form.value);
      this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
 
    // console.log(data)

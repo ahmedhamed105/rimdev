@@ -1,13 +1,21 @@
 package com.rimdev.user.Services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
+import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.user.Repo.NotificationRepo;
+import com.rimdev.user.entities.Application;
+import com.rimdev.user.entities.GroupPriviledge;
 import com.rimdev.user.entities.Notification;
+import com.rimdev.user.entities.UserLogin;
 
 @Service
 public class NotificationServ {
@@ -17,6 +25,9 @@ public class NotificationServ {
 	
 	@Autowired
 	ConfigurationServ configurationServ;
+	
+	@Autowired
+	TextConvertionServ textConvertionServ;
 	
 	
 	
@@ -33,5 +44,30 @@ public class NotificationServ {
 		
 		
 	}
+	
+	
+
+
+public void save(String notiftext,Application applicationID,GroupPriviledge grouppriviledgeID,UserLogin userloginID,String langcode) {
+
+	 Calendar cal = Calendar.getInstance(); 
+	Notification notif=new Notification();
+	notif.setNotifDate(cal.getTime());
+	notif.setApplicationID(applicationID);
+	notif.setGrouppriviledgeID(grouppriviledgeID);
+	notif.setUserloginID(userloginID);
+	notif.setNotiftext(notiftext);
+		try {
+			notificationRepo.save(notif);	
+		} catch (TransientDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    } catch (RecoverableDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }catch (ScriptException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }catch (NonTransientDataAccessException  se) {
+			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    }
+}
 
 }
