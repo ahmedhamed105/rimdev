@@ -16,3 +16,7 @@ SELECT @error;
 -- force Debit
 CALL `rim_accounting`.`postonelegtransaction`(@ref,'EGP', '1000000001',100, 101, 'cash','hamed',null,@error);
 SELECT @error;
+
+-- create account
+CALL `rim_accounting`.`createaccount`('23232323','mohamed ahmed','EGP',@acct,@error);
+SELECT @acct,@error;

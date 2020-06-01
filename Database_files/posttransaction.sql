@@ -24,7 +24,7 @@ END IF;
 select 
 case when count(*) = 1 then 0 else 3 end INTO error_code
  from rim_accounting.currency 
- where Currency_status = 'Active' 
+ where All_status_ID = 1 
  and Currency_ISO = Currency;
  -- end if not exist  currency
 IF error_code > 0 THEN
@@ -33,7 +33,7 @@ IF error_code > 0 THEN
    -- get currency id    
 select id INTO @currency_id
  from rim_accounting.currency 
- where Currency_status = 'Active' 
+ where All_status_ID = 1
  and Currency_ISO = Currency;
  
 -- check  account
@@ -42,7 +42,7 @@ case when count(*) = 1 then 0 else 1 end INTO error_code
 from rim_accounting.account 
 where 
 acct_number = acct_no 
-and Currency_ID =  (select ID from rim_accounting.currency where Currency_status = 'Active' and Currency_ISO = Currency);
+and Currency_ID =  (select ID from rim_accounting.currency where All_status_ID = 1 and Currency_ISO = Currency);
 
 -- end if not exist   account
 IF error_code > 0 THEN
@@ -55,7 +55,7 @@ select id,Aval_balance,Curr_balance INTO @account,@avl,@curr
 from rim_accounting.account 
 where 
 acct_number = acct_no 
-and Currency_ID =  (select ID from rim_accounting.currency where Currency_status = 'Active' and Currency_ISO = Currency);    
+and Currency_ID =  (select ID from rim_accounting.currency where All_status_ID = 1 and Currency_ISO = Currency);    
 
 -- check flow type 
 select 

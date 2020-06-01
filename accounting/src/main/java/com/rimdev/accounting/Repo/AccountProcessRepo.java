@@ -1,6 +1,8 @@
 package com.rimdev.accounting.Repo;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
@@ -38,5 +40,14 @@ public interface AccountProcessRepo extends CrudRepository<AccountProcess, Integ
    @Param("Trx_flow")String Trx_flow,
    @Param("Trx_desc")String Trx_desc,
    @Param("hold_id")int hold_id);
+	
+	
+	
+	   @Transactional
+	   @Procedure(procedureName = "createaccount")
+	  String createaccount(
+	   @Param("customer_no")String customer_no,
+	   @Param("customer_name")String customer_name,
+	   @Param("Currency")String Currency);
 
 }

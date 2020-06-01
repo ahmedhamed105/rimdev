@@ -7,13 +7,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import com.rimdev.accounting.Enttities.Account;
+import com.rimdev.accounting.Services.AccountProcessServ;
 import com.rimdev.accounting.Services.AccountServ;
 import com.rimdev.accounting.Services.ErrorCodesServ;
+import com.rimdev.accounting.inputobject.Acct_obj;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/Account") // 
@@ -22,7 +26,30 @@ public class AccountController {
 	@Autowired
 	AccountServ accountServ;
 	
+	@Autowired
+	AccountProcessServ accountProcessServ;
+	
 
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	  public  @ResponseBody ResponseEntity<Acct_obj> create_account(@RequestHeader("projectcode") String  projectcode,@RequestBody Acct_obj acct) {
+	    // This returns a JSON or XML with the users
+		  RestTemplate restTemplate = new RestTemplate();
+			ResponseEntity<String> okl = restTemplate.getForEntity("http://localhost:8081/Config/getacctkey" , String.class);
+
+		  
+		  
+		if(projectcode.equals(okl.getBody())) {
+			
+			return new ResponseEntity<Acct_obj>(accountProcessServ.create_acct(acct), HttpStatus.OK);
+	
+		}else {
+		
+			return new ResponseEntity<Acct_obj>(new Acct_obj(), HttpStatus.NOT_ACCEPTABLE);
+
+			
+		}
+	  }
 	
 	
 	@RequestMapping(value = "/all", method = RequestMethod.GET)

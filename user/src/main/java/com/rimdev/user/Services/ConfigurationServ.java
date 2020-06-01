@@ -42,4 +42,30 @@ public Configuration getbykey(String key) {
 	
 }
 
+
+public Configuration setvalue(String key,String value) {
+	
+	
+	try {
+		Optional<Configuration> flowid =configurationRep.findbykey(key);
+		 
+		 if (flowid.isPresent()){
+			 Configuration  ouput = flowid.get();
+			 ouput.setConfigvalue(value);
+			 configurationRep.save(ouput);
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	} catch (Exception e) {
+		// TODO: handle exception
+		return null;
+	}
+	
+	
+	
+}
+
 }

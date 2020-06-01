@@ -71,7 +71,14 @@ public class ComponentServ {
 				
 				
 				component.setCcode(textConvertionServ.search(component.getCcode(), langcode));
+				if(component.getRequiredError() != null) {
+					component.setRequiredError(textConvertionServ.search(component.getRequiredError(), langcode));
+				}
+				if(component.getPaternError() != null) {
+				 component.setPaternError(textConvertionServ.search(component.getPaternError(), langcode));	
+				}
 				
+
 				try {
 					 select =componentSelectServ.getbycomponent(component.getId(), langcode).get(0);
 
@@ -81,6 +88,16 @@ public class ComponentServ {
 				try {
 					 input =componentInputServ.getbycomponent(component.getId(), langcode).get(0);
 					 List<ComponentFile> files =componentFileServ.getbyinputcomp(input, langcode);
+				if(input.getFileSizeerr() != null) {
+					input.setFileSizeerr(textConvertionServ.search(input.getFileSizeerr(), langcode));	
+				}
+				if(input.getFileCounterr() != null) {
+					input.setFileCounterr(textConvertionServ.search(input.getFileCounterr(), langcode));	
+				}
+				if(input.getFileTypeerror() != null) {
+					input.setFileTypeerror(textConvertionServ.search(input.getFileTypeerror(), langcode));	
+				}
+				
 				
 				if(files.size() > 0) {
 					for (ComponentFile componentFile : files) {

@@ -353,14 +353,24 @@ public void save(HttpServletRequest request,DevicePage devpag,UserLogin input,St
 		try {
 			userLoginRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			String text= "user "+input.getUsername()+" not created by "+devpag.getUserloginID().getUsername();
+			logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+	    	
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    	String text= "user "+input.getUsername()+" not created by "+devpag.getUserloginID().getUsername();
+			logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+	    	
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    	String text= "user "+input.getUsername()+" not created by "+devpag.getUserloginID().getUsername();
+			logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+	    	
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-	    	se.printStackTrace();
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    	String text= "user "+input.getUsername()+" not created by "+devpag.getUserloginID().getUsername();
+			logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }
 		
 		
@@ -369,6 +379,10 @@ public void save(HttpServletRequest request,DevicePage devpag,UserLogin input,St
     	
 		
 	}else {
+		
+		String text= "user "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,"no user entity created");		
+    	
 		
 		throw new PopupException(textConvertionServ.search("E107", langcode));
 	

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
@@ -16,6 +18,7 @@ import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Component;
+import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
@@ -45,6 +48,10 @@ public class UserServ {
 	
 	@Autowired
 	UserLoginServ userLoginServ;
+	
+	
+	@Autowired
+	LogServ logServ;
 	
 
 	
@@ -198,7 +205,7 @@ public void check_user(String firstname,String middlename,String lastname,String
 
 
 
-public User Save(User input,String langcode) {
+public User Save(HttpServletRequest request,DevicePage devpag,User input,String langcode) {
 	
 	try {
 		FilesUpload file=	fileStorageService.getfilebyid(1, langcode);
@@ -210,16 +217,33 @@ public User Save(User input,String langcode) {
 		input.setUsercreate(date);
 		input.setUsermodify(date);
 		User ouput =userRepo.save(input);	
+		
+		String text= "user entity "+input.getFirstName()+" created by "+devpag.getUserloginID().getUsername();
+		logServ.info(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode," ");		
+    	
+		
 		return ouput;
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+   
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+   
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+   
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }			
 		
 	}

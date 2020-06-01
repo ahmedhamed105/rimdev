@@ -21,9 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
+import com.rimdev.user.Exception.PopupException;
+import com.rimdev.user.Services.AccountServ;
+import com.rimdev.user.Services.ConfigurationServ;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.NotificationServ;
+import com.rimdev.user.Services.TextConvertionServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Services.UserServ;
 import com.rimdev.user.Utils.ObjectUtils;
@@ -32,6 +37,7 @@ import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
 import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.ouputobject.Acct_obj;
 import com.rimdev.user.ouputobject.Userobject;
 import com.rimdev.user.ouputobject.threevalues;
 
@@ -52,6 +58,10 @@ public class UserController {
 	
 	@Autowired
 	NotificationServ notificationServ;
+	
+	
+	@Autowired
+	AccountServ accountServ;
 	
 
 	
@@ -106,12 +116,12 @@ input.getUser().setiDnumber(userLoginServ.dencryp(input.getUser().getiDnumber())
 User user;
 if(input.getUser().getId() == null) {
 	
-	 user=userServ.Save(input.getUser(),langcode);
+	 user=userServ.Save(request,dg,input.getUser(),langcode);
 	 
 }else {
 	 user= userServ.getuserbyid(input.getUser().getId(),langcode);
 		if(user == null ) {
-			user=userServ.Save(input.getUser(),langcode);
+			user=userServ.Save(request,dg,input.getUser(),langcode);
 		
 		}else {
 	      input.getUser().setId(user.getId());
@@ -154,6 +164,9 @@ if(info.getId() !=null) {
 
 notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
 
+
+String acct_no=accountServ.create_acct(request,dg,user.getUseridnumber(), info.getUsername(), langcode);
+System.out.println(acct_no);
 
 return new ResponseEntity<UserLogin>(info, HttpStatus.OK);
 

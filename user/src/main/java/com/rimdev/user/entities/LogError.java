@@ -44,7 +44,7 @@ public class LogError implements Serializable {
     @Column(name = "user_id", nullable = false)
     private int userId;
     @Basic(optional = false)
-    @Column(name = "log_text", nullable = false, length = 450)
+    @Column(name = "log_text", nullable = false, length = 9000)
     private String logText;
     @Column(name = "log_exception", length = 450)
     private String logException;

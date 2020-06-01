@@ -385,10 +385,20 @@ public class UserLogin implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entity.UserLogin[ id=" + id + " ]";
-    }
+	@Override
+	public String toString() {
+		return "UserLogin [id=" + id + ", usertokean=" + usertokean + ", expiredate=" + expiredate + ", createdate="
+				+ createdate + ", username=" + username + ", passwordEncy=" + passwordEncy + ", loginModfiy="
+				+ loginModfiy + ", loginCreate=" + loginCreate + ", notes=" + notes + ", loginkey=" + loginkey
+				+ ", loginFailed=" + loginFailed + ", loginFlag=" + loginFlag + ", configurationCollection="
+				+ configurationCollection + ", userFileCollection=" + userFileCollection + ", telephonesCollection="
+				+ telephonesCollection + ", adressCollection=" + adressCollection + ", notificationCollection="
+				+ notificationCollection + ", applicationID=" + applicationID + ", grouppriviledgeID="
+				+ grouppriviledgeID + ", pagesID=" + pagesID + ", userID=" + userID + ", userstatusID=" + userstatusID
+				+ ", usertypeID=" + usertypeID + ", emailCollection=" + emailCollection + ", passwordHistoryCollection="
+				+ passwordHistoryCollection + ", devicePageCollection=" + devicePageCollection + "]";
+	}
+
     
 }
 

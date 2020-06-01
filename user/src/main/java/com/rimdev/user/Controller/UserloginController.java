@@ -76,7 +76,7 @@ public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate(HttpServletReq
 
 	  List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
-DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	System.out.println(info.getPasswordEncy());
 	String key = userLoginServ.getkey(info.getPasswordEncy());
@@ -104,7 +104,7 @@ DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pag
 	}else {
 	
 		userLoginServ.check_username(info.getUsername(),langcode);
-		userLoginServ.save(info,langcode,Integer.parseInt(pagenum));
+		userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
 	}
 		
 	
