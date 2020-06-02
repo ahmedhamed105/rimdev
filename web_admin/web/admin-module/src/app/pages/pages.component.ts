@@ -956,7 +956,7 @@ console.log(form.value);
 }
 
 
-resetform(form,serv,related,relcom){
+resetform(index,form,serv,related,relcom){
   if(this.isfile){
     this.fileupload.clearQueue();
 
