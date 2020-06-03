@@ -144,7 +144,7 @@ export class PagesComponent implements OnInit {
   
     this._ComponentService.getbypage().subscribe(res =>{
 
-     // console.log(res);
+      console.log(res);
       
 
       res.forEach((parent,indexp) => {

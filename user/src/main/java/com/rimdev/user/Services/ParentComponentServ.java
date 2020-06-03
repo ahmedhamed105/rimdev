@@ -41,6 +41,10 @@ public class ParentComponentServ {
 	@Autowired
 	GroupParentServ groupParentServ;
 	
+	
+	@Autowired
+	ConfigurationServ configurationServ;
+	
 
 	public List<parent_comp> getbypage(int pageid,String langcode,DevicePage devpage){
 		List<parent_comp> coms = new ArrayList<parent_comp>();
@@ -55,32 +59,53 @@ public class ParentComponentServ {
 				throw new PopupException(textConvertionServ.search("E115", langcode));
 				
 			}
+
 			
 			for (ParentComponent component : com) {
+				parent_comp a = new parent_comp();
+				a.setParent(component);
+				List<Component_object>	 select1=new ArrayList<Component_object>();
 				
+				System.out.println("call "+component.getId());
+				
+				if(component.getComTable() == 1 && component.getComFormid() != null) {
+					
+			
+					
+					
+					List<Component_object>	 select =componentServ.getbyparent(component.getComFormid(), langcode);
+				for (Component_object comp : select) {
+					if(comp.getButton().getId() != null) {
+
+					}else {
+						 if(comp.getInput().getId() != null && configurationServ.getlist("input_comp_not_include_table").contains(comp.getInput().getInputtypeID().getId())) {	
+								
+							}else {
+								select1.add(comp);	
+							}
+					
+					}
+				}
+
+					
+				}
 				
 				component.setPcodeTittle(textConvertionServ.search(component.getPcodeTittle(), langcode));
-				
-				parent_comp a = new parent_comp();
 			
 					List<Component_object>	 select =componentServ.getbyparent(component.getId(), langcode);
 					if(select.size() == 0) {
 						
-						continue;
-					}
-					
-					if(select.size() > 0 ) {
-						a.setParent(component);
-						a.setChild(select);
-						coms.add(a);							
-					}else {
-						if(!component.getParentType().equals("form")) {
-							a.setParent(component);
-					//		a.setChild(select);
-							coms.add(a);									
+						if(coms.size() == 0) {
+							a.setChild(select1);
+							coms.add(a);	
 						}
-						
+						continue;
+					}else {
+						select1.addAll(select);	
+						a.setChild(select1);
+						coms.add(a);	
 					}
+				
 				
 	
 				

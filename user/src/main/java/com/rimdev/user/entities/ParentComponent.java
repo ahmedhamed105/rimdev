@@ -90,6 +90,10 @@ public class ParentComponent implements Serializable {
     private int routingInd;
     @Column(name = "routing_loc", length = 450)
     private String routingLoc;
+    @Column(name = "com_table")
+    private Integer comTable;
+    @Column(name = "com_formid")
+    private Integer comFormid;
     
     
 
@@ -108,7 +112,23 @@ public class ParentComponent implements Serializable {
     
 
     
-    public int getRoutingInd() {
+    public Integer getComFormid() {
+		return comFormid;
+	}
+
+	public void setComFormid(Integer comFormid) {
+		this.comFormid = comFormid;
+	}
+
+	public Integer getComTable() {
+		return comTable;
+	}
+
+	public void setComTable(Integer comTable) {
+		this.comTable = comTable;
+	}
+
+	public int getRoutingInd() {
 		return routingInd;
 	}
 

@@ -12,6 +12,9 @@ public interface ConfigurationRepo  extends CrudRepository<Configuration, Intege
 	
 	@Query(value ="SELECT * FROM rim_user.configuration where Config_key=?1" , nativeQuery = true)
 	Optional<Configuration> findbykey(String key);
+	
+	@Query(value ="SELECT * FROM rim_user.configuration where Config_key=?1" , nativeQuery = true)
+	Iterable<Configuration> findallbykey(String key);
 
 }
 
