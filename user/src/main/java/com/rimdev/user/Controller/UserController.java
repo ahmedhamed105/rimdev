@@ -148,6 +148,9 @@ if(info.getId() !=null) {
           
       	System.out.println(info.toString());
           userLoginServ.update(found,info,langcode);
+          notificationServ.save("User "+info.getUsername()+" updated", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
+
+
 
 		}else {
 			String key = userLoginServ.getkey(info.getPasswordEncy());
@@ -160,6 +163,9 @@ if(info.getId() !=null) {
 			userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
 			String acct_no=accountServ.create_acct(request,dg,user.getUseridnumber(), info.getUsername(), langcode);
 			System.out.println(acct_no);
+			notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
+
+
 		}
 }else {
 	String key = userLoginServ.getkey(info.getPasswordEncy());
@@ -172,10 +178,11 @@ if(info.getId() !=null) {
 	userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
 	String acct_no=accountServ.create_acct(request,dg,user.getUseridnumber(), info.getUsername(), langcode);
 	System.out.println(acct_no);
+	notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
+
+
 }
 
-
-notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
 
 
 info.setPasswordEncy("");
