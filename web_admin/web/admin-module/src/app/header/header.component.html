@@ -58,8 +58,8 @@
     <div class="card card-widget widget-user">
       <!-- Add the bg color to the header using any of the bg-* classes -->
       <div class="widget-user-header bg-info">
-        <h3 class="widget-user-username">{{user === undefined ?'':user.userID.firstName}}</h3>
-        <h5 class="widget-user-desc">{{user === undefined ?'':user.userID.lastname}}</h5>
+        <h3 class="widget-user-username">{{user === undefined ?'':user.firstName}}</h3>
+        <h5 class="widget-user-desc">{{user === undefined ?'':user.lastname}}</h5>
       </div>
       <div class="widget-user-image">
         <img class="img-circle elevation-2" [src]="profileimage" alt="User Avatar">
@@ -115,7 +115,7 @@
         <img [src]="profileimage" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
-        <a href="#" class="d-block">{{user === undefined ?'':user.userID.firstName}}</a>
+        <a href="#" class="d-block">{{user === undefined ?'':user.firstName}}</a>
       </div>
     </div>
 

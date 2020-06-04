@@ -58,6 +58,9 @@ makeid(length) {
 
 
 public encypttext(text):any{
+  if(text === 'Enter password'){
+    return '';
+  }
   var key =  this.makeid(16);
   var iv = CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);
   var salt = CryptoJS.lib.WordArray.random(128/8).toString(CryptoJS.enc.Hex);

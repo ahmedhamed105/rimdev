@@ -66,6 +66,7 @@ public List<Userobject> getall(String langcode) {
 		for (UserLogin user2 : user) {
 			Userobject a= new Userobject();
 			a.setUser(user2.getUserID());
+			user2.setPasswordEncy("Enter password");
 			a.setLogin(user2);
 			ob.add(a);
 		}
@@ -249,9 +250,11 @@ public User Save(HttpServletRequest request,DevicePage devpag,User input,String 
 	}
 
 
-public User update(User input,String langcode) {
+public User update(User old,User input,String langcode) {
 
 	try {	
+		input.setId(old.getId());
+		input.setUsercreate(old.getUsercreate());
 		Date date = new Date();
 		input.setUsermodify(date);
 		User ouput =userRepo.save(input);	

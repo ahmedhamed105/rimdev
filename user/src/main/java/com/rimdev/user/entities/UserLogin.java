@@ -26,7 +26,10 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  *
@@ -35,6 +38,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "user_login", catalog = "rim_user", schema = "")
 @XmlRootElement
+@JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
+@DynamicUpdate
 @NamedQueries({
     @NamedQuery(name = "UserLogin.findAll", query = "SELECT u FROM UserLogin u")
     , @NamedQuery(name = "UserLogin.findById", query = "SELECT u FROM UserLogin u WHERE u.id = :id")
@@ -50,6 +55,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
     , @NamedQuery(name = "UserLogin.findByLoginFailed", query = "SELECT u FROM UserLogin u WHERE u.loginFailed = :loginFailed")
     , @NamedQuery(name = "UserLogin.findByLoginFlag", query = "SELECT u FROM UserLogin u WHERE u.loginFlag = :loginFlag")})
 public class UserLogin implements Serializable {
+	
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -156,7 +162,8 @@ public class UserLogin implements Serializable {
     public void setUsertokean(String usertokean) {
         this.usertokean = usertokean;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getExpiredate() {
         return expiredate;
     }
@@ -164,7 +171,8 @@ public class UserLogin implements Serializable {
     public void setExpiredate(Date expiredate) {
         this.expiredate = expiredate;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getCreatedate() {
         return createdate;
     }
@@ -188,7 +196,8 @@ public class UserLogin implements Serializable {
     public void setPasswordEncy(String passwordEncy) {
         this.passwordEncy = passwordEncy;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getLoginModfiy() {
         return loginModfiy;
     }
@@ -196,7 +205,8 @@ public class UserLogin implements Serializable {
     public void setLoginModfiy(Date loginModfiy) {
         this.loginModfiy = loginModfiy;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getLoginCreate() {
         return loginCreate;
     }
@@ -212,7 +222,8 @@ public class UserLogin implements Serializable {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public String getLoginkey() {
         return loginkey;
     }
@@ -220,7 +231,8 @@ public class UserLogin implements Serializable {
     public void setLoginkey(String loginkey) {
         this.loginkey = loginkey;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Integer getLoginFailed() {
         return loginFailed;
     }
@@ -228,7 +240,8 @@ public class UserLogin implements Serializable {
     public void setLoginFailed(Integer loginFailed) {
         this.loginFailed = loginFailed;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public int getLoginFlag() {
         return loginFlag;
     }
@@ -302,7 +315,8 @@ public class UserLogin implements Serializable {
     public void setGrouppriviledgeID(GroupPriviledge grouppriviledgeID) {
         this.grouppriviledgeID = grouppriviledgeID;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Pages getPagesID() {
         return pagesID;
     }
@@ -310,7 +324,8 @@ public class UserLogin implements Serializable {
     public void setPagesID(Pages pagesID) {
         this.pagesID = pagesID;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public User getUserID() {
         return userID;
     }

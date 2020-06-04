@@ -316,7 +316,7 @@ public UserLogin getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NullPointerException(textConvertionServ.search("E109", langcode));
+				return null;
 			}
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
@@ -395,13 +395,37 @@ public void save(HttpServletRequest request,DevicePage devpag,UserLogin input,St
 
 
 
-public void update(UserLogin input,String langcode) {
+public void update(UserLogin old,UserLogin input,String langcode) {
 	
 	if(input.getUserID() != null || input.getUserID().getId() != null) {
 		User  usero = userServ.getuser(input.getUserID().getId(), langcode);
 		input.setUserID(usero);
 	}
 	
+System.out.println("password "+input.getPasswordEncy());
+	if(input.getPasswordEncy() != null && input.getPasswordEncy().equals("")) {
+		System.out.println("same");
+		input.setPasswordEncy(old.getPasswordEncy());
+		input.setLoginkey(old.getLoginkey());
+	}else {
+		System.out.println("different");
+		String key = getkey(input.getPasswordEncy());
+		String pass = getencpassword(input.getPasswordEncy());
+
+		input.setLoginkey(key);
+		input.setPasswordEncy(pass);
+
+	}
+
+	input.setId(old.getId());
+	input.setCreatedate(old.getCreatedate()); 
+	input.setExpiredate(old.getExpiredate());
+	input.setLoginCreate(old.getLoginCreate());
+	input.setLoginFailed(old.getLoginFailed());
+	input.setLoginFlag(old.getLoginFlag());
+	input.setPagesID(old.getPagesID());
+	input.setUserID(old.getUserID());
+
 	Date date = new Date();
 	input.setLoginModfiy(date);
 	
@@ -414,6 +438,7 @@ public void update(UserLogin input,String langcode) {
     }catch (ScriptException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
+    	se.printStackTrace();
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
     }
 	

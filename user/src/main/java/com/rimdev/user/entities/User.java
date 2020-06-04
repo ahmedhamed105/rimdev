@@ -179,7 +179,8 @@ public class User implements Serializable {
 	public void setiDnumber(String iDnumber) {
 		this.iDnumber = iDnumber;
 	}
-
+    @XmlTransient
+    @JsonIgnore
 	public Date getUsermodify() {
         return usermodify;
     }
@@ -187,7 +188,8 @@ public class User implements Serializable {
     public void setUsermodify(Date usermodify) {
         this.usermodify = usermodify;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public Date getUsercreate() {
         return usercreate;
     }

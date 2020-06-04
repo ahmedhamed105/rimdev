@@ -4,13 +4,15 @@ import java.util.List;
 
 import com.rimdev.user.entities.Application;
 import com.rimdev.user.entities.Notification;
+import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserLogin;
 
 public class loginpra {
 	
 	String usertokean;
 	String username;
-	UserLogin userid;
+	UserLogin userlogin;
+	User userid;
 	Application app;
 	List<Notification> notif;
 	
@@ -60,12 +62,34 @@ public class loginpra {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public UserLogin getUserid() {
+
+
+
+
+	public UserLogin getUserlogin() {
+		return userlogin;
+	}
+
+
+
+
+	public void setUserlogin(UserLogin userlogin) {
+		this.userlogin = userlogin;
+	}
+
+
+
+
+	public User getUserid() {
 		return userid;
 	}
-	public void setUserid(UserLogin userid) {
+
+
+
+
+	public void setUserid(User userid) {
 		this.userid = userid;
-	} 
+	}
 	
 	
 

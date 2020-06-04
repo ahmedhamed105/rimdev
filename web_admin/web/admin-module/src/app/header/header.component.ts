@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit {
       .subscribe(notifdata => {
         this.notif= notifdata;
        // console.log(this.notif);
-      this._ComponentService.getimage(this.user.userID.filesuploadID.id).subscribe(image =>{
+      this._ComponentService.getimage(this.user.filesuploadID.id).subscribe(image =>{
       
       
         if(image.size === 0){

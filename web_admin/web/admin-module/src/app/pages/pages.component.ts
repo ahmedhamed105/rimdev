@@ -144,7 +144,7 @@ export class PagesComponent implements OnInit {
   
     this._ComponentService.getbypage().subscribe(res =>{
 
-      console.log(res);
+    //  console.log(res);
       
 
       res.forEach((parent,indexp) => {
@@ -775,7 +775,7 @@ if(related === 'table'){
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
-     
+  
      if( this.passwordstable[index].length > 0){
 
       this.passwordstable[index].forEach(element => {
@@ -803,9 +803,15 @@ if(related === 'table'){
       });
     
     }
-    //console.log(node)
-    this.rowData[index] = this._usersservice.insertbyurl(node,serv,ip,port);
-    
+    console.log(node)
+    this._usersservice.insertbyurl(node,serv,ip,port).subscribe(
+data =>{
+
+  console.log(data)
+}
+
+    );
+    location.reload();
 
       });
 

@@ -78,14 +78,8 @@ public @ResponseBody ResponseEntity<List<UserLogin>> saveorupdate(HttpServletReq
 List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	System.out.println(info.getPasswordEncy());
-	String key = userLoginServ.getkey(info.getPasswordEncy());
-	String pass = userLoginServ.getencpassword(info.getPasswordEncy());
-//	System.out.println(key);
-	info.setLoginkey(key);
-	info.setPasswordEncy(pass);
-//	System.out.println(pass);
-		
+//	System.out.println(info.getPasswordEncy());
+
 	if(info.getId() !=null) {
 		
 	
@@ -98,7 +92,7 @@ DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pa
             	  userLoginServ.check_username(info.getUsername(),langcode);
               }
 
-              userLoginServ.update(found,langcode);
+              userLoginServ.update(found,info,langcode);
 
 			}
 	}else {

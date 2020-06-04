@@ -110,8 +110,9 @@ public @ResponseBody ResponseEntity<UserLogin> saveorupdate(HttpServletRequest r
 List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
+if(input.getUser().getiDnumber() != null && !input.getUser().getiDnumber().equals("")) {
 input.getUser().setiDnumber(userLoginServ.dencryp(input.getUser().getiDnumber()));
-
+}
 
 User user;
 if(input.getUser().getId() == null) {
@@ -124,9 +125,7 @@ if(input.getUser().getId() == null) {
 			user=userServ.Save(request,dg,input.getUser(),langcode);
 		
 		}else {
-	      input.getUser().setId(user.getId());
-	     user=userServ.update(user,langcode);
-			
+	     user=userServ.update(user,input.getUser(),langcode);		
 		}
 		
 }
@@ -136,37 +135,50 @@ input.getLogin().setUserID(user);
 
 
 UserLogin info =input.getLogin();
-String key = userLoginServ.getkey(info.getPasswordEncy());
-String pass = userLoginServ.getencpassword(info.getPasswordEncy());
 
-info.setLoginkey(key);
-info.setPasswordEncy(pass);
-
-  userLoginServ.check_username(info.getUsername(),langcode);
+  
  
 if(info.getId() !=null) {
 	UserLogin found= userLoginServ.getbyid(info.getId(),langcode);
 		
-		if(found != null) {   
-          info.setId(found.getId());
-          userLoginServ.update(info,langcode);
+		if(found != null) {  
+			if(!found.getUsername().equals(info.getUsername())) {
+				userLoginServ.check_username(info.getUsername(),langcode);	
+			}
+          
+      	System.out.println(info.toString());
+          userLoginServ.update(found,info,langcode);
 
 		}else {
+			String key = userLoginServ.getkey(info.getPasswordEncy());
+			String pass = userLoginServ.getencpassword(info.getPasswordEncy());
+
+			info.setLoginkey(key);
+			info.setPasswordEncy(pass);
+
+			userLoginServ.check_username(info.getUsername(),langcode);
 			userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
-			
+			String acct_no=accountServ.create_acct(request,dg,user.getUseridnumber(), info.getUsername(), langcode);
+			System.out.println(acct_no);
 		}
 }else {
-	
+	String key = userLoginServ.getkey(info.getPasswordEncy());
+	String pass = userLoginServ.getencpassword(info.getPasswordEncy());
+
+	info.setLoginkey(key);
+	info.setPasswordEncy(pass);
+
+	userLoginServ.check_username(info.getUsername(),langcode);
 	userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
-	
+	String acct_no=accountServ.create_acct(request,dg,user.getUseridnumber(), info.getUsername(), langcode);
+	System.out.println(acct_no);
 }
 
 
 notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
 
 
-String acct_no=accountServ.create_acct(request,dg,user.getUseridnumber(), info.getUsername(), langcode);
-System.out.println(acct_no);
+info.setPasswordEncy("");
 
 return new ResponseEntity<UserLogin>(info, HttpStatus.OK);
 

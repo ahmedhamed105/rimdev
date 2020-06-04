@@ -66,7 +66,7 @@ public class ParentComponentServ {
 				a.setParent(component);
 				List<Component_object>	 select1=new ArrayList<Component_object>();
 				
-				System.out.println("call "+component.getId());
+				//System.out.println("call "+component.getId());
 				
 				if(component.getComTable() == 1 && component.getComFormid() != null) {
 					
