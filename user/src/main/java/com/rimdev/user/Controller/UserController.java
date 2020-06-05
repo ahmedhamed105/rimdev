@@ -29,6 +29,7 @@ import com.rimdev.user.Services.ConfigurationServ;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.NotificationServ;
 import com.rimdev.user.Services.TextConvertionServ;
+import com.rimdev.user.Services.UserFileServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Services.UserServ;
 import com.rimdev.user.Utils.ObjectUtils;
@@ -62,6 +63,10 @@ public class UserController {
 	
 	@Autowired
 	AccountServ accountServ;
+	
+	@Autowired
+	UserFileServ userFileServ;
+	
 	
 
 	
@@ -233,21 +238,21 @@ DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pa
 
 
 
-@RequestMapping(value = "/filebyuser/{langcode}/{id}", method = RequestMethod.GET)
-public @ResponseBody ResponseEntity<List<UserFile>> savefile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id") String userid) {
+@RequestMapping(value = "/filebyuser/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<UserFile>> savefile(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Userobject input) {
  
 	  List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
-paramter.add("id");
-values.add(String.valueOf(userid));	
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 	// This returns a JSON or XML with the users
 //System.out.println("enter 1");
 //System.out.println(input.getFirstName());
-	System.out.println(userid);
+	System.out.println(input.getLogin().getId());
 	
-	List<UserFile> out= userServ.getfile(userid, langcode);
+	List<UserFile> out= userFileServ.getfilebyuser(input.getLogin(), langcode);
+	
+
 	
 	 return new ResponseEntity<List<UserFile>>(out, HttpStatus.OK);
 

@@ -227,6 +227,7 @@ let headers = new HttpHeaders({
    this._usersservice.getbyvalue(url,userid,ip,port).subscribe(
         
         data => {
+          console.log(data)
           
           data.forEach(singlefile => {
 

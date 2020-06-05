@@ -359,27 +359,7 @@ public FilesUpload deletefile(String fileid,String object, String componentid,St
 
 
 
-public List<UserFile> getfile(String userid,String langcode) {
-	
 
-	try {
-    User user=getuser(Integer.parseInt(userid), langcode);
-    
-    
-	return	userFileServ.getfilebyuser(user, langcode);
-		
-	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }
-	
-	
-}
 
 
 

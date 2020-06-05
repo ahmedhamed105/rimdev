@@ -831,12 +831,13 @@ data =>{
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
-        if(related === 'form'){
+      
       //  console.log(node)
         if(this.isfile){
         this.fileupload.clearQueue();
-        this.fileupload.addfilesuser(serv,node[para],node[para],ip,port);
-        this.file[index].forEach(element => {
+        this.fileupload.addfilesuser(serv,node,node,ip,port);
+
+        this.file[relcom].forEach(element => {
 
           if(element.comp.parentGroup != null && element.comp.groupname != null){
             this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValidators([]);
@@ -852,13 +853,12 @@ data =>{
             this.insertform[relcom].get(element.comp.name).updateValueAndValidity();
           }
           
-        //  this.insertform[relcom].get(element).setValidators([]);
-       //   this.insertform[relcom].get(element).updateValueAndValidity();
+  
         });
 
         }
 
-        this.dates[index].forEach(element => {
+        this.dates[relcom].forEach(element => {
           var value;
           var nodetmp;
         
@@ -883,9 +883,7 @@ data =>{
         });
        
           this.insertform[relcom].patchValue(node);
-      }else if(related === 'table'){
-        this.rowData[relcom] = this._usersservice.getbyvalue(serv,node[para],ip,port);
-      }
+      
 
 
       });

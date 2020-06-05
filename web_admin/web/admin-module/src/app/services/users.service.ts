@@ -43,18 +43,18 @@ export class UsersService {
 
 
       getbyvalue(url,value,ip,port):Observable<[]>{
-        var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language+"/";
-        urlall=urlall+value;
+        var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
         let headers = new HttpHeaders({
           'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-            'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-            'username':   GlobalConstants.USERNAME,
-            'usertokean': GlobalConstants.USERTOKEANkey,
-            'pageid': GlobalConstants.pageid,
-            'Devicecode': GlobalConstants.PCCODE });
+              'Pragma': 'no-cache',
+              'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
+              'username':   GlobalConstants.USERNAME,
+              'usertokean': GlobalConstants.USERTOKEANkey,
+              'pageid': GlobalConstants.pageid,
+              'Devicecode': GlobalConstants.PCCODE});
           let options = { headers: headers };
-        return  this._http.get<[]>(urlall,options);  
+        //  console.log(options)
+        return this._http.post<any>(urlall,value,options);    
         }
 
         postbythreevalue(url,value1,value2,value3,ip,port):Observable<[]>{

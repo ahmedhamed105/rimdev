@@ -80,7 +80,7 @@ public void delete(User user,FilesUpload file,Component com,String langcode) {
 	
 	
 	
-	public List<UserFile> getfilebyuser(User user,String langcode) {
+	public List<UserFile> getfilebyuser(UserLogin user,String langcode) {
 		
 		try {	
 			List<UserFile> userfileList= (List<UserFile>)userFileRepo.findbyuser(user.getId());
