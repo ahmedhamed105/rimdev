@@ -78,14 +78,12 @@ public class Currency implements Serializable {
     @ManyToOne(optional = false)
     private AllStatus allstatusID;
     
-    private String error;
-
+    
     public Currency() {
     }
 
-    public Currency(Integer id,String error) {
+    public Currency(Integer id) {
         this.id = id;
-        this.error = error;
     }
     
     public AllStatus getAllstatusID() {
@@ -115,14 +113,6 @@ public class Currency implements Serializable {
         this.effectiveDate = effectiveDate;
     }
   
-    public String getError() {
-		return error;
-	}
-
-	public void setError(String error) {
-		this.error = error;
-	}
-
 
 
     public Integer getId() {

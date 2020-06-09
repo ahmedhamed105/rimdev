@@ -125,7 +125,7 @@ public class GroupWebServ {
 				//System.out.println(validsd);
 				
 				if(!validsd) {
-					  String text= "webservice : "+ page.getPagesID().getPagename()+" No priviledge for user : "+page.getUserloginID().getUsername() +" group "+group.getGroupname()+" is closed";
+					  String text= "webservice : "+ page.getPagesID().getPagename()+" No priviledge for user : "+page.getUserloginID().getUsername() +" group "+group.getGroupname();
 					  logServ.errorlog(page.getDeviceId().getDeviceip(),request,text, page.getDeviceId(), page.getUserloginID().getId(), 15, langcode," ");					
 						
 				 throw new PopupException(textConvertionServ.search("E101", langcode));

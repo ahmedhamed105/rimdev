@@ -69,18 +69,16 @@ public class ParentComponentServ {
 				//System.out.println("call "+component.getId());
 				
 				if(component.getComTable() == 1 && component.getComFormid() != null) {
-					
-			
-					
-					
-					List<Component_object>	 select =componentServ.getbyparent(component.getComFormid(), langcode);
-				for (Component_object comp : select) {
-					if(comp.getButton().getId() != null) {
 
+					List<Component_object>	 select =componentServ.getbyparent(component.getComFormid(), langcode);
+			
+					for (Component_object comp : select) {
+					if(comp.getButton().getId() != null) {
+				
 					}else {
 						 if(comp.getInput().getId() != null && configurationServ.getlist("input_comp_not_include_table").contains(comp.getInput().getInputtypeID().getId())) {	
-								
-							}else {
+							
+						 }else {
 								select1.add(comp);	
 							}
 					
@@ -94,11 +92,10 @@ public class ParentComponentServ {
 			
 					List<Component_object>	 select =componentServ.getbyparent(component.getId(), langcode);
 					if(select.size() == 0) {
+					
+					  a.setChild(select1);
+					  coms.add(a);	
 						
-						if(coms.size() == 0) {
-							a.setChild(select1);
-							coms.add(a);	
-						}
 						continue;
 					}else {
 						select1.addAll(select);	

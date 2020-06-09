@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Services.AccountServ;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.NotificationServ;
+import com.rimdev.user.Services.TextConvertionServ;
 import com.rimdev.user.Services.UserFileServ;
 import com.rimdev.user.Services.UserLoginServ;
 import com.rimdev.user.Services.UserServ;
@@ -58,18 +59,26 @@ public class UserController {
 	UserFileServ userFileServ;
 	
 	
+	@Autowired
+	TextConvertionServ textConvertionServ;
+	
 
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<Userobject>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
+try {
+	  List<String> paramter =new ArrayList<String>();
+	  List<String> values =new ArrayList<String>();
+	  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-		  List<String> paramter =new ArrayList<String>();
-		  List<String> values =new ArrayList<String>();
-		  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	  return new ResponseEntity<List<Userobject>>(userServ.getall(langcode), HttpStatus.OK);
 
-		  return new ResponseEntity<List<Userobject>>(userServ.getall(langcode), HttpStatus.OK);
-	  }
+} catch (Exception e) {
+	// TODO: handle exception
+	throw new PopupException(textConvertionServ.search("no_data", langcode));
+}
+			  }
 	  
 	  
 	  

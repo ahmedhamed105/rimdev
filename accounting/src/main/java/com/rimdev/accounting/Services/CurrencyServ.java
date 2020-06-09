@@ -1,14 +1,9 @@
 package com.rimdev.accounting.Services;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.NonTransientDataAccessException;
 import org.springframework.dao.RecoverableDataAccessException;
@@ -16,12 +11,9 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.accounting.Enttities.Account;
 import com.rimdev.accounting.Enttities.Currency;
-import com.rimdev.accounting.Enttities.FlowType;
-import com.rimdev.accounting.Exception.NoDataException;
+import com.rimdev.accounting.Exception.PopupException;
 import com.rimdev.accounting.Repo.CurrencyRepo;
-import com.rimdev.accounting.Utils.ObjectUtils;
 
 @Service
 public class CurrencyServ {
@@ -36,16 +28,16 @@ public class CurrencyServ {
 		return (List<Currency>) currencyRepo.findAll();
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (ScriptException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (NonTransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}
 	}
 	
@@ -65,16 +57,16 @@ public class CurrencyServ {
 				}
 		} catch (TransientDataAccessException  se) {
 			se.printStackTrace();
-			throw new NoDataException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
 	    	se.printStackTrace();
-			throw new NoDataException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
 	    	se.printStackTrace();
-			throw new NoDataException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
 	    	se.printStackTrace();
-			throw new NoDataException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }
 	}
 	
@@ -91,16 +83,16 @@ public Currency Save(Currency input,String langcode) {
 		return ouput;
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (ScriptException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (NonTransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}		
 		
 	}
@@ -115,16 +107,16 @@ public Currency update(Currency input,String langcode)  {
 		return ouput1;
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (ScriptException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (NonTransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}	
 	
 	

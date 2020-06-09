@@ -4,12 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.NonTransientDataAccessException;
-import org.springframework.dao.RecoverableDataAccessException;
-import org.springframework.dao.TransientDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.accounting.Enttities.FlowType;
-import com.rimdev.accounting.Exception.NoDataException;
 import com.rimdev.accounting.Services.FlowTypeServ;
 import com.rimdev.accounting.Services.TextConvertionServ;
 import com.rimdev.accounting.Utils.ObjectUtils;

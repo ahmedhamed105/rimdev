@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rimdev.accounting.Enttities.Account;
 import com.rimdev.accounting.Services.AccountProcessServ;
 import com.rimdev.accounting.Services.AccountServ;
+import com.rimdev.accounting.Services.ExternalServ;
 import com.rimdev.accounting.inputobject.Acct_obj;
 import com.rimdev.accounting.inputobject.authobject;
 import com.rimdev.accounting.inputobject.authouput;
@@ -40,45 +41,18 @@ public class AccountController {
 	@Autowired
 	AccountProcessServ accountProcessServ;
 	
+	@Autowired
+	ExternalServ externalServ;
+	
 
 	
 	@RequestMapping(value = "/create/{langcode}", method = RequestMethod.POST)
 	  public  @ResponseBody ResponseEntity<Acct_obj> create_account(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Acct_obj acct) {
 	    // This returns a JSON or XML with the users
-		  try {
-		  RestTemplate restTemplate = new RestTemplate();
-		  ObjectMapper mapper = new ObjectMapper();
-		  authobject auth=new authobject();
-		  auth.setRequestip(request.getRemoteAddr());
-		  auth.setRequestURL(request.getRequestURI().toString());
-		  auth.setDevicecode(Devicecode);
-		  auth.setLangcode(langcode);
-		  auth.setPagenum(pagenum);
-		  auth.setUsername(username);
-		  auth.setUsertokean(usertokean);
-		  auth.setParamter(new ArrayList<>());
-		  auth.setValues(new ArrayList<>());  
-		  auth.setLogtext("Account in processing");
-		  auth.setInfo(true);
-		  auth.setLogtype(33);
-		  auth.setLogException("");
-		  final HttpHeaders headers = new HttpHeaders();
-		    headers.setContentType(MediaType.APPLICATION_JSON);
-		 // set `accept` header
-		 headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-		     System.out.println(mapper.writeValueAsString(auth));
-
-		    //Create a new HttpEntity
-		    
-				HttpEntity<String> entity = new HttpEntity<String>(mapper.writeValueAsString(auth),headers);
-			
-			
 		  
-		  ResponseEntity<authouput> okl = restTemplate.postForEntity("http://localhost:8081/Auth/log/"+langcode,entity, authouput.class);
-
+		boolean result=  externalServ.Log(request, Devicecode, username, usertokean, pagenum, langcode, "account in processing", "", 33, 0);
 		
-		if(okl.getStatusCodeValue() == 200) {
+		if(result) {
 			
 			return new ResponseEntity<Acct_obj>(accountProcessServ.create_acct(acct), HttpStatus.OK);
 	
@@ -89,12 +63,7 @@ public class AccountController {
 			
 		}
 		
-		     } catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return new ResponseEntity<Acct_obj>(new Acct_obj(), HttpStatus.NOT_ACCEPTABLE);
-
-				}
+		    
 				
 	  }
 	

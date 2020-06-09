@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.accounting.Enttities.FlowType;
-import com.rimdev.accounting.Exception.NoDataException;
+import com.rimdev.accounting.Exception.PopupException;
 import com.rimdev.accounting.Repo.FlowTypeRepo;
 
 @Service
@@ -30,16 +30,16 @@ public List<FlowType> getall(String langcode) {
 		return (List<FlowType>) flowTypeRepo.findAll();
 } catch (TransientDataAccessException  se) {
 	se.printStackTrace();
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
 	se.printStackTrace();
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
 	se.printStackTrace();
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
 	se.printStackTrace();
-	throw new NoDataException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }
 		
 	}
@@ -64,16 +64,16 @@ public FlowType getflow(int id,String langcode) {
 			}
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 }
 
@@ -90,16 +90,16 @@ public FlowType Save(FlowType input,String langcode){
 		return ouput;
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	}
 
@@ -114,16 +114,16 @@ public FlowType update(FlowType input,String langcode)  {
 		return ouput1;
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
     	se.printStackTrace();
-		throw new NoDataException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	
