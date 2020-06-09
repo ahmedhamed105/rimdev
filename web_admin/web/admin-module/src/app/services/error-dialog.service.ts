@@ -4,6 +4,7 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { LanguagegoService } from './languagego.service';
 import { GlobalConstants } from '../GlobalConstants';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 
 @Injectable({
@@ -30,6 +31,17 @@ export class ErrorDialogService {
             let animal;
             animal = result;
         });
+    }
+
+
+
+    display_sucess(text){
+      let data1 = {
+        reason: text ,
+        status: 400
+      };
+      this.openDialog(data1);
+
     }
 
 
@@ -64,7 +76,7 @@ window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
 
 
 
-   public formaterror(error,map,field,date){
+   public formaterror(error,map,field,date,user){
 
     if(error === undefined){
       error='error';
@@ -74,9 +86,13 @@ if(map != null){
  // console.log(typeof(map))
   if(typeof(map)==='string'){
     error =error.replace('data',map);
+    error =error.replace("{{","");
+    error =error.replace("}}","");
   }else{
     for (let [key, value] of map.entries()) {
       error =error.replace(key,value);
+      error =error.replace("{{","");
+      error =error.replace("}}","");
   }
 
   }
@@ -88,17 +104,26 @@ if(field != null){
   field='field';
 }
   error =error.replace('field',field);
+  error =error.replace("{{","");
+
+  error =error.replace("}}","");
 }
 
 if(date != null){
-  error =error.replace('date',date);
+  error =error.replace('date',formatDate(date, GlobalConstants.formatlogin, GlobalConstants.locale));
+  error =error.replace("{{","");
+
+  error =error.replace("}}","");
 }
 
 
 
-       error =error.replace("{{","");
+if(user != null){
+  error =error.replace('user',user);
+  error =error.replace("{{","");
 
-      error =error.replace("}}","");
+  error =error.replace("}}","");
+}
 
 
 return error;

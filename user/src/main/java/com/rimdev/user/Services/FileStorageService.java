@@ -350,7 +350,7 @@ public class FileStorageService {
 	    
 	    
 	    
-	    public void deleteFile(int fileid,String langcode) {
+	    public void changestatustoclose(int fileid,String langcode) {
 	    //	System.out.println("load");
 	    	
 	    	FilesUpload filedel=getfilebyid(fileid,langcode);

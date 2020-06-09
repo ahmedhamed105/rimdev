@@ -40,7 +40,7 @@ export class LoginpageComponent implements OnInit {
 
   public pagenumber = 12;
 
-  constructor(private spinnerService: SpinnerService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private cookieService: CookiesService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
+  constructor(private _ErrorDialogService :ErrorDialogService,private spinnerService: SpinnerService,private renderer:Renderer2,private elementRef: ElementRef,private _MenushareService:MenushareService,private cookieService: CookiesService,private _EncryptionService:EncryptionService,private fileupload: FileUploaderService,public _ComponentService: ComponentService,public errorDialogService: ErrorDialogService ,private locationService: LocationServiceService,private fb:FormBuilder,private _usersservice:UsersService){}
 
   insertform :FormGroup []=[];
   tmpform :FormGroup;
@@ -758,7 +758,7 @@ if(group != null){
 
 
 
-onSubmit(index,form,serv,related,relcom,ip,port,routingInd,routingLoc){
+onSubmit(index,form,serv,related,relcom,ip,port,routingInd,routingLoc,alert,message){
 
   
 
@@ -827,9 +827,18 @@ onSubmit(index,form,serv,related,relcom,ip,port,routingInd,routingLoc){
   
        }
 
+       if(alert === 1){
+        this.errorDialogService.display_sucess(this._ErrorDialogService.formaterror(message,null,null,Date.now(),data['username']));
+      }
+
        if(routingInd === 1){
-        window.location.replace(routingLoc);
+        setTimeout(() => {
+          window.location.replace(routingLoc);
+       }, 2000);
+     
        }
+
+       
 
     },
     error=>{

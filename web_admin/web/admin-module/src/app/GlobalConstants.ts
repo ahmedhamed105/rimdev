@@ -15,6 +15,7 @@ export class GlobalConstants {
     public static urladd: string = '/file/uploadFile';
     public static urldownload: string = '/file/downloadFile';
     public static format: string = 'yyyy-MM-dd';
+    public static formatlogin: string = 'yyyy-MM-dd hh:mm:ss';
     public static locale: string = 'en-US';
     public static Devicetype: string = '/DeviceType/dataall';
     public static logintype: string = '/Logintype/dataall';

@@ -154,7 +154,8 @@ public class UserLogin implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
+    @XmlTransient
+    @JsonIgnore
     public String getUsertokean() {
         return usertokean;
     }

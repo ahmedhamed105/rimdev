@@ -80,13 +80,13 @@ public class FilesController {
 	
     	List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
-	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+	  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
     	
     	FilesUpload result = new FilesUpload();
     	
     	try {
-			fileStorageService.deleteFile(fileid,langcode); 
+			fileStorageService.changestatustoclose(fileid,langcode); 
 		} catch (Exception e) {
 			// TODO: handle exception
 			

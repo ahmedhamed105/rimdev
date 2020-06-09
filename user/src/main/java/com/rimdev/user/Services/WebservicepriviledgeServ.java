@@ -85,6 +85,16 @@ public class WebservicepriviledgeServ {
 	}
 
 	
+	public  String makeUrlexternal(String URL,List<String> paramter,List<String> values)
+	{
+
+		for (String val : values) {	
+			URL = URL.replace(val,"{"+ paramter.get(values.indexOf(val))+"}");
+		}
+
+	    return URL;
+	}
+	
 	
 	
 }

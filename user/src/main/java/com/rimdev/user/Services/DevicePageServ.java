@@ -54,6 +54,23 @@ public class DevicePageServ {
 	@Autowired
 	GroupPagesServ groupPagesServ;
 	
+public DevicePage check_webservice_external(HttpServletRequest request,String url,String tokean,String username,String pageid,String langcode,String devicecode,List<String> paramter,List<String> values) {
+		
+		DevicePage devpage=getdevicepage(request, tokean, username, pageid, langcode,devicecode);
+		
+		userLoginServ.check_userlogin_without(request, devpage.getDeviceId(), devpage.getPagesID(), username, tokean, langcode);
+		
+		groupPagesServ.check_page(request,devpage, langcode);
+		
+		  paramter.add("langcode");
+		  values.add(langcode);
+		  
+		  groupWebServ.checkpriviledgeexternal(request,url ,devpage,paramter,values);
+		  
+		  return devpage;
+	}
+	
+	
 	public DevicePage check_webservice(HttpServletRequest request,String tokean,String username,String pageid,String langcode,String devicecode,List<String> paramter,List<String> values) {
 		
 		DevicePage devpage=getdevicepage(request, tokean, username, pageid, langcode,devicecode);

@@ -425,6 +425,7 @@ System.out.println("password "+input.getPasswordEncy());
 	input.setLoginFlag(old.getLoginFlag());
 	input.setPagesID(old.getPagesID());
 	input.setUserID(old.getUserID());
+	input.setUsertokean(old.getUsertokean());
 
 	Date date = new Date();
 	input.setLoginModfiy(date);

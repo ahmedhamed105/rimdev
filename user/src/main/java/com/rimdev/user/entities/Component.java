@@ -101,6 +101,9 @@ public class Component implements Serializable {
     private String requiredError;
     @Column(name = "patern_error", length = 450)
     private String paternError;
+    @Basic(optional = false)
+    @Column(name = "visible", nullable = false)
+    private int visible;
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
@@ -134,7 +137,15 @@ public class Component implements Serializable {
     
    
     
-    public String getRequiredError() {
+    public int getVisible() {
+		return visible;
+	}
+
+	public void setVisible(int visible) {
+		this.visible = visible;
+	}
+
+	public String getRequiredError() {
 		return requiredError;
 	}
 

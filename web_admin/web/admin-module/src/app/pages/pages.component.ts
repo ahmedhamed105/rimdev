@@ -19,6 +19,7 @@ import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
 import { MenushareService } from '../share_data/menushare.service';
 import { SpinnerService } from '../services/spinner.service';
+import { IfStmt } from '@angular/compiler';
 
 
 @Component({
@@ -761,7 +762,7 @@ if(related === 'table'){
   }
 
 
-  tableaction(serv,para,index,related,relcom,ip,port){
+  tableaction(serv,para,index,related,relcom,ip,port,alert,message){
 
    // console.log(this.gridOptions[index])
     const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
@@ -811,14 +812,21 @@ data =>{
 }
 
     );
-    location.reload();
+
+    if(alert === 1){
+
+      this.errorDialogService.display_sucess(message);
+    }
+
+
+    this.rowData[relcom] = this._usersservice.getbyvalue(serv,node,ip,port);
 
       });
 
   }
 
 
-  displayupdate(serv,para,index,related,relcom,ip,port){
+  displayupdate(serv,para,index,related,relcom,ip,port,alert,message){
  //console.log(this.gridOptions)
     const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
 
@@ -883,7 +891,10 @@ data =>{
         });
        
           this.insertform[relcom].patchValue(node);
-      
+          if(alert === 1){
+
+            this.errorDialogService.display_sucess(message);
+          }
 
 
       });
@@ -893,7 +904,7 @@ data =>{
 
   
 
-onSubmit(index,form,serv,related,relcom,ip,port){
+onSubmit(index,form,serv,related,relcom,ip,port,alert,message){
 
   if( this.passwords[index].length > 0){
 
@@ -947,8 +958,11 @@ console.log(form.value);
         }
       }
   
+if(alert === 1){
 
-     
+  this.errorDialogService.display_sucess(message);
+}
+ 
 
       form.reset();
 
@@ -960,7 +974,7 @@ console.log(form.value);
 }
 
 
-resetform(index,form,serv,related,relcom){
+resetform(index,form,serv,related,relcom,alert,message){
   if(this.isfile){
     this.fileupload.clearQueue();
 

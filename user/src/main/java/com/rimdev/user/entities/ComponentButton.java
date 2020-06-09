@@ -72,6 +72,10 @@ public class ComponentButton implements Serializable {
     private String methodParamter;
     @Column(name = "disable", nullable = false)
     private int disable;
+    @Column(name = "alert_after")
+    private Integer alertAfter;
+    @Column(name = "sucess_message", length = 900)
+    private String sucessMessage;
 
     public ComponentButton() {
     }
@@ -87,7 +91,25 @@ public class ComponentButton implements Serializable {
     }
     
     
-    public int getDisable() {
+    
+    
+    public Integer getAlertAfter() {
+		return alertAfter;
+	}
+
+	public void setAlertAfter(Integer alertAfter) {
+		this.alertAfter = alertAfter;
+	}
+
+	public String getSucessMessage() {
+		return sucessMessage;
+	}
+
+	public void setSucessMessage(String sucessMessage) {
+		this.sucessMessage = sucessMessage;
+	}
+
+	public int getDisable() {
         return disable;
     }
 

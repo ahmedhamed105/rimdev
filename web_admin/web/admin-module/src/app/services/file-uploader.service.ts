@@ -117,7 +117,7 @@ export class FileUploaderService {
     if(filescount > filecount){
       let map = new Map();
       map.set("filecount",filecount); 
-      alert(this._ErrorDialogService.formaterror(fileCounterr,map,null,null));
+      alert(this._ErrorDialogService.formaterror(fileCounterr,map,null,null,null));
       return false;
   
     }
@@ -126,7 +126,7 @@ export class FileUploaderService {
     if(filetypes.length <= 0){
       let map = new Map();
       map.set("wrongtype",'unsupported');
-      alert(this._ErrorDialogService.formaterror(fileTypeerror,map,null,null));
+      alert(this._ErrorDialogService.formaterror(fileTypeerror,map,null,null,null));
       return false;
     }else{
   
@@ -141,7 +141,7 @@ export class FileUploaderService {
       if(count <= 0){
         let map = new Map();
         map.set("wrongtype",data[0].type); 
-        alert(this._ErrorDialogService.formaterror(fileTypeerror,map,null,null));
+        alert(this._ErrorDialogService.formaterror(fileTypeerror,map,null,null,null));
         return false;
       }
   
@@ -154,7 +154,7 @@ export class FileUploaderService {
     if (data[0].size > maxfilesize) {
       let map = new Map();
       map.set("maxfilesize",maxfilesize); 
-      alert(this._ErrorDialogService.formaterror(fileSizeerr,map,null,null));
+      alert(this._ErrorDialogService.formaterror(fileSizeerr,map,null,null,null));
        return false;
    }
 
@@ -231,6 +231,8 @@ let headers = new HttpHeaders({
           
           data.forEach(singlefile => {
 
+            console.log(singlefile)
+
             var file= {name : singlefile['filesuploadID']['filesName'],size : singlefile['filesuploadID']['filesSize']*1024}
          
 
@@ -247,23 +249,21 @@ let headers = new HttpHeaders({
             queueObj.filename = singlefile['filesuploadID']['filesName'];
             queueObj.fileid = singlefile['filesuploadID']['id'];
             queueObj.componentid = singlefile['componentID']['id'];
-            queueObj.object = delteobject;
+            queueObj.object = singlefile["userloginID"]["id"];
 
                // push to the queue
-               if(this._files[singlefile['componentID']['id']] === undefined){
-                this._files[singlefile['componentID']['id']] = [];
+               if(this._files[queueObj.componentid] === undefined){
+                this._files[queueObj.componentid] = [];
                }
-               if(this._queue[singlefile['componentID']['id']] === undefined){
+               if(this._queue[queueObj.componentid] === undefined){
 
-                this._queue[singlefile['componentID']['id']] = <BehaviorSubject<FileQueueObject[]>>new BehaviorSubject(this._files[singlefile['componentID']['id']]);
+                this._queue[queueObj.componentid] = <BehaviorSubject<FileQueueObject[]>>new BehaviorSubject(queueObj.componentid);
                }
            
-               this._files[singlefile['componentID']['id']].push(queueObj);
-               this._queue[singlefile['componentID']['id']].next(this._files[singlefile['componentID']['id']]); 
+               this._files[queueObj.componentid].push(queueObj);
+               this._queue[queueObj.componentid].next(this._files[queueObj.componentid]); 
   
             });
-           console.log(this.queue(36))
-            return  this.queue(36);
         });
 
       

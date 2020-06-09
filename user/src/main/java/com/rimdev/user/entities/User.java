@@ -71,9 +71,9 @@ public class User implements Serializable {
     @Column(name = "birthdate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date birthdate;
-    @Column(name = "User_id_number", length = 45)
+    @Column(name = "User_id_number", length = 450)
     private String useridnumber;
-    @Column(name = "Passport_number", length = 45)
+    @Column(name = "Passport_number", length = 450)
     private String passportnumber;
     @Column(name = "ID_number", length = 45)
     private String iDnumber;

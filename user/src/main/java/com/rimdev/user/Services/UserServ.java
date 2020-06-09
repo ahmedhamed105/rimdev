@@ -250,29 +250,49 @@ public User Save(HttpServletRequest request,DevicePage devpag,User input,String 
 	}
 
 
-public User update(User old,User input,String langcode) {
+public User update(HttpServletRequest request,DevicePage devpag,User old,User input,String langcode) {
 
 	try {	
 		input.setId(old.getId());
 		input.setUsercreate(old.getUsercreate());
+		if(input.getFilesuploadID() == null || input.getFilesuploadID().getId() == null) {
+			input.setFilesuploadID(old.getFilesuploadID());			
+		}
 		Date date = new Date();
 		input.setUsermodify(date);
 		User ouput =userRepo.save(input);	
+		
+		String text= "user entity "+input.getFirstName()+" updated by "+devpag.getUserloginID().getUsername();
+		logServ.info(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode," ");		
+    	
+		
 		return ouput;
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }		
 		
 	}
 
 
-public FilesUpload savefile(threevalues input,String langcode) {
+public FilesUpload savefile(HttpServletRequest request,DevicePage devpag,threevalues input,String langcode) {
 
 	try {
 		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
@@ -281,19 +301,31 @@ public FilesUpload savefile(threevalues input,String langcode) {
 		UserLogin userlog=userLoginServ.getuserlogin(Integer.parseInt(input.getValue1()), langcode);
 	
 		
-		userFileServ.Save(userlog, file,com, langcode);
+		userFileServ.Save(request,devpag,userlog, file,com, langcode);
 		
 		return file;
 		
 	
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	
@@ -301,7 +333,7 @@ public FilesUpload savefile(threevalues input,String langcode) {
 
 
 
-public FilesUpload saveprofilefile(threevalues input,String langcode) {
+public FilesUpload saveprofilefile(HttpServletRequest request,DevicePage devpag,threevalues input,String langcode) {
 
 	try {
 		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
@@ -311,20 +343,37 @@ public FilesUpload saveprofilefile(threevalues input,String langcode) {
 	
 		
 		userlog.getUserID().setFilesuploadID(file);
-		
+		System.out.println("here");
+		userFileServ.delete(request,devpag,userlog,com, langcode);
+		System.out.println("here1");
+		userFileServ.Save(request,devpag,userlog, file,com, langcode);
+		System.out.println("here2");
 		userRepo.save(userlog.getUserID());
 		
 		return file;
 		
 	
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    	
+    	String text= "user entity "+input.toString()+" not created by "+devpag.getUserloginID().getUsername();
+		logServ.errorlog(devpag.getDeviceId().getDeviceip(),request,text, devpag.getDeviceId(), devpag.getUserloginID().getId(),  32, langcode,se.getMessage());		
+    	
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	
@@ -333,16 +382,16 @@ public FilesUpload saveprofilefile(threevalues input,String langcode) {
 
 
 
-public FilesUpload deletefile(String fileid,String object, String componentid,String langcode) {
+public FilesUpload deletefile(HttpServletRequest request,DevicePage devpag,String fileid,String object, String componentid,String langcode) {
 	
-	User user=getuser(Integer.parseInt(object), langcode);
+	UserLogin user=userLoginServ.getuserlogin(Integer.parseInt(object), langcode);
 	FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(fileid), langcode);
 	Component com=componentServ.getComponentbyid(Integer.parseInt(componentid), langcode);
 	
 	try {
-		fileStorageService.deleteFile(file.getId(),langcode); 
+		fileStorageService.changestatustoclose(file.getId(),langcode); 
 		
-		userFileServ.delete(user, file,com, langcode);
+		userFileServ.deletefile(request,devpag,user, file,com, langcode);
 		
 	} catch (TransientDataAccessException  se) {
 		throw new NullPointerException(textConvertionServ.search("E104", langcode));
