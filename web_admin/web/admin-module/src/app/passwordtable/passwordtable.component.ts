@@ -72,24 +72,25 @@ export class PasswordtableComponent implements AgRendererComponent{
 
     var value =this.params.data;
 
+    this.tmpform = this.jform[this.params.colDef.formnum];
+
     if(this.params.colDef.parentgroup != null){
       this.jform[this.params.colDef.formnum].addControl(this.params.colDef.parentgroup, new FormGroup({}));
      
       this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup) as FormGroup;
-    
+      value=value[this.params.colDef.parentgroup]
+    }
       if(this.params.colDef.groupname != null){
         this.tmpform.addControl(this.params.colDef.groupname, new FormGroup({}));;
        // this.tmpform = this.jform[this.params.coldef.formnum].get(this.params.colDef.groupname) as FormGroup;
-       this.tmpform = this.jform[this.params.colDef.formnum].get(this.params.colDef.parentgroup).get(this.params.colDef.groupname) as FormGroup;
-       
+       this.tmpform = this.tmpform.get(this.params.colDef.groupname) as FormGroup;
+       value=value[this.params.colDef.groupname];
         
       }
-    }else{
 
-      this.tmpform = this.jform[this.params.colDef.formnum];
-    }
   
-    value = value[this.params.colDef.parentgroup][this.params.colDef.field];
+      value=value[this.params.colDef.field];
+
     this.tmpform.addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
 
   }
