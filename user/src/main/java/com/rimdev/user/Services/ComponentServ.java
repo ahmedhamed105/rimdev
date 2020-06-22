@@ -19,6 +19,8 @@ import com.rimdev.user.entities.ComponentFile;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
 import com.rimdev.user.entities.FileType;
+import com.rimdev.user.entities.RelationComp;
+import com.rimdev.user.entities.RelationType;
 import com.rimdev.user.ouputobject.Component_object;
 
 @Service
@@ -41,6 +43,9 @@ public class ComponentServ {
 	
 	@Autowired
 	ComponentFileServ componentFileServ;
+	
+	@Autowired
+	RelationCompServ relationCompServ;
 	
 
 	
@@ -68,6 +73,7 @@ public class ComponentServ {
 				ComponentInput input=new ComponentInput();
 				ComponentButton button=new ComponentButton();
 				List<FileType> filetype=new ArrayList<>();
+				List<RelationComp> rel=new ArrayList<>();
 				
 				
 				component.setCcode(textConvertionServ.search(component.getCcode(), langcode));
@@ -76,6 +82,13 @@ public class ComponentServ {
 				}
 				if(component.getPaternError() != null) {
 				 component.setPaternError(textConvertionServ.search(component.getPaternError(), langcode));	
+				}
+				
+				try {
+					rel=relationCompServ.getbycomponent(component.getId(), langcode);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
 				}
 				
 
@@ -122,6 +135,7 @@ public class ComponentServ {
 				a.setInput(input);
 				a.setButton(button);
 				a.setAllowfiletype(filetype);
+				a.setRel(rel);
 				coms.add(a);
 				
 			}

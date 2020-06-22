@@ -66,7 +66,7 @@ public class UserController {
 	
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Userobject>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Userobject>> getAll(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 try {
 	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
@@ -107,8 +107,8 @@ try {
 	  
 	 
 
-@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<UserLogin> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Userobject input) {
+@RequestMapping(value = "/save/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Userobject>> save(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Userobject input) {
 	
 	List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
@@ -118,46 +118,14 @@ if(input.getUser().getiDnumber() != null && !input.getUser().getiDnumber().equal
 input.getUser().setiDnumber(userLoginServ.dencryp(input.getUser().getiDnumber()));
 }
 
-User user;
-if(input.getUser().getId() == null) {
-	
-	 user=userServ.Save(request,dg,input.getUser(),langcode);
-	 
-}else {
-	 user= userServ.getuserbyid(input.getUser().getId(),langcode);
-		if(user == null ) {
-			user=userServ.Save(request,dg,input.getUser(),langcode);
-		
-		}else {
-	     user=userServ.update(request,dg,user,input.getUser(),langcode);		
-		}
-		
-}
-
-
-input.getLogin().setUserID(user);
-
-
+User user=input.getUser();
 UserLogin info =input.getLogin();
-
-  
- 
-if(info.getId() !=null) {
-	UserLogin found= userLoginServ.getbyid(info.getId(),langcode);
+input.getLogin().setUserID(user);
+try {
+	if(user.getId() == null || info.getId() == null) {
 		
-		if(found != null) {  
-			if(!found.getUsername().equals(info.getUsername())) {
-				userLoginServ.check_username(info.getUsername(),langcode);	
-			}
-          
-      	System.out.println(info.toString());
-          userLoginServ.update(found,info,langcode);
-          notificationServ.save("User "+info.getUsername()+" updated", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
-
-
-
-		}else {
-			String key = userLoginServ.getkey(info.getPasswordEncy());
+		 user=userServ.Save(request,dg,input.getUser(),langcode);
+		 String key = userLoginServ.getkey(info.getPasswordEncy());
 			String pass = userLoginServ.getencpassword(info.getPasswordEncy());
 
 			info.setLoginkey(key);
@@ -165,37 +133,79 @@ if(info.getId() !=null) {
 
 			userLoginServ.check_username(info.getUsername(),langcode);
 			userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
-			System.out.println(Devicecode);
+			
 			String acct_no=accountServ.create_acct(Devicecode,username,usertokean,pagenum,request,dg,user.getUseridnumber(), info.getUsername(), langcode);
-			System.out.println(acct_no);
+			
 			notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
 
+		 
+	}else {
+		throw new PopupException("error while insertion");
 
-		}
-}else {
-	String key = userLoginServ.getkey(info.getPasswordEncy());
-	String pass = userLoginServ.getencpassword(info.getPasswordEncy());
+	}
+} catch (Exception e) {
+	// TODO: handle exception
+	throw new PopupException("error while inserting");	
+}
 
-	info.setLoginkey(key);
-	info.setPasswordEncy(pass);
 
-	userLoginServ.check_username(info.getUsername(),langcode);
-	userLoginServ.save(request,dg,info,langcode,Integer.parseInt(pagenum));
-	System.out.println(Devicecode);
-	String acct_no=accountServ.create_acct(Devicecode,username,usertokean,pagenum,request,dg,user.getUseridnumber(), info.getUsername(), langcode);
-	System.out.println(acct_no);
-	notificationServ.save("User "+info.getUsername()+" Created", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
+
+
+return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
 
 
 }
 
 
 
-info.setPasswordEncy("");
 
-return new ResponseEntity<UserLogin>(info, HttpStatus.OK);
+@RequestMapping(value = "/update/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Userobject>> update(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Userobject input) {
+	
+	List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+
+if(input.getUser().getiDnumber() != null && !input.getUser().getiDnumber().equals("")) {
+input.getUser().setiDnumber(userLoginServ.dencryp(input.getUser().getiDnumber()));
+}
+
+try {
+
+User user = input.getUser();
+UserLogin info =input.getLogin();
+if(user.getId() == null || info.getId() ==null) {
+	
+	throw new PopupException("error while updating");
+	 
+}else {
+	 user= userServ.getuserbyid(user.getId(),langcode);
+	 UserLogin found= userLoginServ.getbyid(info.getId(),langcode);
+		if(user == null || found == null) {
+			throw new PopupException("error while updating");		
+		}
+
+ user=userServ.update(request,dg,user,input.getUser(),langcode);		
+ input.getLogin().setUserID(user);
+		
+	if(!found.getUsername().equals(info.getUsername())) {
+		userLoginServ.check_username(info.getUsername(),langcode);	
+	}
+  
+
+  userLoginServ.update(found,info,langcode);
+  notificationServ.save("User "+info.getUsername()+" updated", info.getApplicationID(), info.getGrouppriviledgeID(), info, langcode);
+  
+}
+
+} catch (Exception e) {
+	// TODO: handle exception
+	
+	throw new PopupException("error while updating");	
+}
 
 
+return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
 
 }
 
@@ -210,11 +220,9 @@ List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
 
-	System.out.println(input.getValue1() +" "+input.getValue2() +" "+input.getValue3());
-	
 	FilesUpload out= userServ.saveprofilefile(request,dg,input, langcode);
 	
-	 return new ResponseEntity<FilesUpload>(out, HttpStatus.OK);
+	 return new ResponseEntity<FilesUpload>(out , HttpStatus.OK);
 
 	
 }
@@ -227,8 +235,10 @@ public @ResponseBody ResponseEntity<FilesUpload> savefile(HttpServletRequest req
 List<String> values =new ArrayList<String>();
 DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
+System.out.println(input.getUser().getLogin().getUsername());
+System.out.println(input.getFileid().getId());
 
-	System.out.println(input.getValue1() +" "+input.getValue2() +" "+input.getValue3());
+	//System.out.println(input.getValue1() +" "+input.getValue2() +" "+input.getValue3());
 	
 	FilesUpload out= userServ.savefile(request,dg,input, langcode);
 	

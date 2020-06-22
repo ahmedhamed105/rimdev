@@ -77,19 +77,14 @@ public class ParentComponent implements Serializable {
     @Column(name = "date_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
-    @Column(name = "related_parent")
-    private Integer relatedParent;
-    @Column(name = "related_type", length = 45)
-    private String relatedType;
-    @Column(name = "Com_IP", nullable = false, length = 450)
+    @Basic(optional = false)
+    @Column(name = "pagination", nullable = false)
+    private int pagination;
+    @Column(name = "Com_IP", nullable = true, length = 450)
     private String comIP;
     @Basic(optional = false)
-    @Column(name = "Com_port", nullable = false, length = 45)
+    @Column(name = "Com_port", nullable = true, length = 45)
     private String comport;
-    @Column(name = "routing_ind", nullable = false)
-    private int routingInd;
-    @Column(name = "routing_loc", length = 450)
-    private String routingLoc;
     @Column(name = "com_table")
     private Integer comTable;
     @Column(name = "com_formid")
@@ -128,21 +123,6 @@ public class ParentComponent implements Serializable {
 		this.comTable = comTable;
 	}
 
-	public int getRoutingInd() {
-		return routingInd;
-	}
-
-	public void setRoutingInd(int routingInd) {
-		this.routingInd = routingInd;
-	}
-
-	public String getRoutingLoc() {
-		return routingLoc;
-	}
-
-	public void setRoutingLoc(String routingLoc) {
-		this.routingLoc = routingLoc;
-	}
 
 	public String getComIP() {
         return comIP;
@@ -160,26 +140,15 @@ public class ParentComponent implements Serializable {
         this.comport = comport;
     }
     
-    
-    public String getRelatedType() {
-        return relatedType;
-    }
+    public int getPagination() {
+		return pagination;
+	}
 
-    public void setRelatedType(String relatedType) {
-        this.relatedType = relatedType;
-    }
-    
-    public Integer getRelatedParent() {
-        return relatedParent;
-    }
+	public void setPagination(int pagination) {
+		this.pagination = pagination;
+	}
 
-    public void setRelatedParent(Integer relatedParent) {
-        this.relatedParent = relatedParent;
-    }
-    
-    
-    
-    public String getFirstmethod() {
+	public String getFirstmethod() {
         return firstmethod;
     }
 

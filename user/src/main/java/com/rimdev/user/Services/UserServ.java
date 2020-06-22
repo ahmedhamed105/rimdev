@@ -295,12 +295,11 @@ public User update(HttpServletRequest request,DevicePage devpag,User old,User in
 public FilesUpload savefile(HttpServletRequest request,DevicePage devpag,threevalues input,String langcode) {
 
 	try {
-		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
-		Component com=componentServ.getComponentbyid(Integer.parseInt(input.getValue3()), langcode);
+		FilesUpload file = fileStorageService.getfilebyid(input.getFileid().getId(), langcode);
+		Component com =componentServ.getComponentbyid(Integer.parseInt(input.getCompid()), langcode);
 		
-		UserLogin userlog=userLoginServ.getuserlogin(Integer.parseInt(input.getValue1()), langcode);
+		UserLogin userlog=userLoginServ.getbyusername(input.getUser().getLogin().getUsername(), langcode);
 	
-		
 		userFileServ.Save(request,devpag,userlog, file,com, langcode);
 		
 		return file;
@@ -336,10 +335,10 @@ public FilesUpload savefile(HttpServletRequest request,DevicePage devpag,threeva
 public FilesUpload saveprofilefile(HttpServletRequest request,DevicePage devpag,threevalues input,String langcode) {
 
 	try {
-		FilesUpload file= fileStorageService.getfilebyid(Integer.parseInt(input.getValue2()), langcode);
-		Component com=componentServ.getComponentbyid(Integer.parseInt(input.getValue3()), langcode);
+		FilesUpload file = fileStorageService.getfilebyid(input.getFileid().getId(), langcode);
+		Component com =componentServ.getComponentbyid(Integer.parseInt(input.getCompid()), langcode);
 		
-		UserLogin userlog=userLoginServ.getuserlogin(Integer.parseInt(input.getValue1()), langcode);
+		UserLogin userlog=userLoginServ.getbyusername(input.getUser().getLogin().getUsername(), langcode);
 	
 		
 		userlog.getUserID().setFilesuploadID(file);

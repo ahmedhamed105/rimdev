@@ -59,8 +59,6 @@ public class ComponentSelect implements Serializable {
     private String selectValue;
     @Column(name = "select_display", length = 450)
     private String selectDisplay;
-    @Column(name = "Change_method", length = 45)
-    private String changemethod;
     @Column(name = "web_service", length = 450)
     private String webService;
     @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
@@ -73,6 +71,11 @@ public class ComponentSelect implements Serializable {
     @Column(name = "date_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
+    @Column(name = "Com_IP", nullable = true, length = 450)
+    private String comIP;
+    @Basic(optional = false)
+    @Column(name = "Com_port", nullable = true, length = 45)
+    private String comport;
 
     public ComponentSelect() {
     }
@@ -88,7 +91,25 @@ public class ComponentSelect implements Serializable {
     }
     
     
-    @XmlTransient
+    
+    
+    public String getComIP() {
+		return comIP;
+	}
+
+	public void setComIP(String comIP) {
+		this.comIP = comIP;
+	}
+
+	public String getComport() {
+		return comport;
+	}
+
+	public void setComport(String comport) {
+		this.comport = comport;
+	}
+
+	@XmlTransient
     @JsonIgnore
     public Date getDateModify() {
         return dateModify;
@@ -147,18 +168,7 @@ public class ComponentSelect implements Serializable {
 
     public void setSelectDisplay(String selectDisplay) {
         this.selectDisplay = selectDisplay;
-    }
-        
-    
-	public String getChangemethod() {
-		return changemethod;
-	}
-
-	public void setChangemethod(String changemethod) {
-		this.changemethod = changemethod;
-	}
-	
-	
+    }     
 
 	public String getWebService() {
 		return webService;

@@ -90,7 +90,7 @@ public class AccountProcess implements Serializable {
     @Column(name = "TRX_Amount", nullable = false, length = 45)
     private BigDecimal tRXAmount;
     @Basic(optional = false)
-    @Column(name = "TRX_description", nullable = false, length = 45)
+    @Column(name = "TRX_description", nullable = false, length = 450)
     private String tRXdescription;
     @Basic(optional = false)
     @Column(name = "Reference_number", nullable = false, length = 500)

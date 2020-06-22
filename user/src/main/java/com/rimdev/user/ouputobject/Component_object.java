@@ -7,6 +7,7 @@ import com.rimdev.user.entities.ComponentButton;
 import com.rimdev.user.entities.ComponentInput;
 import com.rimdev.user.entities.ComponentSelect;
 import com.rimdev.user.entities.FileType;
+import com.rimdev.user.entities.RelationComp;
 
 public class Component_object {
 	
@@ -15,11 +16,17 @@ public class Component_object {
 	ComponentInput input;
 	ComponentButton button;
 	List<FileType> allowfiletype;
-	
+	List<RelationComp> rel;
 	 
 	
 	
 	
+	public List<RelationComp> getRel() {
+		return rel;
+	}
+	public void setRel(List<RelationComp> rel) {
+		this.rel = rel;
+	}
 	public List<FileType> getAllowfiletype() {
 		return allowfiletype;
 	}

@@ -29,6 +29,7 @@ export class PasswordtableComponent implements AgRendererComponent{
   setvalue(form){
 //console.log(form)
     var text =form;
+
     if(this.params.colDef.parentgroup != null){
       text =text.get(this.params.colDef.parentgroup);
     }
@@ -47,16 +48,16 @@ export class PasswordtableComponent implements AgRendererComponent{
 
     if(this.params.colDef.parentgroup != null && this.params.colDef.groupname != null){
       this.params.data[this.params.colDef.parentgroup][this.params.colDef.groupname][this.params.colDef.field] = status;
-    }else if(this.params.colDef.groupname != null && this.params.colDef.groupname == null){
+    }else if(this.params.colDef.parentgroup != null && this.params.colDef.groupname == null){
       this.params.data[this.params.colDef.parentgroup][this.params.colDef.field] = status;
 
-     }else if(this.params.colDef.groupname == null && this.params.colDef.groupname != null){
+     }else if(this.params.colDef.parentgroup == null && this.params.colDef.groupname != null){
       this.params.data[this.params.colDef.groupname][this.params.colDef.field] = status;
     }else{
       this.params.data[this.params.colDef.field] = status;
     }
 
-    
+     
 
     
   }

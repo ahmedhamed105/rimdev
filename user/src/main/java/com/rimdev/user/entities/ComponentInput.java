@@ -82,7 +82,15 @@ public class ComponentInput implements Serializable {
     @Column(name = "file_sizeerr", length = 450)
     private String fileSizeerr;
     @Column(name = "file_typeerror", length = 450)
-    private String fileTypeerror;
+    private String fileTypeerror;   
+    @Column(name = "insert_ip", length = 450)
+    private String insertIp;
+    @Column(name = "insert_port", length = 45)
+    private String insertPort;
+    @Column(name = "delete_ip", length = 450)
+    private String deleteIp;
+    @Column(name = "delete_port", length = 45)
+    private String deletePort;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentinputID")
     private Collection<ComponentFile> componentFileCollection;
@@ -93,9 +101,41 @@ public class ComponentInput implements Serializable {
     public ComponentInput(Integer id) {
         this.id = id;
     }
-      
     
-    public String getFileTypeerror() {
+    
+    public String getInsertIp() {
+		return insertIp;
+	}
+
+	public void setInsertIp(String insertIp) {
+		this.insertIp = insertIp;
+	}
+
+	public String getInsertPort() {
+		return insertPort;
+	}
+
+	public void setInsertPort(String insertPort) {
+		this.insertPort = insertPort;
+	}
+
+	public String getDeleteIp() {
+		return deleteIp;
+	}
+
+	public void setDeleteIp(String deleteIp) {
+		this.deleteIp = deleteIp;
+	}
+
+	public String getDeletePort() {
+		return deletePort;
+	}
+
+	public void setDeletePort(String deletePort) {
+		this.deletePort = deletePort;
+	}
+
+	public String getFileTypeerror() {
 		return fileTypeerror;
 	}
 

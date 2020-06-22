@@ -8,7 +8,7 @@ import { ErrorDialogService } from '../services/error-dialog.service';
 import { ComponentService } from '../services/component.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Icolumdef } from '../objects/Icolumdef';
-import { Observable,of  } from 'rxjs';
+import { Observable,of, empty  } from 'rxjs';
 import { FileQueueObject, FileUploaderService } from '../services/file-uploader.service';
 import { GlobalConstants } from '../GlobalConstants';
 import { formatDate } from '@angular/common';
@@ -19,7 +19,6 @@ import { CookiesService } from '../services/cookies.service';
 import { LanguagegoService } from '../services/languagego.service';
 import { MenushareService } from '../share_data/menushare.service';
 import { SpinnerService } from '../services/spinner.service';
-import { IfStmt } from '@angular/compiler';
 
 
 @Component({
@@ -36,6 +35,9 @@ export class PagesComponent implements OnInit {
   public objects = [[]];
   public components = [];
   public arraystatic = [];
+  public placeholders = [];
+
+  public allcompoent = new Map<any, any>();
   public page ;
   public pagenumber ;
   public type ;
@@ -49,7 +51,7 @@ export class PagesComponent implements OnInit {
   public device ;
   gridOptions:GridOptions []=[];
   rowData: any []=[];
-
+  tablepagination:any  []=[];
  columnDefs: Icolumdef[] []=[];
  public column:Icolumdef[] = [];
  
@@ -59,8 +61,6 @@ export class PagesComponent implements OnInit {
  public datestmp :any [] =[] ;
  public passwords :any [][]=[] ;
  public tpasswords :any []=[] ;
- public passwordstable :any [][] =[] ;
- public tpasswordstable :any [] =[] ;
  passwordIsValid = false;
 
 
@@ -145,7 +145,7 @@ export class PagesComponent implements OnInit {
   
     this._ComponentService.getbypage().subscribe(res =>{
 
-     console.log(res);
+    // console.log(res);
       
 
       res.forEach((parent,indexp) => {
@@ -174,9 +174,11 @@ export class PagesComponent implements OnInit {
         
 
       a.forEach((element,index) => {
-     
-        var parentin=indexp*a.length;
 
+        var parentin=element.comp.id;
+        this.allcompoent.set(parentin,[element.comp.name,element.comp.groupname,element.comp.parentGroup]);
+
+        this.placeholders[parentin]= element.comp.ccode;
 
         if(element.comp.fieldEncry === 1){
 
@@ -230,16 +232,16 @@ if(element.comp.ctype == 'select'){
 
         if(element.select.arrayObject === 1){
           if(element.select.webService != undefined){
-
-            this._usersservice.getbyurl(element.select.webService,parent.parent.comIP,parent.parent.comport)
-            .subscribe(data => {this.objects[index+parentin] = data;
+           
+            this._usersservice.getbyurl(element.select.webService,element.select.comIP,element.select.comport)
+            .subscribe(data => {this.objects[parentin] = data;
             
-          //  console.log(element.select.webService)
+          
         });
            }
 
            }else{
-            this.objects[index+parentin]=[];
+            this.objects[parentin]=[];
              var res = element.select.selectValue.replace('[', '').replace(']', '').split(",");
              var res1 = element.select.selectDisplay.replace('[', '').replace(']', '').split(",");
              res1.forEach((element, index1) => {
@@ -247,7 +249,7 @@ if(element.comp.ctype == 'select'){
                  key : element,
                  value :res[index1]
                };
-               this.objects[index+parentin].push(prearray);
+               this.objects[parentin].push(prearray);
              });
        
             
@@ -265,6 +267,7 @@ if(element.comp.ctype == 'select'){
 
 
 this.passwords[parent.parent.id]=this.tpasswords;
+this.tpasswords=[];
 this.dates[parent.parent.id]=this.datestmp;
 this.file[parent.parent.id]=this.filetmp;
 
@@ -272,6 +275,7 @@ this.file[parent.parent.id]=this.filetmp;
 }else if(parent.child != null && parent.parent.parentType === 'table'){
 
 
+  this.tablepagination[parent.parent.id]=parent.parent.pagination;
   this.gridOptions[parent.parent.id]= <GridOptions>{};
   this.gridOptions[parent.parent.id].frameworkComponents = { "selRenderer" : UsertypedropdownComponent,"passRenderer" : PasswordtableComponent };
   this.gridOptions[parent.parent.id].rowHeight = 100;
@@ -312,15 +316,12 @@ a.forEach((element,index) => {
 
   var b : Icolumdef;
 
-  var parentin=indexp*a.length;
 
   if(element.comp.fieldEncry === 1){
 
-    this.tpasswordstable.push(element);
+    this.tpasswords.push(element);
 
   }
-
-  this.passwordstable[parent.parent.id]=this.tpasswordstable;
 
 
 
@@ -340,8 +341,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:0,
       sortable: true, 
       filter: true, 
@@ -365,8 +366,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:0,
       sortable: true, 
       filter: true, 
@@ -403,8 +404,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:0,
       sortable: true, 
       filter: true, 
@@ -429,8 +430,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:0,
       sortable: true, 
       filter: true, 
@@ -466,8 +467,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:index,
       sortable: true, 
       filter: true, 
@@ -492,8 +493,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:index,
       sortable: true, 
       filter: true, 
@@ -526,8 +527,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:index,
       sortable: true, 
       filter: true, 
@@ -551,8 +552,8 @@ if(element.comp.ctype === 'label'){
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
       fielddisable: element.comp.disable === 1 ? true:false,
       disabled : element.comp.disable === 1 ? true:false,
-      ip:parent.parent.comIP,
-      port:parent.parent.comport,
+      ip:element.select.comIP,
+      port:element.select.comport,
       formnum:index,
       sortable: true, 
       filter: true, 
@@ -583,7 +584,8 @@ if(element.comp.ctype === 'label'){
 
  
 });
-
+this.passwords[parent.parent.id]=this.tpasswords;
+this.tpasswords=[];
 this.columnDefs[parent.parent.id]=this.column;
 
 
@@ -624,20 +626,12 @@ completeItem = (item: FileQueueObject, response: any) => {
  }
 
 
- addfiles($event,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror) {
+ addfiles($event,name,index,pageid,parentid,compid,insertserv,parameter,insertip,insertport,deleteserv,deleteip,deleteport,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror) {
 
   const fileBrowser = $event.target;
 
-  //console.log(fileBrowser.files.length);
-
-  //console.log(this.fileupload.filelength(index));
-
-  //console.log(fileBrowser.files.length+this.fileupload.filelength(index));
-
-  
-
  
-  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insert,parameter,ip,port,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror);
+  this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insertserv,parameter,insertip,insertport,deleteserv,deleteip,deleteport,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror);
 }
 
 
@@ -752,7 +746,7 @@ if(group != null){
     var selectobject = array.filter(x => x[comp] == id)[0];
 //get table no action
 if(related === 'table'){
-  this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port);
+  //this.rowData[relcom] =this._usersservice.getbyvalue(serv,selectobject.id,ip,port);
 }
   
 
@@ -760,10 +754,10 @@ if(related === 'table'){
   }
 
 
-  tableaction(serv,para,index,related,relcom,ip,port,alert,message){
+  tableaction(event,rel,form,parentid,type){
 
    // console.log(this.gridOptions[index])
-    const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
+    const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
 
@@ -775,58 +769,15 @@ if(related === 'table'){
     const selectedDataStringPresentation = selectedData.map( node =>
        {
   
-     if( this.passwordstable[index].length > 0){
-
-      this.passwordstable[index].forEach(element => {
-        var value;
-        var nodetmp;
-      
-        if(element.comp.parentGroup != null && element.comp.groupname != null){
-          nodetmp = node[element.comp.parentGroup][element.comp.groupname][element.comp.name];
-          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-          node[element.comp.parentGroup][element.comp.groupname][element.comp.name]=value;
-        }else if(element.comp.parentGroup != null && element.comp.groupname == null){
-          nodetmp = node[element.comp.parentGroup][element.comp.name];
-          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-          node[element.comp.parentGroup][element.comp.name]=value;
-         }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
-          nodetmp = node[element.comp.groupname][element.comp.name];
-          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-          node[element.comp.groupname][element.comp.name]=value;
-        }else{
-          nodetmp = node[element.comp.name];
-          value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-          node[element.comp.name]=value;
-        }
-    
-      });
-    
-    }
-    console.log(node)
-    this._usersservice.insertbyurl(node,serv,ip,port).subscribe(
-data =>{
-
-  console.log(data)
-}
-
-    );
-
-    if(alert === 1){
-
-      this.errorDialogService.display_sucess(message);
-    }
-
-
-    this.rowData[relcom] = this._usersservice.getbyvalue(serv,node,ip,port);
-
+        this.ret_handle(event,rel,2,node,parentid,type);
       });
 
   }
 
 
-  displayupdate(serv,para,index,related,relcom,ip,port,alert,message){
+  displayupdate(event,rel,form,parentid,type){
  //console.log(this.gridOptions)
-    const selectedNodes = this.gridOptions[index].api.getSelectedNodes();
+    const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
 
@@ -837,149 +788,11 @@ data =>{
     const selectedData = selectedNodes.map( node => node.data );
     const selectedDataStringPresentation = selectedData.map( node =>
        {
+        this.ret_handle(event,rel,3,node,parentid,type);
       
-      //  console.log(node)
-        if(this.isfile){
-        this.fileupload.clearQueue();
-        this.fileupload.addfilesuser(serv,node,node,ip,port);
-
-        this.file[relcom].forEach(element => {
-
-          if(element.comp.parentGroup != null && element.comp.groupname != null){
-            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValidators([]);
-            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).updateValueAndValidity();
-          }else if(element.comp.parentGroup != null && element.comp.groupname == null){
-            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.name).setValidators([]);
-            this.insertform[relcom].get(element.comp.parentGroup).get(element.comp.name).updateValueAndValidity();
-           }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
-            this.insertform[relcom].get(element.comp.groupname).get(element.comp.name).setValidators([]);
-            this.insertform[relcom].get(element.comp.groupname).get(element.comp.name).updateValueAndValidity();
-          }else{ 
-            this.insertform[relcom].get(element.comp.name).setValidators([]);
-            this.insertform[relcom].get(element.comp.name).updateValueAndValidity();
-          }
-          
-  
-        });
-
-        }
-
-        this.dates[relcom].forEach(element => {
-          var value;
-          var nodetmp;
-        
-          if(element.comp.parentGroup != null && element.comp.groupname != null){
-            nodetmp = node[element.comp.parentGroup][element.comp.groupname][element.comp.name];
-            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
-            node[element.comp.parentGroup][element.comp.groupname][element.comp.name]=value;
-          }else if(element.comp.parentGroup != null && element.comp.groupname == null){
-            nodetmp = node[element.comp.parentGroup][element.comp.name];
-            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
-            node[element.comp.parentGroup][element.comp.name]=value;
-           }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
-            nodetmp = node[element.comp.groupname][element.comp.name];
-            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
-            node[element.comp.groupname][element.comp.name]=value;
-          }else{
-            nodetmp = node[element.comp.name];
-            value = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
-            node[element.comp.name]=value;
-          }
-        //  node[element]= formatDate(node[element], GlobalConstants.format, GlobalConstants.locale)
-        });
-       
-          this.insertform[relcom].patchValue(node);
-          if(alert === 1){
-
-            this.errorDialogService.display_sucess(message);
-          }
-
-
       });
 
   }
-
-
-  
-
-onSubmit(index,form,serv,related,relcom,ip,port,alert,message){
-
-  if( this.passwords[index].length > 0){
-
-    this.passwords[index].forEach(element => {
-      var value;
-      var nodetmp;
-    
-      if(element.comp.parentGroup != null && element.comp.groupname != null){
-        nodetmp = form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).value.trim();
-        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-        form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValue(value);
-      }else if(element.comp.parentGroup != null && element.comp.groupname == null){
-        nodetmp = form.get(element.comp.parentGroup).get(element.comp.name).value.trim();
-        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-        form.get(element.comp.parentGroup).get(element.comp.name).setValue(value);
-       }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
-        nodetmp = form.get(element.comp.groupname).get(element.comp.name).value.trim();
-        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-        form.get(element.comp.groupname).get(element.comp.name).setValue(value);
-      }else{
-        nodetmp = form.get(element.comp.name).value.trim();
-        value = this._EncryptionService.encypttext(nodetmp.toString().trim())
-        form.get(element.comp.name).setValue(value);
-      }
-  
-    });
-  
-  }
-  console.log(form);
-console.log(form.value);
-     this._usersservice.insertbyurl(form.value,serv,ip,port).subscribe(data => {
-
-   // console.log(data)
-
-      if(this.rowData === undefined){
-      }else{
-        
-        if(this.isfile){
-          this.fileupload.uploadAllinsert(data,ip,port)
-          this.fileupload.clearQueue();
-  
-        } 
-
-        // get table number 
-        if(related === 'table'){
-        var allsserv=  serv.substring(0, serv.lastIndexOf('/')+1)+'all';
-          this._usersservice.getbyurl(allsserv,ip,port).subscribe(alldata => {
-            this.rowData[relcom]= of(alldata) ;
-          });
-      
-        }
-      }
-  
-if(alert === 1){
-
-  this.errorDialogService.display_sucess(message);
-}
- 
-
-      form.reset();
-
-    });
-    
-
- 
- 
-}
-
-
-resetform(index,form,serv,related,relcom,alert,message){
-  if(this.isfile){
-    this.fileupload.clearQueue();
-
-  } 
-  form.reset();
-}
-
 
 passwordValid(event) {
   this.passwordIsValid = event;
@@ -990,6 +803,427 @@ language(code){
   this.cookieService.language(code);
     }
 
+
+    doaction(event,rel,form,parentid,type){
+this.ret_handle(event,rel,1,form,parentid,type);
+
+    }
+
+ret_handle(event,rel,formnode,form,parentid,type){
+    
+
+    
+        if( rel != undefined || rel.length > 0 ){
+          rel.forEach((comp,indexp) => {
+         var relvalue;
+            if(type === 'button'){
+              if( this.passwords[parentid].length > 0){
+    
+                this.passwords[parentid].forEach(element => {
+                  var value;
+                  var nodetmp;
+                if(formnode === 1){
+                  if(element.comp.parentGroup != null && element.comp.groupname != null){
+                    nodetmp = form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).value.trim();
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form.get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValue(value);
+                  }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+                    nodetmp = form.get(element.comp.parentGroup).get(element.comp.name).value.trim();
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form.get(element.comp.parentGroup).get(element.comp.name).setValue(value);
+                   }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+                    nodetmp = form.get(element.comp.groupname).get(element.comp.name).value.trim();
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form.get(element.comp.groupname).get(element.comp.name).setValue(value);
+                  }else{
+                    nodetmp = form.get(element.comp.name).value.trim();
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form.get(element.comp.name).setValue(value);
+                  }
+                }else if(formnode === 2){
+                  if(element.comp.parentGroup != null && element.comp.groupname != null){
+                    nodetmp = form[element.comp.parentGroup][element.comp.groupname][element.comp.name];
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form[element.comp.parentGroup][element.comp.groupname][element.comp.name]=value;
+                  }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+                    nodetmp = form[element.comp.parentGroup][element.comp.name];
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form[element.comp.parentGroup][element.comp.name]=value;
+                   }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+                    nodetmp = form[element.comp.groupname][element.comp.name];
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form[element.comp.groupname][element.comp.name]=value;
+                  }else{
+                    nodetmp = form[element.comp.name];
+                    value = this._EncryptionService.encypttext(nodetmp.toString().trim())
+                    form[element.comp.name]=value;
+                  }
+
+                }
+                 
+              
+                });
+              
+              }
+              if(formnode === 1){
+                relvalue = form.value;
+              }else if(formnode === 2){
+                relvalue = form;
+              }else if(formnode === 3){
+                relvalue = form
+              }
+    
+           
+    
+            if(relvalue != undefined){
+              // alert(comp.relatedComponent +' '+ comp.service +' '+ comp.relatedParent +' '+ comp.parServ );
+              
+                 if(comp.relatedComponent != null && comp.service != null && comp.service != undefined){
+                   this._usersservice.insertbyurl(relvalue,comp.service,comp.comIP,comp.comport)
+                 .subscribe(data => {   
+                   if(comp.datatype === 'A'){
+                     this.objects[comp.relatedComponent] = data;   
+                   }else if(comp.datatype === 'NP'){
+                       this.placeholders[comp.relatedComponent] = data['text'];                   
+                   }else if(comp.datatype === 'TP'){
+                       relatcom.setValue(data['text']);
+                       this.placeholders[comp.relatedComponent] = data['text'];                   
+                   }  else if(comp.datatype === 'TN'){
+                       relatcom.setValue(data['text']);
+                   }else if(comp.datatype === 'N'){
+     
+                   } 
+                   this.customactioncode(data);
+
+                   if(comp.alertAfter === 1){
+                    this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                   }
+       
+                   if(comp.resetind === 1){
+                    this.insertform[comp.resetParent].reset();
+                             if(this.isfile){
+                              this.fileupload.clearQueue();
+                             }  
+                   }
+             
+                   if(comp.routingInd === 1 ){
+                     setTimeout(() => {
+                       window.location.replace(comp.routingLoc);
+                    }, 2000);
+             
+                   }
+
+                              
+                 });
+                     }
+                     
+                 
+
+                     if(comp.relatedParent != undefined && comp.parServ != undefined){
+                      
+                      this._usersservice.insertbyurl(relvalue,comp.parServ,comp.comIPpar,comp.comportpar).subscribe(
+                        data => {
+
+                          if(formnode === 3){
+                            if(this.isfile){
+                              this.fileupload.clearQueue();
+                              this.fileupload.addfilesuser(data);
+                      
+                              this.file[comp.relatedParent].forEach(element => {
+                      
+                                if(element.comp.parentGroup != null && element.comp.groupname != null){
+                                  this.insertform[comp.relatedParent].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).setValidators([]);
+                                  this.insertform[comp.relatedParent].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name).updateValueAndValidity();
+                                }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+                                  this.insertform[comp.relatedParent].get(element.comp.parentGroup).get(element.comp.name).setValidators([]);
+                                  this.insertform[comp.relatedParent].get(element.comp.parentGroup).get(element.comp.name).updateValueAndValidity();
+                                 }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+                                  this.insertform[comp.relatedParent].get(element.comp.groupname).get(element.comp.name).setValidators([]);
+                                  this.insertform[comp.relatedParent].get(element.comp.groupname).get(element.comp.name).updateValueAndValidity();
+                                }else{ 
+                                  this.insertform[comp.relatedParent].get(element.comp.name).setValidators([]);
+                                  this.insertform[comp.relatedParent].get(element.comp.name).updateValueAndValidity();
+                                }
+                                
+                        
+                              });
+                      
+                              }
+                      
+                              this.dates[comp.relatedParent].forEach(element => {
+                                var valueq;
+                                var nodetmp;
+                              
+                                if(element.comp.parentGroup != null && element.comp.groupname != null){
+                                  nodetmp = relvalue[element.comp.parentGroup][element.comp.groupname][element.comp.name];
+                                  valueq = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+                                  relvalue[element.comp.parentGroup][element.comp.groupname][element.comp.name]=valueq;
+                                }else if(element.comp.parentGroup != null && element.comp.groupname == null){
+                                  nodetmp = relvalue[element.comp.parentGroup][element.comp.name];
+                                  valueq = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+                                  relvalue[element.comp.parentGroup][element.comp.name]=valueq;
+                                 }else if(element.comp.parentGroup  == null && element.comp.groupname != null){
+                                  nodetmp = relvalue[element.comp.groupname][element.comp.name];
+                                  valueq = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+                                  relvalue[element.comp.groupname][element.comp.name]=valueq;
+                                }else{
+                                  nodetmp = relvalue[element.comp.name];
+                                  valueq = formatDate(nodetmp, GlobalConstants.format, GlobalConstants.locale);
+                                  relvalue[element.comp.name]=valueq;
+                                }
+                              //  node[element]= formatDate(node[element], GlobalConstants.format, GlobalConstants.locale)
+                              });
+                             
+                                this.insertform[comp.relatedParent].patchValue(relvalue);
+                          }else if(formnode === 2){
+                            if(this.isfile){
+                              this.fileupload.uploadAllinsert(relvalue)
+                              this.fileupload.clearQueue();
+                            } 
+                            this.rowData[comp.relatedParent] = of(data);
+
+                          }else if(formnode === 1){
+                            if(this.isfile){
+                              this.fileupload.uploadAllinsert(relvalue)
+                              this.fileupload.clearQueue();
+                            } 
+                            this.rowData[comp.relatedParent] = of(data);
+
+                          }
+
+                          this.customactioncode(data);
+                          
+                        
+                         
+
+
+                          if(comp.alertAfter === 1){
+                            this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                           }
+               
+                           if(comp.resetind === 1){
+                             this.insertform[comp.resetParent].reset();
+                             if(this.isfile){
+                              this.fileupload.clearQueue();
+                             } 
+                           }
+                     
+                           if(comp.routingInd === 1 ){
+                             setTimeout(() => {
+                               window.location.replace(comp.routingLoc);
+                            }, 2000);
+                     
+                           }
+                        });
+                       
+                      }
+
+     
+                      if(comp.relatedComponent == undefined && comp.parServ == undefined && comp.relatedParent == undefined && comp.parServ == undefined && comp.resetind === 1 && comp.resetParent != undefined){
+                       
+                       
+                        if(comp.alertAfter === 1){
+                          this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                         }
+
+                         if(comp.resetind === 1){
+                          this.insertform[comp.resetParent].reset();
+                          if(this.isfile){
+                           this.fileupload.clearQueue();
+                          } 
+                        }
+                     
+                   
+                         if(comp.routingInd === 1 ){
+                           setTimeout(() => {
+                             window.location.replace(comp.routingLoc);
+                          }, 2000);
+                   
+                         }
+                     
+                      }
+     
+     
+               }else{
+                
+                if(comp.alertAfter === 1){
+                  this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                 }
+     
+                 if(comp.resetind === 1){
+                   form.reset();
+                   if(this.isfile){
+                 //    this.fileupload.clearQueue();
+                   } 
+                 }
+           
+                 if(comp.routingInd === 1 ){
+                   setTimeout(() => {
+                     window.location.replace(comp.routingLoc);
+                  }, 2000);
+           
+                 }  
+     
+                 }
+    
+        
+    
+            
+            }else{
+              relvalue= event.target.value;
+            var relatcom=form.get(this.allcompoent.get(comp.relatedComponent)[0]);
+            
+    
+    
+              if(relvalue.length > 0){
+                // alert(comp.relatedComponent +' '+ comp.service +' '+ comp.relatedParent +' '+ comp.parServ );
+             
+                   if(comp.relatedComponent != undefined && comp.service != undefined){
+                    
+                     this._usersservice.insertbyurl(relvalue,comp.service,comp.comIP,comp.comport)
+                   .subscribe(data => {   
+                     if(comp.datatype === 'A'){
+                       this.objects[comp.relatedComponent] = data;   
+                     }else if(comp.datatype === 'NP'){
+                         this.placeholders[comp.relatedComponent] = data['text'];                   
+                     }else if(comp.datatype === 'TP'){
+                         relatcom.setValue(data['text']);
+                         this.placeholders[comp.relatedComponent] = data['text'];                   
+                     }  else if(comp.datatype === 'TN'){
+                         relatcom.setValue(data['text']);
+                     }else if(comp.datatype === 'N'){
+       
+                     } 
+
+                     this.customactioncode(data);
+
+                     if(comp.alertAfter === 1){
+                      this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                     }
+         
+                     if(comp.resetind === 1){
+                      relatcom.setValue('');
+                     }
+               
+                     if(comp.routingInd === 1 ){
+                       setTimeout(() => {
+                         window.location.replace(comp.routingLoc);
+                      }, 2000);
+               
+                     }
+    
+                    
+                     
+                   });
+                       }
+
+                       if(comp.relatedParent != undefined && comp.parServ != undefined){
+
+                        this._usersservice.insertbyurl(relvalue,comp.parServ,comp.comIPpar,comp.comportpar).subscribe(
+                          data => {
+                           
+                            this.rowData[comp.relatedParent] = of(data);
+
+                            if(comp.alertAfter === 1){
+                              this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                             }
+                 
+                             if(comp.resetind === 1){
+                              relatcom.setValue('');
+                             }
+                       
+                             if(comp.routingInd === 1 ){
+                               setTimeout(() => {
+                                 window.location.replace(comp.routingLoc);
+                              }, 2000);
+                       
+                             }
+                            
+                          });
+                         
+                        }
+       
+                        if(comp.relatedComponent == undefined && comp.parServ == undefined && comp.relatedParent == undefined && comp.parServ == undefined && comp.resetind === 1 && comp.resetParent != undefined){
+                          relatcom.setValue('');
+                        } 
+       
+                 }else{
+                   if(comp.relatedComponent != undefined && comp.emptyServ != undefined){
+                     this._usersservice.getbyurl(comp.emptyServ,comp.comIP,comp.comport)
+                     .subscribe(data => {
+                       
+                      this.objects[comp.relatedComponent] = data;
+                      if(comp.alertAfter === 1){
+                        this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                       }
+           
+                       if(comp.resetind === 1){
+                        relatcom.setValue('');
+                       }
+                 
+                       if(comp.routingInd === 1 ){
+                         setTimeout(() => {
+                           window.location.replace(comp.routingLoc);
+                        }, 2000);
+                 
+                       }
+
+                     });
+                   }
+       
+                     if(comp.relatedParent != undefined && comp.parServ != undefined){
+                     this._usersservice.getbyurl(comp.relparentServempty,comp.comIPpar,comp.comportpar).subscribe(
+                      data => {
+                       
+                        this.rowData[comp.relatedParent] = of(data);
+
+                        if(comp.alertAfter === 1){
+                          this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                         }
+             
+                         if(comp.resetind === 1){
+                          relatcom.setValue('');
+                         }
+                   
+                         if(comp.routingInd === 1 ){
+                           setTimeout(() => {
+                             window.location.replace(comp.routingLoc);
+                          }, 2000);
+                   
+                         }
+                        
+                      }
+                      
+                     )}
+        
+       
+                   }
+    
+    
+    
+            }
+    
+          
+               
+
+    
+          });
+
+         
+    
+        }else{
+          this.errorDialogService.display_sucess(this.errorDialogService.formaterror("no action",null,null,null,null));
+
+
+        }
+       
+      }
+    
+    
+      customactioncode(data:any){
+
+        
+      }
 
     signout(){
       this.cookieService.username('',GlobalConstants.rember);

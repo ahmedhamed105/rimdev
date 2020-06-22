@@ -74,10 +74,8 @@ public class CurrencyController {
 
 							
 							}else {
-						//		System.out.println("enter 4");
-						    BeanUtils.copyProperties(input, user, ObjectUtils.getNullPropertyNames(input));
-						 //   System.out.println(user.getFirstName());
-						    user=currencyServ.update(user,langcode);
+								input.setId(user.getId());
+						    user=currencyServ.update(input,langcode);
 							 externalServ.Log(request, Devicecode, username, usertokean, pagenum, langcode, "Currency updated", "", 34, 0);
 
 								

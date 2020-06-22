@@ -16,7 +16,7 @@ main:BEGIN
 
 set @cdate = now();
 
-if reference_no is null then
+if reference_no is null OR  reference_no ='' then
 set reference_no =rim_accounting.generateref();
 END IF;
 
@@ -60,27 +60,27 @@ and Currency_ID =  (select ID from rim_accounting.currency where All_status_ID =
 -- check flow type 
 select 
 case when count(*) = 1 then 0 else 5 end INTO error_code 
-from rim_accounting.flow_type where Flow_status = 'Active' and Flowtype = Trx_flow ;
+from rim_accounting.flow_type where All_status_ID = 1 and Flowtype = Trx_flow ;
   -- end if not exist  flow_type
 IF error_code > 0 THEN
          LEAVE main;
     END IF;  
     -- get flow type id    
 select id INTO @flow_id 
-from rim_accounting.flow_type where Flow_status = 'Active' and Flowtype = Trx_flow;
+from rim_accounting.flow_type where All_status_ID = 1 and Flowtype = Trx_flow;
 
 
 -- check transaction type 
 select 
 case when count(*) = 1 then 0 else 6 end INTO error_code 
-from rim_accounting.transaction_type where TRXtype_status = 'Active' and Trxcode = Trantypecode ;
+from rim_accounting.transaction_type where All_status_ID = 1 and Trxcode = Trantypecode ;
   -- end if not exist  transaction type
 IF error_code > 0 THEN
          LEAVE main;
     END IF;  
     -- get transaction type id    
 select id,payment_not INTO @Trxtype_id,@payment 
-from rim_accounting.transaction_type where TRXtype_status = 'Active' and Trxcode = Trantypecode;
+from rim_accounting.transaction_type where All_status_ID = 1 and Trxcode = Trantypecode;
 
 -- if debit sub from avalible and current 
 		if @payment = 1 and Trantypecode = 100

@@ -118,7 +118,7 @@ public class ExternalServ {
 				
 				
 			  
-			  ResponseEntity<authouput> okl = restTemplate.postForEntity("http://localhost:8081/Auth/get/"+langcode,entity, authouput.class);
+			  ResponseEntity<authouput> okl = restTemplate.postForEntity("http://localhost:8081/Auth/log/"+langcode,entity, authouput.class);
 
 			
 			if(okl.getStatusCodeValue() == 200) {

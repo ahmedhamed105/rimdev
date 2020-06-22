@@ -104,6 +104,12 @@ public class Component implements Serializable {
     @Basic(optional = false)
     @Column(name = "visible", nullable = false)
     private int visible;
+    @Basic(optional = false)
+    @Column(name = "view_shape", nullable = false)
+    private int viewShape;
+    @Column(name = "Amethod", length = 450)
+    private String amethod;
+
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
@@ -118,6 +124,9 @@ public class Component implements Serializable {
     @JoinColumn(name = "parent_component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private ParentComponent parentcomponentID;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
+    private Collection<RelationComp> relationCompCollection;
     
 
     public Component() {
@@ -137,7 +146,24 @@ public class Component implements Serializable {
     
    
     
-    public int getVisible() {
+
+	public String getAmethod() {
+		return amethod;
+	}
+
+	public void setAmethod(String amethod) {
+		this.amethod = amethod;
+	}
+
+	public int getViewShape() {
+		return viewShape;
+	}
+
+	public void setViewShape(int viewShape) {
+		this.viewShape = viewShape;
+	}
+
+	public int getVisible() {
 		return visible;
 	}
 
@@ -323,6 +349,17 @@ public class Component implements Serializable {
 
     public void setComponentSelectCollection(Collection<ComponentSelect> componentSelectCollection) {
         this.componentSelectCollection = componentSelectCollection;
+    }
+    
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<RelationComp> getRelationCompCollection() {
+        return relationCompCollection;
+    }
+
+    public void setRelationCompCollection(Collection<RelationComp> relationCompCollection) {
+        this.relationCompCollection = relationCompCollection;
     }
     
     

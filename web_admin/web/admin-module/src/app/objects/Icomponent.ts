@@ -9,8 +9,7 @@
             parentType: string,
             parentName: string,
             firstmethod:string,
-            relatedParent: number,
-            relatedType: string,
+            pagination: number,
             comIP: string,
             comport: string
         },
@@ -30,7 +29,15 @@
             patterndesgin : string,
             disable: number,
             fieldEncry : number,
-            parentGroup : string
+            parentGroup : string,         
+            viewShape: string, 
+            refreshMethod: string, 
+            refershServ: string, 
+            refreshButton: number,
+            keyupMethod: string, 
+            changeMethod: string, 
+            changeServ: string, 
+            keyupServ: string, 
         },
         select : {
             id: number,
@@ -39,8 +46,9 @@
             selectValue: string,
             selectDisplay: string,
             changemethod : string,
-            webService : string
-
+            webService : string,
+            comIP : string,
+            comport : string
         },
         input: {
             id: number,

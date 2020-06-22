@@ -119,7 +119,7 @@ if(date != null){
 
 
 if(user != null){
-  error =error.replace('user',user);
+  error =error.replace('user',GlobalConstants.USERNAME);
   error =error.replace("{{","");
 
   error =error.replace("}}","");

@@ -1,37 +1,41 @@
 package com.rimdev.user.ouputobject;
 
+import com.rimdev.user.entities.FilesUpload;
+
 public class threevalues {
 
-	String value1;
-	String value2;
-	String value3;
+	Userobject user;
+	String compid;
+	FilesUpload fileid;
 
 	public threevalues() {
 		super();
 	}
 
-	public String getValue1() {
-		return value1;
+	public Userobject getUser() {
+		return user;
 	}
 
-	public void setValue1(String value1) {
-		this.value1 = value1;
+	public void setUser(Userobject user) {
+		this.user = user;
 	}
 
-	public String getValue2() {
-		return value2;
+	public String getCompid() {
+		return compid;
 	}
 
-	public void setValue2(String value2) {
-		this.value2 = value2;
+	public void setCompid(String compid) {
+		this.compid = compid;
 	}
 
-	public String getValue3() {
-		return value3;
+	public FilesUpload getFileid() {
+		return fileid;
 	}
 
-	public void setValue3(String value3) {
-		this.value3 = value3;
+	public void setFileid(FilesUpload fileid) {
+		this.fileid = fileid;
 	}
+
+	
 
 }

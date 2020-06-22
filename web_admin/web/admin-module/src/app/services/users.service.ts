@@ -42,27 +42,12 @@ export class UsersService {
 
 
 
-      getbyvalue(url,value,ip,port):Observable<[]>{
-        var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
-        let headers = new HttpHeaders({
-          'Cache-Control': 'no-cache',
-              'Pragma': 'no-cache',
-              'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-              'username':   GlobalConstants.USERNAME,
-              'usertokean': GlobalConstants.USERTOKEANkey,
-              'pageid': GlobalConstants.pageid,
-              'Devicecode': GlobalConstants.PCCODE});
-          let options = { headers: headers };
-        //  console.log(options)
-        return this._http.post<any>(urlall,value,options);    
-        }
-
-        postbythreevalue(url,value1,value2,value3,ip,port):Observable<[]>{
+        postfiles(url,user,compid,fileid,ip,port):Observable<[]>{
           var urlall=GlobalConstants.protocol+ip+":"+port+url+"/"+GlobalConstants.language;
           var file = {
-            value1 : value1,
-            value2 : value2,
-            value3 : value3
+            user : user,
+            compid : compid,
+            fileid : fileid
           }
           let headers = new HttpHeaders({
             'Cache-Control': 'no-cache',

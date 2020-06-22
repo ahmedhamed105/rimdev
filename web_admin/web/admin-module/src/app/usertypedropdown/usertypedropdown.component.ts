@@ -26,8 +26,9 @@ export class UsertypedropdownComponent implements AgRendererComponent {
   setvalue(form){
 
     var text =form;
+
  
-    if(this.params.colDef.parentgroup != null){
+   if(this.params.colDef.parentgroup != null){
       text =text.get(this.params.colDef.parentgroup);
     }
 
@@ -36,19 +37,24 @@ export class UsertypedropdownComponent implements AgRendererComponent {
       }
     
       text=  text.get(this.params.colDef.field).value;
-     
 
+      
+      var  selectobject = this.objects[this.params.colDef.formnum].filter(x => x[this.params.colDef.selectValue] == text)[0];
+  
     if(this.params.colDef.parentgroup != null && this.params.colDef.groupname != null){
-      this.params.data[this.params.colDef.parentgroup][this.params.colDef.groupname][this.params.colDef.field] = text;
-    }else if(this.params.colDef.groupname != null && this.params.colDef.groupname == null){
-      this.params.data[this.params.colDef.parentgroup][this.params.colDef.field] = text;
+      this.params.data[this.params.colDef.parentgroup][this.params.colDef.groupname] = selectobject;
+    }else if(this.params.colDef.parentgroup != null && this.params.colDef.groupname == null){
+      this.params.data[this.params.colDef.parentgroup] = selectobject;
 
-     }else if(this.params.colDef.groupname == null && this.params.colDef.groupname != null){
-      this.params.data[this.params.colDef.groupname][this.params.colDef.field] = text;
+     }else if(this.params.colDef.parentgroup == null && this.params.colDef.groupname != null){
+      this.params.data[this.params.colDef.groupname] = selectobject;
+
+    //  console.log(this.params.data)
     }else{
-      this.params.data[this.params.colDef.field] = text;
+     
+      this.params.data = selectobject;
     }
-
+  
     
 
   }
@@ -90,10 +96,6 @@ export class UsertypedropdownComponent implements AgRendererComponent {
       }
    
 
-  
-
-  
-    
     value=value[this.params.colDef.field]
 
     this.tmpform.addControl(this.params.colDef.field,  new FormControl({value: value, disabled: this.params.colDef.fielddisable}, [Validators.required]));
