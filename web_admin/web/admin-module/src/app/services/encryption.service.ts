@@ -67,8 +67,8 @@ public encypttext(text):any{
   this.AesUtil(128, 1000);
   var ciphertext = this.encrypt(salt, iv, key,  text);
   var aesPassword = (iv + "::" + salt + "::" + ciphertext);
-  console.log(aesPassword)
-   console.log(key)
+ // console.log(aesPassword)
+ //  console.log(key)
    return btoa(aesPassword)+key;
 
 }

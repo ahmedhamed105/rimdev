@@ -81,6 +81,14 @@ public class RelationComp implements Serializable {
     private int resetind;
     @Column(name = "reset_parent")
     private Integer resetParent;
+    @Column(name = "enable_comp")
+    private Integer enableComp;
+    @Column(name = "visible_comp")
+    private Integer visibleComp;
+    @Column(name = "disable_comp")
+    private Integer disableComp;
+    @Column(name = "hide_comp")
+    private Integer hideComp;
 
 
     public RelationComp() {
@@ -98,6 +106,38 @@ public class RelationComp implements Serializable {
     
     
 
+
+	public Integer getDisableComp() {
+		return disableComp;
+	}
+
+	public void setDisableComp(Integer disableComp) {
+		this.disableComp = disableComp;
+	}
+
+	public Integer getHideComp() {
+		return hideComp;
+	}
+
+	public void setHideComp(Integer hideComp) {
+		this.hideComp = hideComp;
+	}
+
+	public Integer getEnableComp() {
+		return enableComp;
+	}
+
+	public void setEnableComp(Integer enableComp) {
+		this.enableComp = enableComp;
+	}
+
+	public Integer getVisibleComp() {
+		return visibleComp;
+	}
+
+	public void setVisibleComp(Integer visibleComp) {
+		this.visibleComp = visibleComp;
+	}
 
 	public Integer getResetParent() {
 		return resetParent;

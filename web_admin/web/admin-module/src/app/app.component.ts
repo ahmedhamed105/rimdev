@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     const body = document.getElementsByTagName('body')[0];
-    console.log(window.location.pathname );
+   // console.log(window.location.pathname );
    var URL= window.location.pathname 
     if(URL === '/' || URL === '/login'){
       this.login=1;

@@ -167,7 +167,7 @@
   <!-- component -->
 
   
-<div class="row" *ngIf="component.comp.ctype == 'button' && component.button.disable === 1" >
+<div class="row" *ngIf="component.comp.ctype == 'button'" >
   <div class="col-8">
     <div class="icheck-primary">
       <!-- Material checked -->
@@ -176,8 +176,8 @@
   </div>
   <!-- /.col -->
   <div class="col-4">
-    <button *ngIf="component.comp.ctype == 'button' && component.button.disable === 1"  [disabled]="!insertform[parent.parent.id].valid" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.comp.amethod == null ?'':this[component.comp.amethod]($event,component.rel,insertform[parent.parent.id],parent.parent.id,component.comp.ctype)" >{{component.comp.ccode}}</button>   
-  <!-- /.col -->
+    <button style="margin-right: 10px;" *ngIf="component.comp.ctype == 'button'"  [disabled]="component.button.disable === 1?true:component.button.valid === 1?!insertform[parent.parent.id].valid:false" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.comp.amethod == null ?'':this[component.comp.amethod]($event,component.rel,insertform[parent.parent.id],parent.parent.id,component.comp.ctype)" >{{component.comp.ccode}}</button>         
+    <!-- /.col -->
 </div>
 </div>
 

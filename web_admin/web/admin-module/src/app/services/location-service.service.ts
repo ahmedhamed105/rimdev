@@ -51,7 +51,7 @@ if(os === undefined){
     deviceOS: 'unknown'
   };
 }else{
-  console.log(os)
+  //console.log(os)
   this.device.deviceOSID={
     id: 0,
     deviceOS: os
@@ -83,7 +83,7 @@ if(os === undefined){
       devtype: 'unknown'
     };
     }else{
-     console.log(devicename)
+    // console.log(devicename)
     this.device.devicetypeID=
     {
       id: 0,

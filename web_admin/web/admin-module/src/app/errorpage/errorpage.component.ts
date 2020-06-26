@@ -14,7 +14,7 @@ export class ErrorpageComponent implements OnInit {
   constructor(private locationService: LocationServiceService) { }
 
   ngOnInit() {
-    console.log("as")
+    //console.log("as")
     this.errorsatatus =  this.locationService.getQueryParams('status',window.location.href).replace(/%20/g,' ')|| 'None';
     this.errormessage =  this.locationService.getQueryParams('reason',window.location.href).replace(/%20/g,' ')|| 'None';
    

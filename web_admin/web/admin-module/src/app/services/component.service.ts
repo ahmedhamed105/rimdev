@@ -75,7 +75,7 @@ export class ComponentService {
 
       url=url+type+'/'+menuid;
 
-      console.log(GlobalConstants.language)
+  //    console.log(GlobalConstants.language)
 
       let headers = new HttpHeaders({
         'Cache-Control': 'no-cache',

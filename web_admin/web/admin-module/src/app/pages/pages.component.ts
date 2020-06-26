@@ -36,7 +36,8 @@ export class PagesComponent implements OnInit {
   public components = [];
   public arraystatic = [];
   public placeholders = [];
-
+  public visables = [];
+  public disables = [];
   public allcompoent = new Map<any, any>();
   public page ;
   public pagenumber ;
@@ -128,7 +129,7 @@ export class PagesComponent implements OnInit {
 
     this.page=res;
 
-   // console.log(this.page)
+   // //console.log(this.page)
 
       
     this._LanguagegoService.getalllang().subscribe(data => {
@@ -145,7 +146,7 @@ export class PagesComponent implements OnInit {
   
     this._ComponentService.getbypage().subscribe(res =>{
 
-    // console.log(res);
+     //console.log(res);
       
 
       res.forEach((parent,indexp) => {
@@ -179,6 +180,8 @@ export class PagesComponent implements OnInit {
         this.allcompoent.set(parentin,[element.comp.name,element.comp.groupname,element.comp.parentGroup]);
 
         this.placeholders[parentin]= element.comp.ccode;
+        this.visables[parentin]= element.comp.visible === 1 ? 'visible' : 'hidden';
+        this.disables[parentin]= element.comp.disable=== 1 ? true : false;
 
         if(element.comp.fieldEncry === 1){
 
@@ -274,7 +277,7 @@ this.file[parent.parent.id]=this.filetmp;
 
 }else if(parent.child != null && parent.parent.parentType === 'table'){
 
-
+  
   this.tablepagination[parent.parent.id]=parent.parent.pagination;
   this.gridOptions[parent.parent.id]= <GridOptions>{};
   this.gridOptions[parent.parent.id].frameworkComponents = { "selRenderer" : UsertypedropdownComponent,"passRenderer" : PasswordtableComponent };
@@ -313,6 +316,11 @@ this.file[parent.parent.id]=this.filetmp;
   
 
 a.forEach((element,index) => {
+
+  var parentin=element.comp.id;
+  this.placeholders[parentin]= element.comp.ccode;
+  this.visables[parentin]= element.comp.visible === 1 ? 'visible' : 'hidden';
+  this.disables[parentin]= element.comp.disable=== 1 ? true : false;
 
   var b : Icolumdef;
 
@@ -567,7 +575,7 @@ if(element.comp.ctype === 'label'){
     
   }
 
-  //console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
+  ////console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
 
 
  // this.columnDefs[parent.parent.id][index+1]= b;
@@ -627,10 +635,9 @@ completeItem = (item: FileQueueObject, response: any) => {
 
 
  addfiles($event,name,index,pageid,parentid,compid,insertserv,parameter,insertip,insertport,deleteserv,deleteip,deleteport,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror) {
-
   const fileBrowser = $event.target;
 
- 
+ //console.log(name,index,pageid,parentid,compid,insertserv,parameter,insertip,insertport,deleteserv,deleteip,deleteport,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror)
   this.fileupload.addToQueue(fileBrowser.files,name,index,pageid,parentid,compid,insertserv,parameter,insertip,insertport,deleteserv,deleteip,deleteport,filecount,maxfilesize,fileCounterr,fileSizeerr,filetypes,fileTypeerror);
 }
 
@@ -756,7 +763,7 @@ if(related === 'table'){
 
   tableaction(event,rel,form,parentid,type){
 
-   // console.log(this.gridOptions[index])
+   // //console.log(this.gridOptions[index])
     const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
@@ -776,7 +783,7 @@ if(related === 'table'){
 
 
   displayupdate(event,rel,form,parentid,type){
- //console.log(this.gridOptions)
+ ////console.log(this.gridOptions)
     const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
@@ -810,9 +817,7 @@ this.ret_handle(event,rel,1,form,parentid,type);
     }
 
 ret_handle(event,rel,formnode,form,parentid,type){
-    
 
-    
         if( rel != undefined || rel.length > 0 ){
           rel.forEach((comp,indexp) => {
          var relvalue;
@@ -895,23 +900,8 @@ ret_handle(event,rel,formnode,form,parentid,type){
                    } 
                    this.customactioncode(data);
 
-                   if(comp.alertAfter === 1){
-                    this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                   }
-       
-                   if(comp.resetind === 1){
-                    this.insertform[comp.resetParent].reset();
-                             if(this.isfile){
-                              this.fileupload.clearQueue();
-                             }  
-                   }
-             
-                   if(comp.routingInd === 1 ){
-                     setTimeout(() => {
-                       window.location.replace(comp.routingLoc);
-                    }, 2000);
-             
-                   }
+                   this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+
 
                               
                  });
@@ -920,15 +910,19 @@ ret_handle(event,rel,formnode,form,parentid,type){
                  
 
                      if(comp.relatedParent != undefined && comp.parServ != undefined){
+
+                      //console.log("dispaly");
                       
                       this._usersservice.insertbyurl(relvalue,comp.parServ,comp.comIPpar,comp.comportpar).subscribe(
                         data => {
 
                           if(formnode === 3){
+
+                            //console.log("dispaly 1");
                             if(this.isfile){
                               this.fileupload.clearQueue();
                               this.fileupload.addfilesuser(data);
-                      
+                              //console.log("dispaly 2");
                               this.file[comp.relatedParent].forEach(element => {
                       
                                 if(element.comp.parentGroup != null && element.comp.groupname != null){
@@ -990,79 +984,29 @@ ret_handle(event,rel,formnode,form,parentid,type){
                             this.rowData[comp.relatedParent] = of(data);
 
                           }
-
+                          //console.log("dispaly 3");
                           this.customactioncode(data);
                           
                         
-                         
+                          this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
 
-
-                          if(comp.alertAfter === 1){
-                            this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                           }
-               
-                           if(comp.resetind === 1){
-                             this.insertform[comp.resetParent].reset();
-                             if(this.isfile){
-                              this.fileupload.clearQueue();
-                             } 
-                           }
-                     
-                           if(comp.routingInd === 1 ){
-                             setTimeout(() => {
-                               window.location.replace(comp.routingLoc);
-                            }, 2000);
-                     
-                           }
                         });
                        
                       }
 
      
                       if(comp.relatedComponent == undefined && comp.parServ == undefined && comp.relatedParent == undefined && comp.parServ == undefined && comp.resetind === 1 && comp.resetParent != undefined){
-                       
-                       
-                        if(comp.alertAfter === 1){
-                          this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                         }
+                     
+                        this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+ 
 
-                         if(comp.resetind === 1){
-                          this.insertform[comp.resetParent].reset();
-                          if(this.isfile){
-                           this.fileupload.clearQueue();
-                          } 
-                        }
-                     
-                   
-                         if(comp.routingInd === 1 ){
-                           setTimeout(() => {
-                             window.location.replace(comp.routingLoc);
-                          }, 2000);
-                   
-                         }
-                     
                       }
      
      
                }else{
-                
-                if(comp.alertAfter === 1){
-                  this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                 }
-     
-                 if(comp.resetind === 1){
-                   form.reset();
-                   if(this.isfile){
-                 //    this.fileupload.clearQueue();
-                   } 
-                 }
-           
-                 if(comp.routingInd === 1 ){
-                   setTimeout(() => {
-                     window.location.replace(comp.routingLoc);
-                  }, 2000);
-           
-                 }  
+
+                this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+ 
      
                  }
     
@@ -1071,14 +1015,13 @@ ret_handle(event,rel,formnode,form,parentid,type){
             
             }else{
               relvalue= event.target.value;
-            var relatcom=form.get(this.allcompoent.get(comp.relatedComponent)[0]);
-            
-    
-    
+              
               if(relvalue.length > 0){
-                // alert(comp.relatedComponent +' '+ comp.service +' '+ comp.relatedParent +' '+ comp.parServ );
-             
+        
+            
                    if(comp.relatedComponent != undefined && comp.service != undefined){
+
+                    var relatcom=form.get(this.allcompoent.get(comp.relatedComponent)[0]);
                     
                      this._usersservice.insertbyurl(relvalue,comp.service,comp.comIP,comp.comport)
                    .subscribe(data => {   
@@ -1097,23 +1040,9 @@ ret_handle(event,rel,formnode,form,parentid,type){
 
                      this.customactioncode(data);
 
-                     if(comp.alertAfter === 1){
-                      this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                     }
-         
-                     if(comp.resetind === 1){
-                      relatcom.setValue('');
-                     }
-               
-                     if(comp.routingInd === 1 ){
-                       setTimeout(() => {
-                         window.location.replace(comp.routingLoc);
-                      }, 2000);
-               
-                     }
-    
-                    
-                     
+
+                     this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
+
                    });
                        }
 
@@ -1124,27 +1053,14 @@ ret_handle(event,rel,formnode,form,parentid,type){
                            
                             this.rowData[comp.relatedParent] = of(data);
 
-                            if(comp.alertAfter === 1){
-                              this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                             }
-                 
-                             if(comp.resetind === 1){
-                              relatcom.setValue('');
-                             }
-                       
-                             if(comp.routingInd === 1 ){
-                               setTimeout(() => {
-                                 window.location.replace(comp.routingLoc);
-                              }, 2000);
-                       
-                             }
-                            
+                            this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
                           });
                          
                         }
        
                         if(comp.relatedComponent == undefined && comp.parServ == undefined && comp.relatedParent == undefined && comp.parServ == undefined && comp.resetind === 1 && comp.resetParent != undefined){
-                          relatcom.setValue('');
+                          this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+
                         } 
        
                  }else{
@@ -1153,20 +1069,9 @@ ret_handle(event,rel,formnode,form,parentid,type){
                      .subscribe(data => {
                        
                       this.objects[comp.relatedComponent] = data;
-                      if(comp.alertAfter === 1){
-                        this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                       }
-           
-                       if(comp.resetind === 1){
-                        relatcom.setValue('');
-                       }
-                 
-                       if(comp.routingInd === 1 ){
-                         setTimeout(() => {
-                           window.location.replace(comp.routingLoc);
-                        }, 2000);
-                 
-                       }
+
+                      this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
+
 
                      });
                    }
@@ -1177,24 +1082,11 @@ ret_handle(event,rel,formnode,form,parentid,type){
                        
                         this.rowData[comp.relatedParent] = of(data);
 
-                        if(comp.alertAfter === 1){
-                          this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
-                         }
-             
-                         if(comp.resetind === 1){
-                          relatcom.setValue('');
-                         }
-                   
-                         if(comp.routingInd === 1 ){
-                           setTimeout(() => {
-                             window.location.replace(comp.routingLoc);
-                          }, 2000);
-                   
-                         }
+                        this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
                         
-                      }
-                      
-                     )}
+                      })
+                    
+                    }
         
        
                    }
@@ -1223,6 +1115,63 @@ ret_handle(event,rel,formnode,form,parentid,type){
       customactioncode(data:any){
 
         
+      }
+
+
+      controltag(type,form,relatedComponent,enableComp,disableComp,visibleComp,hideComp,alertAfter,sucessMessage,resetind,resetParent,routingInd,routingLoc){
+  
+
+
+
+        //console.log(type,enableComp,disableComp,visibleComp,hideComp,alertAfter,sucessMessage,resetind,routingInd,routingLoc);
+        var relatcom;
+
+        if(relatedComponent != null){
+          relatcom=form.get(this.allcompoent.get(relatedComponent)[0]);
+        }
+
+        if(disableComp != null){
+          this.disables[disableComp] = true;                      
+         }
+
+         if(enableComp != null){
+          this.disables[enableComp] = false;                      
+         }
+
+
+         if(hideComp != null){
+           this.visables[hideComp] = 'hidden';                      
+          }
+
+
+         if(visibleComp != null){   
+          this.visables[visibleComp] = 'visible';                      
+         }
+
+         if(alertAfter === 1){
+      
+           this.errorDialogService.display_sucess(this.errorDialogService.formaterror(sucessMessage,null,null,null,'done'));
+          }
+
+          if(resetind === 1){
+            if(type === 1){
+              relatcom.setValue('');
+            }else if(type === 2){
+              this.insertform[resetParent].reset();
+              if(this.isfile){
+               this.fileupload.clearQueue();
+              } 
+            }
+           
+          }
+    
+          if(routingInd === 1 ){
+            setTimeout(() => {
+              window.location.replace(routingLoc);
+           }, 2000);
+    
+          }
+
       }
 
     signout(){

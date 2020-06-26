@@ -157,13 +157,13 @@ if( GlobalConstants.rember === '1'){
 
   //this.page=res;
 
- // console.log(this.page)
+ // //console.log(this.page)
 
     
 
   this._ComponentService.getbypage().subscribe(res =>{
 
-  // console.log(res);
+  // //console.log(res);
     
 
     res.forEach((parent,indexp) => {
@@ -585,7 +585,7 @@ if(element.comp.parentGroup === undefined){
   
 }
 
-//console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
+////console.log(element.comp.groupname === undefined? element.comp.name:element.comp.groupname)
 
 
 // this.columnDefs[parent.parent.id][index+1]= b;
@@ -754,8 +754,8 @@ if(group != null){
 
   onSubmit(event,rel,form,parentid,type){
     
-    console.log(rel.length)
-    console.log(rel) 
+    //console.log(rel.length)
+    //console.log(rel) 
 
     if( rel != undefined || rel.length > 0 ){
       rel.forEach((comp,indexp) => {
@@ -1085,7 +1085,7 @@ passwordValid(event) {
 
 
 checked(event:MatCheckboxChange){
-  console.log(event.checked);
+  //console.log(event.checked);
  // if(event.checked === true){
     this.cookieService.checkboxrember('1');
  // }else{

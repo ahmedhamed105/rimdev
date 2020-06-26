@@ -80,7 +80,7 @@ this.locationService.all_info().then(res => {
 
         this.page=res;
     
-        console.log(this.page)
+      //  console.log(this.page)
   
      //   this.pagenumber = this.type === "P"?this.page['parent']['pagesID']['id']:this.page['child']['pagesID']['id'];
     

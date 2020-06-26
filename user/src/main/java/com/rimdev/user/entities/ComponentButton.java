@@ -38,7 +38,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
     @NamedQuery(name = "ComponentButton.findAll", query = "SELECT c FROM ComponentButton c")
     , @NamedQuery(name = "ComponentButton.findById", query = "SELECT c FROM ComponentButton c WHERE c.id = :id")
     , @NamedQuery(name = "ComponentButton.findByButtonClass", query = "SELECT c FROM ComponentButton c WHERE c.buttonClass = :buttonClass")
-    , @NamedQuery(name = "ComponentButton.findByButtonMethod", query = "SELECT c FROM ComponentButton c WHERE c.buttonMethod = :buttonMethod")
     , @NamedQuery(name = "ComponentButton.findByButtonType", query = "SELECT c FROM ComponentButton c WHERE c.buttonType = :buttonType")})
 public class ComponentButton implements Serializable {
 
@@ -51,13 +50,8 @@ public class ComponentButton implements Serializable {
     @Basic(optional = false)
     @Column(name = "button_class", nullable = false, length = 450)
     private String buttonClass;
-    @Basic(optional = false)
-    @Column(name = "button_method", nullable = false, length = 450)
-    private String buttonMethod;
     @Column(name = "button_type", length = 450)
     private String buttonType;
-    @Column(name = "button_service", length = 450)
-    private String buttonService;
     @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false)
     private Component componentID;
@@ -68,10 +62,8 @@ public class ComponentButton implements Serializable {
     @Column(name = "date_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
-    @Column(name = "method_paramter", length = 450)
-    private String methodParamter;
-    @Column(name = "disable", nullable = false)
-    private int disable;
+    @Column(name = "valid")
+    private int valid;
     @Column(name = "alert_after")
     private Integer alertAfter;
     @Column(name = "sucess_message", length = 900)
@@ -84,16 +76,23 @@ public class ComponentButton implements Serializable {
         this.id = id;
     }
 
-    public ComponentButton(Integer id, String buttonClass, String buttonMethod) {
+    public ComponentButton(Integer id, String buttonClass) {
         this.id = id;
         this.buttonClass = buttonClass;
-        this.buttonMethod = buttonMethod;
     }
     
     
     
     
-    public Integer getAlertAfter() {
+    public int getValid() {
+		return valid;
+	}
+
+	public void setValid(int valid) {
+		this.valid = valid;
+	}
+
+	public Integer getAlertAfter() {
 		return alertAfter;
 	}
 
@@ -109,22 +108,6 @@ public class ComponentButton implements Serializable {
 		this.sucessMessage = sucessMessage;
 	}
 
-	public int getDisable() {
-        return disable;
-    }
-
-    public void setDisable(int disable) {
-        this.disable = disable;
-    }
-    
-    
-    public String getMethodParamter() {
-        return methodParamter;
-    }
-
-    public void setMethodParamter(String methodParamter) {
-        this.methodParamter = methodParamter;
-    }
     
     @XmlTransient
     @JsonIgnore
@@ -163,13 +146,7 @@ public class ComponentButton implements Serializable {
         this.buttonClass = buttonClass;
     }
 
-    public String getButtonMethod() {
-        return buttonMethod;
-    }
-
-    public void setButtonMethod(String buttonMethod) {
-        this.buttonMethod = buttonMethod;
-    }
+   
 
     public String getButtonType() {
         return buttonType;
@@ -179,14 +156,7 @@ public class ComponentButton implements Serializable {
         this.buttonType = buttonType;
     }
     
-    
-	public String getButtonService() {
-		return buttonService;
-	}
-
-	public void setButtonService(String buttonService) {
-		this.buttonService = buttonService;
-	}
+ 
 
 	@XmlTransient
     @JsonIgnore

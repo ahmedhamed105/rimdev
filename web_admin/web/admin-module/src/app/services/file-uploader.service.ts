@@ -87,9 +87,9 @@ export class FileUploaderService {
   // the queue
   public  queue(index) {
 
-    console.log(index)
+    //console.log(index)
     if(this._queue[index] == undefined){
-      console.log("new")
+      //console.log("new")
       this._files[index]=[];
       this._queue[index] = <BehaviorSubject<FileQueueObject[]>>new BehaviorSubject(this._files[index]);
     }
@@ -173,7 +173,7 @@ export class FileUploaderService {
 
       _.each(queueObj1, (queueObj: FileQueueObject) => {
 
-      //  console.log(queueObj.index)
+      //  //console.log(queueObj.index)
         
           this._files[queueObj.index] = [];
           this._queue[queueObj.index].next(this._files[queueObj.index]);
@@ -215,7 +215,7 @@ export class FileUploaderService {
 
     var urlall=GlobalConstants.protocol+GlobalConstants.ip+":"+GlobalConstants.port+GlobalConstants.urldownload+"/"+GlobalConstants.language;
     var url=urlall+"/"+queueObj.fileid;
-console.log(url);
+//console.log(url);
 let headers = new HttpHeaders({
   'Cache-Control': 'no-cache',
     'Pragma': 'no-cache',
@@ -230,17 +230,17 @@ let headers = new HttpHeaders({
 
 
   public addfilesuser(data): any{
-          console.log(data)
+          //console.log(data)
           
           data.forEach(singlefile => {
 
-            console.log(singlefile)
+            //console.log(singlefile)
 
             var file= {name : singlefile['filesuploadID']['filesName'],size : singlefile['filesuploadID']['filesSize']*1024}
          
 
-        console.log(singlefile['filesuploadID']['filesName'])
-        console.log(singlefile['componentID']['id'])
+        //console.log(singlefile['filesuploadID']['filesName'])
+        //console.log(singlefile['componentID']['id'])
 
         //    var queueObj = new FileQueueObject(file,'type','index','pageid','parentid','componentid');
         var queueObj = new FileQueueObject(file,'type',singlefile['componentID']['id'],0,0,singlefile['componentID']['id']);
@@ -295,6 +295,8 @@ let headers = new HttpHeaders({
   }
 
   private _deleteFromQueuepost(queueObj: FileQueueObject,serv,ip,port) {
+
+  //  alert('delete '+serv+' '+ip+' '+port)
 
     var form = new FormData();
     form.append('fileid', queueObj.fileid);
@@ -417,9 +419,9 @@ let headers = new HttpHeaders({
   private _uploadComplete(queueObj: FileQueueObject, response: HttpResponse<any>,para,object,compid) {
     // update the FileQueueObject as completed
 if(para === 0){
-  console.log("insert");
+  //console.log("insert");
   this._usersservice.postfiles(queueObj.insertserv,object,compid,response.body,queueObj.insertip,queueObj.insertport).subscribe(data => {
-console.log(data);
+//console.log(data);
 queueObj.progress = 100;
 queueObj.status = FileQueueStatus.Success;
 queueObj.response = response;
@@ -439,7 +441,7 @@ this.onCompleteItem(queueObj, response.body);
     // update the FileQueueObject as errored
     queueObj.progress = 0;
 
-    console.log(response);
+    //console.log(response);
 
     if(response.status == 409){
    queueObj.status = FileQueueStatus.duplicate;
