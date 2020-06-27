@@ -98,12 +98,16 @@ public Currency Save(Currency input,String langcode) {
 	}
 
 
-public Currency update(Currency input,String langcode)  {
+public Currency update(Currency old,Currency input,String langcode)  {
 	
 	try {	
+		old.setCurrencyISO(input.getCurrencyISO());
+		old.setCurrencydescription(input.getCurrencydescription());
+		old.setCurrencyname(input.getCurrencyname());
+		old.setAllstatusID(input.getAllstatusID());
 		Date date = new Date();
 		input.setEffectiveDate(date);
-		Currency ouput1 =currencyRepo.save(input);	
+		Currency ouput1 =currencyRepo.save(old);	
 		return ouput1;
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
