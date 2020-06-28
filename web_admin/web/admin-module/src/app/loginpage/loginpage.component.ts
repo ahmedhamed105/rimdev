@@ -814,7 +814,8 @@ if(group != null){
                this.customactioncode(data);
 
                if(comp.alertAfter === 1){
-                this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                
+                this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,data));
                }
    
                if(comp.resetind === 1){
@@ -850,9 +851,8 @@ if(group != null){
                       } 
                       this.rowData[comp.relatedParent] = of(data);
 
-
                       if(comp.alertAfter === 1){
-                        this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                        this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,data));
                        }
            
                        if(comp.resetind === 1){
@@ -877,7 +877,7 @@ if(group != null){
                    
                    
                     if(comp.alertAfter === 1){
-                      this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                      this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null));
                      }
 
                      if(comp.resetind === 1){
@@ -901,7 +901,7 @@ if(group != null){
            }else{
             
             if(comp.alertAfter === 1){
-              this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+              this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null));
              }
  
              if(comp.resetind === 1){
@@ -952,7 +952,7 @@ if(group != null){
                  this.customactioncode(data);
 
                  if(comp.alertAfter === 1){
-                  this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                  this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,data));
                  }
      
                  if(comp.resetind === 1){
@@ -979,7 +979,7 @@ if(group != null){
                         this.rowData[comp.relatedParent] = of(data);
 
                         if(comp.alertAfter === 1){
-                          this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                          this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,data));
                          }
              
                          if(comp.resetind === 1){
@@ -1008,7 +1008,7 @@ if(group != null){
                    
                   this.objects[comp.relatedComponent] = data;
                   if(comp.alertAfter === 1){
-                    this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                    this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,data));
                    }
        
                    if(comp.resetind === 1){
@@ -1032,7 +1032,7 @@ if(group != null){
                     this.rowData[comp.relatedParent] = of(data);
 
                     if(comp.alertAfter === 1){
-                      this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,null,null,Date.now(),'done'));
+                      this.errorDialogService.display_sucess(this.errorDialogService.formaterror(comp.sucessMessage,data));
                      }
          
                      if(comp.resetind === 1){
@@ -1066,7 +1066,7 @@ if(group != null){
      
 
     }else{
-      this.errorDialogService.display_sucess(this.errorDialogService.formaterror("no action",null,null,null,null));
+      this.errorDialogService.display_sucess(this.errorDialogService.formaterror("no action",null));
 
 
     }

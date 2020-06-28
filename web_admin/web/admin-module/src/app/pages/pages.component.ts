@@ -761,43 +761,62 @@ if(related === 'table'){
   }
 
 
-  tableaction(event,rel,form,parentid,type){
+  tableaction(event,rel,form,parentid,type,emptyind,emptymessage){
 
    // //console.log(this.gridOptions[index])
     const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
 
-     this.errorDialogService.display_error("E103");
-
+      if(emptyind === 1){
+      let data1 = {
+        'error': emptymessage ,
+        'code' : 400 
+      };
+     this.errorDialogService.display_error(data1);
     }
+    }else{
 
-    const selectedData = selectedNodes.map( node => node.data );
-    const selectedDataStringPresentation = selectedData.map( node =>
-       {
+
+      const selectedData = selectedNodes.map( node => node.data );
+      const selectedDataStringPresentation = selectedData.map( node =>
+         {
+    
+          this.ret_handle(event,rel,2,node,parentid,type);
+        });
   
-        this.ret_handle(event,rel,2,node,parentid,type);
-      });
+    }
 
   }
 
 
-  displayupdate(event,rel,form,parentid,type){
+  displayupdate(event,rel,form,parentid,type,emptyind,emptymessage){
  ////console.log(this.gridOptions)
     const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
 
     if(selectedNodes.length === 0 ){
+if(emptyind === 1){
 
-     this.errorDialogService.display_error("E103");
+  let data1 = {
+    'error': emptymessage ,
+    'code' : 400 
+  };
+ this.errorDialogService.display_error(data1);
+
+}
+
+    }else{
+
+      const selectedData = selectedNodes.map( node => node.data );
+      const selectedDataStringPresentation = selectedData.map( node =>
+         {
+          this.ret_handle(event,rel,3,node,parentid,type);
+        
+        });
 
     }
 
-    const selectedData = selectedNodes.map( node => node.data );
-    const selectedDataStringPresentation = selectedData.map( node =>
-       {
-        this.ret_handle(event,rel,3,node,parentid,type);
-      
-      });
+ 
 
   }
 
@@ -811,7 +830,7 @@ language(code){
     }
 
 
-    doaction(event,rel,form,parentid,type){
+    doaction(event,rel,form,parentid,type,emptyind,emptymessage){
 this.ret_handle(event,rel,1,form,parentid,type);
 
     }
@@ -900,7 +919,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
                    } 
                    this.customactioncode(data);
 
-                   this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+                   this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc,data);   
 
 
                               
@@ -988,7 +1007,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
                           this.customactioncode(data);
                           
                         
-                          this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+                          this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc,data);   
 
                         });
                        
@@ -997,7 +1016,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
      
                       if(comp.relatedComponent == undefined && comp.parServ == undefined && comp.relatedParent == undefined && comp.parServ == undefined && comp.resetind === 1 && comp.resetParent != undefined){
                      
-                        this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+                        this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc,null);   
  
 
                       }
@@ -1005,7 +1024,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
      
                }else{
 
-                this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+                this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc,null);   
  
      
                  }
@@ -1041,7 +1060,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
                      this.customactioncode(data);
 
 
-                     this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
+                     this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc,data);   
 
                    });
                        }
@@ -1053,13 +1072,13 @@ ret_handle(event,rel,formnode,form,parentid,type){
                            
                             this.rowData[comp.relatedParent] = of(data);
 
-                            this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
+                            this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc,data);   
                           });
                          
                         }
        
                         if(comp.relatedComponent == undefined && comp.parServ == undefined && comp.relatedParent == undefined && comp.parServ == undefined && comp.resetind === 1 && comp.resetParent != undefined){
-                          this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc);   
+                          this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc,null);   
 
                         } 
        
@@ -1070,7 +1089,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
                        
                       this.objects[comp.relatedComponent] = data;
 
-                      this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
+                      this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc,data);   
 
 
                      });
@@ -1082,7 +1101,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
                        
                         this.rowData[comp.relatedParent] = of(data);
 
-                        this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc);   
+                        this.controltag(1,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,undefined,comp.routingInd,comp.routingLoc,data);   
                         
                       })
                     
@@ -1104,7 +1123,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
          
     
         }else{
-          this.errorDialogService.display_sucess(this.errorDialogService.formaterror("no action",null,null,null,null));
+          this.errorDialogService.display_sucess(this.errorDialogService.formaterror("no action",null));
 
 
         }
@@ -1118,7 +1137,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
       }
 
 
-      controltag(type,form,relatedComponent,enableComp,disableComp,visibleComp,hideComp,alertAfter,sucessMessage,resetind,resetParent,routingInd,routingLoc){
+      controltag(type,form,relatedComponent,enableComp,disableComp,visibleComp,hideComp,alertAfter,sucessMessage,resetind,resetParent,routingInd,routingLoc,data){
   
 
 
@@ -1150,7 +1169,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
 
          if(alertAfter === 1){
       
-           this.errorDialogService.display_sucess(this.errorDialogService.formaterror(sucessMessage,null,null,null,'done'));
+           this.errorDialogService.display_sucess(this.errorDialogService.formaterror(sucessMessage,data));
           }
 
           if(resetind === 1){

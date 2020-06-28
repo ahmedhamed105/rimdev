@@ -26,7 +26,7 @@ export class ErrorDialogService {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-   //         console.log('The dialog was closed');
+            console.log('The dialog was closed');
             this.isDialogOpen = false;
             let animal;
             animal = result;
@@ -47,7 +47,7 @@ export class ErrorDialogService {
 
     display_error(error){
 
- //console.log(error);
+ console.log(error);
 
 
  let data1 = {
@@ -74,59 +74,64 @@ window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
 
       }
 
+      public formaterror(error,data){
+
+        if(error === undefined){
+          error='error';
+        }
+    
+        if(data != null){
+          console.log(error);
+         var first = this.locations(error,"{{");
+         var last = this.locations(error,"}}");
+         var variables=[];
+         var values=[];
+      
+         for (let i = 0; i < first.length; i++) {
+      
+          var mySubString = error.substring(
+            first[i], 
+            last[i]+2
+        );
+        variables.push(mySubString);
+        var varSubString = error.substring(
+          first[i] + 2, 
+          last[i]
+      );
+      var value=data[varSubString];
+ 
+  if(this.isDate(value)) {
+    value=  formatDate(value, GlobalConstants.formatlogin, GlobalConstants.locale)
+  } 
 
 
-   public formaterror(error,map,field,date,user){
+    
+ 
+      values.push(value);
+        }
+    
+        for (let j = 0; j < variables.length; j++) {
+          error =error.replace(variables[j],values[j]);
+        }  
+    
+       
+        }
+    
+    
+    
+    return error;
+    
+          }   
 
-    if(error === undefined){
-      error='error';
-    }
+          isDate(s) {
+            if(isNaN(s) && !isNaN(Date.parse(s)))
+                return true;
+            else return false;
+        }
 
-if(map != null){
- // console.log(typeof(map))
-  if(typeof(map)==='string'){
-    error =error.replace('data',map);
-    error =error.replace("{{","");
-    error =error.replace("}}","");
-  }else{
-    for (let [key, value] of map.entries()) {
-      error =error.replace(key,value);
-      error =error.replace("{{","");
-      error =error.replace("}}","");
-  }
-
-  }
-
-}
-
-if(field != null){
-  if(field===undefined){
-  field='field';
-}
-  error =error.replace('field',field);
-  error =error.replace("{{","");
-
-  error =error.replace("}}","");
-}
-
-if(date != null){
-  error =error.replace('date',formatDate(date, GlobalConstants.formatlogin, GlobalConstants.locale));
-  error =error.replace("{{","");
-
-  error =error.replace("}}","");
-}
-
-
-
-if(user != null){
-  error =error.replace('user',GlobalConstants.USERNAME);
-  error =error.replace("{{","");
-
-  error =error.replace("}}","");
-}
-
-
-return error;
-
-      }    
+     locations(string,substring){
+            var a=[],i=-1;
+            while((i=string.indexOf(substring,i+1)) >= 0) a.push(i);
+            return a;
+          }
 }

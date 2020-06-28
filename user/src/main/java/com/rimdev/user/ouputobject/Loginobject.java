@@ -1,11 +1,14 @@
 package com.rimdev.user.ouputobject;
 
+import java.util.Date;
+
 public class Loginobject {
 	
 	String username;
 	String password;
 	String Tokean;
 	boolean login;
+	Date logintime;
 
 	
 	public Loginobject() {
@@ -13,6 +16,16 @@ public class Loginobject {
 	}
 	
 	
+	public Date getLogintime() {
+		return logintime;
+	}
+
+
+	public void setLogintime(Date logintime) {
+		this.logintime = logintime;
+	}
+
+
 	public String getTokean() {
 		return Tokean;
 	}

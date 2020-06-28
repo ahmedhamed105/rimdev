@@ -972,7 +972,7 @@ public Loginobject login(HttpServletRequest request,Loginobject input,String lan
 
 
    
-
+    out.setLogintime(cal.getTime());
 	
 
 	return out;

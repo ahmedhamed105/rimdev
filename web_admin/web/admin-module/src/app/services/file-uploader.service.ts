@@ -120,18 +120,20 @@ export class FileUploaderService {
     }
   
     if(filescount > filecount){
-      let map = new Map();
-      map.set("filecount",filecount); 
-      alert(this._ErrorDialogService.formaterror(fileCounterr,map,null,null,null));
+      let map ={
+        'filecount' : filecount
+      }
+      alert(this._ErrorDialogService.formaterror(fileCounterr,map));
       return false;
   
     }
 
 
     if(filetypes.length <= 0){
-      let map = new Map();
-      map.set("wrongtype",'unsupported');
-      alert(this._ErrorDialogService.formaterror(fileTypeerror,map,null,null,null));
+      let map ={
+        'wrongtype' : 'unsupported'
+      }
+      alert(this._ErrorDialogService.formaterror(fileTypeerror,map));
       return false;
     }else{
   
@@ -144,9 +146,10 @@ export class FileUploaderService {
       });
   
       if(count <= 0){
-        let map = new Map();
-        map.set("wrongtype",data[0].type); 
-        alert(this._ErrorDialogService.formaterror(fileTypeerror,map,null,null,null));
+        let map ={
+          'wrongtype' : data[0].type
+        }
+        alert(this._ErrorDialogService.formaterror(fileTypeerror,map));
         return false;
       }
   
@@ -157,9 +160,10 @@ export class FileUploaderService {
     }
   
     if (data[0].size > maxfilesize) {
-      let map = new Map();
-      map.set("maxfilesize",maxfilesize); 
-      alert(this._ErrorDialogService.formaterror(fileSizeerr,map,null,null,null));
+      let map ={
+        'maxfilesize' : maxfilesize
+      }
+      alert(this._ErrorDialogService.formaterror(fileSizeerr,map));
        return false;
    }
 

@@ -26,6 +26,7 @@ import com.rimdev.accounting.Services.ExternalServ;
 import com.rimdev.accounting.Services.TextConvertionServ;
 import com.rimdev.accounting.inputobject.Acct_obj;
 import com.rimdev.accounting.inputobject.transfer_obj;
+import com.rimdev.accounting.outputobject.Transaction_output;
 import com.rimdev.accounting.outputobject.textobject;
 
 @Controller // This means that this class is a Controller
@@ -52,7 +53,7 @@ public class AccountController {
 
 	
 	@RequestMapping(value = "/transfer/{langcode}", method = RequestMethod.POST)
-	  public  @ResponseBody ResponseEntity<Void> account_transfer(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody transfer_obj acct) {
+	  public  @ResponseBody Transaction_output account_transfer(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody transfer_obj acct) {
 	    // This returns a JSON or XML with the users
 		Account from;
 		Account to;
@@ -88,8 +89,8 @@ public class AccountController {
 				if(result) {
 		     String ref =	accountProcessServ.debit_cash_account("",from.getCurrencyID().getCurrencyISO(), from.getAcctNumber(), amount, acct.getTrxdesc(), langcode);
 		        ref =	accountProcessServ.credit_cash_account(ref,from.getCurrencyID().getCurrencyISO(), to.getAcctNumber(), amount, acct.getTrxdesc(), langcode);
-			throw new PopupException(textConvertionServ.search("reference no "+ref, langcode));
-
+			
+		        return new Transaction_output(amount, ref);
 	
 		}else {
 		

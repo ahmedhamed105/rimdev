@@ -771,7 +771,7 @@
   <div class="input-group-prepend" >
   <ng-container *ngFor="let component of parent.child; let i = index; let parentlen = count">
 
- <button [style.visibility]="visables[component.comp.id]" style="margin-right: 10px;" *ngIf="component.comp.ctype == 'button'"  [disabled]="disables[component.comp.id]?true:component.button.valid === 1?!insertform[parent.parent.id].valid:false" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.comp.amethod == null ?'':this[component.comp.amethod]($event,component.rel,insertform[parent.parent.id],parent.parent.id,component.comp.ctype)" >{{component.comp.ccode}}</button>         
+ <button [style.visibility]="visables[component.comp.id]" style="margin-right: 10px;" *ngIf="component.comp.ctype == 'button'"  [disabled]="disables[component.comp.id]?true:component.button.valid === 1?!insertform[parent.parent.id].valid:false" class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.comp.amethod == null ?'':this[component.comp.amethod]($event,component.rel,insertform[parent.parent.id],parent.parent.id,component.comp.ctype,component.button.alertAfter,component.button.emptyMessage)" >{{component.comp.ccode}}</button>         
   
  
 </ng-container>
@@ -811,7 +811,7 @@
         <!-- /.box-header -->
         <div class="card-body">
           <ng-container  *ngFor="let component of parent.child; let i = index; let parentlen = count" >
-          <button [style.visibility]="visables[component.comp.id]"  [disabled]="disables[component.comp.id]"  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.comp.amethod == null ?'':this[component.comp.amethod]($event,component.rel,insertform[parent.parent.id],parent.parent.id,component.comp.ctype)" >{{component.comp.ccode}}</button> 
+          <button [style.visibility]="visables[component.comp.id]"  [disabled]="disables[component.comp.id]"  *ngIf="component.comp.ctype == 'button'"  class="btn {{component.button.buttonClass}}" type="{{component.button.buttonType}}" (click)="component.comp.amethod == null ?'':this[component.comp.amethod]($event,component.rel,insertform[parent.parent.id],parent.parent.id,component.comp.ctype,component.button.alertAfter,component.button.emptyMessage)" >{{component.comp.ccode}}</button> 
           </ng-container>
       
           <br/>

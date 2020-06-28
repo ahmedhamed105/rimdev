@@ -66,8 +66,8 @@ public class ComponentButton implements Serializable {
     private int valid;
     @Column(name = "alert_after")
     private Integer alertAfter;
-    @Column(name = "sucess_message", length = 900)
-    private String sucessMessage;
+    @Column(name = "empty_message", length = 900)
+    private String emptyMessage;
 
     public ComponentButton() {
     }
@@ -100,16 +100,18 @@ public class ComponentButton implements Serializable {
 		this.alertAfter = alertAfter;
 	}
 
-	public String getSucessMessage() {
-		return sucessMessage;
-	}
-
-	public void setSucessMessage(String sucessMessage) {
-		this.sucessMessage = sucessMessage;
-	}
+	
 
     
-    @XmlTransient
+    public String getEmptyMessage() {
+		return emptyMessage;
+	}
+
+	public void setEmptyMessage(String emptyMessage) {
+		this.emptyMessage = emptyMessage;
+	}
+
+	@XmlTransient
     @JsonIgnore
     public Date getDateModify() {
         return dateModify;
