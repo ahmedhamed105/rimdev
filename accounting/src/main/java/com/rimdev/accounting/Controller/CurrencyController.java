@@ -118,7 +118,7 @@ public class CurrencyController {
 				"Currency in processing", "", 34, 0);
 
 		if (result) {
-			if (input.getId() == null) {
+			if (input.getId() == null ||  input.getAllstatusID().getId() == null) {
 
 				throw new PopupException("error while updating");
 

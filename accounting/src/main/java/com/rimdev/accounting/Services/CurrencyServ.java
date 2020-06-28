@@ -106,7 +106,7 @@ public Currency update(Currency old,Currency input,String langcode)  {
 		old.setCurrencyname(input.getCurrencyname());
 		old.setAllstatusID(input.getAllstatusID());
 		Date date = new Date();
-		input.setEffectiveDate(date);
+		old.setEffectiveDate(date);
 		Currency ouput1 =currencyRepo.save(old);	
 		return ouput1;
 	} catch (TransientDataAccessException  se) {

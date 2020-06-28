@@ -82,7 +82,6 @@ public FlowType getflow(int id,String langcode) {
 public FlowType Save(FlowType input,String langcode){
 	
 	try {	
-		
 		Date date = new Date();
 		input.setCreateDate(date);
 		input.setEffectiveDate(date);
@@ -104,13 +103,16 @@ public FlowType Save(FlowType input,String langcode){
 	}
 
 
-public FlowType update(FlowType input,String langcode)  {
+public FlowType update(FlowType old,FlowType input,String langcode)  {
 	
 	
 	try {	
+		old.setAllstatusID(input.getAllstatusID());
+		old.setFlowtype(input.getFlowtype());
+		old.setFlowdescription(input.getFlowdescription());
 		Date date = new Date();
-		input.setEffectiveDate(date);
-		FlowType ouput1 =flowTypeRepo.save(input);	
+		old.setEffectiveDate(date);
+		FlowType ouput1 =flowTypeRepo.save(old);	
 		return ouput1;
 	} catch (TransientDataAccessException  se) {
 		se.printStackTrace();
