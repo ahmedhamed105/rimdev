@@ -37,36 +37,7 @@ public class TextConvertionServ {
 	LanguageMapServ languageMapServ;
 	
 	
-public void delete(Lang_obj input,LanguageMap map,String langcode) {
-		try {
-			
 
-		Languages lang1=languagesServ.getlangtext(1, langcode);
-		Languages lang2=languagesServ.getlangtext(2, langcode);
-		Languages lang3=languagesServ.getlangtext(3, langcode);
-		TextConvertion text=getbylangmap(lang1.getId(), map.getId(), langcode);
-		textConvertionRepo.delete(text);
-		
-		text=getbylangmap(lang2.getId(), map.getId(), langcode);
-		textConvertionRepo.delete(text);
-		
-		text=getbylangmap(lang3.getId(), map.getId(), langcode);
-		textConvertionRepo.delete(text);
-		
-		languageMapServ.delete(map, langcode);
-		
-} catch (TransientDataAccessException  se) {
-	throw new NullPointerException(search("E104", langcode));
-} catch (RecoverableDataAccessException  se) {
-	throw new NullPointerException(search("E104", langcode));
-}catch (ScriptException  se) {
-	throw new NullPointerException(search("E104", langcode));
-}catch (NonTransientDataAccessException  se) {
-	throw new NullPointerException(search("E104", langcode));
-}
-
-	
-	}
 	
 	
 	public void update(TextConvertion old,Lang_obj input,String langcode) {
@@ -89,20 +60,26 @@ public void delete(Lang_obj input,LanguageMap map,String langcode) {
 	textConvertionRepo.save(old);
 	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }
 		
 	}
 	
 public void Save(Lang_obj input,String langcode) {
 	try {
-    LanguageMap map=languageMapServ.Save(input.getLangcode(), langcode);
+		
+		LanguageMap map=languageMapServ.getbycode(input.getLangcode(), langcode);
+		if(map == null) {
+		   map=languageMapServ.Save(input.getLangcode(), langcode);
+		}else {
+		   map=languageMapServ.update(map, langcode);
+		}
 	Languages lang=languagesServ.getlangtext(input.getTxtconv().getLanguagesID().getId(), langcode);
 	TextConvertion text=new TextConvertion();
 	text.setLanguagemapID(map);
@@ -152,7 +129,7 @@ public void Save(Lang_obj input,String langcode) {
 	
 	public String search(String code,String langcode){
 		if(code == null || langcode == null) {	
-			 new NullPointerException("please enter code");
+			 new PopupException("please enter code");
 		}
 		//System.out.println(code + " "+langcode);
 		Languages lan= languagesServ.getbycode(langcode,langcode);
@@ -174,13 +151,13 @@ public void Save(Lang_obj input,String langcode) {
 		return listtext;
 		
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }
 		
 	
@@ -202,16 +179,16 @@ public void Save(Lang_obj input,String langcode) {
 						}
 				else{
 				   // alternative processing....
-					throw new NullPointerException("no TextConvertion found in "+ this.getClass().getName());
+					throw new PopupException("no TextConvertion found in "+ this.getClass().getName());
 				}
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException(search("E104", langcode));
+			throw new PopupException(search("E104", langcode));
 	    }
 		
 		

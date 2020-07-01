@@ -88,17 +88,17 @@ public class TextConvertionController {
 			
 				try {
 					 TextConvertion txt = textConvertionServ.getbylangmaptxt(input.getTxtconv().getLanguagesID().getId(),input.getLangcode(), langcode);
-
-					if (txt.getId() == null && input.getTxtconv().getLanguagesID().getId() != null) {
+					if (txt == null || input.getTxtconv().getLanguagesID().getId() != null) {
 						// System.out.println("enter 3");
 						textConvertionServ.Save(input, langcode);
 			
 					} else {
-						throw new PopupException("error while insertion");
+						throw new PopupException("error while insertion 1");
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
-					throw new PopupException("error while insertion");
+					e.printStackTrace();
+					throw new PopupException("error while insertion 2");
 				}
 
 				return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
@@ -120,7 +120,7 @@ public class TextConvertionController {
 				try {
 					 TextConvertion txt = textConvertionServ.getbylangmaptxt(input.getTxtconv().getLanguagesID().getId(),input.getLangcode(), langcode);
 
-					if (txt.getId() != null) {
+					if (txt != null) {
 						// System.out.println("enter 3");
 						textConvertionServ.update(txt,input, langcode);
 					} else {
