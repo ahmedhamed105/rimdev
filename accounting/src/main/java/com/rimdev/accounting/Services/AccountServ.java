@@ -36,7 +36,40 @@ private CurrencyRepo currencyRepo;
 TextConvertionServ textConvertionServ;
 
 
-public Account findbyid(int id) {
+
+
+public Account findbyid(int id,String langcode) {
+	
+	
+	
+	try {
+		Optional<Account> flowid =accountRepo.findbyid(id);
+		 
+		 if (flowid.isPresent()){
+			 Account  ouput = flowid.get();
+		
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}
+}
+
+public Account findbyidstatus(int id,String langcode) {
 	
 	
 	
@@ -52,11 +85,19 @@ public Account findbyid(int id) {
 			   // alternative processing....
 				return null;
 			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		return null;
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}
-	
 }
 
 
@@ -127,8 +168,31 @@ public Account getbyaccount(String acct_no,int currency) {
 
 
 
-
-
+public Account update(Account old,Account input,String langcode)  {
+	
+	try {	
+		old.setAllstatusID(input.getAllstatusID());
+		Date date = new Date();
+		old.setEffectiveDate(date);
+		Account ouput1 =accountRepo.save(old);	
+		return ouput1;
+	} catch (TransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	} catch (RecoverableDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}catch (ScriptException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}catch (NonTransientDataAccessException  se) {
+		se.printStackTrace();
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+	}	
+	
+	
+	}
+	
 
 
 

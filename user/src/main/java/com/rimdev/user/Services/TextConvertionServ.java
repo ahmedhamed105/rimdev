@@ -11,12 +11,14 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
+
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.TextConvertionRepo;
 import com.rimdev.user.entities.LanguageMap;
 import com.rimdev.user.entities.Languages;
 import com.rimdev.user.entities.TextConvertion;
+import com.rimdev.user.ouputobject.Lang_obj;
 import com.rimdev.user.ouputobject.lang_code;
-import com.rimdev.user.ouputobject.lang_object;
 
 
 
@@ -35,7 +37,7 @@ public class TextConvertionServ {
 	LanguageMapServ languageMapServ;
 	
 	
-public void delete(lang_object input,LanguageMap map,String langcode) {
+public void delete(Lang_obj input,LanguageMap map,String langcode) {
 		try {
 			
 
@@ -67,29 +69,25 @@ public void delete(lang_object input,LanguageMap map,String langcode) {
 	}
 	
 	
-	public void update(lang_object input,LanguageMap map,String langcode) {
+	public void update(TextConvertion old,Lang_obj input,String langcode) {
 		try {
-		Languages lang1=languagesServ.getlangtext(1, langcode);
-		Languages lang2=languagesServ.getlangtext(2, langcode);
-		Languages lang3=languagesServ.getlangtext(3, langcode);
-		TextConvertion text=getbylangmap(lang1.getId(), map.getId(), langcode);
-		text.setReturnLang(input.getText1());
-		Date date = new Date();
-		text.setDateModify(date);
-		textConvertionRepo.save(text);
-		
-		text=getbylangmap(lang2.getId(), map.getId(), langcode);
-		text.setReturnLang(input.getText2());
-		 date = new Date();
-		text.setDateModify(date);
-		textConvertionRepo.save(text);
-		
-		text=getbylangmap(lang3.getId(), map.getId(), langcode);
-		text.setReturnLang(input.getText3());
-		 date = new Date();
-		text.setDateModify(date);
-		textConvertionRepo.save(text);
-		
+	LanguageMap map=languageMapServ.getbycode(input.getLangcode(), langcode);
+	if(map == null) {
+	   map=languageMapServ.Save(input.getLangcode(), langcode);
+	}else {
+	   map=languageMapServ.update(map, langcode);
+	}
+	
+	Languages lang=languagesServ.getlangtext(input.getTxtconv().getLanguagesID().getId(), langcode);
+
+	
+	old.setLanguagemapID(map);
+	old.setLanguagesID(lang);
+	old.setReturnLang(input.getTxtconv().getReturnLang());
+	Date date = new Date();
+	old.setDateModify(date);
+	textConvertionRepo.save(old);
+	
 		} catch (TransientDataAccessException  se) {
 			throw new NullPointerException(search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
@@ -102,70 +100,48 @@ public void delete(lang_object input,LanguageMap map,String langcode) {
 		
 	}
 	
-public void Save(lang_object input,String langcode) {
+public void Save(Lang_obj input,String langcode) {
 	try {
-	LanguageMap map=languageMapServ.Save(input.getLangaugecode(), langcode);
-	Languages lang1=languagesServ.getlangtext(1, langcode);
-	Languages lang2=languagesServ.getlangtext(2, langcode);
-	Languages lang3=languagesServ.getlangtext(3, langcode);
+    LanguageMap map=languageMapServ.Save(input.getLangcode(), langcode);
+	Languages lang=languagesServ.getlangtext(input.getTxtconv().getLanguagesID().getId(), langcode);
 	TextConvertion text=new TextConvertion();
 	text.setLanguagemapID(map);
-	text.setLanguagesID(lang1);
-	text.setReturnLang(input.getText1());
+	text.setLanguagesID(lang);
+	text.setReturnLang(input.getTxtconv().getReturnLang());
 	Date date = new Date();
 	text.setDateCreate(date);
 	text.setDateModify(date);
 	textConvertionRepo.save(text);
-	
-	text=new TextConvertion();
-	text.setLanguagemapID(map);
-	text.setLanguagesID(lang2);
-	text.setReturnLang(input.getText2());
-	 date = new Date();
-	text.setDateCreate(date);
-	text.setDateModify(date);
-	textConvertionRepo.save(text);
-	
-	text=new TextConvertion();
-	text.setLanguagemapID(map);
-	text.setLanguagesID(lang3);
-	text.setReturnLang(input.getText3());
-	 date = new Date();
-	text.setDateCreate(date);
-	text.setDateModify(date);
-	textConvertionRepo.save(text);
-	
+
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(search("E104", langcode));
+		throw new PopupException(search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(search("E104", langcode));
+		throw new PopupException(search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(search("E104", langcode));
+		throw new PopupException(search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(search("E104", langcode));
+		throw new PopupException(search("E104", langcode));
     }
 	
 	}
 	
 	
 	
-	public List<lang_object> getalllang(String langcode) {
+	public List<Lang_obj> getalllang(String langcode) {
 		
-		List<lang_object> all= new ArrayList<lang_object>();
+		List<Lang_obj> all= new ArrayList<Lang_obj>();
 		List<LanguageMap> languageMaps =languageMapServ.getalllang(langcode);
 		
 		for (LanguageMap languageMap : languageMaps) {
-			lang_object a= new lang_object();
-			a.setLangaugecode(languageMap.getTextcode());	
-			TextConvertion text1=getbylangmap(1,languageMap.getId(), langcode);
-				a.setText1(text1.getReturnLang());
-				
-				TextConvertion text2=getbylangmap(2,languageMap.getId(), langcode);
-				a.setText2(text2.getReturnLang());
-							
-				TextConvertion text3=getbylangmap(3,languageMap.getId(), langcode);
-				a.setText3(text3.getReturnLang());
-			all.add(a);
+	
+			List<TextConvertion> txtconv=(List<TextConvertion>) textConvertionRepo.getbymap(languageMap.getId());
+			for (TextConvertion txtconvtmp : txtconv) {
+				Lang_obj a= new Lang_obj();
+				a.setLangcode(languageMap.getTextcode());
+				a.setTxtconv(txtconvtmp);
+				all.add(a);
+			}
+
 		}
 		
 		
@@ -236,6 +212,36 @@ public void Save(lang_object input,String langcode) {
 			throw new NullPointerException(search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
 			throw new NullPointerException(search("E104", langcode));
+	    }
+		
+		
+	}
+	
+	
+public TextConvertion getbylangmaptxt(int Lang,String code,String langcode){
+		
+		try {
+			Optional<TextConvertion> flowid =textConvertionRepo.getbylangandmaptxt(Lang, code);
+			
+			
+			 
+			 if (flowid.isPresent()){
+				 TextConvertion  ouput = flowid.get();
+			
+				  return ouput;
+						}
+				else{
+				   // alternative processing....
+					return null;
+				}
+		} catch (TransientDataAccessException  se) {
+			throw new PopupException(search("E104", langcode));
+	    } catch (RecoverableDataAccessException  se) {
+			throw new PopupException(search("E104", langcode));
+	    }catch (ScriptException  se) {
+			throw new PopupException(search("E104", langcode));
+	    }catch (NonTransientDataAccessException  se) {
+			throw new PopupException(search("E104", langcode));
 	    }
 		
 		

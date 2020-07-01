@@ -74,6 +74,59 @@ window.location.replace('/error?status='+ data1.status+'&reason='+data1.reason);
 
       }
 
+
+      public patternerror(error,field,data,enc){
+
+        if(error === undefined){
+          error='error';
+        }
+
+        if(field != null){
+          if(field===undefined){
+          field='field';
+        }
+          error =error.replace('field',field);
+          error =error.replace("{{","");
+        
+          error =error.replace("}}","");
+        }
+
+
+        if(enc === 0 && data != null){
+          error =error.replace('data',data);
+          error =error.replace("{{","");
+          error =error.replace("}}","");
+        }else if(enc === 1 && data != null){
+          error =error.replace('data','*'.repeat(data.length));
+          error =error.replace("{{","");
+          error =error.replace("}}","");
+        }
+
+        return error;
+
+      }   
+
+
+      public requirederror(error,field){
+
+        if(error === undefined){
+          error='error';
+        }
+    
+        if(field != null){
+          if(field===undefined){
+          field='field';
+        }
+          error =error.replace('field',field);
+          error =error.replace("{{","");
+        
+          error =error.replace("}}","");
+        }
+
+    return error;
+    
+          } 
+
       public formaterror(error,data){
 
         if(error === undefined){

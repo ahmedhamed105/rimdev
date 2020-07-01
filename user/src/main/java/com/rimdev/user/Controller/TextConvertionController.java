@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.LanguageMapServ;
+import com.rimdev.user.Services.LogServ;
 import com.rimdev.user.Services.TextConvertionServ;
 import com.rimdev.user.entities.DevicePage;
-import com.rimdev.user.entities.LanguageMap;
-import com.rimdev.user.ouputobject.lang_object;
+import com.rimdev.user.entities.TextConvertion;
+import com.rimdev.user.ouputobject.Lang_obj;
 import com.rimdev.user.ouputobject.singleString;
 
 
@@ -37,6 +40,8 @@ public class TextConvertionController {
 	
 	@Autowired
 	DevicePageServ devicePageServ;
+	
+
 	
 	
 	  @RequestMapping(value = "/code/{langcode}/{txtcode}", method = RequestMethod.GET)
@@ -59,98 +64,78 @@ public class TextConvertionController {
 
 	  
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<lang_object>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
+	  public  ResponseEntity<List<Lang_obj>> getAll(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){ 
 		  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
 		  
-		  return new ResponseEntity<List<lang_object>>(textConvertionServ.getalllang(langcode), HttpStatus.OK);
+		  return new ResponseEntity<List<Lang_obj>>(textConvertionServ.getalllang(langcode), HttpStatus.OK);
 
 	  
 	  }
 	  
-	  
-	  public  ResponseEntity<List<lang_object>> getAllUsers(String langcode){ 
-		  return new ResponseEntity<List<lang_object>>(textConvertionServ.getalllang(langcode), HttpStatus.OK);  
-	  }
-	  
-	  
-	  @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<List<lang_object>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
-	
+	  @RequestMapping(value = "/save/{langcode}", method = RequestMethod.POST)
+		public @ResponseBody ResponseEntity<List<Lang_obj>> save(HttpServletRequest request,
+				@RequestHeader("Devicecode") String Devicecode, @RequestHeader("username") String username,
+				@RequestHeader("usertokean") String usertokean, @RequestHeader("pageid") String pagenum,
+				@PathVariable("langcode") String langcode, @RequestBody Lang_obj input) {
+			// This returns a JSON or XML with the users
+
 		  List<String> paramter =new ArrayList<String>();
-	  List<String> values =new ArrayList<String>();
-	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
-	 
-		  // This returns a JSON or XML with the users
-		  LanguageMap langmap;
-		try {
-			langmap= languageMapServ.getbycode(input.getLangaugecode(),langcode);
-		//	 System.out.println("enter 2");
-
-			if(langmap == null ) {
-			//	System.out.println("enter 3");
-				textConvertionServ.Save(input,langcode);
+		  List<String> values =new ArrayList<String>();
+		  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 			
-			}else {
-		//		System.out.println("enter 4");
-		//		System.out.println("ahmed "+input.getText2());
+				try {
+					 TextConvertion txt = textConvertionServ.getbylangmaptxt(input.getTxtconv().getLanguagesID().getId(),input.getLangcode(), langcode);
 
-		    textConvertionServ.update(input,langmap,langcode);
-				
-			}
+					if (txt.getId() == null && input.getTxtconv().getLanguagesID().getId() != null) {
+						// System.out.println("enter 3");
+						textConvertionServ.Save(input, langcode);
 			
+					} else {
+						throw new PopupException("error while insertion");
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					throw new PopupException("error while insertion");
+				}
 
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-			textConvertionServ.Save(input,langcode);
+				return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
+
 
 		}
 
-			return getAllUsers(langcode);
-			
-		
-		  }
-	  
-	  
-	  
-	  @RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<List<lang_object>> delete(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody lang_object input) {
+	  @RequestMapping(value = "/update/{langcode}", method = RequestMethod.POST)
+		public @ResponseBody ResponseEntity<List<Lang_obj>> update(HttpServletRequest request,
+				@RequestHeader("Devicecode") String Devicecode, @RequestHeader("username") String username,
+				@RequestHeader("usertokean") String usertokean, @RequestHeader("pageid") String pagenum,
+				@PathVariable("langcode") String langcode, @RequestBody Lang_obj input) {
+			// This returns a JSON or XML with the users
 
 		  List<String> paramter =new ArrayList<String>();
-	  List<String> values =new ArrayList<String>();
-	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
-	 
-		  // This returns a JSON or XML with the users
-		  LanguageMap langmap;
-		try {
-			langmap= languageMapServ.getbycode(input.getLangaugecode(),langcode);
-		//	 System.out.println("enter 2");
+		  List<String> values =new ArrayList<String>();
+		  DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+			
+				try {
+					 TextConvertion txt = textConvertionServ.getbylangmaptxt(input.getTxtconv().getLanguagesID().getId(),input.getLangcode(), langcode);
 
-			if(langmap == null ) {
-			throw new NullPointerException("no data found");
-			
-			}else {
-		//		System.out.println("enter 4");
-		//		System.out.println("ahmed "+input.getText2());
+					if (txt.getId() != null) {
+						// System.out.println("enter 3");
+						textConvertionServ.update(txt,input, langcode);
+					} else {
+						throw new PopupException("error while updating");
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					throw new PopupException("error while updating");
+				}
 
-		    textConvertionServ.delete(input,langmap,langcode);
-				
-			}
-			
+				return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
 
-		} catch (Exception e) {
-			// TODO: handle exception
-			
-			
-			throw new NullPointerException("no data found");
+
 		}
-
-			return getAllUsers(langcode);
-			
-		
-		  }
+	  
+	  
 	 
 }

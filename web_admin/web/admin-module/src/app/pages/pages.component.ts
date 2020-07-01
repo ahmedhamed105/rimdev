@@ -309,7 +309,7 @@ this.file[parent.parent.id]=this.filetmp;
     resizable: true,
     checkboxSelection: true,
     cellRenderer: "",
-    
+    hide : false
   };
   this.column.push(b);
  // this.columnDefs[parent.parent.id][0] = b;
@@ -320,7 +320,7 @@ a.forEach((element,index) => {
   var parentin=element.comp.id;
   this.placeholders[parentin]= element.comp.ccode;
   this.visables[parentin]= element.comp.visible === 1 ? 'visible' : 'hidden';
-  this.disables[parentin]= element.comp.disable=== 1 ? true : false;
+  this.disables[parentin]= element.comp.tableDisable=== 1 ? true : false;
 
   var b : Icolumdef;
 
@@ -347,8 +347,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup:0,
       groupname:"",
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:0,
@@ -358,7 +358,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
 
   }else{
@@ -372,8 +372,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup:0,
       groupname:"",
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:0,
@@ -383,7 +383,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
 
   }
@@ -410,8 +410,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup:0,
       groupname:"",
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:0,
@@ -421,7 +421,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
    
   }else{
@@ -436,8 +436,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup:0,
       groupname:"",
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:0,
@@ -447,7 +447,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
     
   }
@@ -473,8 +473,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup: element.comp.groupname === undefined? 0 : 1,
       groupname : element.comp.groupname === undefined?null:element.comp.groupname,
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:index,
@@ -484,7 +484,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "passRenderer",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
     
 
@@ -499,8 +499,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup: element.comp.groupname === undefined? 0 : 1,
       groupname : element.comp.groupname === undefined?null:element.comp.groupname,
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:index,
@@ -510,7 +510,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "passRenderer",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
     
   }
@@ -533,8 +533,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup: element.comp.groupname === undefined? 0 : 1,
       groupname : element.comp.groupname === undefined?null:element.comp.groupname,
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:index,
@@ -544,7 +544,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "selRenderer",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
 
   }else{
@@ -558,8 +558,8 @@ if(element.comp.ctype === 'label'){
       fieldgroup: element.comp.groupname === undefined? 0 : 1,
       groupname : element.comp.groupname === undefined?null:element.comp.groupname,
       parentgroup: element.comp.parentGroup=== undefined?null:element.comp.parentGroup,
-      fielddisable: element.comp.disable === 1 ? true:false,
-      disabled : element.comp.disable === 1 ? true:false,
+      fielddisable: element.comp.tableDisable === 1 ? true:false,
+      disabled : element.comp.tableDisable === 1 ? true:false,
       ip:element.select.comIP,
       port:element.select.comport,
       formnum:index,
@@ -569,7 +569,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "selRenderer",
-      
+      hide : element.comp.visible === 1 ? false:true
     };
 
     

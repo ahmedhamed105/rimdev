@@ -11,6 +11,8 @@ import com.rimdev.accounting.Enttities.Account;
 @Repository
 public interface  AccountRepo extends CrudRepository<Account, Integer>{
 	
+	@Query(value ="select a.* from rim_accounting.Account a where a.id = ?1 " , nativeQuery = true)
+	Optional<Account> findbyid(Integer id);
 	
 	@Query(value ="select a.* from rim_accounting.Account a,rim_accounting.currency c  where a.id = ?1 and a.Currency_ID = c.id and c.All_status_ID = 1 and a.All_status_ID = 1" , nativeQuery = true)
 	Optional<Account> findbyidstatus(Integer id);

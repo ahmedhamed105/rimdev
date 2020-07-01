@@ -55,7 +55,7 @@ public class LanguagesController {
 		  return new ResponseEntity<List<Languages>>(languagesServ.getalllang(langcode), HttpStatus.OK);
 	  }
 	  
-	  @RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
+	  @RequestMapping(value = "/save/{langcode}", method = RequestMethod.POST)
 	  public @ResponseBody ResponseEntity<List<Languages>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Languages input) {
 	
 		  List<String> paramter =new ArrayList<String>();

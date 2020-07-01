@@ -10,10 +10,10 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
+
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.LanguageMapRepo;
 import com.rimdev.user.entities.LanguageMap;
-import com.rimdev.user.entities.Languages;
-import com.rimdev.user.ouputobject.lang_object;
 
 @Service
 public class LanguageMapServ {
@@ -36,13 +36,13 @@ public LanguageMap Save(String Code,String langcode) {
 		LanguageMap ouput =languageMapRepo.save(map);	
 		return ouput;
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 		
 	}

@@ -28,6 +28,7 @@
             cpattern: number,
             patterndesgin : string,
             disable: number,
+            tableDisable: number ,
             visible:number,
             fieldEncry : number,
             parentGroup : string,         

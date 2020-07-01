@@ -322,6 +322,7 @@ var b : Icolumdef = {
   resizable: true,
   checkboxSelection: true,
   cellRenderer: "",
+  hide : false
   
 };
 this.column.push(b);
@@ -368,7 +369,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer: "",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
 
 }else{
@@ -393,7 +394,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer: "",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
 
 }
@@ -431,7 +432,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer : "",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
  
 }else{
@@ -457,7 +458,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer : "",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
   
 }
@@ -494,7 +495,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer : "passRenderer",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
   
 
@@ -520,7 +521,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer : "passRenderer",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
   
 }
@@ -554,7 +555,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer: "selRenderer",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
 
 }else{
@@ -579,7 +580,7 @@ if(element.comp.parentGroup === undefined){
     resizable: true,
     checkboxSelection: false,
     cellRenderer: "selRenderer",
-    
+    hide : element.comp.visible === 1 ? false:true
   };
 
   

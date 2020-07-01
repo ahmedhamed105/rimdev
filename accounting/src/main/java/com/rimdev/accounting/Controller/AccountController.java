@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rimdev.accounting.Enttities.Account;
+import com.rimdev.accounting.Enttities.AllStatus;
 import com.rimdev.accounting.Enttities.ErrorCodes;
 import com.rimdev.accounting.Exception.PopupException;
 import com.rimdev.accounting.Services.AccountProcessServ;
 import com.rimdev.accounting.Services.AccountServ;
+import com.rimdev.accounting.Services.AllStatusServ;
 import com.rimdev.accounting.Services.ErrorCodesServ;
 import com.rimdev.accounting.Services.ExternalServ;
 import com.rimdev.accounting.Services.TextConvertionServ;
@@ -48,6 +50,9 @@ public class AccountController {
 	@Autowired
 	ErrorCodesServ errorCodesServ;
 	
+	@Autowired
+	AllStatusServ allStatusServ;
+	
 	
 	
 
@@ -63,8 +68,8 @@ public class AccountController {
 		
 		try {
 		//	System.out.println(acct.getFromaccounts().getId() +" "+acct.getToaccounts().getId());
-			 from=accountServ.findbyid(acct.getFromaccounts().getId());
-			 to=accountServ.findbyid(acct.getToaccounts().getId());
+			 from=accountServ.findbyidstatus(acct.getFromaccounts().getId(),langcode);
+			 to=accountServ.findbyidstatus(acct.getToaccounts().getId(),langcode);
 			 if(from.equals(to)) { 
 					throw new PopupException(textConvertionServ.search("same account", langcode));		 
 			 }
@@ -128,7 +133,7 @@ public class AccountController {
 	  
 
 		@RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-		  public  ResponseEntity<List<Account>> getAllAccounts(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
+		  public  ResponseEntity<List<Account>> getAll(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 			boolean result=  externalServ.Log(request, Devicecode, username, usertokean, pagenum, langcode, "Account in processing", "", 36, 0);
 			if(result) {
 				
@@ -141,13 +146,16 @@ public class AccountController {
 			}
 		  }
 		
+		
+		
+		
 		@RequestMapping(value = "/currency/{langcode}", method = RequestMethod.POST)
 		  public  ResponseEntity<textobject> getcurrencybyname(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody String input){
 			boolean result=  externalServ.Log(request, Devicecode, username, usertokean, pagenum, langcode, "get currency in processing", "", 36, 0);
 			if(result) {
 				Account acct;
 				try {
-					 acct=accountServ.findbyid(Integer.parseInt(input));
+					 acct=accountServ.findbyidstatus(Integer.parseInt(input),langcode);
 				} catch (Exception e) {
 					// TODO: handle exception
 					ErrorCodes Err=	errorCodesServ.geterrordesc(1);
@@ -186,58 +194,60 @@ public class AccountController {
 	
 	
 	
-	@RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
-	  public @ResponseBody ResponseEntity<Account> saveorupdate(@RequestBody Account input) {
+	@RequestMapping(value = "/update/{langcode}", method = RequestMethod.POST)
+	  public @ResponseBody ResponseEntity<List<Account>> update(HttpServletRequest request,
+				@RequestHeader("Devicecode") String Devicecode, @RequestHeader("username") String username,
+				@RequestHeader("usertokean") String usertokean, @RequestHeader("pageid") String pagenum,
+				@PathVariable("langcode") String langcode,@RequestBody Account input) {
 	    // This returns a JSON or XML with the users
-		
 		Account ouput = null;
-		
-		if(input.getId() == null || input.getId() == 0) {
-			System.out.println("insert");
-			try {
-			///	 ouput= accountServ.Save(input);
-				 if(ouput == null || ouput.getId() == -1) {
-						
-					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
-				 }
-			} catch (Exception e) {
-				// TODO: handle exception
-				 if(ouput == null || ouput.getId() == -1) {
-						
-					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
-				 }
-			}
-			
-			return new ResponseEntity<Account>(ouput, HttpStatus.OK);
+		boolean result = externalServ.Log(request, Devicecode, username, usertokean, pagenum, langcode,
+				"Account update in processing", "", 36, 0);
 
-		}else {
-			System.out.println("update "+input.getId());
+		if (result) {
+
 			
-			try {
-			//	 ouput= accountServ.update(input, input.getId());
-				 if(ouput == null || ouput.getId() == -1) {
+			if(input.getId() == null) {
+				throw new PopupException("error while updating");
+
+			}else {
+				System.out.println(input.getId());
+				ouput = accountServ.findbyid(input.getId(), langcode);
+				if (ouput == null) {
+					// System.out.println("enter 3");
+					throw new PopupException("error while updating");
+
+				} else {
+				try {
 					
-					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
-				 }
-			} catch (Exception e) {
-				// TODO: handle exception
-				 if(ouput == null|| ouput.getId() == -1) {
-					 
-					 ouput.setError(ouput.getError());
-					 return new ResponseEntity<Account>(ouput, HttpStatus.BAD_REQUEST);	 
-				 }
+					AllStatus status = allStatusServ.getbyid(input.getAllstatusID().getId(), langcode);
+					input.setAllstatusID(status);
+					 accountServ.update(ouput,input,langcode);
+					 externalServ.Log(request, Devicecode, username, usertokean, pagenum, langcode,
+								"Account updated", "", 36, 0);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+					throw new PopupException("error while updating");
+				}
+				
+				}
+				
 			}
-			
-			return new ResponseEntity<Account>(ouput, HttpStatus.OK);
+			  
+		
+			return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
+
+		
+		}else {
+			externalServ.Log(request, Devicecode, username, usertokean, pagenum, langcode,
+					"Account update Error in processing", "while auth and log in first", 36, 1);
+			throw new PopupException(textConvertionServ.search("auth_error", langcode));
 			
 		}
-		  }
-	
-	
-
+		
+		
+	}
 	
 	
 	

@@ -109,7 +109,10 @@ public class Component implements Serializable {
     private int viewShape;
     @Column(name = "Amethod", length = 450)
     private String amethod;
-
+    @Column(name = "table_disable")
+    private Integer tableDisable;
+    @Column(name = "display_data_error")
+    private Integer displayDataError;
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
     private Collection<ComponentSelect> componentSelectCollection;
@@ -146,6 +149,22 @@ public class Component implements Serializable {
     
    
     
+
+	public Integer getDisplayDataError() {
+		return displayDataError;
+	}
+
+	public void setDisplayDataError(Integer displayDataError) {
+		this.displayDataError = displayDataError;
+	}
+
+	public Integer getTableDisable() {
+		return tableDisable;
+	}
+
+	public void setTableDisable(Integer tableDisable) {
+		this.tableDisable = tableDisable;
+	}
 
 	public String getAmethod() {
 		return amethod;
