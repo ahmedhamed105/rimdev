@@ -26,8 +26,10 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.rimdev.user.Exception.BlockedException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.DeviceServ;
+import com.rimdev.user.Services.DeviceStatusServ;
 import com.rimdev.user.Services.DeviceipServ;
 import com.rimdev.user.Services.GroupPagesServ;
 import com.rimdev.user.Services.GroupWebServ;
@@ -40,6 +42,7 @@ import com.rimdev.user.Services.WebservicepriviledgeServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
+import com.rimdev.user.entities.DeviceStatus;
 import com.rimdev.user.entities.Deviceip;
 import com.rimdev.user.entities.GroupPriviledge;
 import com.rimdev.user.entities.GroupWeb;
@@ -85,6 +88,9 @@ public class DeviceController {
 	
 	@Autowired
 	NotificationServ notificationServ;
+	
+	@Autowired
+	DeviceStatusServ deviceStatusServ;
 
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
@@ -100,67 +106,59 @@ public class DeviceController {
 	  
 	  
 	 
-	  public  ResponseEntity<List<Device>> getAll( String langcode){
-		  return new ResponseEntity<List<Device>>(deviceServ.getall(langcode), HttpStatus.OK);
-	  }
+
 	  
-	  
-	  @RequestMapping(value = "/page/{langcode}/{id}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<pagesdevice>> getpages(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@PathVariable("id")  int deviceid){	  
+	  @RequestMapping(value = "/page/{langcode}", method = RequestMethod.POST)
+	  public  ResponseEntity<List<pagesdevice>> getpages(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Device input){	  
 		
 		  List<String> paramter =new ArrayList<String>();
 		  List<String> values =new ArrayList<String>();
-		  paramter.add("id");
-		  values.add(String.valueOf(deviceid));
 		  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-		  return new ResponseEntity<List<pagesdevice>>(devicePageServ.getpagesbydevice(deviceid,langcode), HttpStatus.OK);
+		  return new ResponseEntity<List<pagesdevice>>(devicePageServ.getpagesbydevice(input.getId(),langcode), HttpStatus.OK);
 	  }
 	  
 	  
 
 
-@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
+@RequestMapping(value = "/update/{langcode}", method = RequestMethod.POST)
 public @ResponseBody ResponseEntity<List<Device>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Device input) {
   // This returns a JSON or XML with the users
 	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
-	 
+	  Device user = null;
+	  if (input.getId() == null) {
 
-	Device out=null;
-	try {
+			throw new PopupException("error while updating");
 
-		Device dev=deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser(), langcode);
-		
-		System.out.println(deviceServ.checkdevice(input.getDeviceip(),input.getDeviceOSID(),input.getDevicetypeID(),input.getDevicebrowser(), langcode));
+		} else {
 
+			try {
+				user = deviceServ.getbyid(input.getId(), langcode);
+				// System.out.println("enter 2");
 
-		//System.out.println(dev.getDevicename());
-		if(dev != null ) {		
-			  BeanUtils.copyProperties(input, dev, ObjectUtils.getNullPropertyNames(input));
-	
+				if (user == null) {
+					// System.out.println("enter 3");
+					throw new PopupException("error while updating");
 
-			  out=deviceServ.update(dev,langcode);
-	
+				} else {
+					
+				DeviceStatus devicestatusID= deviceStatusServ.getbyid(input.getDevicestatusID().getId());
+				input.setDevicestatusID(devicestatusID);
+				user = deviceServ.update(user, input, langcode);
 
-			} else {
-				out=deviceServ.Save(input,langcode);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+
+				throw new PopupException("error while updating");
 			}
-		
-	} catch (Exception e) {
-		// TODO: handle exception
-		
-		out=deviceServ.Save(input,langcode);
-		
 
-	}
-	
-	
+		}
 
+		return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
 	
-	return getAll(langcode);
-
 	
 }
 

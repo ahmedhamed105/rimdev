@@ -67,18 +67,32 @@ public class DeviceServ {
 	
 
 	
-	
-	public void blockdevice(Device dev){
-		Date date = new Date();
-		dev.setDevicemodify(date);
-		dev.setDevicestatusID(deviceStatusServ.getbyid(2));
-		Device ouput =deviceRepo.save(dev);
-		
 
+public Device getbyid(int id,String langcode) {
+	try {
+		Optional<Device> flowid =deviceRepo.findById(id);
+		 
+		 if (flowid.isPresent()){
+			 Device  ouput = flowid.get();
 		
-	}
+			  return ouput;
+					}
+			else{
+			   // alternative processing....
+				return null;
+			}
+	}  catch (TransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+    }
 	
-	
+}
+
 	
 public List<Device> getall(String langcode) {
 	try {
@@ -94,6 +108,9 @@ public List<Device> getall(String langcode) {
 }
 		
 	}
+
+
+
 public Device checkdevicetwo(String Device_code,String langcode) {
 	try {
 		Optional<Device> flowid =deviceRepo.findbydevicecode(Device_code);
@@ -180,18 +197,18 @@ public Device Save(Device input,String langcode) {
 		
 	}
 
-public Device update(Device input,String langcode) {
+public Device update(Device old,Device input,String langcode) {
 	
 	
 	try {
-
+		old.setDevicestatusID(input.getDevicestatusID());
     // convert date to calendar
 	Date date = new Date();
     Calendar c = Calendar.getInstance();
     c.setTime(date);
     c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-	input.setDevicemodify(date);
-	Device ouput =deviceRepo.save(input);	
+    old.setDevicemodify(date);
+	Device ouput =deviceRepo.save(old);	
 
 	
 	return ouput;

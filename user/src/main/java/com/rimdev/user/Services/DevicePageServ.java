@@ -16,6 +16,7 @@ import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.user.Exception.NooauthException;
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.DevicePageRepo;
 import com.rimdev.user.Utils.Generate;
 import com.rimdev.user.entities.Device;
@@ -218,23 +219,24 @@ public DevicePage savedevicepagewithout(HttpServletRequest request,Device dev,Pa
 
 
 public List<pagesdevice> getpagesbydevice(int id,String langcode) {
+	System.out.println(id);
 	List<DevicePage> p=new ArrayList<DevicePage>();
 	try {
 		 p= (List<DevicePage>)devicePageRepo.findbydeviceid(id);
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	} catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
 	}
 	
 	
 	if(p.size() <= 0)
 	{
-		throw new NullPointerException("no pages");
+		throw new PopupException("no pages");
 		
 	}
 	
