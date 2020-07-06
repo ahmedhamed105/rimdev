@@ -25,5 +25,9 @@ public interface UserLoginRepo extends CrudRepository<UserLogin, Integer>{
 	
 	@Query(value ="SELECT * FROM rim_user.user_login where Username =?1 AND User_tokean =?2" , nativeQuery = true)
 	Optional<UserLogin> findbyusernametokean(String username,String tokean);
+	
+	
+	@Query(value ="SELECT a.* FROM rim_user.user_login a,rim_user.user b where a.User_ID = b.ID and b.User_id_number =?1" , nativeQuery = true)
+	Iterable<UserLogin> findbyuserid(String userid);
 
 }

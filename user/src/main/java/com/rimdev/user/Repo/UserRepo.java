@@ -14,5 +14,7 @@ public interface UserRepo extends CrudRepository<User, Integer>{
 	@Query(value ="SELECT * FROM rim_user.user where first_name = ?1 and middle_name= ?2 and Last_name = ?3" , nativeQuery = true)
 	Optional<User> findbyname(String firstname,String middlename,String lastname);
 	
+
+	
 	
 }

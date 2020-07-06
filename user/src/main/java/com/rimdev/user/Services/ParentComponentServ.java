@@ -66,10 +66,10 @@ public class ParentComponentServ {
 				a.setParent(component);
 				List<Component_object>	 select1=new ArrayList<Component_object>();
 				
-				//System.out.println("call "+component.getId());
+				//System.out.println("parent "+component.getId());
 				
 				if(component.getComTable() == 1 && component.getComFormid() != null) {
-
+					
 					List<Component_object>	 select =componentServ.getbyparent(component.getComFormid(), langcode);
 			
 					for (Component_object comp : select) {
@@ -127,9 +127,7 @@ public class ParentComponentServ {
 			throw new PopupException(textConvertionServ.search("E117", langcode));
 			
 		}
-		
-		
-		
+
 			return coms;
 		
 		

@@ -97,6 +97,8 @@ public UserLogin getuserlogin(int id,String langcode) {
 }
 
 
+
+
 public void checkuserlogin(int id,String langcode) {
 	
 	try {
@@ -197,6 +199,36 @@ public List<UserLogin> getbyuser(int userid,String langcode) {
 }
 
 
+public List<UserLogin> getbyuserid(String userid,String langcode) {
+	
+
+	
+	try {
+		List<UserLogin> loginlist= (List<UserLogin>) userLoginRepo.findbyuserid(userid);
+	
+		if(loginlist == null || loginlist.size() <= 0) {
+			return null;
+		}
+		
+		return loginlist;
+		
+	
+
+	} catch (TransientDataAccessException  se) {
+		throw new PopupException("TransientDataAccessException");
+    } catch (RecoverableDataAccessException  se) {
+		throw new PopupException("RecoverableDataAccessException");
+    }catch (ScriptException  se) {
+		throw new PopupException("ScriptException");
+    }catch (NonTransientDataAccessException  se) {
+		throw new PopupException("NonTransientDataAccessException");
+    }
+	
+	
+
+	
+
+}
 
 
 public void check_username(String username,String langcode) {

@@ -16,15 +16,20 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Services.AreaServ;
+import com.rimdev.user.Services.DataStatusServ;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.EmailServ;
 import com.rimdev.user.Utils.ObjectUtils;
 import com.rimdev.user.entities.Area;
+import com.rimdev.user.entities.DataStatus;
 import com.rimdev.user.entities.Device;
 import com.rimdev.user.entities.DevicePage;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
+import com.rimdev.user.ouputobject.Emailobj;
 import com.rimdev.user.ouputobject.response_all;
 import com.rimdev.user.ouputobject.select_object;
 
@@ -37,6 +42,9 @@ public class EmailController {
 	
 	@Autowired
 	DevicePageServ devicePageServ;
+	
+	@Autowired
+	DataStatusServ  dataStatusServ;
 	
 	
 	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
@@ -59,13 +67,13 @@ public class EmailController {
 	  }
 
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Email>> getAllUsers(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
+	  public  ResponseEntity<List<Emailobj>> getAll(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 	
 		  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
-		  return new ResponseEntity<List<Email>>(emailServ.getall(langcode), HttpStatus.OK);
+		  return new ResponseEntity<List<Emailobj>>(emailServ.getall(langcode), HttpStatus.OK);
 	  }
 	  
 	  
@@ -78,83 +86,125 @@ public class EmailController {
 	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
 		  
-		  return new ResponseEntity<List<Email>>(emailServ.getbyuserlogin(userid,langcode), HttpStatus.OK);
+		//  return new ResponseEntity<List<Email>>(emailServ.getbyuserlogin(userid,langcode), HttpStatus.OK);
+	 return null;
+	  
 	  }
 	  
-	  
-	  public  ResponseEntity<List<Email>> getUsersbyuser( String langcode, int userid){ 
 
-		  return new ResponseEntity<List<Email>>(emailServ.getbyuserlogin(userid,langcode), HttpStatus.OK);
-	  }
 
-@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
+@RequestMapping(value = "/save/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Emailobj>> save(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Emailobj emails) {
+  // This returns a JSON or XML with the users
+	
+	  List<String> paramter =new ArrayList<String>();
+List<String> values =new ArrayList<String>();
+DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
+		try {
+			if(emails.getEmail().getId() == null || emails.getEmail().getDatastatusID().getId() != null) {
+				
+					 emailServ.check_email(emails.getEmail().getEmailuser(),langcode);
+		              DataStatus status = dataStatusServ.getbyid(emails.getEmail().getDatastatusID().getId(), langcode);
+		              emails.getEmail().setDatastatusID(status);
+				     emailServ.save(emails,langcode);
+			} else {
+				throw new PopupException("error while insertion");
+			}
+		} catch (PopupException e) {
+			// TODO: handle exception
+			throw e;
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new PopupException("error while insertion");
+		}
+		
+			
+		return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
+
+}
+
+
+
+
+@RequestMapping(value = "/update/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Emailobj>> update(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Emailobj emails) {
   // This returns a JSON or XML with the users
 	
 	  List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
 DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	if(emails.getId() !=null) {
-		
+if (emails.getUserid() == null || emails.getEmail().getId() == null || emails.getEmail().getDatastatusID().getId() == null) {
+
+	throw new PopupException("error while updating");
+
+} else {
+	try {
 	
-			Email found= emailServ.getbyid(emails.getId(),langcode);
+			Email found= emailServ.getbyid(emails.getEmail().getId(),langcode);
 			
-			if(found != null) {
-              BeanUtils.copyProperties(emails, found, ObjectUtils.getNullPropertyNames(emails));
-            
-              if(!found.getEmailuser().equals(emails.getEmailuser())) {
-            	  emailServ.check_email(emails.getEmailuser(),langcode);
+			if(found != null ) {
+
+              if(!found.getEmailuser().equals(emails.getEmail().getEmailuser())) {
+            	  emailServ.check_email(emails.getEmail().getEmailuser(),langcode);
               }
               
-  			
-              emailServ.update(found,langcode);
+              DataStatus status = dataStatusServ.getbyid(emails.getEmail().getDatastatusID().getId(), langcode);
+              emails.getEmail().setDatastatusID(status);
+              emailServ.update(found,emails,langcode);
 
 			}
-	}else {
-	
-			 emailServ.check_email(emails.getEmailuser(),langcode);
-		     emailServ.save(emails,langcode);
+
+	} catch (PopupException e) {
+		// TODO: handle exception
+		throw e;
+	} catch (Exception e) {
+		// TODO: handle exception
+
+		throw new PopupException("error while updating");
 	}
 		
-	
-	
-	
-		return getUsersbyuser(langcode,emails.getUserloginID().getId());
 }
-
-
-
+return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
+}
 
 
 
 @RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Email>> delete(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Email emails) {
+public @ResponseBody ResponseEntity<List<Emailobj>> delete(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Emailobj emails) {
   // This returns a JSON or XML with the users
-	
+
 	  List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
 DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	if(emails.getId() !=null  && emails.getUserloginID() != null && emails.getUserloginID().getId() != null) {
-		
-		
-		Email found= emailServ.getbyid(emails.getId(),langcode);	
-		if(found != null) {
+if (emails.getUserid() == null || emails.getEmail().getId() == null || emails.getEmail().getDatastatusID().getId() == null) {
+
+	throw new PopupException("error while updating");
+
+} else {
+	try {
+	
+			Email found= emailServ.getbyid(emails.getEmail().getId(),langcode);
 			
-			emailServ.delete(emails,langcode);
-		}
+			if(found != null ) {
+
+            
+            emailServ.delete(found,langcode);
+
+			}
+
+	} catch (PopupException e) {
+		// TODO: handle exception
+		throw e;
+	} catch (Exception e) {
+		// TODO: handle exception
+
+		throw new PopupException("error while updating");
+	}
 		
-	
-
-}else {
-	
-	throw new NullPointerException("ID not Found or user id not found");
-
 }
-	
-	
-	return getUsersbyuser(langcode,emails.getUserloginID().getId());
+return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
 }
 
 

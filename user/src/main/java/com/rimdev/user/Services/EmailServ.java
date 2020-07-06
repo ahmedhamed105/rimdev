@@ -1,5 +1,6 @@
 package com.rimdev.user.Services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import com.rimdev.user.Repo.EmailRepo;
 import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.ouputobject.Emailobj;
 
 @Service
 public class EmailServ {
@@ -33,33 +35,41 @@ public class EmailServ {
 	UserLoginServ userLoginServ;
 	
 	
-public List<Email> getall(String langcode) {
-	
-List<Email> emails;
-	
+public List<Emailobj> getall(String langcode) {
+	List<Emailobj> out= new ArrayList<Emailobj>();
+	List<Email>	emails; 
 	try {
 		
-		emails = (List<Email>) emailRepo.findAll();
-
-	//    throw new NullPointerException("no data found in users");
-
-	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }
-	
-	if(emails == null || emails.size() <= 0) {
+	emails = (List<Email>) emailRepo.findAll();
+   if(emails == null || emails.size() <= 0) {
 		
-		throw new NullPointerException(textConvertionServ.search("E108", langcode));
+		throw new PopupException(textConvertionServ.search("E108", langcode));
 		
 	}
+   
+   for (Email email : emails) {
+	   Emailobj em=new Emailobj();
+	   em.setEmail(email);
+	   em.setUserid(email.getUserloginID().getUserID().getUseridnumber());
+	   out.add(em);
+}
 	
-		return emails;
+
+	//    throw new PopupException("no data found in users");
+
+	} catch (TransientDataAccessException  se) {
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+    } catch (RecoverableDataAccessException  se) {
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+    }catch (ScriptException  se) {
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+    }catch (NonTransientDataAccessException  se) {
+		throw new PopupException(textConvertionServ.search("E104", langcode));
+    }
+	
+	
+	
+		return out;
 	
 		
 	}
@@ -82,13 +92,13 @@ public void check_email(String email,String langcode) {
 				
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 
 	
@@ -108,17 +118,17 @@ public Email getbyemail(String email,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NullPointerException(textConvertionServ.search("E109", langcode));
+				throw new PopupException(textConvertionServ.search("E109", langcode));
 				
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 
 	
@@ -137,16 +147,16 @@ public Email getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NullPointerException(textConvertionServ.search("E109", langcode));
+				throw new PopupException(textConvertionServ.search("E109", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 
@@ -156,28 +166,28 @@ public Email getbyid(int id,String langcode) {
 
 
 
-public List<Email> getbyuserlogin(int userid,String langcode) {
+public List<Email> getbyuserlogin(String userid,String langcode) {
 	
 
-		List<Email> cu;
+		List<Email> cu = null;
 		try {
 			
-			cu=(List<Email>) emailRepo.findbyuser(userid);
+		//	cu=(List<Email>) emailRepo.findbyuser(userid);
 
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("TransientDataAccessException");
+			throw new PopupException("TransientDataAccessException");
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("RecoverableDataAccessException");
+			throw new PopupException("RecoverableDataAccessException");
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("ScriptException");
+			throw new PopupException("ScriptException");
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("NonTransientDataAccessException");
+			throw new PopupException("NonTransientDataAccessException");
 	    }
 		
 		if(cu == null || cu.size() <= 0) {
 			
-			userServ.checkuser(userid, langcode);	
-			throw new NullPointerException(textConvertionServ.search("E109", langcode));
+			//userServ.checkuser(userid, langcode);	
+			throw new PopupException(textConvertionServ.search("E109", langcode));
 
 		}
 		
@@ -198,13 +208,13 @@ String out = "";
 			cu=(List<Email>) emailRepo.findbyuser(userid);
 
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException("TransientDataAccessException");
+			throw new PopupException("TransientDataAccessException");
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException("RecoverableDataAccessException");
+			throw new PopupException("RecoverableDataAccessException");
 	    }catch (ScriptException  se) {
-			throw new NullPointerException("ScriptException");
+			throw new PopupException("ScriptException");
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException("NonTransientDataAccessException");
+			throw new PopupException("NonTransientDataAccessException");
 	    }
 		
 		if(cu == null || cu.size() <= 0) {
@@ -227,65 +237,79 @@ String out = "";
 
 
 
-public void save(Email input,String langcode) {
-	
-	
-	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
-		UserLogin  usero =  userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
-		input.setUserloginID(usero);
+public void save(Emailobj input,String langcode) {
+	List<UserLogin>  usero=	userLoginServ.getbyuserid(input.getUserid(), langcode);
+	if(usero != null) {
 		
 		Date date = new Date();
-		input.setEmailCreate(date);
-		input.setEmailModify(date);
+	for (UserLogin userLogin : usero) {
 		
+		Email em=new Email();
+		em =input.getEmail();
+		em.setUserloginID(userLogin);
+		em.setEmailCreate(date);
+		em.setEmailModify(date);
+		System.out.println(em.getEmailuser());
 		try {
-			emailRepo.save(input);	
+			emailRepo.save(em);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
 	    	se.printStackTrace();
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }
 		
+	}
 	}else {
 		
-		throw new NullPointerException(textConvertionServ.search("E107", langcode));
+		throw new PopupException("error while insertion");
 	
 	}
-	
-
 
 	
 }
 
 
 
-public void update(Email input,String langcode) {
+public void update(Email old,Emailobj input,String langcode) {
 	
-	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
-		UserLogin  usero =  userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
-		input.setUserloginID(usero);
+	List<UserLogin>  usero=	userLoginServ.getbyuserid(input.getUserid(), langcode);
+	System.out.println(usero.size());
+	if(usero != null) {
+		
+		Date date = new Date();
+	for (UserLogin userLogin : usero) {
+		
+		Email em=new Email();
+		em =old;
+		em.setDatastatusID(input.getEmail().getDatastatusID());
+		em.setEmailPrimary(input.getEmail().getEmailPrimary());
+		em.setEmailuser(input.getEmail().getEmailuser());
+		em.setUserloginID(userLogin);
+		em.setEmailModify(date);
+		try {
+			emailRepo.save(em);	
+		} catch (TransientDataAccessException  se) {
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    } catch (RecoverableDataAccessException  se) {
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    }catch (ScriptException  se) {
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    }catch (NonTransientDataAccessException  se) {
+	    	se.printStackTrace();
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    }
+		
 	}
+	}else {
+		
+		throw new PopupException("error while insertion");
 	
-	Date date = new Date();
-	input.setEmailModify(date);
-	
-	try {
-		emailRepo.save(input);	
-	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }
-	
+	}
 	
 }
 
@@ -294,16 +318,15 @@ public void update(Email input,String langcode) {
 public void delete(Email input,String langcode) {	
 	
 	try {
-		userLoginServ.checkuserlogin(input.getUserloginID().getId(), langcode);	
 		emailRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	

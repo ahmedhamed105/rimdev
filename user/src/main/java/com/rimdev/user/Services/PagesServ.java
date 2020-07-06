@@ -63,7 +63,7 @@ public void check_page(String pagename,String langcode) {
 					}
 			else{
 			   // alternative processing....
-
+				
 
 			}
 	}  catch (TransientDataAccessException  se) {
@@ -126,18 +126,18 @@ public void save(Pages input,String langcode) {
 		try {
 			pagesRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }
 		
 	}else {
 		
-		throw new NullPointerException(textConvertionServ.search("E107", langcode));
+		throw new PopupException(textConvertionServ.search("E107", langcode));
 	
 	}
 
@@ -148,23 +148,23 @@ public void save(Pages input,String langcode) {
 }
 
 
-public void update(Pages input,String langcode) {
+public void update(Pages old,Pages input,String langcode) {
 	
-
+	old.setPagemenu(input.getPagemenu());
+	old.setPagename(input.getPagename());
 	Date date = new Date();
-	input.setDateModify(date);
-	
+	old.setDateModify(date);
 	
 	try {
-		pagesRepo.save(input);	
+		pagesRepo.save(old);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	

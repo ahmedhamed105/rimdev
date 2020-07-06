@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Services.DevicePageServ;
 import com.rimdev.user.Services.PagesServ;
 import com.rimdev.user.Utils.ObjectUtils;
@@ -46,70 +48,78 @@ public class Pagescontroller {
 		 return new ResponseEntity<List<Pages>>(pagesServ.getall(langcode), HttpStatus.OK);
 	  }  
 
-@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Pages>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Pages teles) {
+@RequestMapping(value = "/save/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Pages>> save(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Pages teles) {
   // This returns a JSON or XML with the users
 	  List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
 DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	System.out.println("hamed");
-	if(teles.getId() !=null) {
-				
-		Pages found= pagesServ.getbyid(teles.getId(),langcode);
-			
-			if(found != null) {
-              BeanUtils.copyProperties(teles, found, ObjectUtils.getNullPropertyNames(teles));
-              if(!found.getPagename().equals(teles.getPagename())) {
-            	  pagesServ.check_page(teles.getPagename(),langcode);
-              }
-  		       pagesServ.update(found,langcode);      
-			}
-	}else {
+try {
+	if(teles.getId() ==null) {
+		
 		
 			 pagesServ.check_page(teles.getPagename(),langcode);
+			 
 		      pagesServ.save(teles,langcode);
 
+	} else {
+		throw new PopupException("error while insertion");
 	}
 		
-	
-	  return getAll(langcode);
+} catch (Exception e) {
+	// TODO: handle exception
+	throw new PopupException("error while insertion");
+}
+
+return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
 
 }
 
 
-
-
-
-
-@RequestMapping(value = "/delete/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Pages>> delete(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Pages teles) {
+@RequestMapping(value = "/update/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<List<Pages>> update(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Pages teles) {
   // This returns a JSON or XML with the users
 	  List<String> paramter =new ArrayList<String>();
 List<String> values =new ArrayList<String>();
 DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 
-	
-	if(teles.getId() !=null  && teles.getPagename() != null) {
-		
-		
-			Pages found= pagesServ.getbyid(teles.getId(),langcode);	
-			if(found != null) {
-				
-				pagesServ.delete(teles,langcode);
-			}
-			
-		
 
-	}else {
-		
-		throw new NullPointerException("ID not Found or user id not found");
+	if (teles.getId() == null) {
+
+		throw new PopupException("error while updating");
+
+	} else {
+		try {
+				
+		Pages found= pagesServ.getbyid(teles.getId(),langcode);
+		if (found == null) {
+			// System.out.println("enter 3");
+			throw new PopupException("error while updating");
+
+		} else {
+			
+            	  pagesServ.check_page(teles.getPagename(),langcode);
+  		       pagesServ.update(found,teles,langcode);      
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+
+			throw new PopupException("error while updating");
+		}
 
 	}
 		
-	  return getAll(langcode);
+	
+	return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
 
 }
+
+
+
+
+
+
 
 
 

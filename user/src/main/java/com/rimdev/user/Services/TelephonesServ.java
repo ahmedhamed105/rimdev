@@ -1,6 +1,7 @@
 package com.rimdev.user.Services;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import com.rimdev.user.entities.Email;
 import com.rimdev.user.entities.Telephones;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.ouputobject.Emailobj;
 
 @Service
 public class TelephonesServ {
@@ -38,33 +40,40 @@ public class TelephonesServ {
 	UserLoginServ userLoginServ;
 	
 	
-public List<Telephones> getall(String langcode) {
-	
+public List<Emailobj> getall(String langcode) {
+	List<Emailobj> out= new ArrayList<Emailobj>();
 	List<Telephones> teles;
 	
 	try {
 		
 		teles = (List<Telephones>) telephonesRepo.findAll();
-
-	//    throw new NullPointerException("no data found in users");
+		
+		if(teles == null || teles.size() <= 0) {
+			
+			throw new PopupException(textConvertionServ.search("E108", langcode));
+			
+		}
+	   
+	   for (Telephones tele : teles) {
+		   Emailobj em=new Emailobj();
+		   em.setTele(tele);
+		   em.setUserid(tele.getUserloginID().getUserID().getUseridnumber());
+		   out.add(em);
+	}
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
-	if(teles == null || teles.size() <= 0) {
-		
-		throw new NullPointerException(textConvertionServ.search("E108", langcode));
-		
-	}
+
 	
-		return teles;
+		return out;
 		
 	}
 
@@ -88,13 +97,13 @@ public void check_tele(String tele,String langcode) {
 
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 
@@ -116,18 +125,18 @@ public Telephones getbytele(String tele,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NullPointerException(textConvertionServ.search("E107", langcode));
+				throw new PopupException(textConvertionServ.search("E107", langcode));
 
 
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 
@@ -149,16 +158,16 @@ public Telephones getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NullPointerException(textConvertionServ.search("E107", langcode));
+				throw new PopupException(textConvertionServ.search("E107", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 
@@ -174,19 +183,19 @@ public List<Telephones> getbyuserlogin(int userid,String langcode) {
 		cu=(List<Telephones>) telephonesRepo.findbyuser(userid);
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	if(cu == null || cu.size() <= 0) {
 		
 		userServ.checkuser(userid, langcode);	
-		throw new NullPointerException(textConvertionServ.search("E107", langcode));
+		throw new PopupException(textConvertionServ.search("E107", langcode));
 
 	}
 	
@@ -206,13 +215,13 @@ public String getbyuserloginchar(int userid,String langcode) {
 		cu=(List<Telephones>) telephonesRepo.findbyuser(userid);
 
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	if(cu == null || cu.size() <= 0) {
@@ -232,86 +241,100 @@ public String getbyuserloginchar(int userid,String langcode) {
 
 
 
-public void save(Telephones input,String langcode) {
-
-	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
-		UserLogin  usero = userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
-		input.setUserloginID(usero);
+public void save(Emailobj input,String langcode) {
+	List<UserLogin>  usero=	userLoginServ.getbyuserid(input.getUserid(), langcode);
+	if(usero != null) {
 		
 		Date date = new Date();
-		input.setTeleCreate(date);
-		input.setTeleModify(date);
+	for (UserLogin userLogin : usero) {
 		
+		Telephones em=new Telephones();
+		em =input.getTele();
+		em.setUserloginID(userLogin);
+		em.setTeleCreate(date);
+		em.setTeleModify(date);
 		try {
-			telephonesRepo.save(input);	
+			telephonesRepo.save(em);	
 		} catch (TransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (ScriptException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	    	se.printStackTrace();
+			throw new PopupException(textConvertionServ.search("E104", langcode));
 	    }
 		
+	}
 	}else {
 		
-		throw new NullPointerException(textConvertionServ.search("E107", langcode));
+		throw new PopupException("error while insertion");
 	
 	}
 
 	
 	
 	
-	
 }
 
 
-public void update(Telephones input,String langcode) {
+public void update(Telephones old,Emailobj input,String langcode) {
 	
-	if(input.getUserloginID() != null || input.getUserloginID().getId() != null) {
-		UserLogin  usero = userLoginServ.getuserlogin(input.getUserloginID().getId(), langcode);
-		input.setUserloginID(usero);
+	List<UserLogin>  usero=	userLoginServ.getbyuserid(input.getUserid(), langcode);
+	if(usero != null) {
+		
+		Date date = new Date();
+	for (UserLogin userLogin : usero) {
+		
+		Telephones em=new Telephones();
+		em =old;
+		em.setDatastatusID(input.getTele().getDatastatusID());
+		em.setTelePrimary(input.getTele().getTelePrimary());
+		em.setPhoneNo(input.getTele().getPhoneNo());
+		em.setUserloginID(userLogin);
+		em.setTeleModify(date);
+		try {
+			telephonesRepo.save(em);	
+		} catch (TransientDataAccessException  se) {
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    } catch (RecoverableDataAccessException  se) {
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    }catch (ScriptException  se) {
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    }catch (NonTransientDataAccessException  se) {
+	    	se.printStackTrace();
+			throw new PopupException(textConvertionServ.search("E104", langcode));
+	    }
+		
+	}
+	}else {
+		
+		throw new PopupException("error while insertion");
+	
 	}
 	
-	Date date = new Date();
-	input.setTeleModify(date);
-	
-	try {
-		telephonesRepo.save(input);	
-	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }
-	
-	
-
-	
 }
+
 
 
 public void delete(Telephones input,String langcode) {	
-
+	
 	try {
-		userLoginServ.checkuserlogin(input.getUserloginID().getId(), langcode);	
 		telephonesRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	
 }
+
 
 
 }
