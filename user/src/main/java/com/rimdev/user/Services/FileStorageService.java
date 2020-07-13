@@ -196,6 +196,18 @@ public class FileStorageService {
 		        }
 	    	
 	    }
+	    
+	    public FilesUpload change_public(FilesUpload file,boolean publicf) {
+	    	
+	    if(publicf) {
+	    file.setFilePublic(1);
+	    }else {
+	    file.setFilePublic(0);	
+	    }
+	    file = filesUploadRepo.save(file);
+	    return file;
+	    }
+
 
 	    public FilesUpload storeFile(MultipartFile file,int pageid,int parentid,int componentid,String langcode,DevicePage devpag) {
 
@@ -327,9 +339,12 @@ public class FileStorageService {
 	    
 	    }
 
-	    public Resource loadFileAsResource(int fileid,String langcode) {
+	    public Resource loadFileAsResource(int fileid,String langcode,Boolean publicfile) {
 	    //	System.out.println("load");
 	    	FilesUpload filedel=getfilebyid(fileid,langcode);
+	    	if(publicfile && filedel.getFilePublic() != 1) {
+	    		return null;
+	    	}
 	        try {
 		     Path targetLocation1 = this.fileStorageLocation.resolve(filedel.getFilePath());
 
@@ -534,11 +549,15 @@ public class FileStorageService {
 		}
 	    
 	    
+  
+  
+  
 	    
-	    public ResponseEntity<Resource> getresource(HttpServletRequest request,int fileid,String langcode) {
-			
-			// Load file as Resource
-	        Resource resource = loadFileAsResource(fileid,langcode);
+	    public ResponseEntity<Resource> getresource(HttpServletRequest request,int fileid,String langcode,Boolean publicfile) {
+	    	
+	    	
+	    	Resource resource  = loadFileAsResource(fileid,langcode,publicfile);   		
+
 	        String contentType = null;
 	        if(resource == null) {
 	        	 contentType = "application/octet-stream";

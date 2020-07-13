@@ -69,7 +69,7 @@ public class FilesController {
 	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 
     	// Load file as Resource
-        return fileStorageService.getresource(request,fileid,langcode);
+        return fileStorageService.getresource(request,fileid,langcode,false);
 
     }
 

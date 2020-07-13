@@ -86,7 +86,7 @@ public class ComponentController {
 			fileid= 1;
 		}
 		
-			  return fileStorageService.getresource(request,fileid,langcode);
+			  return fileStorageService.getresource(request,fileid,langcode,true);
 		
 		 
 	  }
@@ -104,7 +104,7 @@ public class ComponentController {
 	 
 		
 		
-			  return fileStorageService.getresource(request,imageid,langcode);
+			  return fileStorageService.getresource(request,imageid,langcode,false);
 		
 		 
 	  }

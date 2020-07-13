@@ -72,6 +72,9 @@ public class FilesUpload implements Serializable {
     
     @Column(name = "file_path", length = 450)
     private String filePath;
+    
+    @Column(name = "file_public", nullable = false)
+    private int filePublic;
 
 
     public FilesUpload() {
@@ -88,7 +91,17 @@ public class FilesUpload implements Serializable {
         this.filesName = filesName;
     }
     
-    public FileType getFiletypeID() {
+    
+    
+    public int getFilePublic() {
+		return filePublic;
+	}
+
+	public void setFilePublic(int filePublic) {
+		this.filePublic = filePublic;
+	}
+
+	public FileType getFiletypeID() {
         return filetypeID;
     }
 

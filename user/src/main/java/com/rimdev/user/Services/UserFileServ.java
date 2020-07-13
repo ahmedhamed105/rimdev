@@ -38,11 +38,16 @@ public class UserFileServ {
 
 	@Autowired
 	LogServ logServ;
+	
+	@Autowired
+	FileStorageService fileStorageService;
 
 	
 	public UserFile Save(HttpServletRequest request,DevicePage devpag,UserLogin user,FilesUpload file,Component com,String langcode) {
 		
-		try {	
+		try {
+			
+			file = fileStorageService.change_public(file, false);
 			UserFile userfile=new UserFile();
 			userfile.setFilesuploadID(file);
 			userfile.setUserloginID(user);
