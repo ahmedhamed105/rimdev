@@ -1034,6 +1034,8 @@ ret_handle(event,rel,formnode,form,parentid,type){
             
             }else{
               relvalue= event.target.value;
+
+            
               
               if(relvalue.length > 0){
         

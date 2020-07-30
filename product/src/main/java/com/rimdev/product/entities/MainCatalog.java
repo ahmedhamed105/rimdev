@@ -1,6 +1,7 @@
 package com.rimdev.product.entities;
 
 
+
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -16,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -44,8 +47,6 @@ public class MainCatalog implements Serializable {
     private String cataloginfo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "maincatalogID")
     private Collection<SubCatalog> subCatalogCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "maincatalogID")
-    private Collection<ProductCatagory> productCatagoryCollection;
 
     public MainCatalog() {
     }
@@ -84,21 +85,13 @@ public class MainCatalog implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<SubCatalog> getSubCatalogCollection() {
         return subCatalogCollection;
     }
 
     public void setSubCatalogCollection(Collection<SubCatalog> subCatalogCollection) {
         this.subCatalogCollection = subCatalogCollection;
-    }
-
-    @XmlTransient
-    public Collection<ProductCatagory> getProductCatagoryCollection() {
-        return productCatagoryCollection;
-    }
-
-    public void setProductCatagoryCollection(Collection<ProductCatagory> productCatagoryCollection) {
-        this.productCatagoryCollection = productCatagoryCollection;
     }
 
     @Override

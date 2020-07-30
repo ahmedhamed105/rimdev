@@ -1,6 +1,5 @@
 package com.rimdev.product.entities;
 
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -12,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -20,6 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -76,10 +79,9 @@ public class ProductMain implements Serializable {
     private Collection<ProductComments> productCommentsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productmainProduct")
     private Collection<ProductImage> productImageCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productmainID")
-    private Collection<ProductSuncatagory> productSuncatagoryCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productmainProduct")
-    private Collection<ProductCatagory> productCatagoryCollection;
+    @JoinColumn(name = "sub_catalog_ID", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(optional = false)
+    private SubCatalog subcatalogID;
 
     public ProductMain() {
     }
@@ -171,6 +173,7 @@ public class ProductMain implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<ProductComments> getProductCommentsCollection() {
         return productCommentsCollection;
     }
@@ -180,6 +183,7 @@ public class ProductMain implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<ProductImage> getProductImageCollection() {
         return productImageCollection;
     }
@@ -188,22 +192,12 @@ public class ProductMain implements Serializable {
         this.productImageCollection = productImageCollection;
     }
 
-    @XmlTransient
-    public Collection<ProductSuncatagory> getProductSuncatagoryCollection() {
-        return productSuncatagoryCollection;
+    public SubCatalog getSubcatalogID() {
+        return subcatalogID;
     }
 
-    public void setProductSuncatagoryCollection(Collection<ProductSuncatagory> productSuncatagoryCollection) {
-        this.productSuncatagoryCollection = productSuncatagoryCollection;
-    }
-
-    @XmlTransient
-    public Collection<ProductCatagory> getProductCatagoryCollection() {
-        return productCatagoryCollection;
-    }
-
-    public void setProductCatagoryCollection(Collection<ProductCatagory> productCatagoryCollection) {
-        this.productCatagoryCollection = productCatagoryCollection;
+    public void setSubcatalogID(SubCatalog subcatalogID) {
+        this.subcatalogID = subcatalogID;
     }
 
     @Override
@@ -225,10 +219,11 @@ public class ProductMain implements Serializable {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "product.ProductMain[ id=" + id + " ]";
     }
     
 }
+

@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
  * @author ahmed.elemam
@@ -45,7 +47,7 @@ public class SubCatalog implements Serializable {
     @ManyToOne(optional = false)
     private MainCatalog maincatalogID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subcatalogID")
-    private Collection<ProductSuncatagory> productSuncatagoryCollection;
+    private Collection<ProductMain> productMainCollection;
 
     public SubCatalog() {
     }
@@ -92,12 +94,13 @@ public class SubCatalog implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ProductSuncatagory> getProductSuncatagoryCollection() {
-        return productSuncatagoryCollection;
+    @JsonIgnore
+    public Collection<ProductMain> getProductMainCollection() {
+        return productMainCollection;
     }
 
-    public void setProductSuncatagoryCollection(Collection<ProductSuncatagory> productSuncatagoryCollection) {
-        this.productSuncatagoryCollection = productSuncatagoryCollection;
+    public void setProductMainCollection(Collection<ProductMain> productMainCollection) {
+        this.productMainCollection = productMainCollection;
     }
 
     @Override
@@ -126,3 +129,4 @@ public class SubCatalog implements Serializable {
     }
     
 }
+
