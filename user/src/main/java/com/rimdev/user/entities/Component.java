@@ -105,8 +105,8 @@ public class Component implements Serializable {
     @Column(name = "visible", nullable = false)
     private int visible;
     @Basic(optional = false)
-    @Column(name = "view_shape", nullable = false)
-    private int viewShape;
+    @Column(name = "table_visible", nullable = false)
+    private int tableVisible;
     @Column(name = "Amethod", length = 450)
     private String amethod;
     @Column(name = "table_disable")
@@ -174,12 +174,12 @@ public class Component implements Serializable {
 		this.amethod = amethod;
 	}
 
-	public int getViewShape() {
-		return viewShape;
+	public int getTableVisible() {
+		return tableVisible;
 	}
 
-	public void setViewShape(int viewShape) {
-		this.viewShape = viewShape;
+	public void setTableVisible(int tableVisible) {
+		this.tableVisible = tableVisible;
 	}
 
 	public int getVisible() {

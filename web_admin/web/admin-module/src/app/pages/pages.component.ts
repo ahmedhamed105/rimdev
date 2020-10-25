@@ -32,6 +32,8 @@ export class PagesComponent implements OnInit {
   queue: Observable<FileQueueObject[]> []=[];
 
 
+  public relat = [];
+
   public objects = [[]];
   public components = [];
   public arraystatic = [];
@@ -146,7 +148,7 @@ export class PagesComponent implements OnInit {
   
     this._ComponentService.getbypage().subscribe(res =>{
 
-     console.log(res);
+   //  console.log(res);
       
 
       res.forEach((parent,indexp) => {
@@ -172,7 +174,7 @@ export class PagesComponent implements OnInit {
           return a.comp.seqNum -b.comp.seqNum;
         });
 
-        
+          this.relat = [];  
 
       a.forEach((element,index) => {
 
@@ -189,7 +191,8 @@ export class PagesComponent implements OnInit {
 
         }
 
-      
+
+     
 
 
         if(element.comp.ctype == 'button'){
@@ -197,7 +200,9 @@ export class PagesComponent implements OnInit {
 
         }else{
 
-
+          if (element['rel'].length > 0) {
+            this.relat.push(element);
+          }
 
           this.createItem(element.comp.name,element.comp.parentGroup,element.comp.groupname,element.comp.crequired,element.comp.cpattern,element.comp.patterndesgin,parent.parent.id);
         
@@ -313,9 +318,20 @@ this.file[parent.parent.id]=this.filetmp;
   };
   this.column.push(b);
  // this.columnDefs[parent.parent.id][0] = b;
-  
+      
+ 
+
 
 a.forEach((element,index) => {
+
+
+  //element['rel'].forEach((rel, index1) => {
+
+ //   this.relat.push(rel);
+//  });
+
+ 
+
 
   var parentin=element.comp.id;
   this.placeholders[parentin]= element.comp.ccode;
@@ -358,7 +374,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
 
   }else{
@@ -383,7 +399,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
 
   }
@@ -421,7 +437,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
    
   }else{
@@ -447,7 +463,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
     
   }
@@ -484,7 +500,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "passRenderer",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
     
 
@@ -510,7 +526,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer : "passRenderer",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
     
   }
@@ -544,7 +560,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "selRenderer",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
 
   }else{
@@ -569,7 +585,7 @@ if(element.comp.ctype === 'label'){
       resizable: true,
       checkboxSelection: false,
       cellRenderer: "selRenderer",
-      hide : element.comp.visible === 1 ? false:true
+      hide : element.comp.tableVisible === 1 ? false:true
     };
 
     
@@ -761,7 +777,7 @@ if(related === 'table'){
   }
 
 
-  tableaction(event,rel,form,parentid,type,emptyind,emptymessage){
+  tableaction(event,rel,form,parentid,type,emptyind,emptymessage,data){
 
    // //console.log(this.gridOptions[index])
     const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
@@ -782,7 +798,7 @@ if(related === 'table'){
       const selectedDataStringPresentation = selectedData.map( node =>
          {
     
-          this.ret_handle(event,rel,2,node,parentid,type);
+        this.ret_handle(event, rel, 2, node, parentid, type, data);
         });
   
     }
@@ -790,7 +806,7 @@ if(related === 'table'){
   }
 
 
-  displayupdate(event,rel,form,parentid,type,emptyind,emptymessage){
+  displayupdate(event, rel, form, parentid, type, emptyind, emptymessage, data){
  ////console.log(this.gridOptions)
     const selectedNodes = this.gridOptions[parentid].api.getSelectedNodes();
 
@@ -810,7 +826,7 @@ if(emptyind === 1){
       const selectedData = selectedNodes.map( node => node.data );
       const selectedDataStringPresentation = selectedData.map( node =>
          {
-          this.ret_handle(event,rel,3,node,parentid,type);
+        this.ret_handle(event, rel, 3, node, parentid, type, data);
         
         });
 
@@ -830,12 +846,15 @@ language(code){
     }
 
 
-    doaction(event,rel,form,parentid,type,emptyind,emptymessage){
-this.ret_handle(event,rel,1,form,parentid,type);
+  doaction(event, rel, form, parentid, type, emptyind, emptymessage, data){
+  //  console.log(data);
+    this.ret_handle(event, rel, 1, form, parentid, type, data);
 
     }
 
-ret_handle(event,rel,formnode,form,parentid,type){
+
+
+ret_handle(event,rel,formnode,form,parentid,type,data){
 
         if( rel != undefined || rel.length > 0 ){
           rel.forEach((comp,indexp) => {
@@ -920,7 +939,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
                    this.customactioncode(data);
 
                    this.controltag(2,form,comp.relatedComponent,comp.enableComp,comp.disableComp,comp.visibleComp,comp.hideComp,comp.alertAfter,comp.sucessMessage,comp.resetind,comp.resetParent,comp.routingInd,comp.routingLoc,data);   
-
+                   
 
                               
                  });
@@ -930,7 +949,7 @@ ret_handle(event,rel,formnode,form,parentid,type){
 
                      if(comp.relatedParent != undefined && comp.parServ != undefined){
 
-                      //console.log("dispaly");
+                     // console.log("dispaly");
                       
                       this._usersservice.insertbyurl(relvalue,comp.parServ,comp.comIPpar,comp.comportpar).subscribe(
                         data => {
@@ -988,6 +1007,21 @@ ret_handle(event,rel,formnode,form,parentid,type){
                               });
                              
                                 this.insertform[comp.relatedParent].patchValue(relvalue);
+                            this.relat.forEach((element, index1) => {
+                              var value;
+                              if (element.comp.parentGroup != null && element.comp.groupname != null) {
+                                value=    this.insertform[comp.relatedParent].get(element.comp.parentGroup).get(element.comp.groupname).get(element.comp.name);
+                              } else if (element.comp.parentGroup != null && element.comp.groupname == null) {
+                                value =    this.insertform[comp.relatedParent].get(element.comp.parentGroup).get(element.comp.name);
+                              } else if (element.comp.parentGroup == null && element.comp.groupname != null) {
+                                value =    this.insertform[comp.relatedParent].get(element.comp.groupname).get(element.comp.name);
+                              } else {
+                                value =     this.insertform[comp.relatedParent].get(element.comp.name);
+                              }
+                              this[element.comp.amethod](value, element.rel, this.insertform[comp.relatedParent], comp.relatedParent, element.comp.ctype,'','',1)
+                            });
+
+
                           }else if(formnode === 2){
                             if(this.isfile){
                               this.fileupload.uploadAllinsert(relvalue)
@@ -1033,11 +1067,15 @@ ret_handle(event,rel,formnode,form,parentid,type){
     
             
             }else{
-              relvalue= event.target.value;
 
-            
-              
-              if(relvalue.length > 0){
+             
+              if(data == 0){
+                relvalue = event.target.value;
+              }else{
+                relvalue = event.value;
+              }
+           
+              if (relvalue.length > 0 || relvalue >= 0){
         
             
                    if(comp.relatedComponent != undefined && comp.service != undefined){

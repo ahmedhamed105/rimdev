@@ -32,7 +32,7 @@
             visible:number,
             fieldEncry : number,
             parentGroup : string,         
-            viewShape: string, 
+            tableVisible: number, 
             refreshMethod: string, 
             refershServ: string, 
             refreshButton: number,
