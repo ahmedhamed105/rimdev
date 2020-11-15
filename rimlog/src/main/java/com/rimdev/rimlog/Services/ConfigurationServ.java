@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rimdev.rimlog.Repo.ConfigurationRepo;
-import com.rimdev.rimlog.entities.Component;
 import com.rimdev.rimlog.entities.Configuration;
-import com.rimdev.rimlog.entities.DeviceOs;
 
 @Service
 public class ConfigurationServ {

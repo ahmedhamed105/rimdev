@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
  * @author ahmed.elemam
@@ -79,6 +81,7 @@ public class LogType implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<LogFatal> getLogFatalCollection() {
         return logFatalCollection;
     }
@@ -88,6 +91,7 @@ public class LogType implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<LogOther> getLogOtherCollection() {
         return logOtherCollection;
     }
@@ -97,6 +101,7 @@ public class LogType implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<LogInfo> getLogInfoCollection() {
         return logInfoCollection;
     }
@@ -106,6 +111,7 @@ public class LogType implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<LogError> getLogErrorCollection() {
         return logErrorCollection;
     }
@@ -115,6 +121,7 @@ public class LogType implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public Collection<LogWarning> getLogWarningCollection() {
         return logWarningCollection;
     }

@@ -6,7 +6,6 @@ import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule , HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from './Error/HttpErrorInterceptor';
-import { DeviceDetectorModule } from 'ngx-device-detector';
 import { AgGridModule } from 'ag-grid-angular';
 import {FileUploadModule} from 'ng2-file-upload';
 import { UsertypedropdownComponent } from './usertypedropdown/usertypedropdown.component';
@@ -33,7 +32,6 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     AppRoutingModule,
     ReactiveFormsModule,
     NgxWebstorageModule.forRoot(),
-    DeviceDetectorModule.forRoot(),
     AgGridModule.withComponents([
       UsertypedropdownComponent,
       PasswordtableComponent

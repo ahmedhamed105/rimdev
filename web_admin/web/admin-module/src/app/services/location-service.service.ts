@@ -2,11 +2,6 @@ import { Injectable } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IDevice } from '../objects/IDevice';
-import { IdeviceOS } from '../objects/IdeviceOS';
-import { Ilogintype } from '../objects/Ilogintype';
-import { Idevicetype } from '../objects/Idevicetype';
-import { Router } from '@angular/router';
-import { devicetoken } from '../objects/devicetoken';
 import { GlobalConstants } from '../GlobalConstants';
 import { CookiesService } from '../services/cookies.service';
 
@@ -58,24 +53,7 @@ if(os === undefined){
   };
 }
 
-    //  console.log(this.deviceService.getDeviceInfo());
-    //   await   this.getos(usertokean,username).then(res => {
-        
-    //     this.deviceos=res;
-    // //     console.log('finish2');
-    // //     console.log(this.deviceos);
-    //     for(var i = 0; i < this.deviceos.length; i++) {
-    //    //   console.log(this.deviceos[i].deviceOS);
-    //         if (this.deviceos[i].deviceOS == os) {
-    //           this.device.deviceOSID=this.deviceos[i];
-    //             break;
-    //         }
-    //     }  
-  
-    //   //  console.log('finish4');
  
- 
-    //   });
     if(devicename === undefined){  
     this.device.devicetypeID=
     {
@@ -91,20 +69,6 @@ if(os === undefined){
     };
   }
 
-    //  await this.gettype(usertokean,username).then(data => {
-
-    //     this.devicetype = data;
-
-    //   for(var i = 0; i < this.devicetype.length; i++) {
-    //   //  console.log(this.devicetype[i].devtype);
-    //       if (this.devicetype[i].devtype == devicename) {
-    //         this.device.devicetypeID=this.devicetype[i];
-    //           break;
-    //       }
-    //   }
-    // });
-
-    
 
     this.device.devicebrowser=browser;
     this.device.deviceBVersion=browser_version;
@@ -124,34 +88,10 @@ if(os === undefined){
     };
 
 
-    //   await this.getlogintype(usertokean,username).then(data => {
-
-    //     this.logintype = data;
-
-    //   for(var i = 0; i < this.logintype.length; i++) {
-    //   //  console.log(this.devicetype[i].devtype);
-
-    //   if (this.logintype[i].ltype == 'unknown') {
-    //     this.device.logintypeID=this.logintype[i];
-    //   }
-    //       if (this.logintype[i].ltype == 'Admin') {
-    //         this.device.logintypeID=this.logintype[i];
-    //           break;
-    //       }
-    //   }
-
-    
-
-    // });
- //  await   this.getip().then(data => {
- //      this.device.deviceip=data['ip'];
- //     }).catch((error) => {
-//        this.device.deviceip = ''
- //      });
-
+   
  this.device.deviceip = ''
 
-   // console.log("IP "+this.device.deviceip)
+   console.log("IP "+this.device.deviceip)
     GlobalConstants.PCCODE= this.cookieService.getCookie('pccode');
         if(GlobalConstants.PCCODE.length === 0){
           GlobalConstants.PCCODE= Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
