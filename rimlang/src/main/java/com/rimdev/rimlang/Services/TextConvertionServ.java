@@ -128,6 +128,7 @@ public void Save(Lang_obj input,String langcode) {
 	
 	
 	public String search(String code,String langcode){
+		
 		if(code == null || langcode == null) {	
 			 new PopupException("please enter code");
 		}

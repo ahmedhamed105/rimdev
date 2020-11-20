@@ -8,10 +8,10 @@ import com.rimdev.rimlang.Config.FileStorageProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ FileStorageProperties.class })
-public class AuthApplication {
+public class LangApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AuthApplication.class, args);
+		SpringApplication.run(LangApplication.class, args);
 	}
 
 }

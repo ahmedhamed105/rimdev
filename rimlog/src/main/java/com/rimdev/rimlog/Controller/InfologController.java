@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.rimdev.rimlog.Services.DeviceServ;
+import com.rimdev.rimlog.Services.ExternalServ;
 import com.rimdev.rimlog.Services.LogServ;
 import com.rimdev.rimlog.entities.Device;
 import com.rimdev.rimlog.entities.LogInfo;
@@ -29,7 +28,7 @@ public class InfologController {
 	LogServ logServ;
 
 	@Autowired
-	DeviceServ deviceServ;
+	ExternalServ externalServ;
 
 	@RequestMapping(value = "/insert/{langcode}", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<Boolean> log_text(HttpServletRequest req, @RequestBody Logobject log,
@@ -37,7 +36,7 @@ public class InfologController {
 
 		try {
 
-			Device devinfo = deviceServ.getbyid(log.getDeviceid(), langcode);
+			Device devinfo = externalServ.getdevicebyid(log.getDeviceid(), langcode);
 
 			if (devinfo == null) {
 				System.out.println("Device is null");

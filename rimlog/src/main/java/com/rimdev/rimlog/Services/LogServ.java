@@ -42,9 +42,9 @@ public class LogServ {
 	LogTypeRepo logTypeRepo;
 	@Autowired
 	LogWarningRepo logWarningRepo;
-
 	@Autowired
-	TextConvertionServ textConvertionServ;
+	ExternalServ externalServ;
+
 
 	@Autowired
 	ConfigurationServ configurationServ;
@@ -176,17 +176,17 @@ public class LogServ {
 
 			} else {
 				//
-				throw new NoResultException(textConvertionServ.search("E100", langcode));
+				throw new NoResultException(externalServ.search("E100", langcode));
 
 			}
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -200,13 +200,13 @@ public class LogServ {
 			return flowid;
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -224,18 +224,18 @@ public class LogServ {
 
 			} else {
 				//
-				throw new NoResultException(textConvertionServ.search("E100", langcode));
+				throw new NoResultException(externalServ.search("E100", langcode));
 
 			}
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode), new Throwable());
+			throw new NoResultException(externalServ.search("E104", langcode), new Throwable());
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -249,13 +249,13 @@ public class LogServ {
 			return flowid;
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -273,18 +273,18 @@ public class LogServ {
 
 			} else {
 				//
-				throw new NoResultException(textConvertionServ.search("E100", langcode));
+				throw new NoResultException(externalServ.search("E100", langcode));
 
 			}
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode), new Throwable());
+			throw new NoResultException(externalServ.search("E104", langcode), new Throwable());
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -298,13 +298,13 @@ public class LogServ {
 			return flowid;
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -322,18 +322,18 @@ public class LogServ {
 
 			} else {
 				//
-				throw new NoResultException(textConvertionServ.search("E100", langcode));
+				throw new NoResultException(externalServ.search("E100", langcode));
 
 			}
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode), new Throwable());
+			throw new NoResultException(externalServ.search("E104", langcode), new Throwable());
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -347,13 +347,13 @@ public class LogServ {
 			return flowid;
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -371,18 +371,18 @@ public class LogServ {
 
 			} else {
 				//
-				throw new NoResultException(textConvertionServ.search("E100", langcode));
+				throw new NoResultException(externalServ.search("E100", langcode));
 
 			}
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode), new Throwable());
+			throw new NoResultException(externalServ.search("E104", langcode), new Throwable());
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -396,13 +396,13 @@ public class LogServ {
 			return flowid;
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}
@@ -420,18 +420,18 @@ public class LogServ {
 
 			} else {
 				//
-				throw new NoResultException(textConvertionServ.search("E100", langcode));
+				throw new NoResultException(externalServ.search("E100", langcode));
 
 			}
 
 		} catch (TransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode), new Throwable());
+			throw new NoResultException(externalServ.search("E104", langcode), new Throwable());
 		} catch (RecoverableDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (ScriptException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		} catch (NonTransientDataAccessException se) {
-			throw new NoResultException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(externalServ.search("E104", langcode));
 		}
 
 	}

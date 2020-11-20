@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.rimdev.rimdevices.Exception.BlockedException;
 import com.rimdev.rimdevices.Exception.NooauthException;
+import com.rimdev.rimdevices.Exception.PopupException;
 import com.rimdev.rimdevices.Repo.DeviceRepo;
 import com.rimdev.rimdevices.Utils.Generate;
 import com.rimdev.rimdevices.entities.Application;
@@ -79,16 +80,16 @@ public Device getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				return null;
+				throw new PopupException(textConvertionServ.search("E104", langcode));
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 }
@@ -98,13 +99,13 @@ public List<Device> getall(String langcode) {
 	try {
 		return (List<Device>) deviceRepo.findAll();
 } catch (TransientDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }
 		
 	}
@@ -125,13 +126,13 @@ public Device checkdevicetwo(String Device_code,String langcode) {
 				return null;
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 }
@@ -142,13 +143,13 @@ public Device checkdevice(String ip,DeviceOs os,DeviceType type,String browser,S
 	    return a.get(0);
 	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }
 	
 	
@@ -186,13 +187,13 @@ public Device Save(Device input,String langcode) {
 		
 		return ouput;
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }			
 		
 	}
@@ -213,13 +214,13 @@ public Device update(Device old,Device input,String langcode) {
 	
 	return ouput;
 } catch (TransientDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }	
 }
 
@@ -284,19 +285,19 @@ public DevicePage SaveDP(HttpServletRequest request,Device input,String username
 	} catch (TransientDataAccessException  se) {
 		String text= "sql error"+tokean;
 		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
 		String text= "sql error"+tokean;
 		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
 		String text= "sql error"+tokean;
 		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
 		String text= "sql error"+tokean;
 		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new PopupException(textConvertionServ.search("E104", langcode));
     }			
 		
 	}
@@ -378,20 +379,20 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 } catch (TransientDataAccessException  se) {
 	String text= "sql error"+tokean;
 	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
 	String text= "sql error"+tokean;
 	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
 	String text= "sql error"+tokean;
 	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
 	se.printStackTrace();
 	String text= "sql error"+tokean;
 	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new PopupException(textConvertionServ.search("E104", langcode));
 }
 	
 	

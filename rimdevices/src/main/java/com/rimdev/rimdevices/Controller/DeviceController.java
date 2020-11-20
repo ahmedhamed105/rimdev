@@ -1,8 +1,5 @@
 package com.rimdev.rimdevices.Controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
-import com.maxmind.geoip2.model.CityResponse;
 import com.rimdev.rimdevices.Exception.PopupException;
 import com.rimdev.rimdevices.Services.DevicePageServ;
 import com.rimdev.rimdevices.Services.DeviceServ;
@@ -39,9 +33,7 @@ import com.rimdev.rimdevices.Services.UserLoginServ;
 import com.rimdev.rimdevices.entities.Device;
 import com.rimdev.rimdevices.entities.DevicePage;
 import com.rimdev.rimdevices.entities.DeviceStatus;
-import com.rimdev.rimdevices.entities.Deviceip;
-import com.rimdev.rimdevices.entities.Notification;
-import com.rimdev.rimdevices.outputobject.loginpra;
+import com.rimdev.rimdevices.outputobject.Deviceob;
 import com.rimdev.rimdevices.outputobject.pagesdevice;
 
 
@@ -82,6 +74,30 @@ public class DeviceController {
 	
 	@Autowired
 	DeviceStatusServ deviceStatusServ;
+	
+	
+	
+	
+
+
+@RequestMapping(value = "/getbyid/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<Device> gettxt(HttpServletRequest req, @RequestBody Deviceob dev,@PathVariable("langcode") String langcode) {
+
+	try {
+
+		Device outdevice=deviceServ.getbyid(dev.getDeviceid(), langcode);
+		
+
+return new ResponseEntity<Device>(outdevice, HttpStatus.OK);
+	} catch (Exception e) {
+		throw e;
+	}
+
+}
+
+	
+	
+	
 
 	
 	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
@@ -95,6 +111,7 @@ public class DeviceController {
 		    	      .body(deviceServ.getall(langcode));
 	  }
 	  
+	    
 	  
 	 
 
