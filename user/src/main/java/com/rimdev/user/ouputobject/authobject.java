@@ -1,14 +1,6 @@
 package com.rimdev.user.ouputobject;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class authobject {
 	

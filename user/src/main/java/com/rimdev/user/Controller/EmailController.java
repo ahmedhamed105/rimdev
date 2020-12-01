@@ -50,7 +50,7 @@ public class EmailController {
 	  @RequestMapping(value = "/primary/{langcode}", method = RequestMethod.GET)
 	  public  ResponseEntity<List<select_object>> getprimary(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
 		
-		  List<String> paramter =new ArrayList<String>();
+	  List<String> paramter =new ArrayList<String>();
 	  List<String> values =new ArrayList<String>();
 	  DevicePage devpag= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
 	 

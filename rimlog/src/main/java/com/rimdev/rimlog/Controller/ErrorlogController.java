@@ -31,22 +31,19 @@ public class ErrorlogController {
 	ExternalServ externalServ;
 
 	@RequestMapping(value = "/insert/{langcode}", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<Boolean> log_text(HttpServletRequest req, @RequestBody Logobject log,
+	public @ResponseBody ResponseEntity<LogError> log_text(HttpServletRequest req, @RequestBody Logobject log,
 			@PathVariable("langcode") String langcode) {
 
 		try {
 
 			Device devinfo = externalServ.getdevicebyid(log.getDeviceid(), langcode);
 
-			if (devinfo == null) {
-				System.out.println("Device is null");
-				return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
-			}
+		
 
-			logServ.errorlogexternal(devinfo.getDeviceip(), log.getRequesturl(), log.getLogtext(), devinfo,
+			LogError result=logServ.errorlogexternal(devinfo.getDeviceip(), log.getRequesturl(), log.getLogtext(), devinfo,
 					log.getUserid(), log.getLogtype(), langcode, log.getLogexception());
 
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			return new ResponseEntity<LogError>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw e;
@@ -54,7 +51,7 @@ public class ErrorlogController {
 
 	}
 
-	@RequestMapping(value = "/get/{langcode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/getbycode/{langcode}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<LogError> getbyerrorcode(HttpServletRequest req, @RequestBody GetLogob log,
 			@PathVariable("langcode") String langcode) {
 

@@ -49,7 +49,7 @@ public class LogServ {
 	@Autowired
 	ConfigurationServ configurationServ;
 
-	public String errorlogexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
+	public LogError errorlogexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
 			int logtypeID, String langcode, String logException) {
 		String errorcode = "";
 		if (configurationServ.getbykey("Log_error").getConfigboolean() == 1) {
@@ -68,11 +68,12 @@ public class LogServ {
 			a.setErrorcode(errorcode);
 			a.setIpaddress(ipaddress);
 			logErrorRepo.save(a);
+			return a;
 		}
-		return errorcode;
+		return null;
 	}
 
-	public String infoexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
+	public LogInfo infoexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
 			int logtypeID, String langcode, String logException) {
 		String errorcode = "";
 		if (configurationServ.getbykey("Log_info").getConfigboolean() == 1) {
@@ -91,11 +92,12 @@ public class LogServ {
 			a.setErrorcode(errorcode);
 			a.setIpaddress(ipaddress);
 			logInfoRepo.save(a);
+			return a;
 		}
-		return errorcode;
+		throw new NoResultException(externalServ.search("E100", langcode));
 	}
 
-	public String fatalerrorexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
+	public LogFatal fatalerrorexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
 			int logtypeID, String langcode, String logException) {
 		String errorcode = "";
 		if (configurationServ.getbykey("Log_fatal_error").getConfigboolean() == 1) {
@@ -114,11 +116,12 @@ public class LogServ {
 			a.setErrorcode(errorcode);
 			a.setIpaddress(ipaddress);
 			logFatalRepo.save(a);
+			return a;
 		}
-		return errorcode;
+		throw new NoResultException(externalServ.search("E100", langcode));
 	}
 
-	public String warningexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
+	public LogWarning warningexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
 			int logtypeID, String langcode, String logException) {
 		String errorcode = "";
 		if (configurationServ.getbykey("Log_warning").getConfigboolean() == 1) {
@@ -137,11 +140,12 @@ public class LogServ {
 			a.setErrorcode(errorcode);
 			a.setIpaddress(ipaddress);
 			logWarningRepo.save(a);
+			return a;
 		}
-		return errorcode;
+		throw new NoResultException(externalServ.search("E100", langcode));
 	}
 
-	public String logotherexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
+	public LogOther logotherexternal(String ipaddress, String webservice, String text, Device deviceId, int userId,
 			int logtypeID, String langcode, String logException) {
 		String errorcode = "";
 		if (configurationServ.getbykey("Log_other").getConfigboolean() == 1) {
@@ -160,8 +164,9 @@ public class LogServ {
 			a.setErrorcode(errorcode);
 			a.setIpaddress(ipaddress);
 			logOtherRepo.save(a);
+			return a;
 		}
-		return errorcode;
+		throw new NoResultException(externalServ.search("E100", langcode));
 	}
 
 	public LogType logtypebyid(int id, String langcode) {

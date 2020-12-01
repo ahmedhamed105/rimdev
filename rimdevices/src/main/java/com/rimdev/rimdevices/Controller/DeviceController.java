@@ -1,40 +1,22 @@
 package com.rimdev.rimdevices.Controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rimdev.rimdevices.Exception.PopupException;
-import com.rimdev.rimdevices.Services.DevicePageServ;
+import com.rimdev.rimdevices.Exception.NoResultException;
 import com.rimdev.rimdevices.Services.DeviceServ;
-import com.rimdev.rimdevices.Services.DeviceStatusServ;
-import com.rimdev.rimdevices.Services.DeviceipServ;
-import com.rimdev.rimdevices.Services.GroupPagesServ;
-import com.rimdev.rimdevices.Services.GroupWebServ;
-import com.rimdev.rimdevices.Services.LogServ;
-import com.rimdev.rimdevices.Services.NotificationServ;
-import com.rimdev.rimdevices.Services.PagesServ;
-import com.rimdev.rimdevices.Services.TextConvertionServ;
-import com.rimdev.rimdevices.Services.UserLoginServ;
+import com.rimdev.rimdevices.Services.LangExternalServ;
 import com.rimdev.rimdevices.entities.Device;
-import com.rimdev.rimdevices.entities.DevicePage;
-import com.rimdev.rimdevices.entities.DeviceStatus;
 import com.rimdev.rimdevices.outputobject.Deviceob;
-import com.rimdev.rimdevices.outputobject.pagesdevice;
 
 
 @Controller // This means that this class is a Controller
@@ -44,48 +26,28 @@ public class DeviceController {
 	@Autowired
 	DeviceServ deviceServ;
 	
-	
 	@Autowired
-	PagesServ pagesServ;
-	
-	@Autowired
-	UserLoginServ userLoginServ;
-	
-	@Autowired
-	DeviceipServ deviceipServ;
-	
-	@Autowired
-	GroupWebServ groupWebServ;
-	
-	@Autowired
-	GroupPagesServ GroupPagesServ;
-	
-	@Autowired
-	DevicePageServ devicePageServ;
-	
-	@Autowired
-	LogServ logServ;
-	
-	@Autowired
-	TextConvertionServ textConvertionServ;
-	
-	@Autowired
-	NotificationServ notificationServ;
-	
-	@Autowired
-	DeviceStatusServ deviceStatusServ;
-	
-	
+	LangExternalServ textConvertionServ;
 	
 	
 
 
-@RequestMapping(value = "/getbyid/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<Device> gettxt(HttpServletRequest req, @RequestBody Deviceob dev,@PathVariable("langcode") String langcode) {
+@RequestMapping(value = "/search/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<Device> getbyid(HttpServletRequest req, @RequestBody Deviceob dev,@PathVariable("langcode") String langcode) {
 
+	Device outdevice= null;
+	
 	try {
+		if(dev.getData().getId() != null) {
+			 outdevice=deviceServ.getbyid(dev.getData().getId(), langcode);
 
-		Device outdevice=deviceServ.getbyid(dev.getDeviceid(), langcode);
+		}else if(dev.getData().getDevicecode() != null) {
+			
+			outdevice=deviceServ.getbycode(dev.getData().getDevicecode(), langcode);
+		}else {
+			throw new NoResultException(textConvertionServ.search("E104", langcode));
+		}
+
 		
 
 return new ResponseEntity<Device>(outdevice, HttpStatus.OK);
@@ -95,84 +57,45 @@ return new ResponseEntity<Device>(outdevice, HttpStatus.OK);
 
 }
 
+
+@RequestMapping(value = "/saveorupdate/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<Device> saveorupdate(HttpServletRequest req, @RequestBody Deviceob dev,@PathVariable("langcode") String langcode) {
+	Device outdevice;
+	try {
+		 outdevice = getbyid(req, dev, langcode).getBody();
+	//	System.out.println(outdevice.getId());
+	} catch (Exception e) {
+		e.printStackTrace();
+		Device out = deviceServ.saveDevice(dev.getData(), langcode);
+		return new ResponseEntity<Device>(out, HttpStatus.OK);
+	}
+	try {
+		Device out = deviceServ.updateDevice(outdevice, dev.getData(), langcode);
+		return new ResponseEntity<Device>(out, HttpStatus.OK);
+	} catch (Exception e) {
+		// TODO: handle exception
+		throw e;
+	}
 	
 	
-	
 
-	
-	  @RequestMapping(value = "/all/{langcode}", method = RequestMethod.GET)
-	  public  ResponseEntity<List<Device>> getAll( HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode){
-		  List<String> paramter =new ArrayList<String>();
-		  List<String> values =new ArrayList<String>();
-		  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
-
-		    return ResponseEntity.ok()
-		    	      .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))
-		    	      .body(deviceServ.getall(langcode));
-	  }
-	  
-	    
-	  
-	 
-
-	  
-	  @RequestMapping(value = "/page/{langcode}", method = RequestMethod.POST)
-	  public  ResponseEntity<List<pagesdevice>> getpages(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Device input){	  
-		
-		  List<String> paramter =new ArrayList<String>();
-		  List<String> values =new ArrayList<String>();
-		  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
-
-		  return new ResponseEntity<List<pagesdevice>>(devicePageServ.getpagesbydevice(input.getId(),langcode), HttpStatus.OK);
-	  }
-	  
-	  
-
-
-@RequestMapping(value = "/update/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<List<Device>> saveorupdate(HttpServletRequest request,@RequestHeader("Devicecode") String  Devicecode,@RequestHeader("username") String  username,@RequestHeader("usertokean") String  usertokean,@RequestHeader("pageid") String  pagenum,@PathVariable("langcode") String langcode,@RequestBody Device input) {
-  // This returns a JSON or XML with the users
-	  List<String> paramter =new ArrayList<String>();
-	  List<String> values =new ArrayList<String>();
-	  DevicePage a= devicePageServ.check_webservice(request, usertokean, username, pagenum, langcode,Devicecode,paramter,values);
-	  Device user = null;
-	  if (input.getId() == null) {
-
-			throw new PopupException("error while updating");
-
-		} else {
-
-			try {
-				user = deviceServ.getbyid(input.getId(), langcode);
-				// System.out.println("enter 2");
-
-				if (user == null) {
-					// System.out.println("enter 3");
-					throw new PopupException("error while updating");
-
-				} else {
-					
-				DeviceStatus devicestatusID= deviceStatusServ.getbyid(input.getDevicestatusID().getId());
-				input.setDevicestatusID(devicestatusID);
-				user = deviceServ.update(user, input, langcode);
-
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-
-				throw new PopupException("error while updating");
-			}
-
-		}
-
-		return getAll(request, Devicecode, username, usertokean, pagenum, langcode);
-	
-	
 }
 
 
 
+@RequestMapping(value = "/savedevicepage/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<Device> savedevicepage(HttpServletRequest req, @RequestBody Deviceob dev,@PathVariable("langcode") String langcode) {
+	return null;
+	
+	
+	
 
+}
+
+
+	
+	
+	
 	
 
 }

@@ -91,7 +91,7 @@ if(os === undefined){
    
  this.device.deviceip = ''
 
-   console.log("IP "+this.device.deviceip)
+  // console.log("IP "+this.device.deviceip)
     GlobalConstants.PCCODE= this.cookieService.getCookie('pccode');
         if(GlobalConstants.PCCODE.length === 0){
           GlobalConstants.PCCODE= Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);

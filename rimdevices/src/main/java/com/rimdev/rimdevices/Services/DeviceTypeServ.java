@@ -19,10 +19,10 @@ import com.rimdev.rimdevices.entities.DeviceType;
 public class DeviceTypeServ {
 	
 	@Autowired 
-	private DeviceTypeRepo deviceTypeRepo;
+	 DeviceTypeRepo deviceTypeRepo;
 	
 	@Autowired
-	TextConvertionServ textConvertionServ;
+	LangExternalServ textConvertionServ;
 	
 public List<DeviceType> getall(String langcode) {
 

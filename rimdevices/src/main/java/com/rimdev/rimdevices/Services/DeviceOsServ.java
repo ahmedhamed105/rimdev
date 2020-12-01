@@ -23,7 +23,7 @@ public class DeviceOsServ {
 	private DeviceOsRepo deviceOsRepo;
 	
 	@Autowired
-	TextConvertionServ textConvertionServ;
+	LangExternalServ textConvertionServ;
 	
 public List<DeviceOs> getall(String langcode) {
 		try {

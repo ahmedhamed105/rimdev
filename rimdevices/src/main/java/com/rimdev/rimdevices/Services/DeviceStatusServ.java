@@ -20,7 +20,7 @@ public class DeviceStatusServ {
 	
 	
 	@Autowired
-	TextConvertionServ textConvertionServ;
+	LangExternalServ textConvertionServ;
 	
 public List<DeviceStatus> getall(String langcode) {
 		try {

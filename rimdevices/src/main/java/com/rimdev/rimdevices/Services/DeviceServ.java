@@ -1,5 +1,7 @@
 package com.rimdev.rimdevices.Services;
 
+import java.io.File;
+import java.net.InetAddress;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,27 +16,25 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.CityResponse;
 import com.rimdev.rimdevices.Exception.BlockedException;
+import com.rimdev.rimdevices.Exception.NoResultException;
 import com.rimdev.rimdevices.Exception.NooauthException;
-import com.rimdev.rimdevices.Exception.PopupException;
 import com.rimdev.rimdevices.Repo.DeviceRepo;
-import com.rimdev.rimdevices.Utils.Generate;
 import com.rimdev.rimdevices.entities.Application;
 import com.rimdev.rimdevices.entities.Device;
 import com.rimdev.rimdevices.entities.DeviceOs;
 import com.rimdev.rimdevices.entities.DevicePage;
 import com.rimdev.rimdevices.entities.DeviceType;
 import com.rimdev.rimdevices.entities.Pages;
-import com.rimdev.rimdevices.entities.UserLogin;
 
 @Service
 public class DeviceServ {
 	
 	@Autowired 
-	private DeviceRepo deviceRepo;
+	 DeviceRepo deviceRepo;
 	
-	@Autowired
-	PagesServ pagesServ;
 	
 	@Autowired
 	DeviceOsServ deviceOsServ;
@@ -45,22 +45,19 @@ public class DeviceServ {
 	@Autowired
 	DeviceStatusServ deviceStatusServ;
 	
-	
-	@Autowired
-	ConfigurationServ configurationServ;
-	
 	@Autowired
 	ApplicationServ applicationServ;
 	
 	
 	@Autowired
-	TextConvertionServ textConvertionServ;
+	LangExternalServ textConvertionServ;
 	
 	@Autowired
 	DevicePageServ devicePageServ;
 	
 	@Autowired
-	LogServ logServ;
+	DeviceipServ deviceipServ;
+	
 
 	
 
@@ -80,39 +77,25 @@ public Device getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new PopupException(textConvertionServ.search("E104", langcode));
+				throw new NoResultException(textConvertionServ.search("E104", langcode));
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     }
 	
 }
 
 	
-public List<Device> getall(String langcode) {
-	try {
-		return (List<Device>) deviceRepo.findAll();
-} catch (TransientDataAccessException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-} catch (RecoverableDataAccessException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-}catch (ScriptException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-}catch (NonTransientDataAccessException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-}
-		
-	}
 
 
 
-public Device checkdevicetwo(String Device_code,String langcode) {
+public Device getbycode(String Device_code,String langcode) {
 	try {
 		Optional<Device> flowid =deviceRepo.findbydevicecode(Device_code);
 		 
@@ -123,182 +106,36 @@ public Device checkdevicetwo(String Device_code,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				return null;
+				throw new NoResultException(textConvertionServ.search("E104", langcode));
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     }catch (ScriptException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E104", langcode));
     }
 	
 }
 
-public Device checkdevice(String ip,DeviceOs os,DeviceType type,String browser,String langcode) {
+
+
+
+
+public List<Device> getall(String langcode) {
 	try {
-		List<Device> a= (List<Device>) deviceRepo.findbyiposbrowser( ip, os, type, browser);
-	    return a.get(0);
-	
-	}  catch (TransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }
-	
-	
-}
-
-
-public Device Save(Device input,String langcode) {
-		
-	try {	
-		
-		if(input.getDeviceOSID()==null || input.getDeviceOSID().getId()==null) {
-			input.setDeviceOSID(deviceOsServ.getbyname("Unknown"));
-			
-		}
-		if(input.getDevicetypeID()==null || input.getDevicetypeID().getId()==null) {
-			input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));		
-		}
-		
-		
-		input.setDevicestatusID(deviceStatusServ.getbyid(1));
-		
-		
-		Date date = new Date();
-	
-        // convert date to calendar
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-		input.setDevicecreate(date);
-		input.setDevicemodify(date);
-		Device ouput =deviceRepo.save(input);	
-		
-		
-		
-		
-		return ouput;
-	} catch (TransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }			
-		
-	}
-
-public Device update(Device old,Device input,String langcode) {
-	
-	
-	try {
-		old.setDevicestatusID(input.getDevicestatusID());
-    // convert date to calendar
-	Date date = new Date();
-    Calendar c = Calendar.getInstance();
-    c.setTime(date);
-    c.add(Calendar.HOUR, 1); //same with c.add(Calendar.DAY_OF_MONTH, 1);
-    old.setDevicemodify(date);
-	Device ouput =deviceRepo.save(old);	
-
-	
-	return ouput;
+		return (List<Device>) deviceRepo.findAll();
 } catch (TransientDataAccessException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
+	throw new NoResultException(textConvertionServ.search("E104", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
+	throw new NoResultException(textConvertionServ.search("E104", langcode));
 }catch (ScriptException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
+	throw new NoResultException(textConvertionServ.search("E104", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-}	
+	throw new NoResultException(textConvertionServ.search("E104", langcode));
 }
-
-
-
-
-
-
-public DevicePage SaveDP(HttpServletRequest request,Device input,String username,String tokean,String langcode) {
-		
-	try {	
-		
-		System.out.println(input.getDeviceOSID().getDeviceOS());
-		
-		DeviceOs deviceos=deviceOsServ.getbyname(input.getDeviceOSID().getDeviceOS());
-		
-		if(deviceos==null) {
-			input.setDeviceOSID(deviceOsServ.getbyname("Unknown"));
-			
-		}else {
-			
-			input.setDeviceOSID(deviceos);
-		}
-		
-		System.out.println(input.getDevicetypeID().getDevtype());
-		DeviceType devicetype=deviceTypeServ.getbyname(input.getDevicetypeID().getDevtype());
-		
-		if(devicetype==null) {
-			input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));		
-		}else {
-			input.setDevicetypeID(devicetype);
-		}
-		
-		
-		Application application =applicationServ.getbytype(input.getApplicationID().getAppname());
-		if(application == null) {
-		
-			throw new NooauthException(textConvertionServ.search("E104", langcode));
-	
-		}else {
-			 input.setApplicationID(application);
-		}
-		
-	
-		input.setDevicestatusID(deviceStatusServ.getbyid(1));
-		
-		
-		Date date = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-		input.setDevicecreate(date);
-		input.setDevicemodify(date);
-		Device ouput =deviceRepo.save(input);	
-		
-		
-		Pages p= pagesServ.getbyid(input.getPage());
-		DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
-		
-	
-		
-		return out;
-	} catch (TransientDataAccessException  se) {
-		String text= "sql error"+tokean;
-		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-		String text= "sql error"+tokean;
-		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-		String text= "sql error"+tokean;
-		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-		String text= "sql error"+tokean;
-		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());	
-		throw new PopupException(textConvertionServ.search("E104", langcode));
-    }			
 		
 	}
 
@@ -306,53 +143,123 @@ public DevicePage SaveDP(HttpServletRequest request,Device input,String username
 
 
 
-public DevicePage updateDP(HttpServletRequest request,Device input,Device update,String username,String tokean,String langcode) {
-	
+
+
+public boolean check_device(Device input,String langcode){
 	
 	if(input.getDevicestatusID().getId() == 2) {
-		
-	   	String text= "Device is blocked";
-		logServ.errorlog(input.getDeviceip(),request,text, input, 0, 26, langcode," ");			
-	
-	    throw new BlockedException(textConvertionServ.search("E111", langcode));			
-		
-		
-	}
-	
-	System.out.println(input.getDeviceOSID().getDeviceOS());
-	
-	DeviceOs deviceos=deviceOsServ.getbyname(update.getDeviceOSID().getDeviceOS());
-	
-	if(deviceos==null) {
-		input.setDeviceOSID(deviceOsServ.getbyname("Unknown"));
-		
-	}else {
-		
-		input.setDeviceOSID(deviceos);
-	}
-	
-	System.out.println(input.getDevicetypeID().getDevtype());
-	DeviceType devicetype=deviceTypeServ.getbyname(update.getDevicetypeID().getDevtype());
-	
-	if(devicetype==null) {
-		input.setDevicetypeID(deviceTypeServ.getbyname("Unknown"));		
-	}else {
-		input.setDevicetypeID(devicetype);
-	}
-	
-	
-	Application application =applicationServ.getbytype(update.getApplicationID().getAppname());
-	if(application == null) {
-	
-		throw new NooauthException(textConvertionServ.search("E104", langcode));
 
+		 throw new BlockedException(textConvertionServ.search("E201", langcode));				
+		
 	}else {
-		 input.setApplicationID(application);
+		
+	    return true;				
+
+	}
+	
+}
+
+
+
+
+
+public Device saveDevice(Device newdev,String langcode) {
+	
+	
+	try {
+		DeviceType defaultdeviceType = deviceTypeServ.getbyname("Unknown");
+		DeviceOs defaultdeviceOS = deviceOsServ.getbyname("Unknown");
+
+
+		DeviceOs deviceos = deviceOsServ.getbyname(newdev.getDeviceOSID().getDeviceOS());
+
+		if (deviceos == null) {
+			newdev.setDeviceOSID(defaultdeviceOS);
+
+		} else {
+
+			newdev.setDeviceOSID(deviceos);
+		}
+
+		DeviceType devicetype = deviceTypeServ.getbyname(newdev.getDevicetypeID().getDevtype());
+
+		if (devicetype == null) {
+			newdev.setDevicetypeID(defaultdeviceType);
+		} else {
+			newdev.setDevicetypeID(devicetype);
+		}
+
+		Application application = applicationServ.getbytype(newdev.getApplicationID().getAppname(),langcode);
+		if (application != null) {
+			newdev.setApplicationID(application);
+		}
+
+	} catch (Exception e) {
+
+		throw e;
+
 	}
 	
 	Device ouput ;
 	
+	
+    // convert date to calendar
+	Date date = new Date();
+    Calendar c = Calendar.getInstance();
+    c.setTime(date);
+
+    newdev.setDevicemodify(date);
+
+    ouput =deviceRepo.save(newdev);	
+
+    deviceipServ.savebyip(ouput, langcode);
+	
+	return ouput;
+	
+}
+
+
+public Device updateDevice(Device input,Device update,String langcode) {
+	
+	
 	try {
+		DeviceType defaultdeviceType = deviceTypeServ.getbyname("Unknown");
+		DeviceOs defaultdeviceOS = deviceOsServ.getbyname("Unknown");
+
+		check_device(input, langcode);
+
+		DeviceOs deviceos = deviceOsServ.getbyname(update.getDeviceOSID().getDeviceOS());
+
+		if (deviceos == null) {
+			input.setDeviceOSID(defaultdeviceOS);
+
+		} else {
+
+			input.setDeviceOSID(deviceos);
+		}
+
+		DeviceType devicetype = deviceTypeServ.getbyname(update.getDevicetypeID().getDevtype());
+
+		if (devicetype == null) {
+			input.setDevicetypeID(defaultdeviceType);
+		} else {
+			input.setDevicetypeID(devicetype);
+		}
+
+		Application application = applicationServ.getbytype(update.getApplicationID().getAppname(),langcode);
+		if (application != null) {
+			input.setApplicationID(application);
+		}
+
+	} catch (Exception e) {
+
+		throw e;
+
+	}
+	
+	Device ouput ;
+	
+	
     // convert date to calendar
 	Date date = new Date();
     Calendar c = Calendar.getInstance();
@@ -373,39 +280,16 @@ public DevicePage updateDP(HttpServletRequest request,Device input,Device update
 	input.setDevicelong(update.getDevicelong());
 	input.setPage(update.getPage());
 	
-	 ouput =deviceRepo.save(input);	
+    ouput =deviceRepo.save(input);	
+    
+    deviceipServ.savebyip(ouput, langcode);
 
 	
-} catch (TransientDataAccessException  se) {
-	String text= "sql error"+tokean;
-	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-} catch (RecoverableDataAccessException  se) {
-	String text= "sql error"+tokean;
-	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-}catch (ScriptException  se) {
-	String text= "sql error"+tokean;
-	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new PopupException(textConvertionServ.search("E104", langcode));
-}catch (NonTransientDataAccessException  se) {
-	se.printStackTrace();
-	String text= "sql error"+tokean;
-	logServ.errorlog(input.getDeviceip(),request,text, input, 0, 2, langcode,se.getMessage());
-	throw new PopupException(textConvertionServ.search("E104", langcode));
+	return ouput;
+	
 }
-	
-	
-	//get page entity
-		Pages p= pagesServ.getbyid(input.getPage());
-		
-		
-		DevicePage out=devicePageServ.savedevpag(request,ouput, p,username, tokean,langcode);
-		
 
-		return out;
-	
-}
+
 
 
 }

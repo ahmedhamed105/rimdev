@@ -11,7 +11,8 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
-import com.rimdev.rimpages.Exception.PopupException;
+import com.rimdev.rimpages.Exception.NoResultException;
+import com.rimdev.rimpages.Exception.NoResultException;
 import com.rimdev.rimpages.Repo.DevicePageRepo;
 import com.rimdev.rimpages.Repo.PagesRepo;
 import com.rimdev.rimpages.entities.Pages;
@@ -26,10 +27,9 @@ public class PagesServ {
 	DevicePageRepo devicePageRepo;
 	
 	@Autowired
-	TextConvertionServ textConvertionServ;
+	ExternalServ textConvertionServ;
 	
-	@Autowired
-	UserLoginServ userLoginServ;
+
 	
 	
 public List<Pages> getall(String langcode) {
@@ -37,13 +37,13 @@ public List<Pages> getall(String langcode) {
 try {	
 		return (List<Pages>) pagesRepo.findAll();
 } catch (TransientDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new NoResultException(textConvertionServ.search("E400", langcode));
 } catch (RecoverableDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new NoResultException(textConvertionServ.search("E400", langcode));
 }catch (ScriptException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new NoResultException(textConvertionServ.search("E400", langcode));
 }catch (NonTransientDataAccessException  se) {
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
+	throw new NoResultException(textConvertionServ.search("E400", langcode));
 }
 		
 	}
@@ -60,7 +60,7 @@ public void check_page(String pagename,String langcode) {
 		 if (flowid.isPresent()){
 			 flowid.get();
 		
-			throw new PopupException(textConvertionServ.search("E105", langcode));
+			throw new NoResultException(textConvertionServ.search("E105", langcode));
 					}
 			else{
 			   // alternative processing....
@@ -68,13 +68,13 @@ public void check_page(String pagename,String langcode) {
 
 			}
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }
 	
 
@@ -97,16 +97,16 @@ public Pages getbyid(int id,String langcode) {
 					}
 			else{
 			   // alternative processing....
-				throw new NullPointerException(textConvertionServ.search("E107", langcode));
+				throw new NoResultException(textConvertionServ.search("E400", langcode));
 			}
 	} catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }
 	
 
@@ -127,18 +127,18 @@ public void save(Pages input,String langcode) {
 		try {
 			pagesRepo.save(input);	
 		} catch (TransientDataAccessException  se) {
-			throw new PopupException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(textConvertionServ.search("E400", langcode));
 	    } catch (RecoverableDataAccessException  se) {
-			throw new PopupException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(textConvertionServ.search("E400", langcode));
 	    }catch (ScriptException  se) {
-			throw new PopupException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(textConvertionServ.search("E400", langcode));
 	    }catch (NonTransientDataAccessException  se) {
-			throw new PopupException(textConvertionServ.search("E104", langcode));
+			throw new NoResultException(textConvertionServ.search("E400", langcode));
 	    }
 		
 	}else {
 		
-		throw new PopupException(textConvertionServ.search("E107", langcode));
+		throw new NoResultException(textConvertionServ.search("E107", langcode));
 	
 	}
 
@@ -159,13 +159,13 @@ public void update(Pages old,Pages input,String langcode) {
 	try {
 		pagesRepo.save(old);	
 	}  catch (TransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (ScriptException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new PopupException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }
 	
 	
@@ -179,13 +179,13 @@ public void delete(Pages input,String langcode) {
 	try {
 		pagesRepo.delete(input);	
 	}  catch (TransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     } catch (RecoverableDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (ScriptException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }catch (NonTransientDataAccessException  se) {
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
+		throw new NoResultException(textConvertionServ.search("E400", langcode));
     }
 	
 	
@@ -195,31 +195,5 @@ public void delete(Pages input,String langcode) {
 	
 
 
-public Pages getbyid(int id) {
-	
-	
-	try {
-		Optional<Pages> flowid =pagesRepo.findbyid(id);
-		 
-		 if (flowid.isPresent()){
-			 Pages  ouput = flowid.get();
-		
-			  return ouput;
-					}
-			else{
-			   // alternative processing....
-				throw new NullPointerException("no pages");
-			}
-	} catch (Exception e) {
-		// TODO: handle exception
-		throw new NullPointerException("no pages");
-	}
-	
-	
-
-	
-	
-	
-}
 
 }

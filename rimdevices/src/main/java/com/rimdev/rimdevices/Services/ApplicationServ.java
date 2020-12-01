@@ -10,6 +10,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.rimdevices.Exception.NooauthException;
 import com.rimdev.rimdevices.Repo.ApplicationRepo;
 import com.rimdev.rimdevices.entities.Application;
 
@@ -20,7 +21,7 @@ public class ApplicationServ {
 	ApplicationRepo applicationRepo;
 	
 	@Autowired
-	TextConvertionServ textConvertionServ;
+	LangExternalServ textConvertionServ;
 	
 	
 	
@@ -69,7 +70,7 @@ public Application getbyid(int id) {
 
 
 
-public Application getbytype(String type) {
+public Application getbytype(String type,String langcode) {
 	
 	
 	try {
@@ -82,11 +83,11 @@ public Application getbytype(String type) {
 					}
 			else{
 			   // alternative processing....
-				return null;
+				throw new NooauthException(textConvertionServ.search("E202", langcode));
 			}
 	} catch (Exception e) {
 		// TODO: handle exception
-		return null;
+		throw new NooauthException(textConvertionServ.search("E202", langcode));
 	}
 	
 	

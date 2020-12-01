@@ -29,6 +29,7 @@ import com.rimdev.user.entities.FilesUpload;
 import com.rimdev.user.entities.User;
 import com.rimdev.user.entities.UserFile;
 import com.rimdev.user.entities.UserLogin;
+import com.rimdev.user.ouputobject.Userob;
 import com.rimdev.user.ouputobject.Userobject;
 import com.rimdev.user.ouputobject.threevalues;
 
@@ -288,6 +289,25 @@ DevicePage dg= devicePageServ.check_webservice(request, usertokean, username, pa
 	 return new ResponseEntity<FilesUpload>(out, HttpStatus.OK);
 
 	
+}
+
+
+
+@RequestMapping(value = "/getbyid/{langcode}", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<User> getbyerrorcode(HttpServletRequest req, @RequestBody Userob usero,
+		@PathVariable("langcode") String langcode) {
+
+	try {
+
+		User usr = userServ.getuserbyid(usero.getUserid(),langcode);
+
+		return new ResponseEntity<User>(usr, HttpStatus.OK);
+	} catch (Exception e) {
+		// TODO: handle exception
+		// e.printStackTrace();
+		throw e;
+	}
+
 }
 
 

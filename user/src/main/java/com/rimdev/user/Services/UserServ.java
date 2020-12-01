@@ -14,6 +14,7 @@ import org.springframework.dao.TransientDataAccessException;
 import org.springframework.jdbc.datasource.init.ScriptException;
 import org.springframework.stereotype.Service;
 
+import com.rimdev.user.Exception.NoResultException;
 import com.rimdev.user.Exception.PopupException;
 import com.rimdev.user.Repo.UserRepo;
 import com.rimdev.user.Utils.Generate;
@@ -136,46 +137,30 @@ public User getuser(int id,String langcode) {
     }
 }
 
+public User getuserbyid(int id, String langcode) {
 
-
-public User getuserbyid(int id,String langcode) {
-	
-//	System.out.println("null 0");
-	
 	try {
-		Optional<User> flowid =userRepo.findById(id);
-		 
-		 if (flowid.isPresent()){
-			//	System.out.println("null g");
-			 User  ouput = flowid.get();
-		
-			  return ouput;
-					}
-			else{
-				
-		//		System.out.println("null 1");
-			   // alternative processing....
-				return null;
-			}
-	} catch (TransientDataAccessException  se) {
-		se.printStackTrace();
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    } catch (RecoverableDataAccessException  se) {
-    	se.printStackTrace();
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (ScriptException  se) {
-    	se.printStackTrace();
-		throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NonTransientDataAccessException  se) {
-    	se.printStackTrace();
-	throw new NullPointerException(textConvertionServ.search("E104", langcode));
-    }catch (NullPointerException e) {
-    //	System.out.println("null 2");
-		// TODO: handle exception
-    	e.printStackTrace();
-   // 	return null;
+		Optional<User> flowid = userRepo.findById(id);
+
+		if (flowid.isPresent()) {
+			User ouput = flowid.get();
+			return ouput;
+		} else {
+
+			throw new NoResultException(textConvertionServ.search("E500", langcode));
+		}
+	} catch (TransientDataAccessException se) {
+		throw new NoResultException(textConvertionServ.search("E500", langcode));
+	} catch (RecoverableDataAccessException se) {
+		throw new NoResultException(textConvertionServ.search("E500", langcode));
+	} catch (ScriptException se) {
+		throw new NoResultException(textConvertionServ.search("E500", langcode));
+	} catch (NonTransientDataAccessException se) {
+		throw new NoResultException(textConvertionServ.search("E500", langcode));
+	} catch (Exception e) {
+		throw new NoResultException(textConvertionServ.search("E500", langcode));
 	}
-	return null;
+
 }
 
 public void check_user(String firstname,String middlename,String lastname,String langcode) {

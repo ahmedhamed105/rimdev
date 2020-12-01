@@ -25,7 +25,7 @@ public class LangController {
 	
 
 @RequestMapping(value = "/translate/{langcode}", method = RequestMethod.POST)
-public @ResponseBody ResponseEntity<langob> gettxt(HttpServletRequest req, @RequestBody langob txt,@PathVariable("langcode") String langcode) {
+public @ResponseBody ResponseEntity<langob> search(HttpServletRequest req, @RequestBody langob txt,@PathVariable("langcode") String langcode) {
 
 	try {
 		langob out =new langob();
