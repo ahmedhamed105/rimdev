@@ -40,10 +40,10 @@ public @ResponseBody ResponseEntity<UserLogin> initpage(HttpServletRequest reque
 		try {
 			input.setDeviceip(request.getRemoteAddr());
 			
-			//if not found noauth
+			//save device 
 			 Device outdevice= deviceExternalServ.saveorupdatedevice(input, langcode);
 			 
-			 //if not found page
+			 //get page
 			 Pages page = pageExternalServ.getpagebyid(input.getPage(), langcode);
 			 
 			 //if not have user use public 
