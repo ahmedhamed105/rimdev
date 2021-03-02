@@ -2,11 +2,9 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,23 +12,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "input_type", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -43,15 +41,13 @@ public class InputType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
     @Basic(optional = false)
     @Column(name = "itype", nullable = false, length = 45)
     private String itype;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inputtypeID")
-    private Collection<ComponentInput> componentInputCollection;
     @Column(name = "date_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateModify;
@@ -61,65 +57,16 @@ public class InputType implements Serializable {
     private Date dateCreate;
 
 
-    public InputType() {
-    }
+   
 
-    public InputType(Integer id) {
-        this.id = id;
-    }
+    public InputType(String itype, Date dateModify, Date dateCreate) {
+		super();
+		this.itype = itype;
+		this.dateModify = dateModify;
+		this.dateCreate = dateCreate;
+	}
 
-    public InputType(Integer id, String itype) {
-        this.id = id;
-        this.itype = itype;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
-
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-    
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getItype() {
-        return itype;
-    }
-
-    public void setItype(String itype) {
-        this.itype = itype;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<ComponentInput> getComponentInputCollection() {
-        return componentInputCollection;
-    }
-
-    public void setComponentInputCollection(Collection<ComponentInput> componentInputCollection) {
-        this.componentInputCollection = componentInputCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

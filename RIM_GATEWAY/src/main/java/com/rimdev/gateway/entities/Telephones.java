@@ -7,32 +7,32 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "telephones", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -48,7 +48,7 @@ public class Telephones implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -57,7 +57,7 @@ public class Telephones implements Serializable {
     private String phoneNo;
     @Basic(optional = false)
     @Column(name = "tele_primary", nullable = false)
-    private int telePrimary;
+    private Integer telePrimary;
     @Basic(optional = false)
     @Column(name = "tele_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -66,87 +66,25 @@ public class Telephones implements Serializable {
     @Column(name = "tele_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date teleCreate;
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
+    @Column(name = "Data_status_ID")
+    private Integer datastatusID;
 
-    
-    @JoinColumn(name = "Data_status_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DataStatus datastatusID;
+   
 
-    public Telephones() {
-    }
-
-    public Telephones(Integer id) {
-        this.id = id;
-    }
-    
-    public DataStatus getDatastatusID() {
-        return datastatusID;
-    }
-
-    public void setDatastatusID(DataStatus datastatusID) {
-        this.datastatusID = datastatusID;
-    }
-
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    
-
-    public int getTelePrimary() {
-		return telePrimary;
-	}
-
-	public void setTelePrimary(int telePrimary) {
+    public Telephones(String phoneNo, Integer telePrimary, Date teleModify, Date teleCreate, Integer userloginID,
+			Integer datastatusID) {
+		super();
+		this.phoneNo = phoneNo;
 		this.telePrimary = telePrimary;
+		this.teleModify = teleModify;
+		this.teleCreate = teleCreate;
+		this.userloginID = userloginID;
+		this.datastatusID = datastatusID;
 	}
 
-	@XmlTransient
-    @JsonIgnore
-    public Date getTeleModify() {
-        return teleModify;
-    }
-
-    public void setTeleModify(Date teleModify) {
-        this.teleModify = teleModify;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Date getTeleCreate() {
-        return teleCreate;
-    }
-
-    public void setTeleCreate(Date teleCreate) {
-        this.teleCreate = teleCreate;
-    }
-
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
-
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

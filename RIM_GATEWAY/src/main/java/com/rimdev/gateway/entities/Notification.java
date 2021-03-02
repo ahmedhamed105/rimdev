@@ -3,14 +3,13 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -18,11 +17,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "notification", catalog = "rim_user", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -34,7 +36,7 @@ public class Notification implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -44,77 +46,27 @@ public class Notification implements Serializable {
     @Column(name = "Notif_Date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date notifDate;
-    @JoinColumn(name = "Application_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Application applicationID;
-    @JoinColumn(name = "Group_priviledge_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private GroupPriviledge grouppriviledgeID;
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
+    @Column(name = "Application_ID")
+    private Integer applicationID;
+    @Column(name = "Group_priviledge_ID")
+    private Integer grouppriviledgeID;
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
 
-    public Notification() {
-    }
+  
+    
 
-    public Notification(Integer id) {
-        this.id = id;
-    }
+    public Notification(String notiftext, Date notifDate, Integer applicationID, Integer grouppriviledgeID,
+			Integer userloginID) {
+		super();
+		this.notiftext = notiftext;
+		this.notifDate = notifDate;
+		this.applicationID = applicationID;
+		this.grouppriviledgeID = grouppriviledgeID;
+		this.userloginID = userloginID;
+	}
 
-    public Notification(Integer id, String notiftext) {
-        this.id = id;
-        this.notiftext = notiftext;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNotiftext() {
-        return notiftext;
-    }
-
-    public void setNotiftext(String notiftext) {
-        this.notiftext = notiftext;
-    }
-
-    public Date getNotifDate() {
-        return notifDate;
-    }
-
-    public void setNotifDate(Date notifDate) {
-        this.notifDate = notifDate;
-    }
-
-    public Application getApplicationID() {
-        return applicationID;
-    }
-
-    public void setApplicationID(Application applicationID) {
-        this.applicationID = applicationID;
-    }
-
-    public GroupPriviledge getGrouppriviledgeID() {
-        return grouppriviledgeID;
-    }
-
-    public void setGrouppriviledgeID(GroupPriviledge grouppriviledgeID) {
-        this.grouppriviledgeID = grouppriviledgeID;
-    }
-
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
-
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

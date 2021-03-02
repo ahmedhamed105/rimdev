@@ -2,11 +2,9 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,20 +12,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "language_map", catalog = "rim_language", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -38,7 +35,7 @@ public class LanguageMap implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -53,64 +50,17 @@ public class LanguageMap implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "languagemapID")
-    private Collection<TextConvertion> textConvertionCollection;
 
-    public LanguageMap() {
-    }
-
-    public LanguageMap(Integer id) {
-        this.id = id;
-    }
     
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
 
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
+    public LanguageMap(String textcode, Date dateModify, Date dateCreate) {
+		super();
+		this.textcode = textcode;
+		this.dateModify = dateModify;
+		this.dateCreate = dateCreate;
+	}
 
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTextcode() {
-        return textcode;
-    }
-
-    public void setTextcode(String textcode) {
-        this.textcode = textcode;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<TextConvertion> getTextConvertionCollection() {
-        return textConvertionCollection;
-    }
-
-    public void setTextConvertionCollection(Collection<TextConvertion> textConvertionCollection) {
-        this.textConvertionCollection = textConvertionCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

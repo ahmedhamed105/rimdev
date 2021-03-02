@@ -1,9 +1,8 @@
 package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,17 +10,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 @Entity
+@Data
 @Table(name = "device_status", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -34,49 +33,21 @@ public class DeviceStatus implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
     @Column(name = "D_status", length = 45)
     private String dstatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "devicestatusID")
-    private Collection<Device> deviceCollection;
 
-    public DeviceStatus() {
-    }
+    
+    
+    public DeviceStatus(String dstatus) {
+		super();
+		this.dstatus = dstatus;
+	}
 
-    public DeviceStatus(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDstatus() {
-        return dstatus;
-    }
-
-    public void setDstatus(String dstatus) {
-        this.dstatus = dstatus;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<Device> getDeviceCollection() {
-        return deviceCollection;
-    }
-
-    public void setDeviceCollection(Collection<Device> deviceCollection) {
-        this.deviceCollection = deviceCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

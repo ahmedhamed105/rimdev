@@ -3,33 +3,30 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "files_upload", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -58,17 +55,13 @@ public class FilesUpload implements Serializable {
     @Basic(optional = false)
     @Column(name = "files_name", nullable = false, length = 45)
     private String filesName;
-    @JoinColumn(name = "file_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private FileType filetypeID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "filesuploadID")
-    private Collection<UserFile> userFileCollection;
+    @Column(name = "file_type_ID")
+    private Integer filetypeID;
     @Column(name = "filecomruntime", precision = 20, scale = 6)
     private BigDecimal filecomruntime;
 
-    @JoinColumn(name = "file_status_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private FileStatus filestatusID;
+    @Column(name = "file_status_ID")
+    private Integer filestatusID;
     
     @Column(name = "file_path", length = 450)
     private String filePath;
@@ -77,110 +70,25 @@ public class FilesUpload implements Serializable {
     private int filePublic;
 
 
-    public FilesUpload() {
-    }
-
-    public FilesUpload(Integer id) {
-        this.id = id;
-    }
-
-    public FilesUpload(Integer id, String filesUrl, BigDecimal filesSize, String filesName) {
-        this.id = id;
-        this.filesUrl = filesUrl;
-        this.filesSize = filesSize;
-        this.filesName = filesName;
-    }
     
     
-    
-    public int getFilePublic() {
-		return filePublic;
-	}
 
-	public void setFilePublic(int filePublic) {
+
+
+    public FilesUpload(String filesUrl, BigDecimal filesSize, String filesName, Integer filetypeID,
+			BigDecimal filecomruntime, Integer filestatusID, String filePath, int filePublic) {
+		super();
+		this.filesUrl = filesUrl;
+		this.filesSize = filesSize;
+		this.filesName = filesName;
+		this.filetypeID = filetypeID;
+		this.filecomruntime = filecomruntime;
+		this.filestatusID = filestatusID;
+		this.filePath = filePath;
 		this.filePublic = filePublic;
 	}
 
-	public FileType getFiletypeID() {
-        return filetypeID;
-    }
-
-    public void setFiletypeID(FileType filetypeID) {
-        this.filetypeID = filetypeID;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-    
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFilesUrl() {
-        return filesUrl;
-    }
-
-    public void setFilesUrl(String filesUrl) {
-        this.filesUrl = filesUrl;
-    }
-
-    public BigDecimal getFilesSize() {
-        return filesSize;
-    }
-
-    public void setFilesSize(BigDecimal filesSize) {
-        this.filesSize = filesSize;
-    }
-
-    public String getFilesName() {
-        return filesName;
-    }
-
-    public void setFilesName(String filesName) {
-        this.filesName = filesName;
-    }
-
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<UserFile> getUserFileCollection() {
-        return userFileCollection;
-    }
-
-    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
-        this.userFileCollection = userFileCollection;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public FileStatus getFilestatusID() {
-        return filestatusID;
-    }
-
-    public void setFilestatusID(FileStatus filestatusID) {
-        this.filestatusID = filestatusID;
-    }
-    
-    public BigDecimal getFilecomruntime() {
-        return filecomruntime;
-    }
-
-    public void setFilecomruntime(BigDecimal filecomruntime) {
-        this.filecomruntime = filecomruntime;
-    }
-
-
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

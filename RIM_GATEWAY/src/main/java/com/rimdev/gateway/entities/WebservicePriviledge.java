@@ -2,9 +2,8 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,21 +11,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "webservice_priviledge", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -43,7 +42,7 @@ public class WebservicePriviledge implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -52,129 +51,43 @@ public class WebservicePriviledge implements Serializable {
     private String webService;
     @Basic(optional = false)
     @Column(name = "public", nullable = false)
-    private int public1;
+    private Integer public1;
     @Basic(optional = false)
     @Column(name = "Web_Device", nullable = false)
-    private int webDevice;
+    private Integer webDevice;
     @Basic(optional = false)
     @Column(name = "Mobile_Device", nullable = false)
-    private int mobileDevice;
+    private Integer mobileDevice;
     @Basic(optional = false)
     @Column(name = "Admin_Device", nullable = false)
-    private int adminDevice;
+    private Integer adminDevice;
     @Basic(optional = false)
     @Column(name = "Isdesktop", nullable = false)
-    private int isdesktop;
+    private boolean isdesktop;
     @Basic(optional = false)
     @Column(name = "Ismobile", nullable = false)
-    private int ismobile;
+    private boolean ismobile;
     @Basic(optional = false)
     @Column(name = "Istablet", nullable = false)
-    private int istablet;
+    private boolean istablet;
+
     
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "webservicepriviledgeID")
-    private Collection<GroupWeb> groupWebCollection;
 
-    public WebservicePriviledge() {
-    }
+    public WebservicePriviledge(String webService, Integer public1, Integer webDevice, Integer mobileDevice,
+			Integer adminDevice, boolean isdesktop, boolean ismobile, boolean istablet) {
+		super();
+		this.webService = webService;
+		this.public1 = public1;
+		this.webDevice = webDevice;
+		this.mobileDevice = mobileDevice;
+		this.adminDevice = adminDevice;
+		this.isdesktop = isdesktop;
+		this.ismobile = ismobile;
+		this.istablet = istablet;
+	}
 
-    public WebservicePriviledge(Integer id) {
-        this.id = id;
-    }
-
-    public WebservicePriviledge(Integer id, String webService, int public1, int webDevice, int mobileDevice, int adminDevice) {
-        this.id = id;
-        this.webService = webService;
-        this.public1 = public1;
-        this.webDevice = webDevice;
-        this.mobileDevice = mobileDevice;
-        this.adminDevice = adminDevice;
-    }
-    
-    public int getIsdesktop() {
-        return isdesktop;
-    }
-
-    public void setIsdesktop(int isdesktop) {
-        this.isdesktop = isdesktop;
-    }
-
-    public int getIsmobile() {
-        return ismobile;
-    }
-
-    public void setIsmobile(int ismobile) {
-        this.ismobile = ismobile;
-    }
-
-    public int getIstablet() {
-        return istablet;
-    }
-
-    public void setIstablet(int istablet) {
-        this.istablet = istablet;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getWebService() {
-        return webService;
-    }
-
-    public void setWebService(String webService) {
-        this.webService = webService;
-    }
-
-    public int getPublic1() {
-        return public1;
-    }
-
-    public void setPublic1(int public1) {
-        this.public1 = public1;
-    }
-
-    public int getWebDevice() {
-        return webDevice;
-    }
-
-    public void setWebDevice(int webDevice) {
-        this.webDevice = webDevice;
-    }
-
-    public int getMobileDevice() {
-        return mobileDevice;
-    }
-
-    public void setMobileDevice(int mobileDevice) {
-        this.mobileDevice = mobileDevice;
-    }
-
-    public int getAdminDevice() {
-        return adminDevice;
-    }
-
-    public void setAdminDevice(int adminDevice) {
-        this.adminDevice = adminDevice;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<GroupWeb> getGroupWebCollection() {
-        return groupWebCollection;
-    }
-
-    public void setGroupWebCollection(Collection<GroupWeb> groupWebCollection) {
-        this.groupWebCollection = groupWebCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

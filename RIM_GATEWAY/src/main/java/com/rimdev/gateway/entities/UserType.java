@@ -7,10 +7,9 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,23 +17,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "user_type", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -50,7 +49,7 @@ public class UserType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -59,7 +58,7 @@ public class UserType implements Serializable {
     private String usertype;
     @Basic(optional = false)
     @Column(name = "Publish_not", nullable = false)
-    private int publishnot;
+    private Integer publishnot;
     @Basic(optional = false)
     @Column(name = "type_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -68,75 +67,18 @@ public class UserType implements Serializable {
     @Column(name = "type_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date typeCreate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usertypeID")
-    private Collection<UserLogin> userLoginCollection;
 
-    public UserType() {
-    }
+   
 
-    public UserType(Integer id) {
-        this.id = id;
-    }
+    public UserType(String usertype, Integer publishnot, Date typeModify, Date typeCreate) {
+		super();
+		this.usertype = usertype;
+		this.publishnot = publishnot;
+		this.typeModify = typeModify;
+		this.typeCreate = typeCreate;
+	}
 
-    public UserType(Integer id, String usertype, int publishnot, Date typeModify, Date typeCreate) {
-        this.id = id;
-        this.usertype = usertype;
-        this.publishnot = publishnot;
-        this.typeModify = typeModify;
-        this.typeCreate = typeCreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsertype() {
-        return usertype;
-    }
-
-    public void setUsertype(String usertype) {
-        this.usertype = usertype;
-    }
-
-    public int getPublishnot() {
-        return publishnot;
-    }
-
-    public void setPublishnot(int publishnot) {
-        this.publishnot = publishnot;
-    }
-
-    public Date getTypeModify() {
-        return typeModify;
-    }
-
-    public void setTypeModify(Date typeModify) {
-        this.typeModify = typeModify;
-    }
-
-    public Date getTypeCreate() {
-        return typeCreate;
-    }
-
-    public void setTypeCreate(Date typeCreate) {
-        this.typeCreate = typeCreate;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<UserLogin> getUserLoginCollection() {
-        return userLoginCollection;
-    }
-
-    public void setUserLoginCollection(Collection<UserLogin> userLoginCollection) {
-        this.userLoginCollection = userLoginCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

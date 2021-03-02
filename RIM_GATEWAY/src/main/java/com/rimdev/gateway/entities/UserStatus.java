@@ -2,9 +2,8 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,21 +11,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "user_status", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -39,55 +38,22 @@ public class UserStatus implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
     @Basic(optional = false)
     @Column(name = "User_status", nullable = false, length = 450)
     private String userstatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userstatusID")
-    private Collection<UserLogin> userLoginCollection;
 
-    public UserStatus() {
-    }
+    
 
-    public UserStatus(Integer id) {
-        this.id = id;
-    }
+    public UserStatus(String userstatus) {
+		super();
+		this.userstatus = userstatus;
+	}
 
-    public UserStatus(Integer id, String userstatus) {
-        this.id = id;
-        this.userstatus = userstatus;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUserstatus() {
-        return userstatus;
-    }
-
-    public void setUserstatus(String userstatus) {
-        this.userstatus = userstatus;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<UserLogin> getUserLoginCollection() {
-        return userLoginCollection;
-    }
-
-    public void setUserLoginCollection(Collection<UserLogin> userLoginCollection) {
-        this.userLoginCollection = userLoginCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

@@ -7,32 +7,32 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "email", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -48,7 +48,7 @@ public class Email implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -66,85 +66,25 @@ public class Email implements Serializable {
     @Column(name = "email_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date emailCreate;
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
-    
-    
-    @JoinColumn(name = "Data_status_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DataStatus datastatusID;
-
-    public Email() {
-    }
-
-    public Email(Integer id) {
-        this.id = id;
-    }
-    
-    public DataStatus getDatastatusID() {
-        return datastatusID;
-    }
-
-    public void setDatastatusID(DataStatus datastatusID) {
-        this.datastatusID = datastatusID;
-    }
-
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getEmailuser() {
-        return emailuser;
-    }
-
-    public void setEmailuser(String emailuser) {
-        this.emailuser = emailuser;
-    }
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
+    @Column(name = "Data_status_ID")
+    private Integer datastatusID;
 
     
-    public int getEmailPrimary() {
-		return emailPrimary;
-	}
 
-	public void setEmailPrimary(int emailPrimary) {
+    public Email(String emailuser, int emailPrimary, Date emailModify, Date emailCreate, Integer userloginID,
+			Integer datastatusID) {
+		super();
+		this.emailuser = emailuser;
 		this.emailPrimary = emailPrimary;
+		this.emailModify = emailModify;
+		this.emailCreate = emailCreate;
+		this.userloginID = userloginID;
+		this.datastatusID = datastatusID;
 	}
 
-	@XmlTransient
-    @JsonIgnore
-    public Date getEmailModify() {
-        return emailModify;
-    }
-
-    public void setEmailModify(Date emailModify) {
-        this.emailModify = emailModify;
-    }
-    @XmlTransient
-    @JsonIgnore
-    public Date getEmailCreate() {
-        return emailCreate;
-    }
-
-    public void setEmailCreate(Date emailCreate) {
-        this.emailCreate = emailCreate;
-    }
-
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
-
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

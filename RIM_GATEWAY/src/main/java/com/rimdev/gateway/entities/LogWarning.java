@@ -3,14 +3,13 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -18,11 +17,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "log_warning", catalog = "rim_user", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -36,13 +38,13 @@ public class LogWarning implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
     @Basic(optional = false)
     @Column(name = "user_id", nullable = false)
-    private int userId;
+    private Integer userId;
     @Basic(optional = false)
     @Column(name = "log_text", nullable = false, length = 450)
     private String logText;
@@ -52,12 +54,10 @@ public class LogWarning implements Serializable {
     @Column(name = "log_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date logTime;
-    @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Device deviceId;
-    @JoinColumn(name = "Log_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private LogType logtypeID;
+    @Column(name = "DEVICE_ID")
+    private Integer deviceId;
+    @Column(name = "Log_type_ID")
+    private Integer logtypeID;
     @Basic(optional = false)
     @Column(name = "web_service", nullable = false, length = 450)
     private String webService;
@@ -68,104 +68,24 @@ public class LogWarning implements Serializable {
     @Column(name = "Ip_address", nullable = false, length = 450)
     private String ipaddress;
 
-    public LogWarning() {
-    }
-
-    public LogWarning(Integer id) {
-        this.id = id;
-    }
-
-    public LogWarning(Integer id, int userId, String logText, Date logTime) {
-        this.id = id;
-        this.userId = userId;
-        this.logText = logText;
-        this.logTime = logTime;
-    }
     
     
 
-    
-    public String getIpaddress() {
-		return ipaddress;
-	}
-
-	public void setIpaddress(String ipaddress) {
+    public LogWarning(Integer userId, String logText, String logException, Date logTime, Integer deviceId,
+			Integer logtypeID, String webService, String errorcode, String ipaddress) {
+		super();
+		this.userId = userId;
+		this.logText = logText;
+		this.logException = logException;
+		this.logTime = logTime;
+		this.deviceId = deviceId;
+		this.logtypeID = logtypeID;
+		this.webService = webService;
+		this.errorcode = errorcode;
 		this.ipaddress = ipaddress;
 	}
 
-	public String getWebService() {
-		return webService;
-	}
-
-	public void setWebService(String webService) {
-		this.webService = webService;
-	}
-
-	public String getErrorcode() {
-		return errorcode;
-	}
-
-	public void setErrorcode(String errorcode) {
-		this.errorcode = errorcode;
-	}
-
-	public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getLogText() {
-        return logText;
-    }
-
-    public void setLogText(String logText) {
-        this.logText = logText;
-    }
-
-    public String getLogException() {
-        return logException;
-    }
-
-    public void setLogException(String logException) {
-        this.logException = logException;
-    }
-
-    public Date getLogTime() {
-        return logTime;
-    }
-
-    public void setLogTime(Date logTime) {
-        this.logTime = logTime;
-    }
-
-    public Device getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(Device deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public LogType getLogtypeID() {
-        return logtypeID;
-    }
-
-    public void setLogtypeID(LogType logtypeID) {
-        this.logtypeID = logtypeID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

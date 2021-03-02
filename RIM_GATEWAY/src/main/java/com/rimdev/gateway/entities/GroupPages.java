@@ -2,14 +2,13 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -19,11 +18,14 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "group_pages", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -35,49 +37,24 @@ public class GroupPages implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
-    @JoinColumn(name = "Group_priviledge_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private GroupPriviledge grouppriviledgeID;
-    @JoinColumn(name = "pages_priviledge_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private PagesPriviledge pagespriviledgeID;
+    @Column(name = "Group_priviledge_ID")
+    private Integer grouppriviledgeID;
+    @Column(name = "pages_priviledge_ID")
+    private Integer pagespriviledgeID;
 
-    public GroupPages() {
-    }
+  
 
-    public GroupPages(Integer id) {
-        this.id = id;
-    }
+    public GroupPages(Integer grouppriviledgeID, Integer pagespriviledgeID) {
+		super();
+		this.grouppriviledgeID = grouppriviledgeID;
+		this.pagespriviledgeID = pagespriviledgeID;
+	}
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public GroupPriviledge getGrouppriviledgeID() {
-        return grouppriviledgeID;
-    }
-
-    public void setGrouppriviledgeID(GroupPriviledge grouppriviledgeID) {
-        this.grouppriviledgeID = grouppriviledgeID;
-    }
-
-    public PagesPriviledge getPagespriviledgeID() {
-        return pagespriviledgeID;
-    }
-
-    public void setPagespriviledgeID(PagesPriviledge pagespriviledgeID) {
-        this.pagespriviledgeID = pagespriviledgeID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

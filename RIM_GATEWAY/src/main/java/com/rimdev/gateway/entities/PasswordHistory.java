@@ -7,32 +7,32 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "password_history", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -47,7 +47,7 @@ public class PasswordHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -62,67 +62,21 @@ public class PasswordHistory implements Serializable {
     @Column(name = "pass_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date passCreate;
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
 
 
-    public PasswordHistory() {
-    }
+   
 
-    public PasswordHistory(Integer id) {
-        this.id = id;
-    }
+    public PasswordHistory(String passwordHist, Date passModify, Date passCreate, Integer userloginID) {
+		super();
+		this.passwordHist = passwordHist;
+		this.passModify = passModify;
+		this.passCreate = passCreate;
+		this.userloginID = userloginID;
+	}
 
-    public PasswordHistory(Integer id, String passwordHist, Date passModify, Date passCreate) {
-        this.id = id;
-        this.passwordHist = passwordHist;
-        this.passModify = passModify;
-        this.passCreate = passCreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getPasswordHist() {
-        return passwordHist;
-    }
-
-    public void setPasswordHist(String passwordHist) {
-        this.passwordHist = passwordHist;
-    }
-
-    public Date getPassModify() {
-        return passModify;
-    }
-
-    public void setPassModify(Date passModify) {
-        this.passModify = passModify;
-    }
-	@XmlTransient
-    @JsonIgnore
-    public Date getPassCreate() {
-        return passCreate;
-    }
-
-    public void setPassCreate(Date passCreate) {
-        this.passCreate = passCreate;
-    }
-
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
-
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

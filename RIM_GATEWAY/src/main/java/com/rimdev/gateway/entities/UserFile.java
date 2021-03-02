@@ -2,14 +2,13 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -19,11 +18,14 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "user_file", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -35,60 +37,27 @@ public class UserFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
-    @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Component componentID;
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
-    @JoinColumn(name = "files_upload_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private FilesUpload filesuploadID;
+    @Column(name = "Component_ID")
+    private Integer componentID;
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
+    @Column(name = "files_upload_ID")
+    private Integer filesuploadID;
 
-    public UserFile() {
-    }
+    
+    
+    public UserFile(Integer componentID, Integer userloginID, Integer filesuploadID) {
+		super();
+		this.componentID = componentID;
+		this.userloginID = userloginID;
+		this.filesuploadID = filesuploadID;
+	}
 
-    public UserFile(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Component getComponentID() {
-        return componentID;
-    }
-
-    public void setComponentID(Component componentID) {
-        this.componentID = componentID;
-    }
-
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
-
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    public FilesUpload getFilesuploadID() {
-        return filesuploadID;
-    }
-
-    public void setFilesuploadID(FilesUpload filesuploadID) {
-        this.filesuploadID = filesuploadID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

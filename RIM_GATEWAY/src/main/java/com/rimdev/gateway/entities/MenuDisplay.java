@@ -10,26 +10,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "menu_display", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -44,7 +43,7 @@ public class MenuDisplay implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -56,12 +55,10 @@ public class MenuDisplay implements Serializable {
     private String menulink;
     @Column(name = "fa_icon", length = 450)
     private String faIcon;
-    @JoinColumn(name = "Pages_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Pages pagesID;
-    @JoinColumn(name = "Parent_menu_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private ParentMenu parentmenuID;
+    @Column(name = "Pages_ID")
+    private Integer pagesID;
+    @Column(name = "Parent_menu_ID")
+    private Integer parentmenuID;
     @Column(name = "date_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateModify;
@@ -70,91 +67,21 @@ public class MenuDisplay implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreate;
 
-    public MenuDisplay() {
-    }
+   
 
-    public MenuDisplay(Integer id) {
-        this.id = id;
-    }
+    public MenuDisplay(String menuname, String menulink, String faIcon, Integer pagesID, Integer parentmenuID,
+			Date dateModify, Date dateCreate) {
+		super();
+		this.menuname = menuname;
+		this.menulink = menulink;
+		this.faIcon = faIcon;
+		this.pagesID = pagesID;
+		this.parentmenuID = parentmenuID;
+		this.dateModify = dateModify;
+		this.dateCreate = dateCreate;
+	}
 
-    public MenuDisplay(Integer id, String menuname, String menulink) {
-        this.id = id;
-        this.menuname = menuname;
-        this.menulink = menulink;
-    }
-    
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
-
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-    
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getMenuname() {
-        return menuname;
-    }
-
-    public void setMenuname(String menuname) {
-        this.menuname = menuname;
-    }
-
-    public String getMenulink() {
-        return menulink;
-    }
-
-    public void setMenulink(String menulink) {
-        this.menulink = menulink;
-    }
-
-    public String getFaIcon() {
-        return faIcon;
-    }
-
-    public void setFaIcon(String faIcon) {
-        this.faIcon = faIcon;
-    }
-
-    public Pages getPagesID() {
-        return pagesID;
-    }
-
-    public void setPagesID(Pages pagesID) {
-        this.pagesID = pagesID;
-    }
-    
-    @XmlTransient
-    @JsonIgnore 
-    public ParentMenu getParentmenuID() {
-        return parentmenuID;
-    }
-
-    public void setParentmenuID(ParentMenu parentmenuID) {
-        this.parentmenuID = parentmenuID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

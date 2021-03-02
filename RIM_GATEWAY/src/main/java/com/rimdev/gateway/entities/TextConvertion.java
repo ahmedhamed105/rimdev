@@ -10,23 +10,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "text_convertion", catalog = "rim_language", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -37,7 +35,7 @@ public class TextConvertion implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -54,78 +52,24 @@ public class TextConvertion implements Serializable {
     private Date dateCreate;
     
     
-    @JoinColumn(name = "Languages_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Languages languagesID;
-    @JoinColumn(name = "language_map_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private LanguageMap languagemapID;
+    @Column(name = "Languages_ID")
+    private Integer languagesID;
+    @Column(name = "language_map_ID")
+    private Integer languagemapID;
 
-    public TextConvertion() {
-    }
-
-    public TextConvertion(Integer id) {
-        this.id = id;
-    }
-
-    public TextConvertion(Integer id, String returnLang) {
-        this.id = id;
-        this.returnLang = returnLang;
-    }
+   
     
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
+    public TextConvertion(String returnLang, Date dateModify, Date dateCreate, Integer languagesID,
+			Integer languagemapID) {
+		super();
+		this.returnLang = returnLang;
+		this.dateModify = dateModify;
+		this.dateCreate = dateCreate;
+		this.languagesID = languagesID;
+		this.languagemapID = languagemapID;
+	}
 
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getReturnLang() {
-        return returnLang;
-    }
-
-    public void setReturnLang(String returnLang) {
-        this.returnLang = returnLang;
-    }
-
-    public Languages getLanguagesID() {
-        return languagesID;
-    }
-
-    public void setLanguagesID(Languages languagesID) {
-        this.languagesID = languagesID;
-    }
-
-    public LanguageMap getLanguagemapID() {
-        return languagemapID;
-    }
-
-    public void setLanguagemapID(LanguageMap languagemapID) {
-        this.languagemapID = languagemapID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

@@ -2,33 +2,33 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import java.util.Date;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "device_page", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -40,87 +40,35 @@ public class DevicePage implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
-    @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Device deviceId;
-    @JoinColumn(name = "Pages_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Pages pagesID;
+    @Column(name = "DEVICE_ID")
+    private Integer deviceId;
+    @Column(name = "Pages_ID")
+    private Integer pagesID;
     
     @Basic(optional = false)
     @Column(name = "Visit_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date visittime;
     
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
     
     @Basic(optional = false)
     @Column(name = "page_tokean", nullable = false, length = 450)
     private String pageTokean;
 
-    public DevicePage() {
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
+   
 
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    public DevicePage(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Device getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(Device deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public Pages getPagesID() {
-        return pagesID;
-    }
-
-    public void setPagesID(Pages pagesID) {
-        this.pagesID = pagesID;
-    }
-    
-
-    public Date getVisittime() {
-		return visittime;
-	}
-
-	public void setVisittime(Date visittime) {
+	public DevicePage(Integer deviceId, Integer pagesID, Date visittime, Integer userloginID, String pageTokean) {
+		super();
+		this.deviceId = deviceId;
+		this.pagesID = pagesID;
 		this.visittime = visittime;
-	}
-	
-	
-
-	public String getPageTokean() {
-		return pageTokean;
-	}
-
-	public void setPageTokean(String pageTokean) {
+		this.userloginID = userloginID;
 		this.pageTokean = pageTokean;
 	}
 

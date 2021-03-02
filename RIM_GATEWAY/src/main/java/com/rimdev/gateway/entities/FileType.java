@@ -2,9 +2,8 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,18 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "file_type", catalog = "rim_user", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -35,7 +33,7 @@ public class FileType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -45,69 +43,17 @@ public class FileType implements Serializable {
     @Basic(optional = false)
     @Column(name = "fmime", nullable = false, length = 450)
     private String fmime;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "filetypeID")
-    private Collection<ComponentFile> componentFileCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "filetypeID")
-    private Collection<FilesUpload> filesUploadCollection;
 
-    public FileType() {
-    }
 
-    public FileType(Integer id) {
-        this.id = id;
-    }
+    
 
-    public FileType(Integer id, String ftype, String fmime) {
-        this.id = id;
-        this.ftype = ftype;
-        this.fmime = fmime;
-    }
+    public FileType(String ftype, String fmime) {
+		super();
+		this.ftype = ftype;
+		this.fmime = fmime;
+	}
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFtype() {
-        return ftype;
-    }
-
-    public void setFtype(String ftype) {
-        this.ftype = ftype;
-    }
-
-    public String getFmime() {
-        return fmime;
-    }
-
-    public void setFmime(String fmime) {
-        this.fmime = fmime;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<ComponentFile> getComponentFileCollection() {
-        return componentFileCollection;
-    }
-
-    public void setComponentFileCollection(Collection<ComponentFile> componentFileCollection) {
-        this.componentFileCollection = componentFileCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<FilesUpload> getFilesUploadCollection() {
-        return filesUploadCollection;
-    }
-
-    public void setFilesUploadCollection(Collection<FilesUpload> filesUploadCollection) {
-        this.filesUploadCollection = filesUploadCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
