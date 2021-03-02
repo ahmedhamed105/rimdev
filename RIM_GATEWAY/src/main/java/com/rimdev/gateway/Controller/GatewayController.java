@@ -38,15 +38,21 @@ public @ResponseBody ResponseEntity<UserLogin> initpage(HttpServletRequest reque
 		 {
 	
 		try {
+			
+			if(input == null) {
+				 return new ResponseEntity<UserLogin>(new UserLogin(), HttpStatus.BAD_REQUEST);
+				
+			}
+			
 			input.setDeviceip(request.getRemoteAddr());
 			
 			//search device
-			Device outdevice= deviceExternalServ.searchdevice(input, langcode);
+		//	Device outdevice= deviceExternalServ.searchdevice(input, langcode);
 			
 			//save device 
 			// Device outdevice= deviceExternalServ.saveorupdatedevice(input, langcode);
 			 
-			 System.out.println(outdevice.toString());
+			 System.out.println(input.toString());
 			 
 			 //get page
 			// Pages page = pageExternalServ.getpagebyid(input.getPage(), langcode);

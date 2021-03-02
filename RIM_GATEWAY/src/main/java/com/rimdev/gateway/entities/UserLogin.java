@@ -110,7 +110,11 @@ public class UserLogin implements Serializable {
 
 
 
-    public UserLogin(String usertokean, String username) {
+    public UserLogin() {
+		super();
+	}
+
+	public UserLogin(String usertokean, String username) {
 		super();
 		this.usertokean = usertokean;
 		this.username = username;
