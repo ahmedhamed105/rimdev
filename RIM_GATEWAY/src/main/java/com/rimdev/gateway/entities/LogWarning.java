@@ -25,7 +25,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "log_warning", catalog = "rim_user", schema = "")
+@Table(name = "log_warning", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "LogWarning.findAll", query = "SELECT l FROM LogWarning l")

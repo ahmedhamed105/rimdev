@@ -33,7 +33,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "user_login", catalog = "rim_user", schema = "")
+@Table(name = "user_login", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 @DynamicUpdate
@@ -104,10 +104,19 @@ public class UserLogin implements Serializable {
     private Integer userstatusID;
     @Column(name = "User_type_ID")
     private Integer usertypeID;
+    
+    
+    
 
 
 
-    public UserLogin(String usertokean, Date expiredate, Date createdate, String username, String passwordEncy,
+    public UserLogin(String usertokean, String username) {
+		super();
+		this.usertokean = usertokean;
+		this.username = username;
+	}
+
+	public UserLogin(String usertokean, Date expiredate, Date createdate, String username, String passwordEncy,
 			Date loginModfiy, Date loginCreate, String notes, String loginkey, Integer loginFailed, Integer loginFlag,
 			Integer applicationID, Integer grouppriviledgeID, Integer pagesID, Integer userID, Integer userstatusID,
 			Integer usertypeID) {

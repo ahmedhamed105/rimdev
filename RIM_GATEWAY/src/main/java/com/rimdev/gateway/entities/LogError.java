@@ -26,7 +26,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "log_error", catalog = "rim_user", schema = "")
+@Table(name = "log_error", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "LogError.findAll", query = "SELECT l FROM LogError l")
@@ -58,7 +58,6 @@ public class LogError implements Serializable {
     @Column(name = "DEVICE_ID")
     private Integer deviceId;
     @Column(name = "Log_type_ID")
-    @ManyToOne(optional = false)
     private Integer logtypeID;
     @Basic(optional = false)
     @Column(name = "web_service", nullable = false, length = 450)

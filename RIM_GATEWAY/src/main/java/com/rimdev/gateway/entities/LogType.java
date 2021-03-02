@@ -22,7 +22,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "log_type", catalog = "rim_user", schema = "")
+@Table(name = "log_type", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "LogType.findAll", query = "SELECT l FROM LogType l")

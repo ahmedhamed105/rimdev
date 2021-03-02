@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -31,7 +29,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "component_input", catalog = "rim_user", schema = "")
+@Table(name = "component_input", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 @DynamicUpdate
@@ -50,12 +48,10 @@ public class ComponentInput implements Serializable {
     @Basic(optional = false)
     @Column(name = "input_Actions", nullable = false, length = 45)
     private String inputActions;
-    @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Component componentID;
-    @JoinColumn(name = "input_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private InputType inputtypeID;
+    @Column(name = "Component_ID")
+    private Integer componentID;
+    @Column(name = "input_type_ID")
+    private Integer inputtypeID;
     @Column(name = "date_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateModify;
@@ -92,11 +88,14 @@ public class ComponentInput implements Serializable {
     
 
 
-    public ComponentInput(String inputActions, Component componentID, InputType inputtypeID, Date dateModify,
+   
+
+	public ComponentInput(Integer id, String inputActions, Integer componentID, Integer inputtypeID, Date dateModify,
 			Date dateCreate, String insertServ, String deleteServ, String insertParameter, String deleteParameter,
 			Integer fileCount, Integer fileSize, String fileCounterr, String fileSizeerr, String fileTypeerror,
 			String insertIp, String insertPort, String deleteIp, String deletePort) {
 		super();
+		this.id = id;
 		this.inputActions = inputActions;
 		this.componentID = componentID;
 		this.inputtypeID = inputtypeID;

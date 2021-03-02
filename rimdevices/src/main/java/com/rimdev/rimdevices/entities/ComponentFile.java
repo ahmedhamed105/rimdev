@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author ahmed.elemam
  */
 @Entity
-@Table(name = "component_file", catalog = "rim_user", schema = "")
+@Table(name = "component_file", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ComponentFile.findAll", query = "SELECT c FROM ComponentFile c")

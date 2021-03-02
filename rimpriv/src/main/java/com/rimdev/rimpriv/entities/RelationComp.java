@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author ahmed.elemam
  */
 @Entity
-@Table(name = "relation_comp", catalog = "rim_user", schema = "")
+@Table(name = "relation_comp", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RelationComp.findAll", query = "SELECT r FROM RelationComp r")

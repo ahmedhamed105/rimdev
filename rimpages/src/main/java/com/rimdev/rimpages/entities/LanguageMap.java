@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author ahmed.elemam
  */
 @Entity
-@Table(name = "language_map", catalog = "rim_language", schema = "")
+@Table(name = "language_map", catalog = "rim_language", schema = "rim_language")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "LanguageMap.findAll", query = "SELECT l FROM LanguageMap l")

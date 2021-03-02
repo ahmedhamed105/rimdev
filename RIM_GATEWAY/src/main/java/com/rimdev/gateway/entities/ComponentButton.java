@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -31,7 +29,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "component_button", catalog = "rim_user", schema = "")
+@Table(name = "component_button", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 @DynamicUpdate
@@ -53,9 +51,8 @@ public class ComponentButton implements Serializable {
     private String buttonClass;
     @Column(name = "button_type", length = 450)
     private String buttonType;
-    @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Component componentID;
+    @Column(name = "Component_ID")
+    private Integer componentID;
     @Column(name = "date_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateModify;
@@ -74,9 +71,12 @@ public class ComponentButton implements Serializable {
     
     
   
-    public ComponentButton(String buttonClass, String buttonType, Component componentID, Date dateModify,
+
+
+	public ComponentButton(Integer id, String buttonClass, String buttonType, Integer componentID, Date dateModify,
 			Date dateCreate, int valid, Integer alertAfter, String emptyMessage) {
 		super();
+		this.id = id;
 		this.buttonClass = buttonClass;
 		this.buttonType = buttonType;
 		this.componentID = componentID;

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author ahmed.elemam
  */
 @Entity
-@Table(name = "group_priviledge", catalog = "rim_user", schema = "")
+@Table(name = "group_priviledge", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GroupPriviledge.findAll", query = "SELECT g FROM GroupPriviledge g")

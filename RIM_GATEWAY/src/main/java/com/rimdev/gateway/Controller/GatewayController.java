@@ -40,21 +40,26 @@ public @ResponseBody ResponseEntity<UserLogin> initpage(HttpServletRequest reque
 		try {
 			input.setDeviceip(request.getRemoteAddr());
 			
+			//search device
+			Device outdevice= deviceExternalServ.searchdevice(input, langcode);
+			
 			//save device 
-			 Device outdevice= deviceExternalServ.saveorupdatedevice(input, langcode);
+			// Device outdevice= deviceExternalServ.saveorupdatedevice(input, langcode);
+			 
+			 System.out.println(outdevice.toString());
 			 
 			 //get page
-			 Pages page = pageExternalServ.getpagebyid(input.getPage(), langcode);
+			// Pages page = pageExternalServ.getpagebyid(input.getPage(), langcode);
 			 
 			 //if not have user use public 
-			 UserLogin user = userExternalServ.getuserloginbyusername(username, usertokean, langcode);
+			// UserLogin user = userExternalServ.getuserloginbyusername(username, usertokean, langcode);
 			 
 			 //checkpriviledge for page 
 			 
 			 
 			 //save devicepage
 			 
-			 
+			 UserLogin user=null; 
 				
 		     return new ResponseEntity<UserLogin>(user, HttpStatus.OK);
 

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author ahmed.elemam
  */
 @Entity
-@Table(name = "log_type", catalog = "rim_user", schema = "")
+@Table(name = "log_type", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "LogType.findAll", query = "SELECT l FROM LogType l")

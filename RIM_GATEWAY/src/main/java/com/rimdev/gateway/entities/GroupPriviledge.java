@@ -23,7 +23,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "group_priviledge", catalog = "rim_user", schema = "")
+@Table(name = "group_priviledge", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GroupPriviledge.findAll", query = "SELECT g FROM GroupPriviledge g")

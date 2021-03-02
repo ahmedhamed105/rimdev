@@ -35,7 +35,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "device_os", catalog = "rim_user", schema = "")
+@Table(name = "device_os", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 @DynamicUpdate

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @author ahmed.elemam
  */
 @Entity
-@Table(name = "group_status", catalog = "rim_user", schema = "")
+@Table(name = "group_status", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 @DynamicUpdate

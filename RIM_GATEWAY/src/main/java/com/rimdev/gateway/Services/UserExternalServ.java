@@ -68,9 +68,7 @@ public class UserExternalServ {
 			RestTemplate restTemplate = new RestTemplate();
 			ObjectMapper mapper = new ObjectMapper();
 			Deviceob txtgo = new Deviceob();
-			UserLogin userid= new UserLogin();
-			userid.setUsername(username);
-			userid.setUsertokean(usertokean);
+			UserLogin userid= new UserLogin(usertokean,username);
 			txtgo.setUserid(userid);
 
 			final HttpHeaders headers = new HttpHeaders();

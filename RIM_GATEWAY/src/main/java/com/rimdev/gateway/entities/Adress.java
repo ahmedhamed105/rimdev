@@ -34,7 +34,7 @@ import lombok.Data;
  */
 @Entity
 @Data // Lombok: adds getters and setters
-@Table(name = "adress", catalog = "rim_user", schema = "")
+@Table(name = "adress", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
 @DynamicUpdate

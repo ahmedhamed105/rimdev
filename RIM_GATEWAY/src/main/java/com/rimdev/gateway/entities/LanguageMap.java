@@ -25,7 +25,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "language_map", catalog = "rim_language", schema = "")
+@Table(name = "language_map", catalog = "rim_language", schema = "rim_language")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "LanguageMap.findAll", query = "SELECT l FROM LanguageMap l")

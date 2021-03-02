@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author ahmed.elemam
  */
 @Entity
-@Table(name = "file_status", catalog = "rim_user", schema = "")
+@Table(name = "file_status", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FileStatus.findAll", query = "SELECT f FROM FileStatus f")

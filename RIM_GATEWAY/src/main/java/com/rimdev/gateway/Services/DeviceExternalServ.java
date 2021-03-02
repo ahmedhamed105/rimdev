@@ -27,14 +27,12 @@ public class DeviceExternalServ {
 	LangExternalServ langExternalServ;
 	
 
-	public Device searchdevice(int deviceid,String devicecode, String langcode) {
+	public Device searchdevice(Device device, String langcode) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			ObjectMapper mapper = new ObjectMapper();
 			Deviceob txtgo = new Deviceob();
-			Device dev= new Device();
-			dev.setId(deviceid);
-			dev.setDevicecode(devicecode);
+			Device dev= new Device(device.getId(),device.getDevicecode());
 			txtgo.setData(dev);
 
 			final HttpHeaders headers = new HttpHeaders();

@@ -31,7 +31,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "device", catalog = "rim_user", schema = "")
+@Table(name = "device", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Device.findAll", query = "SELECT d FROM Device d")
@@ -118,7 +118,13 @@ public class Device implements Serializable {
     
     
     
-    public Device(String devicename, String deviceinfo, String deviceip, String devicecode, String devicemac,
+    public Device(Integer id, String devicecode) {
+		super();
+		this.id = id;
+		this.devicecode = devicecode;
+	}
+
+	public Device(String devicename, String deviceinfo, String deviceip, String devicecode, String devicemac,
 			String deviceosversion, String deviceosunknow, Date devicemodify, Date devicecreate, BigDecimal devicelong,
 			BigDecimal devicelatitude, String devicebrowser, String deviceBVersion, boolean mobile,
 			boolean desktopDevice, boolean tablet, Integer page, Integer logintypeID, Integer applicationID,
@@ -147,6 +153,193 @@ public class Device implements Serializable {
 		this.devicestatusID = devicestatusID;
 		this.devicetypeID = devicetypeID;
 	}
+	
+	
+	
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getDevicename() {
+		return devicename;
+	}
+
+	public void setDevicename(String devicename) {
+		this.devicename = devicename;
+	}
+
+	public String getDeviceinfo() {
+		return deviceinfo;
+	}
+
+	public void setDeviceinfo(String deviceinfo) {
+		this.deviceinfo = deviceinfo;
+	}
+
+	public String getDeviceip() {
+		return deviceip;
+	}
+
+	public void setDeviceip(String deviceip) {
+		this.deviceip = deviceip;
+	}
+
+	public String getDevicecode() {
+		return devicecode;
+	}
+
+	public void setDevicecode(String devicecode) {
+		this.devicecode = devicecode;
+	}
+
+	public String getDevicemac() {
+		return devicemac;
+	}
+
+	public void setDevicemac(String devicemac) {
+		this.devicemac = devicemac;
+	}
+
+	public String getDeviceosversion() {
+		return deviceosversion;
+	}
+
+	public void setDeviceosversion(String deviceosversion) {
+		this.deviceosversion = deviceosversion;
+	}
+
+	public String getDeviceosunknow() {
+		return deviceosunknow;
+	}
+
+	public void setDeviceosunknow(String deviceosunknow) {
+		this.deviceosunknow = deviceosunknow;
+	}
+
+	public Date getDevicemodify() {
+		return devicemodify;
+	}
+
+	public void setDevicemodify(Date devicemodify) {
+		this.devicemodify = devicemodify;
+	}
+
+	public Date getDevicecreate() {
+		return devicecreate;
+	}
+
+	public void setDevicecreate(Date devicecreate) {
+		this.devicecreate = devicecreate;
+	}
+
+	public BigDecimal getDevicelong() {
+		return devicelong;
+	}
+
+	public void setDevicelong(BigDecimal devicelong) {
+		this.devicelong = devicelong;
+	}
+
+	public BigDecimal getDevicelatitude() {
+		return devicelatitude;
+	}
+
+	public void setDevicelatitude(BigDecimal devicelatitude) {
+		this.devicelatitude = devicelatitude;
+	}
+
+	public String getDevicebrowser() {
+		return devicebrowser;
+	}
+
+	public void setDevicebrowser(String devicebrowser) {
+		this.devicebrowser = devicebrowser;
+	}
+
+	public String getDeviceBVersion() {
+		return deviceBVersion;
+	}
+
+	public void setDeviceBVersion(String deviceBVersion) {
+		this.deviceBVersion = deviceBVersion;
+	}
+
+	public boolean isMobile() {
+		return mobile;
+	}
+
+	public void setMobile(boolean mobile) {
+		this.mobile = mobile;
+	}
+
+	public boolean isDesktopDevice() {
+		return desktopDevice;
+	}
+
+	public void setDesktopDevice(boolean desktopDevice) {
+		this.desktopDevice = desktopDevice;
+	}
+
+	public boolean isTablet() {
+		return tablet;
+	}
+
+	public void setTablet(boolean tablet) {
+		this.tablet = tablet;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getLogintypeID() {
+		return logintypeID;
+	}
+
+	public void setLogintypeID(Integer logintypeID) {
+		this.logintypeID = logintypeID;
+	}
+
+	public Integer getApplicationID() {
+		return applicationID;
+	}
+
+	public void setApplicationID(Integer applicationID) {
+		this.applicationID = applicationID;
+	}
+
+	public Integer getDeviceOSID() {
+		return deviceOSID;
+	}
+
+	public void setDeviceOSID(Integer deviceOSID) {
+		this.deviceOSID = deviceOSID;
+	}
+
+	public Integer getDevicestatusID() {
+		return devicestatusID;
+	}
+
+	public void setDevicestatusID(Integer devicestatusID) {
+		this.devicestatusID = devicestatusID;
+	}
+
+	public Integer getDevicetypeID() {
+		return devicetypeID;
+	}
+
+	public void setDevicetypeID(Integer devicetypeID) {
+		this.devicetypeID = devicetypeID;
+	}
 
 	@Override
     public int hashCode() {
@@ -168,10 +361,6 @@ public class Device implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entity.Device[ id=" + id + " ]";
-    }
-    
+
 }
 
