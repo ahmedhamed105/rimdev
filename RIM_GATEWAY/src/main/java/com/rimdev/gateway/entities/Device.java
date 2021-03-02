@@ -8,33 +8,29 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "device", catalog = "rim_user", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -62,7 +58,7 @@ public class Device implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -108,305 +104,51 @@ public class Device implements Serializable {
     private Integer page;
     @Basic(optional = false)
     @Column(name = "login_type_ID", nullable = false)
-    private int logintypeID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<LogFatal> logFatalCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<LogOther> logOtherCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<LogInfo> logInfoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<LogError> logErrorCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<LogWarning> logWarningCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<DevicePage> devicePageCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceId")
-    private Collection<Deviceip> deviceipCollection;
-    @JoinColumn(name = "Application_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Application applicationID;
-    @JoinColumn(name = "Device_OS_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DeviceOs deviceOSID;
-    @JoinColumn(name = "Device_status_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DeviceStatus devicestatusID;
-    @JoinColumn(name = "Device_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private DeviceType devicetypeID;
+    private Integer logintypeID;
+   
+    @Column(name = "Application_ID")
+    private Integer applicationID;
+    @Column(name = "Device_OS_ID")
+    private Integer deviceOSID;
+    @Column(name = "Device_status_ID")
+    private Integer devicestatusID;
+    @Column(name = "Device_type_ID")
+    private Integer devicetypeID;
 
-    public Device() {
-    }
-
-    public Device(Integer id) {
-        this.id = id;
-    }
-
-    public Device(Integer id, String devicecode, Date devicemodify, Date devicecreate, int logintypeID) {
-        this.id = id;
-        this.devicecode = devicecode;
-        this.devicemodify = devicemodify;
-        this.devicecreate = devicecreate;
-        this.logintypeID = logintypeID;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDevicename() {
-        return devicename;
-    }
-
-    public void setDevicename(String devicename) {
-        this.devicename = devicename;
-    }
-
-    public String getDeviceinfo() {
-        return deviceinfo;
-    }
-
-    public void setDeviceinfo(String deviceinfo) {
-        this.deviceinfo = deviceinfo;
-    }
-
-    public String getDeviceip() {
-        return deviceip;
-    }
-
-    public void setDeviceip(String deviceip) {
-        this.deviceip = deviceip;
-    }
-
-    public String getDevicecode() {
-        return devicecode;
-    }
-
-    public void setDevicecode(String devicecode) {
-        this.devicecode = devicecode;
-    }
-
-    public String getDevicemac() {
-        return devicemac;
-    }
-
-    public void setDevicemac(String devicemac) {
-        this.devicemac = devicemac;
-    }
-
-    public String getDeviceosversion() {
-        return deviceosversion;
-    }
-
-    public void setDeviceosversion(String deviceosversion) {
-        this.deviceosversion = deviceosversion;
-    }
-
-    public String getDeviceosunknow() {
-        return deviceosunknow;
-    }
-
-    public void setDeviceosunknow(String deviceosunknow) {
-        this.deviceosunknow = deviceosunknow;
-    }
-
-    public Date getDevicemodify() {
-        return devicemodify;
-    }
-
-    public void setDevicemodify(Date devicemodify) {
-        this.devicemodify = devicemodify;
-    }
-
-    public Date getDevicecreate() {
-        return devicecreate;
-    }
-
-    public void setDevicecreate(Date devicecreate) {
-        this.devicecreate = devicecreate;
-    }
-
-    public BigDecimal getDevicelong() {
-        return devicelong;
-    }
-
-    public void setDevicelong(BigDecimal devicelong) {
-        this.devicelong = devicelong;
-    }
-
-    public BigDecimal getDevicelatitude() {
-        return devicelatitude;
-    }
-
-    public void setDevicelatitude(BigDecimal devicelatitude) {
-        this.devicelatitude = devicelatitude;
-    }
-
-    public String getDevicebrowser() {
-        return devicebrowser;
-    }
-
-    public void setDevicebrowser(String devicebrowser) {
-        this.devicebrowser = devicebrowser;
-    }
-
-    public String getDeviceBVersion() {
-        return deviceBVersion;
-    }
-
-    public void setDeviceBVersion(String deviceBVersion) {
-        this.deviceBVersion = deviceBVersion;
-    }
-
-
-    public boolean isMobile() {
-		return mobile;
-	}
-
-	public void setMobile(boolean mobile) {
+    
+    
+    
+    public Device(String devicename, String deviceinfo, String deviceip, String devicecode, String devicemac,
+			String deviceosversion, String deviceosunknow, Date devicemodify, Date devicecreate, BigDecimal devicelong,
+			BigDecimal devicelatitude, String devicebrowser, String deviceBVersion, boolean mobile,
+			boolean desktopDevice, boolean tablet, Integer page, Integer logintypeID, Integer applicationID,
+			Integer deviceOSID, Integer devicestatusID, Integer devicetypeID) {
+		super();
+		this.devicename = devicename;
+		this.deviceinfo = deviceinfo;
+		this.deviceip = deviceip;
+		this.devicecode = devicecode;
+		this.devicemac = devicemac;
+		this.deviceosversion = deviceosversion;
+		this.deviceosunknow = deviceosunknow;
+		this.devicemodify = devicemodify;
+		this.devicecreate = devicecreate;
+		this.devicelong = devicelong;
+		this.devicelatitude = devicelatitude;
+		this.devicebrowser = devicebrowser;
+		this.deviceBVersion = deviceBVersion;
 		this.mobile = mobile;
-	}
-
-	public boolean isDesktopDevice() {
-		return desktopDevice;
-	}
-
-	public void setDesktopDevice(boolean desktopDevice) {
 		this.desktopDevice = desktopDevice;
-	}
-
-	public boolean isTablet() {
-		return tablet;
-	}
-
-	public void setTablet(boolean tablet) {
 		this.tablet = tablet;
+		this.page = page;
+		this.logintypeID = logintypeID;
+		this.applicationID = applicationID;
+		this.deviceOSID = deviceOSID;
+		this.devicestatusID = devicestatusID;
+		this.devicetypeID = devicetypeID;
 	}
 
-	public Integer getPage() {
-        return page;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    public int getLogintypeID() {
-        return logintypeID;
-    }
-
-    public void setLogintypeID(int logintypeID) {
-        this.logintypeID = logintypeID;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<LogFatal> getLogFatalCollection() {
-        return logFatalCollection;
-    }
-
-    public void setLogFatalCollection(Collection<LogFatal> logFatalCollection) {
-        this.logFatalCollection = logFatalCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<LogOther> getLogOtherCollection() {
-        return logOtherCollection;
-    }
-
-    public void setLogOtherCollection(Collection<LogOther> logOtherCollection) {
-        this.logOtherCollection = logOtherCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<LogInfo> getLogInfoCollection() {
-        return logInfoCollection;
-    }
-
-    public void setLogInfoCollection(Collection<LogInfo> logInfoCollection) {
-        this.logInfoCollection = logInfoCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<LogError> getLogErrorCollection() {
-        return logErrorCollection;
-    }
-
-    public void setLogErrorCollection(Collection<LogError> logErrorCollection) {
-        this.logErrorCollection = logErrorCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<LogWarning> getLogWarningCollection() {
-        return logWarningCollection;
-    }
-
-    public void setLogWarningCollection(Collection<LogWarning> logWarningCollection) {
-        this.logWarningCollection = logWarningCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<DevicePage> getDevicePageCollection() {
-        return devicePageCollection;
-    }
-
-    public void setDevicePageCollection(Collection<DevicePage> devicePageCollection) {
-        this.devicePageCollection = devicePageCollection;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<Deviceip> getDeviceipCollection() {
-        return deviceipCollection;
-    }
-
-    public void setDeviceipCollection(Collection<Deviceip> deviceipCollection) {
-        this.deviceipCollection = deviceipCollection;
-    }
-
-    public Application getApplicationID() {
-        return applicationID;
-    }
-
-    public void setApplicationID(Application applicationID) {
-        this.applicationID = applicationID;
-    }
-
-    public DeviceOs getDeviceOSID() {
-        return deviceOSID;
-    }
-
-    public void setDeviceOSID(DeviceOs deviceOSID) {
-        this.deviceOSID = deviceOSID;
-    }
-
-    public DeviceStatus getDevicestatusID() {
-        return devicestatusID;
-    }
-
-    public void setDevicestatusID(DeviceStatus devicestatusID) {
-        this.devicestatusID = devicestatusID;
-    }
-
-    public DeviceType getDevicetypeID() {
-        return devicetypeID;
-    }
-
-    public void setDevicetypeID(DeviceType devicetypeID) {
-        this.devicetypeID = devicetypeID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

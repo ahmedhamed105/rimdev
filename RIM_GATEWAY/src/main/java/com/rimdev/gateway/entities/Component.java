@@ -2,37 +2,33 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "component", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -53,7 +49,7 @@ public class Component implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -113,97 +109,123 @@ public class Component implements Serializable {
     private Integer tableDisable;
     @Column(name = "display_data_error")
     private Integer displayDataError;
-        
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
-    private Collection<ComponentSelect> componentSelectCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
-    private Collection<ComponentInput> componentInputCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
-    private Collection<ComponentButton> componentButtonCollection;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
-    private Collection<UserFile> userFileCollection;
-    
-    @JoinColumn(name = "parent_component_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private ParentComponent parentcomponentID;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentID")
-    private Collection<RelationComp> relationCompCollection;
+    @Column(name = "parent_component_ID")
+    private Integer parentcomponentID;
     
 
-    public Component() {
-    }
-
-    public Component(Integer id) {
-        this.id = id;
-    }
-
-    public Component(Integer id, String name, String ccode, int crequired, int cpattern) {
-        this.id = id;
-        this.name = name;
-        this.ccode = ccode;
-        this.crequired = crequired;
-        this.cpattern = cpattern;
-    }
-    
-   
     
 
-	public Integer getDisplayDataError() {
-		return displayDataError;
+    public int getSeqNum() {
+		return seqNum;
 	}
 
-	public void setDisplayDataError(Integer displayDataError) {
-		this.displayDataError = displayDataError;
+	public void setSeqNum(int seqNum) {
+		this.seqNum = seqNum;
 	}
 
-	public Integer getTableDisable() {
-		return tableDisable;
+	public String getName() {
+		return name;
 	}
 
-	public void setTableDisable(Integer tableDisable) {
-		this.tableDisable = tableDisable;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getAmethod() {
-		return amethod;
+	public String getGroupname() {
+		return groupname;
 	}
 
-	public void setAmethod(String amethod) {
-		this.amethod = amethod;
+	public void setGroupname(String groupname) {
+		this.groupname = groupname;
 	}
 
-	public int getTableVisible() {
-		return tableVisible;
+	public String getLabelname() {
+		return labelname;
 	}
 
-	public void setTableVisible(int tableVisible) {
-		this.tableVisible = tableVisible;
+	public void setLabelname(String labelname) {
+		this.labelname = labelname;
 	}
 
-	public int getVisible() {
-		return visible;
+	public String getFormname() {
+		return formname;
 	}
 
-	public void setVisible(int visible) {
-		this.visible = visible;
+	public void setFormname(String formname) {
+		this.formname = formname;
 	}
 
-	public String getRequiredError() {
-		return requiredError;
+	public String getCcode() {
+		return ccode;
 	}
 
-	public void setRequiredError(String requiredError) {
-		this.requiredError = requiredError;
+	public void setCcode(String ccode) {
+		this.ccode = ccode;
 	}
 
-	public String getPaternError() {
-		return paternError;
+	public String getCtype() {
+		return ctype;
 	}
 
-	public void setPaternError(String paternError) {
-		this.paternError = paternError;
+	public void setCtype(String ctype) {
+		this.ctype = ctype;
+	}
+
+	public int getCrequired() {
+		return crequired;
+	}
+
+	public void setCrequired(int crequired) {
+		this.crequired = crequired;
+	}
+
+	public int getCpattern() {
+		return cpattern;
+	}
+
+	public void setCpattern(int cpattern) {
+		this.cpattern = cpattern;
+	}
+
+	public String getPatterndesgin() {
+		return patterndesgin;
+	}
+
+	public void setPatterndesgin(String patterndesgin) {
+		this.patterndesgin = patterndesgin;
+	}
+
+	public Date getDateModify() {
+		return dateModify;
+	}
+
+	public void setDateModify(Date dateModify) {
+		this.dateModify = dateModify;
+	}
+
+	public Date getDateCreate() {
+		return dateCreate;
+	}
+
+	public void setDateCreate(Date dateCreate) {
+		this.dateCreate = dateCreate;
+	}
+
+	public int getDisable() {
+		return disable;
+	}
+
+	public void setDisable(int disable) {
+		this.disable = disable;
+	}
+
+	public String getLabelIcon() {
+		return labelIcon;
+	}
+
+	public void setLabelIcon(String labelIcon) {
+		this.labelIcon = labelIcon;
 	}
 
 	public String getParentGroup() {
@@ -222,198 +244,71 @@ public class Component implements Serializable {
 		this.fieldEncry = fieldEncry;
 	}
 
-	public String getLabelIcon() {
-        return labelIcon;
-    }
-
-    public void setLabelIcon(String labelIcon) {
-        this.labelIcon = labelIcon;
-    }
-    
-    public int getDisable() {
-        return disable;
-    }
-
-    public void setDisable(int disable) {
-        this.disable = disable;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Collection<UserFile> getUserFileCollection() {
-        return userFileCollection;
-    }
-
-    public void setUserFileCollection(Collection<UserFile> userFileCollection) {
-        this.userFileCollection = userFileCollection;
-    }
-    
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
-
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-    
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    
-    
-
-    public int getSeqNum() {
-		return seqNum;
+	public String getRequiredError() {
+		return requiredError;
 	}
 
-	public void setSeqNum(int seqNum) {
-		this.seqNum = seqNum;
+	public void setRequiredError(String requiredError) {
+		this.requiredError = requiredError;
 	}
 
-	public String getName() {
-        return name;
-    }
+	public String getPaternError() {
+		return paternError;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setPaternError(String paternError) {
+		this.paternError = paternError;
+	}
 
-    public String getGroupname() {
-        return groupname;
-    }
+	public int getVisible() {
+		return visible;
+	}
 
-    public void setGroupname(String groupname) {
-        this.groupname = groupname;
-    }
+	public void setVisible(int visible) {
+		this.visible = visible;
+	}
 
-    public String getLabelname() {
-        return labelname;
-    }
+	public int getTableVisible() {
+		return tableVisible;
+	}
 
-    public void setLabelname(String labelname) {
-        this.labelname = labelname;
-    }
+	public void setTableVisible(int tableVisible) {
+		this.tableVisible = tableVisible;
+	}
 
-    public String getFormname() {
-        return formname;
-    }
+	public String getAmethod() {
+		return amethod;
+	}
 
-    public void setFormname(String formname) {
-        this.formname = formname;
-    }
+	public void setAmethod(String amethod) {
+		this.amethod = amethod;
+	}
 
-    public String getCcode() {
-        return ccode;
-    }
+	public Integer getTableDisable() {
+		return tableDisable;
+	}
 
-    public void setCcode(String ccode) {
-        this.ccode = ccode;
-    }
+	public void setTableDisable(Integer tableDisable) {
+		this.tableDisable = tableDisable;
+	}
 
-    public String getCtype() {
-        return ctype;
-    }
+	public Integer getDisplayDataError() {
+		return displayDataError;
+	}
 
-    public void setCtype(String ctype) {
-        this.ctype = ctype;
-    }
+	public void setDisplayDataError(Integer displayDataError) {
+		this.displayDataError = displayDataError;
+	}
 
-    public int getCrequired() {
-        return crequired;
-    }
+	public Integer getParentcomponentID() {
+		return parentcomponentID;
+	}
 
-    public void setCrequired(int crequired) {
-        this.crequired = crequired;
-    }
+	public void setParentcomponentID(Integer parentcomponentID) {
+		this.parentcomponentID = parentcomponentID;
+	}
 
-    public int getCpattern() {
-        return cpattern;
-    }
-
-    public void setCpattern(int cpattern) {
-        this.cpattern = cpattern;
-    }
-
-    public String getPatterndesgin() {
-        return patterndesgin;
-    }
-
-    public void setPatterndesgin(String patterndesgin) {
-        this.patterndesgin = patterndesgin;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<ComponentSelect> getComponentSelectCollection() {
-        return componentSelectCollection;
-    }
-
-    public void setComponentSelectCollection(Collection<ComponentSelect> componentSelectCollection) {
-        this.componentSelectCollection = componentSelectCollection;
-    }
-    
-    
-    @XmlTransient
-    @JsonIgnore
-    public Collection<RelationComp> getRelationCompCollection() {
-        return relationCompCollection;
-    }
-
-    public void setRelationCompCollection(Collection<RelationComp> relationCompCollection) {
-        this.relationCompCollection = relationCompCollection;
-    }
-    
-    
-    @XmlTransient
-    @JsonIgnore
-    public Collection<ComponentInput> getComponentInputCollection() {
-        return componentInputCollection;
-    }
-
-    public void setComponentInputCollection(Collection<ComponentInput> componentInputCollection) {
-        this.componentInputCollection = componentInputCollection;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Collection<ComponentButton> getComponentButtonCollection() {
-        return componentButtonCollection;
-    }
-
-    public void setComponentButtonCollection(Collection<ComponentButton> componentButtonCollection) {
-        this.componentButtonCollection = componentButtonCollection;
-    }
-    
-    
-    @XmlTransient
-    @JsonIgnore
-    public ParentComponent getParentcomponentID() {
-        return parentcomponentID;
-    }
-
-    public void setParentcomponentID(ParentComponent parentcomponentID) {
-        this.parentcomponentID = parentcomponentID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

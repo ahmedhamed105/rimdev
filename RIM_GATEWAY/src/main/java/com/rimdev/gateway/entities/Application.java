@@ -2,9 +2,8 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,18 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "application", catalog = "rim_user", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -37,7 +35,7 @@ public class Application implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -56,107 +54,9 @@ public class Application implements Serializable {
     @Column(name = "footer_html", nullable = false, length = 10000)
     private String footerHtml;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
-    private Collection<Notification> notificationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
-    private Collection<UserLogin> userLoginCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
-    private Collection<Device> deviceCollection;
+ 
 
-    public Application() {
-    }
-    
-
-    public Application(Integer id) {
-        this.id = id;
-    }
-
-    public Application(Integer id, String appname, int appsearch, int notificationFalg) {
-        this.id = id;
-        this.appname = appname;
-        this.appsearch = appsearch;
-        this.notificationFalg = notificationFalg;
-    }
-    
-    
-
-    public String getFooterHtml() {
-		return footerHtml;
-	}
-
-	public void setFooterHtml(String footerHtml) {
-		this.footerHtml = footerHtml;
-	}
-
-	public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAppname() {
-        return appname;
-    }
-
-    public void setAppname(String appname) {
-        this.appname = appname;
-    }
-
-    public int getAppsearch() {
-        return appsearch;
-    }
-
-    public void setAppsearch(int appsearch) {
-        this.appsearch = appsearch;
-    }
-
-    public String getSearchWebserv() {
-        return searchWebserv;
-    }
-
-    public void setSearchWebserv(String searchWebserv) {
-        this.searchWebserv = searchWebserv;
-    }
-
-    public int getNotificationFalg() {
-        return notificationFalg;
-    }
-
-    public void setNotificationFalg(int notificationFalg) {
-        this.notificationFalg = notificationFalg;
-    }
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<Notification> getNotificationCollection() {
-        return notificationCollection;
-    }
-
-    public void setNotificationCollection(Collection<Notification> notificationCollection) {
-        this.notificationCollection = notificationCollection;
-    }
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<UserLogin> getUserLoginCollection() {
-        return userLoginCollection;
-    }
-
-    public void setUserLoginCollection(Collection<UserLogin> userLoginCollection) {
-        this.userLoginCollection = userLoginCollection;
-    }
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<Device> getDeviceCollection() {
-        return deviceCollection;
-    }
-
-    public void setDeviceCollection(Collection<Device> deviceCollection) {
-        this.deviceCollection = deviceCollection;
-    }
+   
 
     @Override
     public int hashCode() {

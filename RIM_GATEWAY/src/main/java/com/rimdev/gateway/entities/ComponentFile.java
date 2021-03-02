@@ -2,24 +2,26 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "component_file", catalog = "rim_user", schema = "")
 @XmlRootElement
 @NamedQueries({
@@ -29,49 +31,25 @@ public class ComponentFile implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
-    @JoinColumn(name = "Component_input_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private ComponentInput componentinputID;
-    @JoinColumn(name = "file_type_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private FileType filetypeID;
+    @Column(name = "Component_input_ID")
+    private Integer componentinputID;
+    @Column(name = "file_type_ID")
+    private Integer filetypeID;
 
-    public ComponentFile() {
-    }
+  
+    
 
-    public ComponentFile(Integer id) {
-        this.id = id;
-    }
+    public ComponentFile(Integer componentinputID, Integer filetypeID) {
+		super();
+		this.componentinputID = componentinputID;
+		this.filetypeID = filetypeID;
+	}
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public ComponentInput getComponentinputID() {
-        return componentinputID;
-    }
-
-    public void setComponentinputID(ComponentInput componentinputID) {
-        this.componentinputID = componentinputID;
-    }
-
-    public FileType getFiletypeID() {
-        return filetypeID;
-    }
-
-    public void setFiletypeID(FileType filetypeID) {
-        this.filetypeID = filetypeID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

@@ -6,10 +6,9 @@
 package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,11 +27,14 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "device_os", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -49,7 +50,7 @@ public class DeviceOs implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -69,73 +70,18 @@ public class DeviceOs implements Serializable {
     @XmlTransient
     @JsonIgnore
     private Date devicecreate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deviceOSID")
-    private Collection<Device> deviceCollection;
 
-    public DeviceOs() {
-    }
+    
 
-    public DeviceOs(Integer id) {
-        this.id = id;
-    }
+    public DeviceOs(String deviceOS, String devicedesc, Date devicemodify, Date devicecreate) {
+		super();
+		this.deviceOS = deviceOS;
+		this.devicedesc = devicedesc;
+		this.devicemodify = devicemodify;
+		this.devicecreate = devicecreate;
+	}
 
-    public DeviceOs(Integer id, Date devicemodify, Date devicecreate) {
-        this.id = id;
-        this.devicemodify = devicemodify;
-        this.devicecreate = devicecreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDeviceOS() {
-        return deviceOS;
-    }
-
-    public void setDeviceOS(String deviceOS) {
-        this.deviceOS = deviceOS;
-    }
-
-    public String getDevicedesc() {
-        return devicedesc;
-    }
-
-    public void setDevicedesc(String devicedesc) {
-        this.devicedesc = devicedesc;
-    }
-
-    public Date getDevicemodify() {
-        return devicemodify;
-    }
-
-    public void setDevicemodify(Date devicemodify) {
-        this.devicemodify = devicemodify;
-    }
-
-    public Date getDevicecreate() {
-        return devicecreate;
-    }
-
-    public void setDevicecreate(Date devicecreate) {
-        this.devicecreate = devicecreate;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<Device> getDeviceCollection() {
-        return deviceCollection;
-    }
-
-    public void setDeviceCollection(Collection<Device> deviceCollection) {
-        this.deviceCollection = deviceCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

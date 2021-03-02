@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -23,11 +21,14 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "deviceip", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -47,7 +48,7 @@ public class Deviceip implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -68,9 +69,8 @@ public class Deviceip implements Serializable {
     private String subneting;
     @Column(name = "timezone", length = 450)
     private String timezone;
-    @JoinColumn(name = "DEVICE_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Device deviceId;
+    @Column(name = "DEVICE_ID")
+    private Integer deviceId;
     
     @Basic(optional = false)
     @Column(name = "Deviceip_modify", nullable = false)
@@ -82,118 +82,25 @@ public class Deviceip implements Serializable {
     private Date deviceipcreate;
     
 
-    public Deviceip() {
-    }
+   
 
-    public Deviceip(Integer id) {
-        this.id = id;
-    }
-
-    public Deviceip(Integer id, String ipAddress) {
-        this.id = id;
-        this.ipAddress = ipAddress;
-    }
-    
-    
-    public Date getDeviceipmodify() {
-        return deviceipmodify;
-    }
-
-    public void setDeviceipmodify(Date deviceipmodify) {
-        this.deviceipmodify = deviceipmodify;
-    }
-
-    public Date getDeviceipcreate() {
-        return deviceipcreate;
-    }
-
-    public void setDeviceipcreate(Date deviceipcreate) {
-        this.deviceipcreate = deviceipcreate;
-    }
-    
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-
-    public String getIpAddress() {
-		return ipAddress;
-	}
-
-	public void setIpAddress(String ipAddress) {
+    public Deviceip(String ipAddress, String country, String city, String state, String latitude, String longitude,
+			String subneting, String timezone, Integer deviceId, Date deviceipmodify, Date deviceipcreate) {
+		super();
 		this.ipAddress = ipAddress;
+		this.country = country;
+		this.city = city;
+		this.state = state;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.subneting = subneting;
+		this.timezone = timezone;
+		this.deviceId = deviceId;
+		this.deviceipmodify = deviceipmodify;
+		this.deviceipcreate = deviceipcreate;
 	}
 
-	public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getSubneting() {
-        return subneting;
-    }
-
-    public void setSubneting(String subneting) {
-        this.subneting = subneting;
-    }
-
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public void setTimezone(String timezone) {
-        this.timezone = timezone;
-    }
-
-    public Device getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(Device deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

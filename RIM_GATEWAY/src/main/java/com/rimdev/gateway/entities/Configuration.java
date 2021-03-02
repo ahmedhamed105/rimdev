@@ -4,14 +4,13 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -23,11 +22,14 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "configuration", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -46,7 +48,7 @@ public class Configuration implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -70,97 +72,26 @@ public class Configuration implements Serializable {
     @Column(name = "modify_Date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifyDate;
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
 
-    public Configuration() {
-    }
+    
+    
 
-    public Configuration(Integer id) {
-        this.id = id;
-    }
+    public Configuration(String configkey, String configvalue, Integer confignum, Integer configboolean,
+			Date configDate, Date createDate, Date modifyDate, Integer userloginID) {
+		super();
+		this.configkey = configkey;
+		this.configvalue = configvalue;
+		this.confignum = confignum;
+		this.configboolean = configboolean;
+		this.configDate = configDate;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.userloginID = userloginID;
+	}
 
-    public Configuration(Integer id, String configkey, Date createDate, Date modifyDate) {
-        this.id = id;
-        this.configkey = configkey;
-        this.createDate = createDate;
-        this.modifyDate = modifyDate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getConfigkey() {
-        return configkey;
-    }
-
-    public void setConfigkey(String configkey) {
-        this.configkey = configkey;
-    }
-
-    public String getConfigvalue() {
-        return configvalue;
-    }
-
-    public void setConfigvalue(String configvalue) {
-        this.configvalue = configvalue;
-    }
-
-    public Integer getConfignum() {
-        return confignum;
-    }
-
-    public void setConfignum(Integer confignum) {
-        this.confignum = confignum;
-    }
-
-    public Integer getConfigboolean() {
-        return configboolean;
-    }
-
-    public void setConfigboolean(Integer configboolean) {
-        this.configboolean = configboolean;
-    }
-
-    public Date getConfigDate() {
-        return configDate;
-    }
-
-    public void setConfigDate(Date configDate) {
-        this.configDate = configDate;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
-
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

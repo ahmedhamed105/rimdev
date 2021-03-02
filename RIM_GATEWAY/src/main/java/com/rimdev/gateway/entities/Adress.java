@@ -8,14 +8,13 @@ package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,11 +26,14 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Data;
+
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data // Lombok: adds getters and setters
 @Table(name = "adress", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -51,7 +53,7 @@ public class Adress implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -76,116 +78,29 @@ public class Adress implements Serializable {
     @Column(name = "add_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date addCreate;
-    @JoinColumn(name = "Area_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Area areaID;
-    @JoinColumn(name = "User_login_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private UserLogin userloginID;
+    @Column(name = "Area_ID")
+    private Integer areaID;
+    @Column(name = "User_login_ID")
+    private Integer userloginID;
 
-    public Adress() {
-    }
+   
 
-    public Adress(Integer id) {
-        this.id = id;
-    }
+	public Adress(String adname, String adStreet, String adbuilding, String adArea, String adlogtiude,
+			String adlatitude, Date addModify, Date addCreate, Integer areaID, Integer userloginID) {
+		super();
+		this.adname = adname;
+		this.adStreet = adStreet;
+		this.adbuilding = adbuilding;
+		this.adArea = adArea;
+		this.adlogtiude = adlogtiude;
+		this.adlatitude = adlatitude;
+		this.addModify = addModify;
+		this.addCreate = addCreate;
+		this.areaID = areaID;
+		this.userloginID = userloginID;
+	}
 
-    public Adress(Integer id, String adname, Date addModify, Date addCreate) {
-        this.id = id;
-        this.adname = adname;
-        this.addModify = addModify;
-        this.addCreate = addCreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAdname() {
-        return adname;
-    }
-
-    public void setAdname(String adname) {
-        this.adname = adname;
-    }
-
-    public String getAdStreet() {
-        return adStreet;
-    }
-
-    public void setAdStreet(String adStreet) {
-        this.adStreet = adStreet;
-    }
-
-    public String getAdbuilding() {
-        return adbuilding;
-    }
-
-    public void setAdbuilding(String adbuilding) {
-        this.adbuilding = adbuilding;
-    }
-
-    public String getAdArea() {
-        return adArea;
-    }
-
-    public void setAdArea(String adArea) {
-        this.adArea = adArea;
-    }
-
-    public String getAdlogtiude() {
-        return adlogtiude;
-    }
-
-    public void setAdlogtiude(String adlogtiude) {
-        this.adlogtiude = adlogtiude;
-    }
-
-    public String getAdlatitude() {
-        return adlatitude;
-    }
-
-    public void setAdlatitude(String adlatitude) {
-        this.adlatitude = adlatitude;
-    }
-
-    public Date getAddModify() {
-        return addModify;
-    }
-
-    public void setAddModify(Date addModify) {
-        this.addModify = addModify;
-    }
-
-    public Date getAddCreate() {
-        return addCreate;
-    }
-
-    public void setAddCreate(Date addCreate) {
-        this.addCreate = addCreate;
-    }
-
-    public Area getAreaID() {
-        return areaID;
-    }
-
-    public void setAreaID(Area areaID) {
-        this.areaID = areaID;
-    }
-
-    public UserLogin getUserloginID() {
-        return userloginID;
-    }
-
-    public void setUserloginID(UserLogin userloginID) {
-        this.userloginID = userloginID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

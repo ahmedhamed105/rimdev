@@ -6,10 +6,9 @@
 package com.rimdev.gateway.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,23 +16,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "area", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -55,7 +54,7 @@ public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -85,125 +84,27 @@ public class Area implements Serializable {
     @Column(name = "Area_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date areacreate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "areaID")
-    private Collection<Adress> adressCollection;
+  
+    
+    
 
-    public Area() {
-    }
+   
+    public Area(String areaname, String arealong1, String arealong2, String arealong3, String arealat1, String arealat2,
+			String arealat3, String arealat4, Date areamodify, Date areacreate) {
+		super();
+		this.areaname = areaname;
+		this.arealong1 = arealong1;
+		this.arealong2 = arealong2;
+		this.arealong3 = arealong3;
+		this.arealat1 = arealat1;
+		this.arealat2 = arealat2;
+		this.arealat3 = arealat3;
+		this.arealat4 = arealat4;
+		this.areamodify = areamodify;
+		this.areacreate = areacreate;
+	}
 
-    public Area(Integer id) {
-        this.id = id;
-    }
-
-    public Area(Integer id, String areaname, String arealong1, Date areamodify, Date areacreate) {
-        this.id = id;
-        this.areaname = areaname;
-        this.arealong1 = arealong1;
-        this.areamodify = areamodify;
-        this.areacreate = areacreate;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAreaname() {
-        return areaname;
-    }
-
-    public void setAreaname(String areaname) {
-        this.areaname = areaname;
-    }
-
-    public String getArealong1() {
-        return arealong1;
-    }
-
-    public void setArealong1(String arealong1) {
-        this.arealong1 = arealong1;
-    }
-
-    public String getArealong2() {
-        return arealong2;
-    }
-
-    public void setArealong2(String arealong2) {
-        this.arealong2 = arealong2;
-    }
-
-    public String getArealong3() {
-        return arealong3;
-    }
-
-    public void setArealong3(String arealong3) {
-        this.arealong3 = arealong3;
-    }
-
-    public String getArealat1() {
-        return arealat1;
-    }
-
-    public void setArealat1(String arealat1) {
-        this.arealat1 = arealat1;
-    }
-
-    public String getArealat2() {
-        return arealat2;
-    }
-
-    public void setArealat2(String arealat2) {
-        this.arealat2 = arealat2;
-    }
-
-    public String getArealat3() {
-        return arealat3;
-    }
-
-    public void setArealat3(String arealat3) {
-        this.arealat3 = arealat3;
-    }
-
-    public String getArealat4() {
-        return arealat4;
-    }
-
-    public void setArealat4(String arealat4) {
-        this.arealat4 = arealat4;
-    }
-    @XmlTransient
-    @JsonIgnore
-    public Date getAreamodify() {
-        return areamodify;
-    }
-
-    public void setAreamodify(Date areamodify) {
-        this.areamodify = areamodify;
-    }
-    @XmlTransient
-    @JsonIgnore
-    public Date getAreacreate() {
-        return areacreate;
-    }
-
-    public void setAreacreate(Date areacreate) {
-        this.areacreate = areacreate;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Collection<Adress> getAdressCollection() {
-        return adressCollection;
-    }
-
-    public void setAdressCollection(Collection<Adress> adressCollection) {
-        this.adressCollection = adressCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

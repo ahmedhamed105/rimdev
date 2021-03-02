@@ -18,18 +18,19 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "component_button", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -43,7 +44,7 @@ public class ComponentButton implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -69,108 +70,24 @@ public class ComponentButton implements Serializable {
     @Column(name = "empty_message", length = 900)
     private String emptyMessage;
 
-    public ComponentButton() {
-    }
-
-    public ComponentButton(Integer id) {
-        this.id = id;
-    }
-
-    public ComponentButton(Integer id, String buttonClass) {
-        this.id = id;
-        this.buttonClass = buttonClass;
-    }
     
     
     
-    
-    public int getValid() {
-		return valid;
-	}
-
-	public void setValid(int valid) {
+  
+    public ComponentButton(String buttonClass, String buttonType, Component componentID, Date dateModify,
+			Date dateCreate, int valid, Integer alertAfter, String emptyMessage) {
+		super();
+		this.buttonClass = buttonClass;
+		this.buttonType = buttonType;
+		this.componentID = componentID;
+		this.dateModify = dateModify;
+		this.dateCreate = dateCreate;
 		this.valid = valid;
-	}
-
-	public Integer getAlertAfter() {
-		return alertAfter;
-	}
-
-	public void setAlertAfter(Integer alertAfter) {
 		this.alertAfter = alertAfter;
-	}
-
-	
-
-    
-    public String getEmptyMessage() {
-		return emptyMessage;
-	}
-
-	public void setEmptyMessage(String emptyMessage) {
 		this.emptyMessage = emptyMessage;
 	}
 
-	@XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
-
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-    
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getButtonClass() {
-        return buttonClass;
-    }
-
-    public void setButtonClass(String buttonClass) {
-        this.buttonClass = buttonClass;
-    }
-
-   
-
-    public String getButtonType() {
-        return buttonType;
-    }
-
-    public void setButtonType(String buttonType) {
-        this.buttonType = buttonType;
-    }
-    
- 
-
-	@XmlTransient
-    @JsonIgnore
-    public Component getComponentID() {
-        return componentID;
-    }
-
-    public void setComponentID(Component componentID) {
-        this.componentID = componentID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

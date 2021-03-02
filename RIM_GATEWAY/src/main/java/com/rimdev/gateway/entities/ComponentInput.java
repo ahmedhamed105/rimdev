@@ -2,11 +2,9 @@ package com.rimdev.gateway.entities;
 
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,23 +14,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "component_input", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -45,7 +43,7 @@ public class ComponentInput implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -92,195 +90,34 @@ public class ComponentInput implements Serializable {
     @Column(name = "delete_port", length = 45)
     private String deletePort;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "componentinputID")
-    private Collection<ComponentFile> componentFileCollection;
 
-    public ComponentInput() {
-    }
 
-    public ComponentInput(Integer id) {
-        this.id = id;
-    }
-    
-    
-    public String getInsertIp() {
-		return insertIp;
-	}
-
-	public void setInsertIp(String insertIp) {
+    public ComponentInput(String inputActions, Component componentID, InputType inputtypeID, Date dateModify,
+			Date dateCreate, String insertServ, String deleteServ, String insertParameter, String deleteParameter,
+			Integer fileCount, Integer fileSize, String fileCounterr, String fileSizeerr, String fileTypeerror,
+			String insertIp, String insertPort, String deleteIp, String deletePort) {
+		super();
+		this.inputActions = inputActions;
+		this.componentID = componentID;
+		this.inputtypeID = inputtypeID;
+		this.dateModify = dateModify;
+		this.dateCreate = dateCreate;
+		this.insertServ = insertServ;
+		this.deleteServ = deleteServ;
+		this.insertParameter = insertParameter;
+		this.deleteParameter = deleteParameter;
+		this.fileCount = fileCount;
+		this.fileSize = fileSize;
+		this.fileCounterr = fileCounterr;
+		this.fileSizeerr = fileSizeerr;
+		this.fileTypeerror = fileTypeerror;
 		this.insertIp = insertIp;
-	}
-
-	public String getInsertPort() {
-		return insertPort;
-	}
-
-	public void setInsertPort(String insertPort) {
 		this.insertPort = insertPort;
-	}
-
-	public String getDeleteIp() {
-		return deleteIp;
-	}
-
-	public void setDeleteIp(String deleteIp) {
 		this.deleteIp = deleteIp;
-	}
-
-	public String getDeletePort() {
-		return deletePort;
-	}
-
-	public void setDeletePort(String deletePort) {
 		this.deletePort = deletePort;
 	}
 
-	public String getFileTypeerror() {
-		return fileTypeerror;
-	}
-
-	public void setFileTypeerror(String fileTypeerror) {
-		this.fileTypeerror = fileTypeerror;
-	}
-
-	@XmlTransient
-    @JsonIgnore
-    public Collection<ComponentFile> getComponentFileCollection() {
-        return componentFileCollection;
-    }
-
-    public void setComponentFileCollection(Collection<ComponentFile> componentFileCollection) {
-        this.componentFileCollection = componentFileCollection;
-    }
-
-    public String getFileCounterr() {
-		return fileCounterr;
-	}
-
-	public void setFileCounterr(String fileCounterr) {
-		this.fileCounterr = fileCounterr;
-	}
-
-	public String getFileSizeerr() {
-		return fileSizeerr;
-	}
-
-	public void setFileSizeerr(String fileSizeerr) {
-		this.fileSizeerr = fileSizeerr;
-	}
-
-	public Integer getFileSize() {
-		return fileSize;
-	}
-
-	public void setFileSize(Integer fileSize) {
-		this.fileSize = fileSize;
-	}
-
-	public ComponentInput(Integer id, String inputActions) {
-        this.id = id;
-        this.inputActions = inputActions;
-    }
-    
-    
-    public String getInsertServ() {
-        return insertServ;
-    }
-
-    public void setInsertServ(String insertServ) {
-        this.insertServ = insertServ;
-    }
-
-    public String getDeleteServ() {
-        return deleteServ;
-    }
-
-    public void setDeleteServ(String deleteServ) {
-        this.deleteServ = deleteServ;
-    }
-
-    public String getInsertParameter() {
-        return insertParameter;
-    }
-
-    public void setInsertParameter(String insertParameter) {
-        this.insertParameter = insertParameter;
-    }
-
-    public String getDeleteParameter() {
-        return deleteParameter;
-    }
-
-    public void setDeleteParameter(String deleteParameter) {
-        this.deleteParameter = deleteParameter;
-    }
-
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
-
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-    
-    
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    
-    
-
-    public Integer getFileCount() {
-		return fileCount;
-	}
-
-	public void setFileCount(Integer fileCount) {
-		this.fileCount = fileCount;
-	}
-
-	public String getInputActions() {
-        return inputActions;
-    }
-
-    public void setInputActions(String inputActions) {
-        this.inputActions = inputActions;
-    }
-	@XmlTransient
-    @JsonIgnore
-    public Component getComponentID() {
-        return componentID;
-    }
-
-    public void setComponentID(Component componentID) {
-        this.componentID = componentID;
-    }
-
-    public InputType getInputtypeID() {
-        return inputtypeID;
-    }
-
-    public void setInputtypeID(InputType inputtypeID) {
-        this.inputtypeID = inputtypeID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

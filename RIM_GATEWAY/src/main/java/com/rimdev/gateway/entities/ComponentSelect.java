@@ -10,26 +10,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@Data
 @Table(name = "component_select", catalog = "rim_user", schema = "")
 @XmlRootElement
 @JsonInclude(JsonInclude.Include.NON_NULL) 	//  ignore all null fields
@@ -45,7 +44,7 @@ public class ComponentSelect implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -61,9 +60,8 @@ public class ComponentSelect implements Serializable {
     private String selectDisplay;
     @Column(name = "web_service", length = 450)
     private String webService;
-    @JoinColumn(name = "Component_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Component componentID;
+    @Column(name = "Component_ID")
+    private Integer componentID;
     @Column(name = "date_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateModify;
@@ -77,118 +75,24 @@ public class ComponentSelect implements Serializable {
     @Column(name = "Com_port", nullable = true, length = 45)
     private String comport;
 
-    public ComponentSelect() {
-    }
-
-    public ComponentSelect(Integer id) {
-        this.id = id;
-    }
-
-    public ComponentSelect(Integer id, String arrayName, Integer arrayObject) {
-        this.id = id;
-        this.arrayName = arrayName;
-        this.arrayObject = arrayObject;
-    }
+   
     
-    
-    
-    
-    public String getComIP() {
-		return comIP;
-	}
-
-	public void setComIP(String comIP) {
+    public ComponentSelect(String arrayName, Integer arrayObject, String selectValue, String selectDisplay,
+			String webService, Integer componentID, Date dateModify, Date dateCreate, String comIP, String comport) {
+		super();
+		this.arrayName = arrayName;
+		this.arrayObject = arrayObject;
+		this.selectValue = selectValue;
+		this.selectDisplay = selectDisplay;
+		this.webService = webService;
+		this.componentID = componentID;
+		this.dateModify = dateModify;
+		this.dateCreate = dateCreate;
 		this.comIP = comIP;
-	}
-
-	public String getComport() {
-		return comport;
-	}
-
-	public void setComport(String comport) {
 		this.comport = comport;
 	}
 
-	@XmlTransient
-    @JsonIgnore
-    public Date getDateModify() {
-        return dateModify;
-    }
-
-    public void setDateModify(Date dateModify) {
-        this.dateModify = dateModify;
-    }
-    
-    @XmlTransient
-    @JsonIgnore
-    public Date getDateCreate() {
-        return dateCreate;
-    }
-    
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getArrayName() {
-        return arrayName;
-    }
-
-    public void setArrayName(String arrayName) {
-        this.arrayName = arrayName;
-    }
-
-    public Integer getArrayObject() {
-        return arrayObject;
-    }
-
-    public void setArrayObject(Integer arrayObject) {
-        this.arrayObject = arrayObject;
-    }
-
-    public String getSelectValue() {
-        return selectValue;
-    }
-
-    public void setSelectValue(String selectValue) {
-        this.selectValue = selectValue;
-    }
-
-    public String getSelectDisplay() {
-        return selectDisplay;
-    }
-
-    public void setSelectDisplay(String selectDisplay) {
-        this.selectDisplay = selectDisplay;
-    }     
-
-	public String getWebService() {
-		return webService;
-	}
-
-	public void setWebService(String webService) {
-		this.webService = webService;
-	}
-
-	@XmlTransient
-    @JsonIgnore
-    public Component getComponentID() {
-        return componentID;
-    }
-
-    public void setComponentID(Component componentID) {
-        this.componentID = componentID;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
