@@ -27,12 +27,16 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
  * @author ahmed.elemam
  */
 @Entity
+@NoArgsConstructor
+@ToString
 @Data // Lombok: adds getters and setters
 @Table(name = "adress", catalog = "rim_user", schema = "rim_user")
 @XmlRootElement
@@ -85,6 +89,11 @@ public class Adress implements Serializable {
 
    
 
+	public Adress() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public Adress(String adname, String adStreet, String adbuilding, String adArea, String adlogtiude,
 			String adlatitude, Date addModify, Date addCreate, Integer areaID, Integer userloginID) {
 		super();
@@ -97,6 +106,96 @@ public class Adress implements Serializable {
 		this.addModify = addModify;
 		this.addCreate = addCreate;
 		this.areaID = areaID;
+		this.userloginID = userloginID;
+	}
+
+	
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getAdname() {
+		return adname;
+	}
+
+	public void setAdname(String adname) {
+		this.adname = adname;
+	}
+
+	public String getAdStreet() {
+		return adStreet;
+	}
+
+	public void setAdStreet(String adStreet) {
+		this.adStreet = adStreet;
+	}
+
+	public String getAdbuilding() {
+		return adbuilding;
+	}
+
+	public void setAdbuilding(String adbuilding) {
+		this.adbuilding = adbuilding;
+	}
+
+	public String getAdArea() {
+		return adArea;
+	}
+
+	public void setAdArea(String adArea) {
+		this.adArea = adArea;
+	}
+
+	public String getAdlogtiude() {
+		return adlogtiude;
+	}
+
+	public void setAdlogtiude(String adlogtiude) {
+		this.adlogtiude = adlogtiude;
+	}
+
+	public String getAdlatitude() {
+		return adlatitude;
+	}
+
+	public void setAdlatitude(String adlatitude) {
+		this.adlatitude = adlatitude;
+	}
+
+	public Date getAddModify() {
+		return addModify;
+	}
+
+	public void setAddModify(Date addModify) {
+		this.addModify = addModify;
+	}
+
+	public Date getAddCreate() {
+		return addCreate;
+	}
+
+	public void setAddCreate(Date addCreate) {
+		this.addCreate = addCreate;
+	}
+
+	public Integer getAreaID() {
+		return areaID;
+	}
+
+	public void setAreaID(Integer areaID) {
+		this.areaID = areaID;
+	}
+
+	public Integer getUserloginID() {
+		return userloginID;
+	}
+
+	public void setUserloginID(Integer userloginID) {
 		this.userloginID = userloginID;
 	}
 
@@ -120,10 +219,7 @@ public class Adress implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entity.Adress[ id=" + id + " ]";
-    }
+    
     
 }
 

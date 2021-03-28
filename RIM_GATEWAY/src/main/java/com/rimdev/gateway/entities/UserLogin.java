@@ -143,6 +143,153 @@ public class UserLogin implements Serializable {
 		this.userstatusID = userstatusID;
 		this.usertypeID = usertypeID;
 	}
+	
+	
+	
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getUsertokean() {
+		return usertokean;
+	}
+
+	public void setUsertokean(String usertokean) {
+		this.usertokean = usertokean;
+	}
+
+	public Date getExpiredate() {
+		return expiredate;
+	}
+
+	public void setExpiredate(Date expiredate) {
+		this.expiredate = expiredate;
+	}
+
+	public Date getCreatedate() {
+		return createdate;
+	}
+
+	public void setCreatedate(Date createdate) {
+		this.createdate = createdate;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPasswordEncy() {
+		return passwordEncy;
+	}
+
+	public void setPasswordEncy(String passwordEncy) {
+		this.passwordEncy = passwordEncy;
+	}
+
+	public Date getLoginModfiy() {
+		return loginModfiy;
+	}
+
+	public void setLoginModfiy(Date loginModfiy) {
+		this.loginModfiy = loginModfiy;
+	}
+
+	public Date getLoginCreate() {
+		return loginCreate;
+	}
+
+	public void setLoginCreate(Date loginCreate) {
+		this.loginCreate = loginCreate;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public String getLoginkey() {
+		return loginkey;
+	}
+
+	public void setLoginkey(String loginkey) {
+		this.loginkey = loginkey;
+	}
+
+	public Integer getLoginFailed() {
+		return loginFailed;
+	}
+
+	public void setLoginFailed(Integer loginFailed) {
+		this.loginFailed = loginFailed;
+	}
+
+	public Integer getLoginFlag() {
+		return loginFlag;
+	}
+
+	public void setLoginFlag(Integer loginFlag) {
+		this.loginFlag = loginFlag;
+	}
+
+	public Integer getApplicationID() {
+		return applicationID;
+	}
+
+	public void setApplicationID(Integer applicationID) {
+		this.applicationID = applicationID;
+	}
+
+	public Integer getGrouppriviledgeID() {
+		return grouppriviledgeID;
+	}
+
+	public void setGrouppriviledgeID(Integer grouppriviledgeID) {
+		this.grouppriviledgeID = grouppriviledgeID;
+	}
+
+	public Integer getPagesID() {
+		return pagesID;
+	}
+
+	public void setPagesID(Integer pagesID) {
+		this.pagesID = pagesID;
+	}
+
+	public Integer getUserID() {
+		return userID;
+	}
+
+	public void setUserID(Integer userID) {
+		this.userID = userID;
+	}
+
+	public Integer getUserstatusID() {
+		return userstatusID;
+	}
+
+	public void setUserstatusID(Integer userstatusID) {
+		this.userstatusID = userstatusID;
+	}
+
+	public Integer getUsertypeID() {
+		return usertypeID;
+	}
+
+	public void setUsertypeID(Integer usertypeID) {
+		this.usertypeID = usertypeID;
+	}
 
 	@Override
     public int hashCode() {
